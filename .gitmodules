@@ -1,6 +1,0 @@
-[submodule "App/AutomaIOS"]
-	path = App/AutomaIOS
-	url = https://github.com/GetAutomaApp/AutomaIOS.git
-[submodule "App/AutomaUIKit"]
-	path = App/AutomaUIKit
-	url = https://github.com/GetAutomaApp/AutomaUIKit.git

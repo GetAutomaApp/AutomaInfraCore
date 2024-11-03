@@ -1,3 +1,9 @@
+enum __CAPNAME__Variants {
+    case variant1, variant2
+    
+}
+
 struct __CAPNAME__ComponentConfig {
     var someProperty: String = "Default Value"  // Default value
+    var variant: __CAPNAME__Variants = .variant1
 }

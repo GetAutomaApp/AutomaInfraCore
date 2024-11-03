@@ -16,7 +16,7 @@ let fileTypes: [FileType] = [
     FileType(name: "ui-component", configurations: [
         FileConfig(
             fromDirectory: "./generators/component/",
-            toDirectory: "../App/AutomaUIKit/AutomaUIKit/Sources/AutomaUIKit/Components/",
+            toDirectory: "../App/AutomaUIKit/Sources/AutomaUIKit/Components/",
             nestToDirectory: "__CAPNAME__Component/",
             templates: [
                 "__CAPNAME__Component.swift",
@@ -28,7 +28,7 @@ let fileTypes: [FileType] = [
         ),
         FileConfig(
             fromDirectory: "./generators/component-testing/",
-            toDirectory: "../App/AutomaUIKit/AutomaUIKit/Tests/",
+            toDirectory: "../App/AutomaUIKit/Tests/Components/",
             nestToDirectory: "__CAPNAME__ComponentTests/",
             templates: [
                 "__CAPNAME__ComponentTests.swift",
@@ -49,6 +49,9 @@ struct GenerateAppComponent: Command {
         
         @Argument(name: "filename", help: "The name of the component to generate.")
         var filename: String
+        
+        @Argument(name: "nestedDir", help: "The directory you want to nest the component into (added to the default path).")
+        var nestedDir: String
     }
 
     func run(using context: CommandContext, signature: Signature) throws {
@@ -60,10 +63,11 @@ struct GenerateAppComponent: Command {
             for fileConfig in fileType.configurations {
                 let fromDirectory = fileConfig.fromDirectory
                 let toDirectory = fileConfig.toDirectory
+                let nestedDir = signature.nestedDir
+                let toNestedDir = "\(toDirectory)\(arrayToPascalCase([nestedDir]))/".replacingOccurrences(of: "//", with: "/")
                 let nestToDirectory = rename(text: fileConfig.nestToDirectory, componentName: componentName)
-                let destinationPath = "\(toDirectory)/\(nestToDirectory)"
+                let destinationPath = "\(toNestedDir)\(nestToDirectory)".replacingOccurrences(of: "//", with: "/")
 
-                // Error if directory already exists
                 if FileManager.default.fileExists(atPath: nestToDirectory) {
                     throw Abort(.badRequest, reason: "Component directory '\(nestToDirectory)' already exists.")
                 }
@@ -72,17 +76,19 @@ struct GenerateAppComponent: Command {
 
                 for template in fileConfig.templates {
                     let sourceFile = "\(fromDirectory)\(template)"
-                    let destinationFile = "\(destinationPath)/\(rename(text: template, componentName: componentName))"
+                    let destinationFile = "\(destinationPath)\(rename(text: template, componentName: componentName))"
                     
                     if FileManager.default.fileExists(atPath: destinationFile) {
                         throw Abort(.badRequest, reason: "Component implementation '\(destinationFile)' already exists.")
                     }
                         
-                    // Move and rename the file
                     try moveAndRenameFile(source: sourceFile, destination: destinationFile, componentName: componentName)
                 }
+                
+                print("Successfully created a \(fileType.name) called '\(componentName)' in '\(toNestedDir)'.")
             }
         }
+        
     }
 
     func moveAndRenameFile(source: String, destination: String, componentName: String) throws {
@@ -99,9 +105,6 @@ struct GenerateAppComponent: Command {
 
         // Write the content to the new file
         try content.write(toFile: destination, atomically: true, encoding: .utf8)
-
-        // Print the full path of the created file
-        print("Created file: \(destination)")
     }
 
     func rename(text: String, componentName: String) -> String {
@@ -150,5 +153,9 @@ struct GenerateAppComponent: Command {
     
     func arrayToSpaceDelimited(_ array: [String]) -> String {
         return array.joined(separator: " ")
+    }
+    
+    func arrayToPascalCase(_ array: [String]) -> String {
+        return array.enumerated().map(\.element.capitalized).joined()
     }
 }

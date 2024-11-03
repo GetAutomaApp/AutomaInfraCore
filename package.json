@@ -1,0 +1,12 @@
+{
+  "name": "automainfracore",
+  "version": "1.0.0",
+  "description": "Main infrastructure &amp; core of Automa",
+  "main": "index.js",
+  "scripts": {
+    "generate": "cd Backend && swift run App generate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
