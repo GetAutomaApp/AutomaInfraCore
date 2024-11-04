@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Page](README.md)
+* [Home](README.md)
 
 ## 💻 Infrastructure
 
