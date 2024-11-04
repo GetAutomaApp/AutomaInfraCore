@@ -4,4 +4,4 @@
 
 ## 💻 Infrastructure
 
-* [Untitled](infrastructure/untitled.md)
+* [Random Page](infrastructure/random-page.md)
