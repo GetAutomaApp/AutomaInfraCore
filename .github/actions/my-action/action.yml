@@ -1,0 +1,31 @@
+name: 'My Custom Swift Test Action'
+description: 'Run Swift tests after switching directories'
+
+inputs:
+  directory:
+    description: 'The directory to change to before running the test'
+    required: true
+    default: './'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+    - name: Set up Swift
+      run: |
+        if ! command -v swift &> /dev/null
+        then
+          echo "Swift not found. Installing Swift..."
+          brew install swift
+        else
+          echo "Swift is already installed."
+        fi
+    - name: Install Dependencies
+      run: |
+        cd ${{ inputs.directory }}
+        swift package resolve
+    - name: Run Tests
+      run: |
+        cd ${{ inputs.directory }}
+        swift test
