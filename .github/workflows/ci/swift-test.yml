@@ -1,0 +1,21 @@
+name: Run Swift Tests on Self-Hosted macOS Runner
+
+on:
+  push:
+    branches-ignore:
+      - develop
+      - staging
+      - prod
+
+jobs:
+  build:
+    runs-on: [macOS]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Run Unit / Integration tests for AutomaUIKit
+        uses: ./.github/actions/my-action
+        with:
+          directory: 'App/AutomaUIKit'
