@@ -14,6 +14,7 @@ let package = Package(
             targets: ["AutomaUIKit"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/nalexn/ViewInspector", from: "0.9.0")
     ],
     targets: [
         .target(
@@ -23,7 +24,7 @@ let package = Package(
         ),
         .testTarget(
             name: "AutomaUIKitTests",
-            dependencies: ["AutomaUIKit"],
+            dependencies: ["AutomaUIKit", "ViewInspector"],
             path: "Tests"
         ),
     ]
