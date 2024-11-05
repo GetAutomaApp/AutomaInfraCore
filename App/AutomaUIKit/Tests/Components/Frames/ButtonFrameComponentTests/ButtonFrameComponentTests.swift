@@ -2,7 +2,7 @@ import XCTest
 import SwiftUI
 import ViewInspector // Ensure this is added as a dependency
 
-@testable import YourAppModule // Replace with your app's module name
+@testable import AutomaUIKit // Replace with your app's module name
 
 extension ButtonFrameComponent: Inspectable {}
 
