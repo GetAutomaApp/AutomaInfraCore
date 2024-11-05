@@ -13,7 +13,7 @@ runs:
     - name: Check out repository
       uses: actions/checkout@v3
     - name: Set up Swift
-      run: |
+      shell: |
         if ! command -v swift &> /dev/null
         then
           echo "Swift not found. Installing Swift..."
@@ -22,10 +22,10 @@ runs:
           echo "Swift is already installed."
         fi
     - name: Install Dependencies
-      run: |
+      shell: |
         cd ${{ inputs.directory }}
         swift package resolve
     - name: Run Tests
-      run: |
+      shell: |
         cd ${{ inputs.directory }}
         swift test

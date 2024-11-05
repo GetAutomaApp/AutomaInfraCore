@@ -8,7 +8,7 @@ on:
       - prod
 
 jobs:
-  build:
+  run:
     runs-on: [macOS]
 
     steps:
