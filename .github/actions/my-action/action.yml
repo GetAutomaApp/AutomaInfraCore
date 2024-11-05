@@ -1,4 +1,4 @@
-name: 'My Custom Swift Test Action'
+name: 'Run `swift test` on specific target'
 description: 'Run Swift tests after switching directories'
 
 inputs:
@@ -13,7 +13,8 @@ runs:
     - name: Check out repository
       uses: actions/checkout@v3
     - name: Set up Swift
-      shell: |
+      shell: bash
+      run: |
         if ! command -v swift &> /dev/null
         then
           echo "Swift not found. Installing Swift..."
@@ -22,10 +23,12 @@ runs:
           echo "Swift is already installed."
         fi
     - name: Install Dependencies
-      shell: |
+      shell: bash
+      run: |
         cd ${{ inputs.directory }}
         swift package resolve
     - name: Run Tests
-      shell: |
+      shell: bash
+      run: |
         cd ${{ inputs.directory }}
         swift test
