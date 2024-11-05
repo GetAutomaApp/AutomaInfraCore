@@ -27,6 +27,11 @@ runs:
       run: |
         cd ${{ inputs.directory }}
         swift package resolve
+    - name: Purge Cache
+      shell: bash
+      run: |
+        cd ${{ inputs.directory }}
+        swift package clean
     - name: Run Tests
       shell: bash
       run: |
