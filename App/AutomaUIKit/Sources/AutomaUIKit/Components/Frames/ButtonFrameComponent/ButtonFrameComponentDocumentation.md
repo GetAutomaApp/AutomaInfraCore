@@ -1,4 +1,4 @@
-# OnboardingScreenTemplateComponent
+# ButtonFrameComponent
 
 ## Overview
 <!-- Give a reason behind this component & what it is doing -->
@@ -12,8 +12,8 @@ LINK: <!-- Link to the figma file component here -->
 ## Props/Parameters
 | Property | Type | Description |
 |----------|------|-------------|
-| `config` | OnboardingScreenTemplateComponentConfig | Configuration for the component. |
-| `styles` | OnboardingScreenTemplateComponentStyles | Styles for the component. |
+| `config` | ButtonFrameComponentConfig | Configuration for the component. |
+| `styles` | ButtonFrameComponentStyles | Styles for the component. |
 
 ## Events/Callbacks
 | Event | Description |
@@ -24,10 +24,10 @@ LINK: <!-- Link to the figma file component here -->
 <!-- Explain when and when not to use the component based on past experience -->
 
 ## Customization
-<!-- Explain how users can customize the component via the "Config" object in OnboardingScreenTemplateComponentConfig Struct -->
-<!-- Explain how users can customize the styles via the "Style" object in OnboardingScreenTemplateComponentStyles Struct -->
+<!-- Explain how users can customize the component via the "Config" object in ButtonFrameComponentConfig Struct -->
+<!-- Explain how users can customize the styles via the "Style" object in ButtonFrameComponentStyles Struct -->
 
 ## StyleConfig
 <!-- Explain how the "StyleConfig.swift" file has an influence on how the components are styled by default. -->
 
-onboardingScreenTemplate
+buttonFrame

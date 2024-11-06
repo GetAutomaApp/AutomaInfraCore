@@ -22,8 +22,7 @@ let fileTypes: [FileType] = [
                 "__CAPNAME__Component.swift.template",
                 "__CAPNAME__Component_Previews.swift.template",
                 "__CAPNAME__ComponentConfig.swift.template",
-                "__CAPNAME__ComponentDocumentation.md.template",
-                "__CAPNAME__ComponentStyleConf.swift.template",
+                "__CAPNAME__ComponentDocumentation.md.template"
             ]
         ),
         FileConfig(

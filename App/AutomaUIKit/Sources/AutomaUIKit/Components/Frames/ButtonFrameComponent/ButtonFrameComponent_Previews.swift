@@ -1,8 +1,8 @@
 import SwiftUI
 // Add a preview per state difference (No need to add all states)
 
-struct OnboardingScreenTemplateComponent_Previews: PreviewProvider {
+struct ButtonFrameComponent_Previews: PreviewProvider {
     static var previews: some View {
-        OnboardingScreenTemplateComponent()
+        ButtonFrameComponent()
     }
 }
