@@ -1,4 +1,4 @@
-name: 'Run `swift test` on specific target'
+name: 'Run `swift test` on specific target.'
 description: 'Run Swift tests after switching directories'
 
 inputs:
