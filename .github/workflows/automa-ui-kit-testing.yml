@@ -1,4 +1,4 @@
-name: Run Swift Tests on Self-Hosted macOS Runner
+name: Run `AutomaUIKit` tests
 
 on:
   push:
@@ -16,6 +16,6 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Unit / Integration tests for AutomaUIKit
-        uses: ./.github/actions/my-action
+        uses: ./.github/actions/swift-test
         with:
           directory: 'App/AutomaUIKit'
