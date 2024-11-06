@@ -1,5 +1,5 @@
-name: 'Run `swift test` on specific target'
-description: 'Run Swift tests after switching directories'
+name: 'Run `swift test` on specific target.'
+description: 'Install Swift dependencies and run `swift test` on a specific target. // Always purges the cache before running the tests to ensure the latest code is tested.'
 
 inputs:
   directory:
