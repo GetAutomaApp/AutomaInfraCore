@@ -1,13 +1,14 @@
 import XCTest
 import SwiftUI
-import ViewInspector // Ensure this is added as a dependency
+import ViewInspector
 
-@testable import YourAppModule // Replace with your app's module name
+@testable import AutomaUIKit
 
 class __CAPNAME__ComponentTests: XCTestCase {
-    func testUI() throws {
+    // 1 test case per method in the component
+    // Test cases for more "complete" interactions with the component (all simulated of course)
+    func testIntegration() throws {
         let component = __CAPNAME__Component()
         XCTAssertNotNil(component)
     }
 }
-
