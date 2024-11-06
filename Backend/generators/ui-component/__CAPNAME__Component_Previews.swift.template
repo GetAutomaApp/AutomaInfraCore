@@ -1,3 +1,4 @@
+import SwiftUI
 // Add a preview per state difference (No need to add all states)
 
 struct __CAPNAME__Component_Previews: PreviewProvider {
