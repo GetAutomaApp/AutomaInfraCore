@@ -14,10 +14,10 @@ struct ButtonFrameComponent<Content: View>: View {
             content(config)
                 .frame(maxWidth: config.fillSpace ? .infinity : nil)
                 .padding(DesignTokens.padding.button)
-                .background(
-                    config.frameVariant == .generic ? config.variantGenericBackground : config.variantGenericBackground.opacity(0)
-                )
-                .cornerRadius(config.isCircular ? .infinity : config.roundness)
         }
+        .background(
+            config.frameVariant == .generic ? config.variantGenericBackground : config.variantGenericBackground.opacity(0)
+        )
+        .cornerRadius(config.isCircular ? .infinity : config.roundness)
     }
 }
