@@ -3,14 +3,13 @@ import SwiftUI
 struct ButtonFrameComponent<Content: View>: View {
     @StateObject var config = ButtonFrameComponentConfig()
     
-    var content: (ButtonFrameComponentConfig) -> Content
     let action: (ButtonFrameComponentConfig) -> Void
-    
+    var content: (ButtonFrameComponentConfig) -> Content
+
     
     var body: some View {
         Button(action: {
             action(config)
-            config.isCircular.toggle()
         }) {
             content(config)
                 .frame(maxWidth: config.fillSpace ? .infinity : nil)
