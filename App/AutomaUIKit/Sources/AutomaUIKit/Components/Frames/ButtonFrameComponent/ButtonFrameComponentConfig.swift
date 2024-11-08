@@ -1,8 +1,14 @@
+import SwiftUI
+
 enum ButtonFrameVariants {
-    case variant1, variant2
+    case generic, disabled
 }
 
-struct ButtonFrameComponentConfig {
-    var someProperty: String = "Default Value"  // Default value
-    var variant: ButtonFrameVariants = .variant1
+class ButtonFrameComponentConfig: ObservableObject {
+    @Published var frameVariant: ButtonFrameVariants = .generic
+    @Published var fillSpace: Bool = true
+    @Published var isCircular: Bool = false
+
+    let variantGenericBackground: Color = DesignTokens.colors.primary
+    let roundness: CGFloat = 8
 }

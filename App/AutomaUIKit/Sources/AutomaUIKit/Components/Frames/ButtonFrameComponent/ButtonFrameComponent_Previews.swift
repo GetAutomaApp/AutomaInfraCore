@@ -1,8 +1,12 @@
 import SwiftUI
-// Add a preview per state difference (No need to add all states)
 
 struct ButtonFrameComponent_Previews: PreviewProvider {
     static var previews: some View {
-        ButtonFrameComponent()
+        HStack {
+            ButtonFrameComponent() {config in
+                Text(config.fillSpace.description)
+            } action: {_ in}
+            .padding()
+        }
     }
 }
