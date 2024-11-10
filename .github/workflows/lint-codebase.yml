@@ -1,0 +1,28 @@
+name: Lint Code Base
+
+on:
+  push:
+    branches-ignore:
+      - develop
+      - staging
+      - prod
+
+jobs:
+  run-lint:
+    runs-on: macos
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up environment
+        run: |
+          echo "Running on branch: $GITHUB_REF"
+
+      - name: Install Linting Tool
+        uses: ./.github/actions/install-lint-tool
+
+      - name: Run Linting CLI
+        run: |
+          swiftlint
