@@ -1,0 +1,14 @@
+name: 'Install Linting Tool'
+description: 'Installs a macOS-only linting tool'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install SwiftLint (macOS only)
+      run: |
+        if ! command -v swiftlint &> /dev/null
+        then
+          echo "swiftlint not found. Installing..."
+          brew install swiftlint
+        else
+          echo "swiftlint is already installed"
+        fi

@@ -1,15 +1,15 @@
 name: Lint Code Base
 
 on:
-    push:
-      branches-ignore:
-        - develop
-        - staging
-        - prod
+  push:
+    branches-ignore:
+      - develop
+      - staging
+      - prod
 
 jobs:
   run-lint:
-    runs-on: [self-hosted, linux]
+    runs-on: macos
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,9 +20,9 @@ jobs:
         run: |
           echo "Running on branch: $GITHUB_REF"
 
-      - name: Lint Code Base
-        uses: github/super-linter@v4
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: "develop"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install Linting Tool
+        uses: ./actions/install-lint-tool
+
+      - name: Run Linting CLI
+        run: |
+          swiftlint
