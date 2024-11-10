@@ -5,78 +5,78 @@
 import SwiftUI
 
 struct ButtonFrameComponent_Previews: PreviewProvider {
-    static var previews: some View {
-        ButtonFrameComponent_PreviewsView()
-    }
+  static var previews: some View {
+    ButtonFrameComponent_PreviewsView()
+  }
 }
 
 struct AutoButtonVariationsView: View {
-    @StateObject var buttonController: ButtonFrameComponentConfig = .init()
-    @State private var isTimerActive = false
+  @StateObject var buttonController: ButtonFrameComponentConfig = .init()
+  @State private var isTimerActive = false
 
-    let switchDelay: TimeInterval = 0.5
+  let switchDelay: TimeInterval = 0.5
 
-    var body: some View {
-        HStack {
-            ButtonFrameComponent(config: buttonController, action: { config in
-                config.isCircular.toggle()
-                config.frameVariant = .disabled
-            }) { _ in
-                ProgressView()
-            } onSelfAppear: { _ in
-                startChangingVariant()
-            }
+  var body: some View {
+    HStack {
+      ButtonFrameComponent(config: buttonController, action: { config in
+        config.isCircular.toggle()
+        config.frameVariant = .disabled
+      }) { _ in
+        ProgressView()
+      } onSelfAppear: { _ in
+        startChangingVariant()
+      }
 
-            Spacer()
+      Spacer()
 
-            ButtonFrameComponent(action: { _ in
-                isTimerActive ? stopChangingVariant() : startChangingVariant()
-            }) {
-                Image(systemName: isTimerActive ? "pause.fill" : "play.fill")
-                    .resizable()
-                    .frame(width: 30, height: 30)
-            } onSelfAppear: { config in
-                config.fillSpace = false
-            }
-        }
+      ButtonFrameComponent(action: { _ in
+        isTimerActive ? stopChangingVariant() : startChangingVariant()
+      }) {
+        Image(systemName: isTimerActive ? "pause.fill" : "play.fill")
+          .resizable()
+          .frame(width: 30, height: 30)
+      } onSelfAppear: { config in
+        config.fillSpace = false
+      }
+    }
+  }
+
+  func startChangingVariant() {
+    if isTimerActive {
+      return
     }
 
-    func startChangingVariant() {
-        if isTimerActive {
-            return
-        }
+    isTimerActive = true
 
-        isTimerActive = true
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + switchDelay) {
-            updateVariant()
-        }
+    DispatchQueue.main.asyncAfter(deadline: .now() + switchDelay) {
+      updateVariant()
     }
+  }
 
-    func updateVariant() {
-        buttonController.frameVariant = .allCases.randomElement()!
-        buttonController.isCircular = .random()
-        buttonController.fillSpace = .random()
+  func updateVariant() {
+    buttonController.frameVariant = .allCases.randomElement()!
+    buttonController.isCircular = .random()
+    buttonController.fillSpace = .random()
 
-        if isTimerActive {
-            DispatchQueue.main.asyncAfter(deadline: .now() + switchDelay) {
-                updateVariant()
-            }
-        }
+    if isTimerActive {
+      DispatchQueue.main.asyncAfter(deadline: .now() + switchDelay) {
+        updateVariant()
+      }
     }
+  }
 
-    func stopChangingVariant() {
-        isTimerActive = false
-    }
+  func stopChangingVariant() {
+    isTimerActive = false
+  }
 }
 
 struct ButtonFrameComponent_PreviewsView: View {
-    var body: some View {
-        ScrollView {
-            AutoButtonVariationsView()
-        }
-        .padding()
+  var body: some View {
+    ScrollView {
+      AutoButtonVariationsView()
     }
+    .padding()
+  }
 }
 
 // struct ButtonFrameComponent_PreviewsView: View {

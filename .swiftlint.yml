@@ -1,3 +1,17 @@
-
 disabled_rules:
   - trailing_comma
+  - type_name
+  - opening_brace
+  - multiple_closures_with_trailing_closure
+
+excluded:
+  - '**/.build/**'            # Exclude all .build directories, including nested ones
+  - '**/Carthage/**'           # Exclude Carthage build directory (recursive)
+  - '**/Pods/**'               # Exclude Pods directory (recursive)
+  - '**/DerivedData/**'        # Exclude DerivedData directory (recursive)
+  - '**/*.xcodeproj'           # Exclude Xcode project files
+  - '**/*.xcworkspace'         # Exclude Xcode workspace files
+  - '**/*.swiftmodule'         # Exclude Swift module files
+  - '**/*.swiftinterface'      # Exclude Swift interface files
+  - '**/Test*/'                # Exclude any directories with 'Test' in their name
+  - '**/Generated/**'          # Exclude generated files/folders
