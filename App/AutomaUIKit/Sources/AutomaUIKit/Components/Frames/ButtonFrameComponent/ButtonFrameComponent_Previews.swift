@@ -70,16 +70,16 @@ struct AutoButtonVariationsView: View {
     }
 }
 
- struct ButtonFrameComponent_PreviewsView: View {
+struct ButtonFrameComponent_PreviewsView: View {
     var body: some View {
         ScrollView {
             AutoButtonVariationsView()
         }
         .padding()
     }
- }
+}
 
-//struct ButtonFrameComponent_PreviewsView: View {
+// struct ButtonFrameComponent_PreviewsView: View {
 //    var body: some View {
 //        ZStack {
 //            Color.green
@@ -119,4 +119,4 @@ struct AutoButtonVariationsView: View {
 //        }
 //        .ignoresSafeArea()
 //    }
-//}
+// }
