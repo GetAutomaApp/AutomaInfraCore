@@ -1,12 +1,16 @@
+// routes.swift
+// Copyright (c) 2024 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp. All rights reserved.
+
 import Fluent
 import Vapor
 
 func routes(_ app: Application) throws {
-    app.get { req async in
+    app.get { _ async in
         "It works!"
     }
 
-    app.get("hello") { req async -> String in
+    app.get("hello") { _ async -> String in
         "Hello, world!"
     }
 

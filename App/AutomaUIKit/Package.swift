@@ -5,16 +5,17 @@ import PackageDescription
 let package = Package(
     name: "AutomaUIKit",
     platforms: [
-        .iOS(.v14),
-        .macOS(.v11)
+        .iOS(.v17),
+        .macOS(.v15),
     ],
     products: [
         .library(
             name: "AutomaUIKit",
-            targets: ["AutomaUIKit"]),
+            targets: ["AutomaUIKit"]
+        ),
     ],
     dependencies: [
-        .package(url: "https://github.com/nalexn/ViewInspector", from: "0.9.0")
+        .package(url: "https://github.com/nalexn/ViewInspector", from: "0.9.0"),
     ],
     targets: [
         .target(

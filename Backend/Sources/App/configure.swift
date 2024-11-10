@@ -1,6 +1,10 @@
-import NIOSSL
+// configure.swift
+// Copyright (c) 2024 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp. All rights reserved.
+
 import Fluent
 import FluentPostgresDriver
+import NIOSSL
 import Vapor
 
 // configures your application
@@ -9,18 +13,17 @@ public func configure(_ app: Application) async throws {
     // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
     app.commands.use(GenerateAppComponent(), as: "generate")
 
-    app.databases.use(DatabaseConfigurationFactory.postgres(configuration: .init(
+    try app.databases.use(DatabaseConfigurationFactory.postgres(configuration: .init(
         hostname: Environment.get("DATABASE_HOST") ?? "localhost",
         port: Environment.get("DATABASE_PORT").flatMap(Int.init(_:)) ?? SQLPostgresConfiguration.ianaPortNumber,
         username: Environment.get("DATABASE_USERNAME") ?? "vapor_username",
         password: Environment.get("DATABASE_PASSWORD") ?? "vapor_password",
         database: Environment.get("DATABASE_NAME") ?? "vapor_database",
-        tls: .prefer(try .init(configuration: .clientDefault)))
+        tls: .prefer(.init(configuration: .clientDefault))
+    )
     ), as: .psql)
 
     app.migrations.add(CreateTodo())
     // register routes
     try routes(app)
-
-
 }

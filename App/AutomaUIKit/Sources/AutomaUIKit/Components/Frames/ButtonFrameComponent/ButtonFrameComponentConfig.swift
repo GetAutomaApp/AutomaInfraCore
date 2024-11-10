@@ -1,7 +1,11 @@
+// ButtonFrameComponentConfig.swift
+// Copyright (c) 2024 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp. All rights reserved.
+
 import SwiftUI
 
-enum ButtonFrameVariants {
-    case generic, disabled
+enum ButtonFrameVariants: CaseIterable {
+    case generic, disabled, rainbow
 }
 
 class ButtonFrameComponentConfig: ObservableObject {
@@ -9,6 +13,9 @@ class ButtonFrameComponentConfig: ObservableObject {
     @Published var fillSpace: Bool = true
     @Published var isCircular: Bool = false
 
-    let variantGenericBackground: Color = DesignTokens.colors.primary
-    let roundness: CGFloat = 8
+    @Published var variantGenericBackground = DesignTokens.colors.primary
+    @Published var variantDisabledBackground = DesignTokens.colors.primary_whitespace_3
+    @Published var defaultPadding = DesignTokens.padding.button
+
+    @Published var roundness = DesignTokens.defaultCornerRadius
 }

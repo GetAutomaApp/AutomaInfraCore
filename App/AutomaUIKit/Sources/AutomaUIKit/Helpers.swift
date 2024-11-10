@@ -1,3 +1,7 @@
+// Helpers.swift
+// Copyright (c) 2024 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp. All rights reserved.
+
 //
 //  Helpers.swift
 //  AutomaUIKit
@@ -27,9 +31,8 @@ extension Color {
             .sRGB,
             red: Double(r) / 255,
             green: Double(g) / 255,
-            blue:  Double(b) / 255,
+            blue: Double(b) / 255,
             opacity: Double(a) / 255
         )
     }
 }
-

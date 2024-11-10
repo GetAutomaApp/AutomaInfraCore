@@ -1,3 +1,7 @@
+// TodoController.swift
+// Copyright (c) 2024 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp. All rights reserved.
+
 import Fluent
 import Vapor
 
@@ -5,10 +9,10 @@ struct TodoController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let todos = routes.grouped("todos")
 
-        todos.get(use: self.index)
-        todos.post(use: self.create)
+        todos.get(use: index)
+        todos.post(use: create)
         todos.group(":todoID") { todo in
-            todo.delete(use: self.delete)
+            todo.delete(use: delete)
         }
     }
 

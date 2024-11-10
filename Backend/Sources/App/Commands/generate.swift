@@ -1,3 +1,7 @@
+// generate.swift
+// Copyright (c) 2024 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp. All rights reserved.
+
 import Vapor
 
 struct FileType {
@@ -22,7 +26,7 @@ let fileTypes: [FileType] = [
                 "__CAPNAME__Component.swift.template",
                 "__CAPNAME__Component_Previews.swift.template",
                 "__CAPNAME__ComponentConfig.swift.template",
-                "__CAPNAME__ComponentDocumentation.md.template"
+                "__CAPNAME__ComponentDocumentation.md.template",
             ]
         ),
         FileConfig(
@@ -32,8 +36,8 @@ let fileTypes: [FileType] = [
             templates: [
                 "__CAPNAME__ComponentTests.swift.template",
             ]
-        )
-    ])
+        ),
+    ]),
 ]
 
 struct GenerateAppComponent: Command {
@@ -52,7 +56,7 @@ struct GenerateAppComponent: Command {
         var nestedDir: String
     }
 
-    func run(using context: CommandContext, signature: Signature) throws {
+    func run(using _: CommandContext, signature: Signature) throws {
         let componentName = signature.filename
 
         for fileType in fileTypes {
@@ -86,7 +90,6 @@ struct GenerateAppComponent: Command {
                 print("Successfully created a \(fileType.name) called '\(componentName)' in '\(toNestedDir)'.")
             }
         }
-
     }
 
     func moveAndRenameFile(source: String, destination: String, componentName: String) throws {
@@ -140,20 +143,20 @@ struct GenerateAppComponent: Command {
     func arrayToHaskell(_ array: [String]) -> String {
         guard !array.isEmpty else { return "" }
 
-        return array.enumerated().map { (index, element) in
+        return array.enumerated().map { index, element in
             if index == 0 {
-                return element.lowercased()
+                element.lowercased()
             } else {
-                return element.lowercased().capitalized
+                element.lowercased().capitalized
             }
         }.joined(separator: "")
     }
 
     func arrayToSpaceDelimited(_ array: [String]) -> String {
-        return array.joined(separator: " ")
+        array.joined(separator: " ")
     }
 
     func arrayToPascalCase(_ array: [String]) -> String {
-        return array.enumerated().map(\.element.capitalized).joined()
+        array.enumerated().map(\.element.capitalized).joined()
     }
 }
