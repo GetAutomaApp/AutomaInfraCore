@@ -11,6 +11,7 @@ struct DesignColors {
 
 struct DesignPadding {
   let button: EdgeInsets = .init(top: 10, leading: 20, bottom: 10, trailing: 20)
+  let buttonEven: EdgeInsets = .init(top: 10, leading: 10, bottom: 10, trailing: 10)
 }
 
 enum DesignTokens {
