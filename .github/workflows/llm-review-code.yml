@@ -1,0 +1,26 @@
+name: 'LLM Code Review'
+on:
+    workflow_dispatch:
+
+jobs:
+  llm-review:
+    runs-on: macos
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up environment
+        run: |
+          echo "Running on branch: $GITHUB_REF"
+          if [[ "${{ github.event_name }}" != "workflow_dispatch" ]]; then
+            echo "Not a manual run, skipping..."
+            exit 0
+          fi
+
+      - name: Run LLM Code Review Action
+        uses: ./.github/actions/llm-review-code
+        with:
+          llm-model: 'codegemma'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -19,6 +19,7 @@ jobs:
       - name: Set up environment
         run: |
           echo "Running on branch: $GITHUB_REF"
+          alias swiftlint="/opt/homebrew/bin/swiftlint"
 
       - name: Install Linting Tool
         uses: ./.github/actions/install-lint-tool
