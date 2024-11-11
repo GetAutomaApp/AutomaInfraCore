@@ -37,4 +37,4 @@ jobs:
         uses: ./.github/actions/llm-review-code
         with:
           llm-model: 'codegemma'
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}

@@ -32,10 +32,25 @@ runs:
         GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
       run: |
         for file in ${{ steps.get-modified-files.outputs.all_changed_files }}; do
-          modified_file_review=$(curl -s http://127.0.0.1:11434/api/generate -d '{"model": "${{ inputs.llm-model }}", "prompt": "Review the following file:\n\n```\n$(cat $file)\n```", "stream": false}' | jq -r '.response')
+          # Read the content of the file
+          file_content=$(cat "$file")
+
+          # Ensure the file content is properly escaped for JSON (escape quotes and special characters)
+          escaped_content=$(echo "$file_content" | jq -R -s .)
+
+          # Call the Ollama API with the file content
+          modified_file_review=$(curl -s http://127.0.0.1:11434/api/generate -d '{
+            "model": "${{ inputs.llm-model }}",
+            "prompt": "Review the following file:\n\n```\n'"$escaped_content"'\n```",
+            "stream": false
+          }' | jq -r '.response')
+
+          # Prepare the review comment
           file_comment="Ollama Code Review for \`$file\`:\n\n$modified_file_review"
           echo "$file_comment" >> ollama_review.txt
+          echo "$file_comment"
         done
 
+        # Post the review as a comment on the PR
         gh pr comment ${{ github.event.pull_request.number }} --body "$(cat ollama_review.txt)"
       shell: bash
