@@ -1,0 +1,24 @@
+name: Lint Code Base
+
+on:
+  push:
+    branches-ignore:
+      - develop
+      - staging
+      - prod
+
+jobs:
+  ollama_review:
+    runs-on: self-hosted
+    name: Ollama Code Review Job
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Ollama Code Review
+        if: contains(github.event.head_commit.message, 'llm-review-code')
+        uses: ./.github/actions/llm-review-code
+        with:
+          llm-model: 'codegemma'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
