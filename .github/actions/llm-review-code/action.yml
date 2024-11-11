@@ -20,7 +20,6 @@ runs:
     - name: Install Ollama
       run: |
         which ollama || brew install ollama
-        ollama ls | grep -c ${{ inputs.llm-model }} || ollama pull ${{ inputs.llm-model }}
       shell: bash
 
     - name: Get modified files
