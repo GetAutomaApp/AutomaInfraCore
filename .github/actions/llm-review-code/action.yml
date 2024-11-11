@@ -35,6 +35,7 @@ runs:
           modified_file_review=$(curl -s http://127.0.0.1:11434/api/generate -d '{"model": "${{ inputs.llm-model }}", "prompt": "Review the following file:\n\n```\n$(cat $file)\n```", "stream": false}' | jq -r '.response')
           file_comment="Ollama Code Review for \`$file\`:\n\n$modified_file_review"
           echo "$file_comment" >> ollama_review.txt
+          echo "$file_comment"
         done
 
         gh pr comment ${{ github.event.pull_request.number }} --body "$(cat ollama_review.txt)"
