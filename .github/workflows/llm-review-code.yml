@@ -6,7 +6,6 @@ on:
             - staging
             - prod
 
-
 jobs:
   llm-review:
     runs-on: macos
@@ -28,5 +27,5 @@ jobs:
         uses: ./.github/actions/llm-review-code
         with:
           llm-model: 'codegemma'
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
