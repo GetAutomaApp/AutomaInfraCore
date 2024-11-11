@@ -7,11 +7,20 @@ on:
 jobs:
   llm-review:
     if: contains(github.event.label.name, 'llm-code-review')
-    runs-on: ubuntu-latest
+    runs-on: macos
     steps:
-      - name: Run LLM Code Review Action
-        uses: ./.github/actions/llm-review-code
-        with:
-          llm-model: 'codegemma'
+        - name: Checkout code
+            uses: actions/checkout@v4
+            with:
+                fetch-depth: 0
+
+        - name: Set up environment
+            run: |
+                echo "Running on branch: $GITHUB_REF"
+
+        - name: Run LLM Code Review Action
+            uses: ./.github/actions/llm-review-code
+            with:
+                llm-model: 'codegemma'
     env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
