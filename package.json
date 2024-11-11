@@ -4,7 +4,9 @@
   "description": "Main infrastructure &amp; core of Automa",
   "main": "index.js",
   "scripts": {
-    "generate": "cd Backend && swift run App generate"
+    "generate": "cd Backend && swift run App generate",
+    "format": "swiftformat .",
+    "lint": "swiftlint"
   },
   "keywords": [],
   "author": "",
