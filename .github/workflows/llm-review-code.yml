@@ -1,6 +1,11 @@
 name: 'LLM Code Review'
 on:
-  workflow_dispatch:  # Changed to workflow_dispatch for manual trigger
+    push:
+        branches-ignore:
+            - develop
+            - staging
+            - prod
+
 
 jobs:
   llm-review:
@@ -14,6 +19,10 @@ jobs:
       - name: Set up environment
         run: |
           echo "Running on branch: $GITHUB_REF"
+          if [[ "${{ github.event_name }}" != "workflow_dispatch" ]]; then
+            echo "Not a manual run, skipping..."
+            exit 0
+          fi
 
       - name: Run LLM Code Review Action
         uses: ./.github/actions/llm-review-code
