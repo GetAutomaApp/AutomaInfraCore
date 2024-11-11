@@ -6,8 +6,94 @@ import SwiftUI
 
 struct ButtonFrameComponent_Previews: PreviewProvider {
   static var previews: some View {
-    ButtonFrameComponent_PreviewsView()
+          ButtonFrameComponent_PreviewsView()
   }
+}
+
+struct ButtonFrameComponent_PreviewsView: View {
+    @StateObject var buttonConfig: ButtonFrameComponentConfig = .init()
+
+    var body: some View {
+        Form {
+            // Customizable Button Section
+            Section {
+                Text("Customize Button Variants")
+                
+                HStack {
+                    ButtonFrameComponent(config: buttonConfig, action: {
+                        print("Clicked Me")
+                    }) {
+                        Text("Hello, World")
+                    }
+                    
+                    ButtonFrameComponent(config: buttonConfig, action: {
+                        print("Clicked Me")
+                    }) {
+                        Image(systemName: "play.fill")
+                    }
+                }
+                
+
+                
+                // MARK: - Customization Controls
+                VStack(alignment: .leading) {
+                    Text("Frame Variant")
+                    Picker("Button Variant", selection: $buttonConfig.frameVariant) {
+                        ForEach(ButtonFrameVariants.allCases, id: \.self) { variant in
+                            Text(variant.rawValue)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding(.bottom)
+                    
+                    Toggle("Fill Space", isOn: $buttonConfig.fillSpace)
+                    
+                    Toggle("Circular", isOn: $buttonConfig.isCircular)
+                        .padding(.bottom)
+
+                    VStack(alignment: .leading) {
+                        Text("Corner Roundness: \(Int(buttonConfig.roundness))")
+                        HStack {
+                            Slider(value: $buttonConfig.roundness, in: 0...50, step: 1)
+                            
+                            ButtonFrameComponent(action: {
+                                buttonConfig.roundness = DesignTokens.defaultCornerRadius
+                            }) {
+                                Text("Reset")
+                            } onSelfAppear: { config in
+                                config.fillSpace = false
+                            }
+                        }
+                    }
+                }
+                .padding(.top)
+            }
+
+            Section {
+                Text("Auto Variant & Variations")
+                AutoButtonVariationsView()
+            }
+            
+            Section {
+                Text("Button Variants")
+                ButtonFrameComponent(action: {}) {
+                    Text("generic")
+                }
+                ButtonFrameComponent(action: {}) {
+                    Text("disabled")
+                } onSelfAppear: { config in
+                    config.frameVariant = .disabled
+                }
+                ButtonFrameComponent(action: {}) {
+                    Text("rainbow")
+                } onSelfAppear: { config in
+                    config.frameVariant = .rainbow
+                }
+            }
+            
+        }.padding(.top, 30)
+        .ignoresSafeArea()
+    }
 }
 
 struct AutoButtonVariationsView: View {
@@ -35,6 +121,7 @@ struct AutoButtonVariationsView: View {
         Image(systemName: isTimerActive ? "pause.fill" : "play.fill")
           .resizable()
           .frame(width: 30, height: 30)
+          .tint(.black)
       } onSelfAppear: { config in
         config.fillSpace = false
       }
@@ -69,54 +156,3 @@ struct AutoButtonVariationsView: View {
     isTimerActive = false
   }
 }
-
-struct ButtonFrameComponent_PreviewsView: View {
-  var body: some View {
-    ScrollView {
-      AutoButtonVariationsView()
-    }
-    .padding()
-  }
-}
-
-// struct ButtonFrameComponent_PreviewsView: View {
-//    var body: some View {
-//        ZStack {
-//            Color.green
-//            VStack {
-//                Spacer()
-//                ZStack {
-//                    Color.black.frame(height: 350)
-//                    VStack {
-//                        HStack {
-//                            VStack(alignment: .leading) {
-//                                Text("Enter a title here")
-//                                    .foregroundStyle(.white)
-//                                    .font(.title)
-//
-//                                Text("Enter a 3 line / 2 line description here")
-//                                    .foregroundStyle(.white)
-//                                    .font(.subheadline)
-//                            }
-//
-//                            Spacer()
-//                        }
-//
-//                        Spacer()
-//                        ButtonFrameComponent(action: { _ in }) { _ in
-//                            Image(systemName: "arrow.right")
-//                                .resizable()
-//                                .aspectRatio(contentMode: .fit)
-//                                .frame(width: 30)
-//                                .padding(5)
-//                        }
-//                        Spacer().frame(height: 20)
-//                    }
-//                    .padding(30)
-//                }
-//                .frame(height: 350)
-//            }
-//        }
-//        .ignoresSafeArea()
-//    }
-// }
