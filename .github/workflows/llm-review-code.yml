@@ -1,10 +1,6 @@
 name: 'LLM Code Review'
 on:
-    push:
-        branches-ignore:
-            - develop
-            - staging
-            - prod
+    workflow_dispatch:
 
 jobs:
   llm-review:
@@ -27,5 +23,4 @@ jobs:
         uses: ./.github/actions/llm-review-code
         with:
           llm-model: 'codegemma'
-        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
