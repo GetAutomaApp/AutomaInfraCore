@@ -16,7 +16,7 @@ runs:
 
     - name: Install Ollama
       run: |
-        curl -fsSL https://ollama.com/install.sh | bash
+        which ollama || brew install ollama
         ollama pull ${{ inputs.llm-model }}
       shell: bash
 
