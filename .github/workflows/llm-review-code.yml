@@ -1,0 +1,17 @@
+
+name: 'LLM Code Review'
+on:
+  pull_request:
+    types: [labeled]
+
+jobs:
+  llm-review:
+    if: contains(github.event.label.name, 'llm-code-review')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run LLM Code Review Action
+        uses: ./.github/actions/llm-review-code
+        with:
+          llm-model: 'codegemma'
+    env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
