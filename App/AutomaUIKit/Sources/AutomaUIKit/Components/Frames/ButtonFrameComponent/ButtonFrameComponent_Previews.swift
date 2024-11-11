@@ -6,94 +6,93 @@ import SwiftUI
 
 struct ButtonFrameComponent_Previews: PreviewProvider {
   static var previews: some View {
-          ButtonFrameComponent_PreviewsView()
+    ButtonFrameComponent_PreviewsView()
   }
 }
 
 struct ButtonFrameComponent_PreviewsView: View {
-    @StateObject var buttonConfig: ButtonFrameComponentConfig = .init()
+  @StateObject var buttonConfig: ButtonFrameComponentConfig = .init()
 
-    var body: some View {
-        Form {
-            // Customizable Button Section
-            Section {
-                Text("Customize Button Variants")
-                
-                HStack {
-                    ButtonFrameComponent(config: buttonConfig, action: {
-                        print("Clicked Me")
-                    }) {
-                        Text("Hello, World")
-                    }
-                    
-                    ButtonFrameComponent(config: buttonConfig, action: {
-                        print("Clicked Me")
-                    }) {
-                        Image(systemName: "play.fill")
-                    }
-                }
-                
+  var body: some View {
+    Form {
+      // Customizable Button Section
+      Section {
+        Text("Customize Button Variants")
 
-                
-                // MARK: - Customization Controls
-                VStack(alignment: .leading) {
-                    Text("Frame Variant")
-                    Picker("Button Variant", selection: $buttonConfig.frameVariant) {
-                        ForEach(ButtonFrameVariants.allCases, id: \.self) { variant in
-                            Text(variant.rawValue)
-                        }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .padding(.bottom)
-                    
-                    Toggle("Fill Space", isOn: $buttonConfig.fillSpace)
-                    
-                    Toggle("Circular", isOn: $buttonConfig.isCircular)
-                        .padding(.bottom)
+        HStack {
+          ButtonFrameComponent(config: buttonConfig, action: {
+            print("Clicked Me")
+          }) {
+            Text("Hello, World")
+          }
 
-                    VStack(alignment: .leading) {
-                        Text("Corner Roundness: \(Int(buttonConfig.roundness))")
-                        HStack {
-                            Slider(value: $buttonConfig.roundness, in: 0...50, step: 1)
-                            
-                            ButtonFrameComponent(action: {
-                                buttonConfig.roundness = DesignTokens.defaultCornerRadius
-                            }) {
-                                Text("Reset")
-                            } onSelfAppear: { config in
-                                config.fillSpace = false
-                            }
-                        }
-                    }
-                }
-                .padding(.top)
+          ButtonFrameComponent(config: buttonConfig, action: {
+            print("Clicked Me")
+          }) {
+            Image(systemName: "play.fill")
+          }
+        }
+
+        // MARK: - Customization Controls
+
+        VStack(alignment: .leading) {
+          Text("Frame Variant")
+          Picker("Button Variant", selection: $buttonConfig.frameVariant) {
+            ForEach(ButtonFrameVariants.allCases, id: \.self) { variant in
+              Text(variant.rawValue)
             }
+          }
+          .pickerStyle(SegmentedPickerStyle())
+          .padding(.bottom)
 
-            Section {
-                Text("Auto Variant & Variations")
-                AutoButtonVariationsView()
+          Toggle("Fill Space", isOn: $buttonConfig.fillSpace)
+
+          Toggle("Circular", isOn: $buttonConfig.isCircular)
+            .padding(.bottom)
+
+          VStack(alignment: .leading) {
+            Text("Corner Roundness: \(Int(buttonConfig.roundness))")
+            HStack {
+              Slider(value: $buttonConfig.roundness, in: 0 ... 50, step: 1)
+
+              ButtonFrameComponent(action: {
+                buttonConfig.roundness = DesignTokens.defaultCornerRadius
+              }) {
+                Text("Reset")
+              } onSelfAppear: { config in
+                config.fillSpace = false
+              }
             }
-            
-            Section {
-                Text("Button Variants")
-                ButtonFrameComponent(action: {}) {
-                    Text("generic")
-                }
-                ButtonFrameComponent(action: {}) {
-                    Text("disabled")
-                } onSelfAppear: { config in
-                    config.frameVariant = .disabled
-                }
-                ButtonFrameComponent(action: {}) {
-                    Text("rainbow")
-                } onSelfAppear: { config in
-                    config.frameVariant = .rainbow
-                }
-            }
-            
-        }.padding(.top, 30)
-        .ignoresSafeArea()
-    }
+          }
+        }
+        .padding(.top)
+      }
+
+      Section {
+        Text("Auto Variant & Variations")
+        AutoButtonVariationsView()
+      }
+
+      Section {
+        Text("Button Variants")
+        ButtonFrameComponent(action: {}) {
+          Text("generic")
+        }
+        ButtonFrameComponent(action: {}) {
+          Text("disabled")
+        } onSelfAppear: { config in
+          config.frameVariant = .disabled
+        }
+        ButtonFrameComponent(action: {}) {
+          Text("rainbow")
+        } onSelfAppear: { config in
+          config.frameVariant = .rainbow
+        }
+      }
+
+    }.padding(.top, 30)
+      .ignoresSafeArea()
+  }
 }
 
 struct AutoButtonVariationsView: View {

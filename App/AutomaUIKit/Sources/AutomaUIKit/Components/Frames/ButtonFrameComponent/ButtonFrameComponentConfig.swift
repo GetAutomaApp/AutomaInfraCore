@@ -12,7 +12,6 @@ enum ButtonFrameVariants: String, CaseIterable {
 
 /// Configuration class for customizing the appearance and behavior of buttons.
 class ButtonFrameComponentConfig: ObservableObject {
-  
   /// The variant of the button's appearance (e.g., generic, disabled, or rainbow).
   @Published var frameVariant: ButtonFrameVariants = .generic
 

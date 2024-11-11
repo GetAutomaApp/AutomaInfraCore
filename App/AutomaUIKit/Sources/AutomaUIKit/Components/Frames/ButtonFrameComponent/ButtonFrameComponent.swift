@@ -12,23 +12,23 @@ import SwiftUI
  - Content with or without configuration
  - Automatic configuration defaults if no custom values are provided.
 
- For more information, refer to the documentation at `App/AutomaUIKit/Sources/AutomaUIKit/Components/Frames/ButtonFrameComponent`.
+ For more information, refer to the documentation in `ButtonFrameComponentDocumentation.md`.
  */
 struct ButtonFrameComponent<Content: View>: View {
-  
   // Default configuration state for the button. Used when no custom configuration is provided.
   @StateObject private var config = ButtonFrameComponentConfig()
 
   // Closure that defines the button's action when tapped, using the current configuration.
   let action: (ButtonFrameComponentConfig) -> Void
-  
+
   // Closure called when the component appears on the screen, allowing for configuration adjustments.
   let onSelfAppear: (ButtonFrameComponentConfig) -> Void
-  
+
   // Closure that provides the content of the button, using the current configuration.
   var content: (ButtonFrameComponentConfig) -> Content
 
   // MARK: - Initializer 1: Action with config, content without config
+
   /**
    Initializes a `ButtonFrameComponent` where the action uses the button's configuration and the content is static.
 
@@ -51,12 +51,13 @@ struct ButtonFrameComponent<Content: View>: View {
   }
 
   // MARK: - Initializer 2: Content with config, action without config
+
   /**
    Initializes a `ButtonFrameComponent` where the content uses the button's configuration and the action is static.
 
    - Parameter config: An optional configuration object to customize the button's appearance.
    - Parameter action: A closure that defines the action triggered when the button is tapped.
-   - Parameter content: A closure returning the content view to be displayed inside the button, which can access the configuration.
+   - Parameter content: A ViewBuilder closure that exposes the config, Returns `some View`
    - Parameter onSelfAppear: A closure called when the button appears on screen.
    */
   init(config: ButtonFrameComponentConfig? = nil,
@@ -73,6 +74,7 @@ struct ButtonFrameComponent<Content: View>: View {
   }
 
   // MARK: - Initializer 3: Neither action nor content use config
+
   /**
    Initializes a `ButtonFrameComponent` where neither the action nor the content uses the configuration.
 
@@ -95,12 +97,13 @@ struct ButtonFrameComponent<Content: View>: View {
   }
 
   // MARK: - Initializer 4: Both action and content use config
+
   /**
    Initializes a `ButtonFrameComponent` where both the action and content use the configuration.
 
    - Parameter config: An optional configuration object to customize the button's appearance.
-   - Parameter action: A closure that defines the action triggered when the button is tapped, using the button's configuration.
-   - Parameter content: A closure returning the content view to be displayed inside the button, which can access the configuration.
+   - Parameter action: A closure that defines the action when the button is tapped.
+   - Parameter content: A closure returning the content view to be displayed inside the button.
    - Parameter onSelfAppear: A closure called when the button appears on screen.
    */
   init(config: ButtonFrameComponentConfig? = nil,
@@ -117,6 +120,7 @@ struct ButtonFrameComponent<Content: View>: View {
   }
 
   // MARK: - Body
+
   /**
    The body of the button, which defines the layout and interaction behavior.
 
@@ -143,6 +147,7 @@ struct ButtonFrameComponent<Content: View>: View {
   }
 
   // MARK: - Helper Function: Determine Background Color
+
   /**
    Determines and returns the appropriate background color for the button based on the configuration's variant.
 
