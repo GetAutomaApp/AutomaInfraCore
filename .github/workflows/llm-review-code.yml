@@ -27,3 +27,5 @@ jobs:
         uses: ./.github/actions/llm-review-code
         with:
           llm-model: 'codegemma'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
