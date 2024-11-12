@@ -16,5 +16,5 @@ jobs:
         uses: tomisacat/ai_code_review@main
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OLLAMA_ADDRESS: localhost
-          exclude: "yarn.lock,dist/**"
+          OLLAMA_ADDRESS: "http://localhost:11434"
+          exclude: "yarn.lock,dist/**,**/.swiftpm,**/.build/**,**/Pods/**"
