@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Install Ollama
+        run: |
+          which ollama || brew install ollama
+          ollama ls | grep -c codellama || ollama pul codellama
+          shell: bash
       - name: Code Review
         uses: tomisacat/ai_code_review@main
         with:
