@@ -23,11 +23,11 @@ jobs:
           npm install
           npm run build
           npm run package
-          cd ../../../
         shell: bash
       - name: Code Review
         uses: ./.github/actions/ai-code-review
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OLLAMA_ADDRESS: "http://localhost:11434"
+          LLM_MODEL: "codellama"
           exclude: "yarn.lock,dist/**,**/.swiftpm,**/.build/**,**/Pods/**"
