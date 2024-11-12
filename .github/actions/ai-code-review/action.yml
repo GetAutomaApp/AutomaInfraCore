@@ -18,7 +18,12 @@ inputs:
     default: ""
 runs:
   using: "node20"
-  main: "dist/index.js"
+  pre: |
+    cd .github/actions_code/ai-code-review
+    npm install
+    npm run build
+    npm run package
+  main: ".github/actions_code/ai-code-review/dist/index.js"
 branding:
   icon: "aperture"
   color: "green"
