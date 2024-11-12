@@ -90,4 +90,4 @@ func modifyButtonState() {
 }
 ```
 
-This is a simple addition
+## Footer. I need help reviewers! What would a good footer be?
