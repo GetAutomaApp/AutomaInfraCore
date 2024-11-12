@@ -17,6 +17,13 @@ jobs:
           which ollama || brew install ollama
           ollama ls | grep -c codellama || ollama pul codellama
         shell: bash
+      - name: Build Project
+        run: |
+          cd .github/actions_code/ai-code-review
+          npm install
+          npm run build
+          npm run package
+        shell: bash
       - name: Code Review
         uses: ./.github/actions/ai-code-review
         with:
