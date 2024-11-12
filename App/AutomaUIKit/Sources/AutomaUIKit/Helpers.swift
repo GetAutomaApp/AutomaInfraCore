@@ -2,14 +2,9 @@
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp. All rights reserved.
 
-//
-//  Helpers.swift
-//  AutomaUIKit
-//
-//  Created by Simon Ferns on 11/6/24.
-//
 import SwiftUI
 
+// What should I add as documnentation here?
 extension Color {
   init(hex: String) {
     let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)

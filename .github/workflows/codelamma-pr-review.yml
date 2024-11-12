@@ -16,7 +16,7 @@ jobs:
         run: |
           which ollama || brew install ollama
           ollama ls | grep -c codellama || ollama pul codellama
-          shell: bash
+        shell: bash
       - name: Code Review
         uses: tomisacat/ai_code_review@main
         with:
