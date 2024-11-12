@@ -18,7 +18,7 @@ jobs:
           ollama ls | grep -c codellama || ollama pul codellama
         shell: bash
       - name: Code Review
-        uses: GetAutomaApp@main
+        uses: ./.github/actions/ai-code-review
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OLLAMA_ADDRESS: "http://localhost:11434"
