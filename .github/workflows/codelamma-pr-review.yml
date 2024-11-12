@@ -29,6 +29,6 @@ jobs:
           node .github/actions_code/ai-code-review/dist/index.js
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}
           OLLAMA_ADDRESS: "http://localhost:11434"
           LLM_MODEL: "codellama"
