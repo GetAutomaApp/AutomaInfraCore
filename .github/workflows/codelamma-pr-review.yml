@@ -23,6 +23,7 @@ jobs:
           npm install
           npm run build
           npm run package
+          cd ../../../
         shell: bash
       - name: Code Review
         uses: ./.github/actions/ai-code-review
