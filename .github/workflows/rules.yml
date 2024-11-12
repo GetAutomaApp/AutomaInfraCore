@@ -2,11 +2,10 @@ name: Rules Check
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches-ignore:
+      - develop
+      - staging
+      - prod
 
 jobs:
   rules:
