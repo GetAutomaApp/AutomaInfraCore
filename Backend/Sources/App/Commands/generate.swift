@@ -142,7 +142,7 @@ struct GenerateAppComponent: Command {
       .replacingOccurrences(of: "__CAPNAME_SPACING__", with: arrayToSpaceDelimited(words))
   }
 
-  func pascalToWordsArray(_ pascal: String) -> [String]? {
+  func pascalToWordsArray(_ pascal: String) -> [String] {
     let pattern = "([A-Z])"
 
     do {
@@ -159,7 +159,7 @@ struct GenerateAppComponent: Command {
     } catch {
       // Handle the error (e.g., print it, return nil, or handle in another way)
       print("Invalid regular expression: \(error)")
-      return nil
+      return []
     }
   }
 

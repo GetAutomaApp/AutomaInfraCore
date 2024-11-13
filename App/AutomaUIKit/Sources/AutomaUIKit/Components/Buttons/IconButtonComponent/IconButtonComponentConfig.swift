@@ -1,13 +1,13 @@
 import SwiftUI
 
-enum __CAPNAME__Variants {
+enum IconButtonVariants {
     case variant1, variant2
 
 }
 
-struct __CAPNAME__ComponentConfig {
+struct IconButtonComponentConfig {
     var someProperty: String = "Default Value"  // Default value
-    var variant: __CAPNAME__Variants = .variant1
+    var variant: IconButtonVariants = .variant1
 
     let textColor: Color = .black
 }
