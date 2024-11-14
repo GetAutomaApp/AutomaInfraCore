@@ -3,6 +3,7 @@ import SwiftUI
 
 struct IconButtonComponent_Previews: PreviewProvider {
     static var previews: some View {
-        IconButtonComponent()
+        IconButtonComponent(
+        )
     }
 }

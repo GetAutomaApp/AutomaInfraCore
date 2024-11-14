@@ -14,9 +14,30 @@ struct DesignPadding {
   let buttonEven: EdgeInsets = .init(top: 10, leading: 10, bottom: 10, trailing: 10)
 }
 
+enum DesignIconsEnum {
+  case pause, play, unknown
+
+  var image: some View {
+    switch self {
+    case .pause:
+        return Image(systemName: "pause.circle.fill").toIcon()
+    case .play:
+        return Image(systemName: "play.circle.fill").toIcon()
+    case .unknown:
+        return Image(systemName: "questionmark.circle.fill").toIcon()
+    }
+  }
+}
+
+struct DesignIcons {
+    static let defaultWidth: CGFloat = 24
+    static let defaultHeight: CGFloat = 24
+}
+
 enum DesignTokens {
   static let colors: DesignColors = .init()
   static let padding: DesignPadding = .init()
+  static let icons: DesignIcons = .init()
 
   static let defaultCornerRadius: CGFloat = 8
 }

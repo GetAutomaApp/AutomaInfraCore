@@ -117,13 +117,11 @@ struct AutoButtonVariationsView: View {
       ButtonFrameComponent(action: { _ in
         isTimerActive ? stopChangingVariant() : startChangingVariant()
       }) {
-        Image(systemName: isTimerActive ? "pause.fill" : "play.fill")
-          .resizable()
-          .frame(width: 30, height: 30)
-          .tint(.black)
+          isTimerActive ? DesignIconsEnum.pause.image : DesignIconsEnum.play.image
       } onSelfAppear: { config in
         config.fillSpace = false
       }
+      .contentTransition(.symbolEffect(.replace))
     }
   }
 
