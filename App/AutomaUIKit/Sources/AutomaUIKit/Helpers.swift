@@ -37,20 +37,20 @@ extension Color {
   }
 }
 
-struct DesignImages {
-    static func iconManipulation(_ image: Image) -> some View {
-        image
-            .resizable()
-            .frame(
-                width: DesignIcons.defaultWidth,
-                height: DesignIcons.defaultHeight
-            )
-            .padding(0)
-    }
+enum DesignImages {
+  static func iconManipulation(_ image: Image) -> some View {
+    image
+      .resizable()
+      .frame(
+        width: DesignIcons.defaultWidth,
+        height: DesignIcons.defaultHeight
+      )
+      .padding(0)
+  }
 }
 
 extension Image {
-    func toIcon() -> some View {
-        DesignImages.iconManipulation(self)
-    }
+  func toIcon() -> some View {
+    DesignImages.iconManipulation(self)
+  }
 }

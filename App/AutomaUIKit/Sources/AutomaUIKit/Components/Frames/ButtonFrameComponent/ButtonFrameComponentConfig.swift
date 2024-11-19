@@ -7,7 +7,9 @@ import SwiftUI
 /// Enum representing the different visual variants of the button.
 /// All variants are displayed int he `ButtonFrameComponent_Previews.swift` file
 enum ButtonFrameVariants: String, CaseIterable {
-  case generic, disabled, rainbow
+  case generic
+  case disabled
+  case rainbow
 }
 
 /// Configuration class for customizing the appearance and behavior of buttons.

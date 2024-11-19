@@ -24,7 +24,7 @@ let package = Package(
       path: "Sources",
       exclude: [
         "AutomaUIKit/Components/Buttons/IconButtonComponent/IconButtonComponentDocumentation.md",
-        "AutomaUIKit/Components/Frames/ButtonFrameComponent/ButtonFrameComponentDocumentation.md"
+        "AutomaUIKit/Components/Frames/ButtonFrameComponent/ButtonFrameComponentDocumentation.md",
       ]
     ),
     .testTarget(

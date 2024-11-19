@@ -20,18 +20,18 @@ enum DesignIconsEnum {
   var image: some View {
     switch self {
     case .pause:
-        return Image(systemName: "pause.circle.fill").toIcon()
+      Image(systemName: "pause.circle.fill").toIcon()
     case .play:
-        return Image(systemName: "play.circle.fill").toIcon()
+      Image(systemName: "play.circle.fill").toIcon()
     case .unknown:
-        return Image(systemName: "questionmark.circle.fill").toIcon()
+      Image(systemName: "questionmark.circle.fill").toIcon()
     }
   }
 }
 
 struct DesignIcons {
-    static let defaultWidth: CGFloat = 24
-    static let defaultHeight: CGFloat = 24
+  static let defaultWidth: CGFloat = 24
+  static let defaultHeight: CGFloat = 24
 }
 
 enum DesignTokens {

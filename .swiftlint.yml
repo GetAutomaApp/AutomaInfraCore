@@ -15,3 +15,4 @@ excluded:
   - '**/*.swiftinterface'      # Exclude Swift interface files
   - '**/Test*/'                # Exclude any directories with 'Test' in their name
   - '**/Generated/**'          # Exclude generated files/folders
+  - '**PropertyEditor.swift'

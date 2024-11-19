@@ -117,7 +117,7 @@ struct AutoButtonVariationsView: View {
       ButtonFrameComponent(action: { _ in
         isTimerActive ? stopChangingVariant() : startChangingVariant()
       }) {
-          isTimerActive ? DesignIconsEnum.pause.image : DesignIconsEnum.play.image
+        isTimerActive ? DesignIconsEnum.pause.image : DesignIconsEnum.play.image
       } onSelfAppear: { config in
         config.fillSpace = false
       }
