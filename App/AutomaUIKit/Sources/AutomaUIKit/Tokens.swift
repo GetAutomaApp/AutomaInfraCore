@@ -30,8 +30,8 @@ enum DesignIconsEnum {
 }
 
 struct DesignIcons {
-  static let defaultWidth: CGFloat = 24
-  static let defaultHeight: CGFloat = 24
+  let defaultWidth: CGFloat = 24
+  let defaultHeight: CGFloat = 24
 }
 
 enum DesignTokens {

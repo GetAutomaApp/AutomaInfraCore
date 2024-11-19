@@ -42,8 +42,8 @@ enum DesignImages {
     image
       .resizable()
       .frame(
-        width: DesignIcons.defaultWidth,
-        height: DesignIcons.defaultHeight
+        width: DesignTokens.icons.defaultWidth,
+        height: DesignTokens.icons.defaultHeight
       )
       .padding(0)
   }

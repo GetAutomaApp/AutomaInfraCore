@@ -39,9 +39,10 @@ struct PaddingSliderInput: View {
       Slider(value: $value, in: 0 ... 30, step: 1)
         .padding(.leading)
       TextField("", value: $value, formatter: NumberFormatter())
-        .keyboardType(.decimalPad)
-        .onChange(of: value) { newValue in
-          value = min(max(newValue, 0), 100)
+        .onChange(of: value) { oldValue, newValue in
+          if oldValue != newValue {
+            value = newValue
+          }
         }
         .frame(width: 30)
     }
