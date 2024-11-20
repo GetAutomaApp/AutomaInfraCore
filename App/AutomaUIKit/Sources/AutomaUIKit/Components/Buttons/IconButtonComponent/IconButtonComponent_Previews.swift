@@ -11,6 +11,9 @@ import SwiftUI
 struct IconButtonComponent_Previews: PreviewProvider {
   static var previews: some View {
     IconButtonComponent(
+        defaultIcon: .pause, action: { c in
+            c.icon = .play
+        }
     )
   }
 }

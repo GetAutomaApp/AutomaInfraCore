@@ -16,7 +16,7 @@ struct DesignPadding {
   let buttonEven: EdgeInsets = .init(top: 10, leading: 10, bottom: 10, trailing: 10)
 }
 
-enum DesignIconsEnum {
+enum DesignIconsEnum: CaseIterable {
   case pause, play, unknown
 
   var image: some View {

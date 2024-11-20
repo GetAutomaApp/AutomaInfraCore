@@ -9,7 +9,7 @@ import SwiftUI
 /**
  The AnyKeyPath struct represents a type reased keypath whicih both has getter & setter methods.
  This wrapper aims to simplify the usage of most types by allowing you to if/else over them.
- 
+
  This struct does the following:
  - Has an initiializer to manually initialize all properties
  - Provides an initializer to initialize the code via a KeyPath
@@ -23,12 +23,15 @@ struct AnyKeyPath<TheObservedObject, TheValueType> {
   // MARK: - 1. First initializer. Initialize this struct by providing a writable keypath
 
   /**
-  Initializes an `AnyKeyPath` where the `get` and `set` properties makes use of KeyPath syntax
+   Initializes an `AnyKeyPath` where the `get` and `set` properties makes use of KeyPath syntax
 
-   - Parameter label: The friendly **label** you want to represent to the user in the UI
-   - Parameter keyPath: A `WritableKeyPath` reference from an `ObservableObject`
-   */
-  init<ObservableWrappedValueType>(_ label: String, keyPath: WritableKeyPath<TheObservedObject, ObservableWrappedValueType>) where ObservableWrappedValueType: Any {
+    - Parameter label: The friendly **label** you want to represent to the user in the UI
+    - Parameter keyPath: A `WritableKeyPath` reference from an `ObservableObject`
+    */
+  init<ObservableWrappedValueType>(
+    _ label: String,
+    keyPath: WritableKeyPath<TheObservedObject, ObservableWrappedValueType>
+  ) where ObservableWrappedValueType: Any {
     self.label = label
     get = { object in object[keyPath: keyPath] as! TheValueType }
     set = { object, value in
@@ -41,7 +44,7 @@ struct AnyKeyPath<TheObservedObject, TheValueType> {
 
 /**
  Renders a SwiftUI view to edit a property by slider or text input.
- 
+
  - Parameter value: A binding to the `CGFloat` Value being edited.
  - Parameter label: The label being renered out on the client.
  - Parameter max: The maximum that the `value` property is allowed to be.
@@ -86,7 +89,7 @@ struct PaddingEditor: View {
 
 /**
  Renders a SwiftUI Segmented Picker allowing you to switch between enum values.
- 
+
  - Parameter value: The Enum value you want to keep in sync.
  - Parameter cases: All the cases that you want to allow the editor to switch to.
  */
@@ -105,7 +108,7 @@ struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View whe
 
 /**
  Renders a SwiftUI view which allows you to modify various properties on a StateObject / ObservableObject.
- 
+
  - Parameter object: The ObservableObject you want this `PropertyEditor` to modify.
  - Parameter properties: All the properties you want rendered out from the **object** parameter.
  - Parameter viewwer: A SwiftUI view closure to render out any additional content.
@@ -141,7 +144,7 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
    Builds a SwiftUI View for a form element which modifies its property.
 
    - Parameter property: The `AnyKeyPath` object you want to generate a row for.
-   
+
    Supported Types: Strings, Integers, Booleans, Doubles, CGFloats, EdgeInsets, Colors
    Types Coming Soon: Arrays (Generic), Dictionaries
 

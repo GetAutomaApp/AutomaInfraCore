@@ -7,26 +7,35 @@
 import SwiftUI
 
 struct IconButtonComponent: View {
-  var config: IconButtonComponentConfig = .init()
+  @StateObject var config: IconButtonComponentConfig
 
   let onSelfAppear: (IconButtonComponentConfig) -> Void
+  let action: (IconButtonComponentConfig) -> Void
+
 
   init(
     config: IconButtonComponentConfig = .init(),
-    onSelfAppear: @escaping (IconButtonComponentConfig) -> Void = { _ in }
+    /// onSelfAppear can override any properties that gets initialized in the init!
+    onSelfAppear: @escaping (IconButtonComponentConfig) -> Void = { _ in },
+    /// defaultIcon overrides anything you pass in into the config!
+    defaultIcon: DesignIconsEnum = .unknown,
+    action: @escaping (IconButtonComponentConfig) -> Void = { _ in }
   ) {
-    self.config = config
+    config.icon = defaultIcon
+    _config = StateObject(wrappedValue: config)
     self.onSelfAppear = onSelfAppear
+    self.action = action
   }
 
   var body: some View {
     ButtonFrameComponent(config: config.frameConfig, action: { _ in
-      print("Action")
+        action(config)
     }) {
       iconToUse
     } onSelfAppear: { _ in
       // NOTE: We have access to the `internalConfig` from the `config.frameConfig
       onSelfAppear(config)
+      print(config)
     }
     .contentTransition(.symbolEffect(.replace))
   }
