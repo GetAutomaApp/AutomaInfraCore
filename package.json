@@ -4,6 +4,7 @@
   "description": "Main infrastructure &amp; core of Automa",
   "main": "index.js",
   "scripts": {
+    "prepare:action": "npm install",
     "generate": "cd Backend && swift run App generate",
     "format": "npm run build:all && swiftformat .",
     "lint": "npm run build:all && swiftlint",
