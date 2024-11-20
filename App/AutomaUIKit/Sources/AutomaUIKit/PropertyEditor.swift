@@ -1,42 +1,60 @@
+// PropertyEditor.swift
+// AdonisCodes created this file on 11/19/24
+// Copyright (c) 2024 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
+
 import SwiftUI
 
-struct AnyKeyPath<T, V> {
+/**
+ The AnyKeyPath struct represents a type reased keypath whicih both has getter & setter methods.
+ This wrapper aims to simplify the usage of most types by allowing you to if/else over them.
+ 
+ This struct does the following:
+ - Has an initiializer to manually initialize all properties
+ - Provides an initializer to initialize the code via a KeyPath
+ */
+struct AnyKeyPath<TheObservedObject, TheValueType> {
   let label: String
-  let get: (T) -> V
-  let set: (inout T, V) -> Void
+  let get: (TheObservedObject) -> TheValueType
+  let set: (inout TheObservedObject, TheValueType) -> Void
   let type: Any.Type
 
-  init(
-    _ label: String,
-    _ get: @escaping (T) -> V,
-    _ set: @escaping (inout T, V) -> Void,
-    _ type: Any
-  ) {
-    self.label = label
-    self.get = get
-    self.set = set
-    self.type = type as! any Any.Type
-  }
+  // MARK: - 1. First initializer. Initialize this struct by providing a writable keypath
 
-  init<U>(_ label: String, keyPath: WritableKeyPath<T, U>) where U: Any {
+  /**
+  Initializes an `AnyKeyPath` where the `get` and `set` properties makes use of KeyPath syntax
+
+   - Parameter label: The friendly **label** you want to represent to the user in the UI
+   - Parameter keyPath: A `WritableKeyPath` reference from an `ObservableObject`
+   */
+  init<ObservableWrappedValueType>(_ label: String, keyPath: WritableKeyPath<TheObservedObject, ObservableWrappedValueType>) where ObservableWrappedValueType: Any {
     self.label = label
-    get = { object in object[keyPath: keyPath] as! V }
+    get = { object in object[keyPath: keyPath] as! TheValueType }
     set = { object, value in
       var mutableObject = object
-      mutableObject[keyPath: keyPath] = value as! U
+      mutableObject[keyPath: keyPath] = value as! ObservableWrappedValueType
     }
-    type = U.self
+    type = ObservableWrappedValueType.self
   }
 }
 
+/**
+ Renders a SwiftUI view to edit a property by slider or text input.
+ 
+ - Parameter value: A binding to the `CGFloat` Value being edited.
+ - Parameter label: The label being renered out on the client.
+ - Parameter max: The maximum that the `value` property is allowed to be.
+ */
 struct PaddingSliderInput: View {
   @Binding var value: CGFloat
   let label: String
+  let max: CGFloat = 30
 
   var body: some View {
     HStack {
       Text("\(label):")
-      Slider(value: $value, in: 0 ... 30, step: 1)
+      Slider(value: $value, in: 0 ... max, step: 1)
         .padding(.leading)
       TextField("", value: $value, formatter: NumberFormatter())
         .onChange(of: value) { oldValue, newValue in
@@ -49,6 +67,9 @@ struct PaddingSliderInput: View {
   }
 }
 
+/**
+ Renders a SwiftUI view to edit edge insets via a binding to that value.
+ */
 struct PaddingEditor: View {
   @Binding var edgeInsets: EdgeInsets
 
@@ -63,19 +84,12 @@ struct PaddingEditor: View {
   }
 }
 
-// struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable & RandomAccessCollection>: View where
-// E.RawValue == String {
-//    @Binding var value: E
-//
-//    var body: some View {
-//        Picker("", selection: $value) {
-//            ForEach(E.allCases, id: \.self) { enumCase in
-//                Text(enumCase.rawValue)
-//            }
-//        }
-//    }
-// }
-
+/**
+ Renders a SwiftUI Segmented Picker allowing you to switch between enum values.
+ 
+ - Parameter value: The Enum value you want to keep in sync.
+ - Parameter cases: All the cases that you want to allow the editor to switch to.
+ */
 struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View where E.RawValue == String {
   @Binding var value: E
   let cases: [E]
@@ -89,6 +103,20 @@ struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View whe
   }
 }
 
+/**
+ Renders a SwiftUI view which allows you to modify various properties on a StateObject / ObservableObject.
+ 
+ - Parameter object: The ObservableObject you want this `PropertyEditor` to modify.
+ - Parameter properties: All the properties you want rendered out from the **object** parameter.
+ - Parameter viewwer: A SwiftUI view closure to render out any additional content.
+
+ Notes:
+ - Never pass an AnyKeyPath referencing another ObservableObject. Reference each property separately.
+ - Supported types are listed in the description of the `propertyRow` method of this struct
+ - All Enums, and extra items should be passed into the `viewer` property
+
+ This method currently isn't perfect but it does reduce the code duplication by 10 fold.
+ */
 struct PropertyEditor<T: ObservableObject, Content: View>: View {
   @ObservedObject var object: T
   let properties: [[AnyKeyPath<T, Any>]]
@@ -109,9 +137,19 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
     }
   }
 
+  /**
+   Builds a SwiftUI View for a form element which modifies its property.
+
+   - Parameter property: The `AnyKeyPath` object you want to generate a row for.
+   
+   Supported Types: Strings, Integers, Booleans, Doubles, CGFloats, EdgeInsets, Colors
+   Types Coming Soon: Arrays (Generic), Dictionaries
+
+   TODO: Add support for specifying modifications in the AnyKeyPath initializer
+   */
   @ViewBuilder
   func propertyRow(for property: AnyKeyPath<T, Any>) -> some View {
-    // Check if the property is another ObservableObject (We will then make sure that we recursively do this!)
+    // TODO: Handle nested Observable Objects
     if property.type == String.self {
       let value = property.get(object) as! String
       HStack {
@@ -161,7 +199,6 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
         Text("\(property.label): \(value, specifier: "%.1f")")
       }
     } else if type(of: property.get(object)) == EdgeInsets.self {
-      // Create a padding editor
       let value = property.get(object) as! EdgeInsets
       PaddingEditor(edgeInsets: Binding(
         get: { value },
@@ -178,7 +215,6 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
       }),
       label: property.label)
     } else if property.type == Color.self {
-      // Colors (Pull from design colors & color picker)
       let value = property.get(object) as! Color
       ColorPicker("\(property.label):", selection: Binding(get: {
         value
@@ -188,62 +224,4 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
       }))
     }
   }
-}
-
-func getAllEnumCases<T>(from value: T) -> [T] where T: CaseIterable & RawRepresentable {
-  if let enumValue = value as? T.Type {
-    return enumValue.allCases as! [T]
-  }
-  return []
-}
-
-class Person: ObservableObject {
-  @Published var name: String = "John Doe"
-  @Published var age: Int = 30
-  @Published var isStudent: Bool = false
-  @Published var gpa: Double = 3.5
-}
-
-struct ContentView: View {
-  @StateObject private var person = Person()
-  @StateObject var buttonConfig: ButtonFrameComponentConfig = .init()
-
-  var body: some View {
-    PropertyEditor(
-      object: buttonConfig,
-      properties: [
-        [AnyKeyPath("Fill Space", keyPath: \.fillSpace)],
-        [AnyKeyPath("Is Circular", keyPath: \.isCircular)],
-        [AnyKeyPath("Padding", keyPath: \.defaultPadding)],
-        [AnyKeyPath("Roundness", keyPath: \.roundness)],
-        [AnyKeyPath("Generic Background", keyPath: \.variantGenericBackground)],
-        [AnyKeyPath("Disabled Background", keyPath: \.variantDisabledBackground)],
-      ]
-    ) {
-      VStack {
-        HStack {
-          ButtonFrameComponent(config: buttonConfig, action: {
-            print("Clicked Me")
-          }) {
-            Text("Hello, World")
-          }
-
-          ButtonFrameComponent(config: buttonConfig, action: {
-            print("Clicked Me")
-          }) {
-            Image(systemName: "play.fill")
-          }
-        }
-
-        EnumPropertyView(
-          value: $buttonConfig.frameVariant,
-          cases: ButtonFrameVariants.allCases
-        )
-      }
-    }
-  }
-}
-
-#Preview {
-  ContentView()
 }

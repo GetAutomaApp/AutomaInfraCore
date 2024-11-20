@@ -1,6 +1,8 @@
 // ButtonFrameComponent_Previews.swift
+// AdonisCodes created this file on 11/6/24
 // Copyright (c) 2024 GetAutomaApp
-// All source code and related assets are the property of GetAutomaApp. All rights reserved.
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
 
 import SwiftUI
 
@@ -14,11 +16,19 @@ struct ButtonFrameComponent_PreviewsView: View {
   @StateObject var buttonConfig: ButtonFrameComponentConfig = .init()
 
   var body: some View {
-    Form {
-      // Customizable Button Section
-      Section {
-        Text("Customize Button Variants")
-
+    PropertyEditor(
+      object: buttonConfig,
+      properties: [
+        [AnyKeyPath("Fill Space", keyPath: \.fillSpace)],
+        [AnyKeyPath("Is Circular", keyPath: \.isCircular)],
+        [AnyKeyPath("Padding", keyPath: \.defaultPadding)],
+        [AnyKeyPath("Roundness", keyPath: \.roundness)],
+        [AnyKeyPath("Generic Background", keyPath: \.variantGenericBackground)],
+        [AnyKeyPath("Disabled Background", keyPath: \.variantDisabledBackground)],
+      ]
+    ) {
+      VStack {
+        AutoButtonVariationsView()
         HStack {
           ButtonFrameComponent(config: buttonConfig, action: {
             print("Clicked Me")
@@ -33,65 +43,12 @@ struct ButtonFrameComponent_PreviewsView: View {
           }
         }
 
-        // MARK: - Customization Controls
-
-        VStack(alignment: .leading) {
-          Text("Frame Variant")
-          Picker("Button Variant", selection: $buttonConfig.frameVariant) {
-            ForEach(ButtonFrameVariants.allCases, id: \.self) { variant in
-              Text(variant.rawValue)
-            }
-          }
-          .pickerStyle(SegmentedPickerStyle())
-          .padding(.bottom)
-
-          Toggle("Fill Space", isOn: $buttonConfig.fillSpace)
-
-          Toggle("Circular", isOn: $buttonConfig.isCircular)
-            .padding(.bottom)
-
-          VStack(alignment: .leading) {
-            Text("Corner Roundness: \(Int(buttonConfig.roundness))")
-            HStack {
-              Slider(value: $buttonConfig.roundness, in: 0 ... 50, step: 1)
-
-              ButtonFrameComponent(action: {
-                buttonConfig.roundness = DesignTokens.defaultCornerRadius
-              }) {
-                Text("Reset")
-              } onSelfAppear: { config in
-                config.fillSpace = false
-              }
-            }
-          }
-        }
-        .padding(.top)
+        EnumPropertyView(
+          value: $buttonConfig.frameVariant,
+          cases: ButtonFrameVariants.allCases
+        )
       }
-
-      Section {
-        Text("Auto Variant & Variations")
-        AutoButtonVariationsView()
-      }
-
-      Section {
-        Text("Button Variants")
-        ButtonFrameComponent(action: {}) {
-          Text("generic")
-        }
-        ButtonFrameComponent(action: {}) {
-          Text("disabled")
-        } onSelfAppear: { config in
-          config.frameVariant = .disabled
-        }
-        ButtonFrameComponent(action: {}) {
-          Text("rainbow")
-        } onSelfAppear: { config in
-          config.frameVariant = .rainbow
-        }
-      }
-
-    }.padding(.top, 30)
-      .ignoresSafeArea()
+    }
   }
 }
 
