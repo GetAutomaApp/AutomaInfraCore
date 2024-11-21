@@ -12,7 +12,8 @@ struct IconButtonComponent: View {
   let onSelfAppear: (IconButtonComponentConfig) -> Void
   let action: (IconButtonComponentConfig) -> Void
 
-    // MARK: - 1. Initializer with all properties, closures with input
+  // MARK: - 1. Initializer with all properties, closures with input
+
   init(
     config: IconButtonComponentConfig = .init(),
     /// onSelfAppear can override any properties that gets initialized in the init!
@@ -26,23 +27,24 @@ struct IconButtonComponent: View {
     self.onSelfAppear = onSelfAppear
     self.action = action
   }
-    
-    // MARK: - 2. Initializer with action with optional closure parameter
-    init(
-        config: IconButtonComponentConfig = .init(),
-        onSelfAppear: @escaping (IconButtonComponentConfig) -> Void = { _ in },
-        defaultIcon: DesignIconsEnum = .unknown,
-        action: @escaping () -> Void = {  }
-    ) {
-        self.init(config: config, onSelfAppear: onSelfAppear, defaultIcon: defaultIcon, action: { _ in action() })
-    }
-    
+
+  // MARK: - 2. Initializer with action with optional closure parameter
+
+  init(
+    config: IconButtonComponentConfig = .init(),
+    onSelfAppear: @escaping (IconButtonComponentConfig) -> Void = { _ in },
+    defaultIcon: DesignIconsEnum = .unknown,
+    action: @escaping () -> Void = {}
+  ) {
+    self.init(config: config, onSelfAppear: onSelfAppear, defaultIcon: defaultIcon, action: { _ in action() })
+  }
+
   var body: some View {
     ButtonFrameComponent(config: config.frameConfig, action: {
       action(config)
-        print(action)
+      print(action)
     }) {
-        config.icon.image
+      config.icon.image
     } onSelfAppear: { _ in
       // NOTE: We have access to the `internalConfig` from the `config.frameConfig
       onSelfAppear(config)

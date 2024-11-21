@@ -79,11 +79,11 @@ struct AutoButtonVariationsView: View {
 //        config.fillSpace = false
 //      }
 //      .contentTransition(.symbolEffect(.replace))
-        
-        IconButtonComponent(onSelfAppear: { config in config.variant = .square }, defaultIcon: .pause) { config in
-            isTimerActive ? stopChangingVariant() : startChangingVariant()
-            config.icon = isTimerActive ? .pause : .play
-        }
+
+      IconButtonComponent(onSelfAppear: { config in config.variant = .square }, defaultIcon: .pause) { config in
+        isTimerActive ? stopChangingVariant() : startChangingVariant()
+        config.icon = isTimerActive ? .pause : .play
+      }
     }
   }
 

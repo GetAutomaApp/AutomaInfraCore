@@ -10,8 +10,8 @@ struct IconButtonComponent_Previews: PreviewProvider {
   static var previews: some View {
     IconButtonComponent(
       defaultIcon: .pause, action: { config in
-          config.variant = .allCases.randomElement()!
-          config.icon = .unknown
+        config.variant = .allCases.randomElement()!
+        config.icon = .unknown
       }
     ).padding()
   }
