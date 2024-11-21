@@ -8,7 +8,7 @@ class __CAPNAME__ComponentTests: XCTestCase {
     // one test case per method
     // one test case per completed flow (action)
     // one test case per potential edge-case
-    func testIntegration() throws {
+    @MainActor func testIntegration() throws {
         let component = __CAPNAME__Component()
         XCTAssertNotNil(component)
     }

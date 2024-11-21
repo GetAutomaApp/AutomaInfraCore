@@ -9,9 +9,10 @@ import SwiftUI
 struct IconButtonComponent_Previews: PreviewProvider {
   static var previews: some View {
     IconButtonComponent(
-      defaultIcon: .pause, action: { config in
+        onSelfAppear: {
+            config in config.isDisabled = true}, defaultIcon: .pause, action: { config in
         config.variant = .allCases.randomElement()!
-        config.icon = .unknown
+          config.icon = .allCases.randomElement()!
       }
     ).padding()
   }

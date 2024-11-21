@@ -38,6 +38,11 @@ struct IconButtonComponent: View {
   ) {
     self.init(config: config, onSelfAppear: onSelfAppear, defaultIcon: defaultIcon, action: { _ in action() })
   }
+    
+  // MARK: - 3. Initializer with all defaults
+    init() {
+        self.init(config: .init(), onSelfAppear: { _ in }, defaultIcon: .unknown, action: { _ in })
+    }
 
   var body: some View {
     ButtonFrameComponent(config: config.frameConfig, action: {
