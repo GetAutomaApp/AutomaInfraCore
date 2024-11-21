@@ -11,23 +11,54 @@ enum IconButtonVariants: String, CaseIterable {
   case square
   case circle
   case pill
-
-  // MARK: - Special Variants / Widely Used Buttons
-
-  case play
-  case videoPlay
-  case pause
-  case videoPause
-  case cancel
 }
 
 class IconButtonComponentConfig: ObservableObject {
   @Published var frameConfig: ButtonFrameComponentConfig = .init()
-  @Published var variant: IconButtonVariants = .generic
+    
+    @Published var variant: IconButtonVariants = .generic {
+        didSet {
+            applyVariantStyling()
+        }
+    }
+  
+    @Published var isDisabled: Bool = false {
+        didSet {
+            manageDisabledState()
+        }
+    }
+    
   @Published var icon: DesignIconsEnum = .unknown
-
-//    init(frameConfig: ButtonFrameComponentConfig = .init(), variant: IconButtonVariants = .generic) {
-//        self._frameConfig = .init(initialValue: frameConfig)
-//        self._variant = .init(initialValue: variant)
-//    }
+    
+    func applyVariantStyling() {
+        switch variant {
+        case .generic:
+            frameConfig.isCircular = false
+            frameConfig.roundness = DesignTokens.defaultCornerRadius
+            frameConfig.fillSpace = true
+        case .square:
+            frameConfig.isCircular = false
+            frameConfig.roundness = DesignTokens.defaultCornerRadius
+            frameConfig.fillSpace = false
+            frameConfig.defaultPadding = DesignTokens.padding.buttonEven
+        case .circle:
+            frameConfig.isCircular = true
+            frameConfig.fillSpace = false
+            frameConfig.defaultPadding = DesignTokens.padding.buttonEven
+        case .pill:
+            frameConfig.isCircular = true
+            frameConfig.fillSpace = true
+            frameConfig.defaultPadding = DesignTokens.padding.button
+        }
+        
+    }
+    
+    func manageDisabledState() {
+        if isDisabled {
+            frameConfig.frameVariant = .disabled
+            return
+        }
+        
+        frameConfig.frameVariant = .generic
+    }
 }

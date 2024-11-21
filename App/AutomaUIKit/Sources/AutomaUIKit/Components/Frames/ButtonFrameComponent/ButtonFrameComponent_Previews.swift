@@ -71,14 +71,19 @@ struct AutoButtonVariationsView: View {
 
       Spacer()
 
-      ButtonFrameComponent(action: { _ in
-        isTimerActive ? stopChangingVariant() : startChangingVariant()
-      }) {
-        isTimerActive ? DesignIconsEnum.pause.image : DesignIconsEnum.play.image
-      } onSelfAppear: { config in
-        config.fillSpace = false
-      }
-      .contentTransition(.symbolEffect(.replace))
+//      ButtonFrameComponent(action: { _ in
+//        isTimerActive ? stopChangingVariant() : startChangingVariant()
+//      }) {
+//        isTimerActive ? DesignIconsEnum.pause.image : DesignIconsEnum.play.image
+//      } onSelfAppear: { config in
+//        config.fillSpace = false
+//      }
+//      .contentTransition(.symbolEffect(.replace))
+        
+        IconButtonComponent(onSelfAppear: { config in config.variant = .square }, defaultIcon: .pause) { config in
+            isTimerActive ? stopChangingVariant() : startChangingVariant()
+            config.icon = isTimerActive ? .pause : .play
+        }
     }
   }
 
