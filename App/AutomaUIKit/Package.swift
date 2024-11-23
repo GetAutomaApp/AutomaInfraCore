@@ -21,7 +21,11 @@ let package = Package(
     .target(
       name: "AutomaUIKit",
       dependencies: [],
-      path: "Sources"
+      path: "Sources",
+      exclude: [
+        "AutomaUIKit/Components/Buttons/IconButtonComponent/IconButtonComponentDocumentation.md",
+        "AutomaUIKit/Components/Frames/ButtonFrameComponent/ButtonFrameComponentDocumentation.md",
+      ]
     ),
     .testTarget(
       name: "AutomaUIKitTests",

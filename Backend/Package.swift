@@ -26,6 +26,9 @@ let package = Package(
         .product(name: "NIOCore", package: "swift-nio"),
         .product(name: "NIOPosix", package: "swift-nio"),
       ],
+      exclude: [
+        "Documentation.md",
+      ],
       swiftSettings: swiftSettings
     ),
     .testTarget(

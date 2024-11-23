@@ -24,6 +24,10 @@ jobs:
       - name: Install Linting Tool
         uses: ./.github/actions/install-lint-tool
 
+      - name: Install NodeJS Dependencies
+        run: |
+          npm run prepare:action
+
       - name: Run Linting CLI
         run: |
-          swiftlint
+          npm run lint

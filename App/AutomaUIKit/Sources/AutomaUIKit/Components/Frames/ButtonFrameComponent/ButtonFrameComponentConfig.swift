@@ -1,13 +1,17 @@
 // ButtonFrameComponentConfig.swift
+// AdonisCodes created this file on 11/6/24
 // Copyright (c) 2024 GetAutomaApp
-// All source code and related assets are the property of GetAutomaApp. All rights reserved.
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
 
 import SwiftUI
 
 /// Enum representing the different visual variants of the button.
 /// All variants are displayed int he `ButtonFrameComponent_Previews.swift` file
 enum ButtonFrameVariants: String, CaseIterable {
-  case generic, disabled, rainbow
+  case generic
+  case disabled
+  case rainbow
 }
 
 /// Configuration class for customizing the appearance and behavior of buttons.

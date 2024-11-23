@@ -1,6 +1,8 @@
 // Tokens.swift
+// AdonisCodes created this file on 11/6/24
 // Copyright (c) 2024 GetAutomaApp
-// All source code and related assets are the property of GetAutomaApp. All rights reserved.
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
 
 import SwiftUI
 
@@ -14,9 +16,30 @@ struct DesignPadding {
   let buttonEven: EdgeInsets = .init(top: 10, leading: 10, bottom: 10, trailing: 10)
 }
 
+enum DesignIconsEnum: CaseIterable {
+  case pause, play, unknown
+
+  var image: some View {
+    switch self {
+    case .pause:
+      Image(systemName: "pause.circle.fill").toIcon()
+    case .play:
+      Image(systemName: "play.circle.fill").toIcon()
+    case .unknown:
+      Image(systemName: "questionmark.circle.fill").toIcon()
+    }
+  }
+}
+
+struct DesignIcons {
+  let defaultWidth: CGFloat = 24
+  let defaultHeight: CGFloat = 24
+}
+
 enum DesignTokens {
   static let colors: DesignColors = .init()
   static let padding: DesignPadding = .init()
+  static let icons: DesignIcons = .init()
 
   static let defaultCornerRadius: CGFloat = 8
 }

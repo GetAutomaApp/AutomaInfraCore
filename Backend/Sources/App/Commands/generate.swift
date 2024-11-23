@@ -1,6 +1,8 @@
 // generate.swift
+// Simon Ferns created this file on 10/23/24
 // Copyright (c) 2024 GetAutomaApp
-// All source code and related assets are the property of GetAutomaApp. All rights reserved.
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
 
 import Vapor
 
@@ -142,7 +144,7 @@ struct GenerateAppComponent: Command {
       .replacingOccurrences(of: "__CAPNAME_SPACING__", with: arrayToSpaceDelimited(words))
   }
 
-  func pascalToWordsArray(_ pascal: String) -> [String]? {
+  func pascalToWordsArray(_ pascal: String) -> [String] {
     let pattern = "([A-Z])"
 
     do {
@@ -159,7 +161,7 @@ struct GenerateAppComponent: Command {
     } catch {
       // Handle the error (e.g., print it, return nil, or handle in another way)
       print("Invalid regular expression: \(error)")
-      return nil
+      return []
     }
   }
 

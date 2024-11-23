@@ -2,3 +2,4 @@
 --allman false
 --indent 2
 --trimwhitespace always
+--header "{file}\n{author.name} created this file on {created}\nCopyright (c) {year} GetAutomaApp\nAll source code and related assets are the property of GetAutomaApp.\nAll rights reserved."

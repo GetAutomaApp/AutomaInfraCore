@@ -1,13 +1,9 @@
 // Helpers.swift
+// AdonisCodes created this file on 11/6/24
 // Copyright (c) 2024 GetAutomaApp
-// All source code and related assets are the property of GetAutomaApp. All rights reserved.
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
 
-//
-//  Helpers.swift
-//  AutomaUIKit
-//
-//  Created by Simon Ferns on 11/6/24.
-//
 import SwiftUI
 
 extension Color {
@@ -34,5 +30,23 @@ extension Color {
       blue: Double(blue) / 255,
       opacity: Double(alpha) / 255
     )
+  }
+}
+
+enum DesignImages {
+  static func iconManipulation(_ image: Image) -> some View {
+    image
+      .resizable()
+      .frame(
+        width: DesignTokens.icons.defaultWidth,
+        height: DesignTokens.icons.defaultHeight
+      )
+      .padding(0)
+  }
+}
+
+extension Image {
+  func toIcon() -> some View {
+    DesignImages.iconManipulation(self)
   }
 }

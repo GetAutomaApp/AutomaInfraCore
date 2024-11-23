@@ -2,9 +2,9 @@ import SwiftUI
 
 struct __CAPNAME__Component: View {
     var config: __CAPNAME__ComponentConfig = __CAPNAME__ComponentConfig()
-  
+
     var body: some View {
         Text("Hello, __CAPNAME__!")
-            .foregroundColor(styles.textColor)
+            .foregroundColor(config.textColor)
     }
 }
