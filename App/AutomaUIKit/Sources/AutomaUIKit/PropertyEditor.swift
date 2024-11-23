@@ -226,7 +226,7 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
         property.set(&mutableObject, newValue)
       }))
     } else {
-        Text("\(property.label)")
+      Text("\(property.label)")
     }
   }
 }
