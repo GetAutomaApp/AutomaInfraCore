@@ -133,6 +133,7 @@ struct ButtonFrameComponent<Content: View>: View {
   var body: some View {
     Button(action: {
       action(config)
+      // Tell swift that it has changed
     }) {
       content(config)
         .frame(maxWidth: config.fillSpace ? .infinity : nil)
