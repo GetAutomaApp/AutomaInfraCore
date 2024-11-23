@@ -40,6 +40,26 @@ let fileTypes: [FileType] = [
       ]
     ),
   ]),
+  FileType(name: "ui-modifier", configurations: [
+    FileConfig(
+      fromDirectory: "./generators/ui-modifier/",
+      toDirectory: "../App/AutomaUIKit/Sources/AutomaUIKit/Core/Modifiers/",
+      nestToDirectory: "__CAPNAME__Modifier/",
+      templates: [
+        "__CAPNAME__Modifier.swift.template",
+        "__CAPNAME__ModifierDocumentation.md.template",
+        "__CAPNAME__Modifier_Previews.swift.template",
+      ]
+    ),
+    FileConfig(
+      fromDirectory: "./generators/ui-modifier-testing/",
+      toDirectory: "../App/AutomaUIKit/Tests/Modifiers/",
+      nestToDirectory: "__CAPNAME__ModifierTests/",
+      templates: [
+        "__CAPNAME__ModifierTests.swift.template",
+      ]
+    ),
+  ]),
 ]
 
 struct GenerateAppComponent: Command {
@@ -57,11 +77,11 @@ struct GenerateAppComponent: Command {
     @Argument(name: "filename", help: "The name of the component to generate.")
     var filename: String
 
-    @Argument(
+    @Option(
       name: "nestedDir",
       help: "The directory you want to nest the component into (added to the default path)."
     )
-    var nestedDir: String
+    var nestedDir: String?
   }
 
   func run(using _: CommandContext, signature: Signature) throws {
@@ -73,7 +93,7 @@ struct GenerateAppComponent: Command {
       for fileConfig in fileType.configurations {
         let fromDirectory = fileConfig.fromDirectory
         let toDirectory = fileConfig.toDirectory
-        let nestedDir = signature.nestedDir
+        let nestedDir = signature.nestedDir ?? ""
         let toNestedDir = "\(toDirectory)\(arrayToPascalCase([nestedDir]))/"
           .replacingOccurrences(of: "//", with: "/")
         let nestToDirectory = rename(text: fileConfig.nestToDirectory, componentName: componentName)
@@ -136,11 +156,18 @@ struct GenerateAppComponent: Command {
   func rename(text: String, componentName: String) -> String {
     let words = pascalToWordsArray(componentName)
     return text
+      // Replace all occurrences of __CAPNAME__ with with the correct format helloComponent -> HelloComponent
       .replacingOccurrences(of: "__CAPNAME__", with: componentName)
+      // Replace all occurrences of __CAPNAME_LOWER__ with with the correct format helloComponent -> hellocomponent
       .replacingOccurrences(of: "__CAPNAME_LOWER__", with: componentName.lowercased())
+      // Replace all occurrences of __CAPNAME_DASHED__ with with the correct format helloComponent -> hello-component
       .replacingOccurrences(of: "__CAPNAME_DASHED__", with: arrayToDashed(words))
+      // Replace all occurrences of __CAPNAME_DASHEDUPPER__ with with the correct format helloComponent ->
+      // Hello-Component
       .replacingOccurrences(of: "__CAPNAME_DASHEDUPPER__", with: arrayToDashed(words, capitalized: true))
+      // Replace all occurrences of __CAPNAME_HASKELL__ with with the correct format helloComponent -> helloComponent
       .replacingOccurrences(of: "__CAPNAME_HASKELL__", with: arrayToHaskell(words))
+      // Replace all occurrences of __CAPNAME_SPACING__ with with the correct format helloComponent -> hello Component
       .replacingOccurrences(of: "__CAPNAME_SPACING__", with: arrayToSpaceDelimited(words))
   }
 
