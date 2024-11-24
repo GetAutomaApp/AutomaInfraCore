@@ -1,5 +1,5 @@
 // Tokens.swift
-// AdonisCodes created this file on 11/6/24
+// was created on 11/6/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -36,7 +36,7 @@ struct DesignIcons {
   let defaultHeight: CGFloat = 24
 }
 
-enum DesignTokens {
+struct DesignTokens {
   static let colors: DesignColors = .init()
   static let padding: DesignPadding = .init()
   static let icons: DesignIcons = .init()

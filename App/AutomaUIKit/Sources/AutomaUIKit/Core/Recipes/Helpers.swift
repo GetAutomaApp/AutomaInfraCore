@@ -1,5 +1,5 @@
 // Helpers.swift
-// AdonisCodes created this file on 11/6/24
+// was created on 11/6/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -33,7 +33,7 @@ extension Color {
   }
 }
 
-enum DesignImages {
+struct DesignImages {
   static func iconManipulation(_ image: Image) -> some View {
     image
       .resizable()

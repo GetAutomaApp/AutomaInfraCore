@@ -11,7 +11,12 @@
     "build:all": "npm-run-all --parallel build:ui-kit build:backend",
     "build:ui-kit": "cd App/AutomaUIKit && swift build",
     "build:backend": "cd Backend && swift build",
-    "prepare": "husky install"
+    "prepare": "husky install && npm run install:all",
+    "gen:ui-kit": "cd App/AutomaUIKit ; swiftgen",
+    "install:swiftlint": "brew install swiftlint",
+    "install:swiftgen": "brew install swiftgen",
+    "install:swiftformat": "brew install swiftformat",
+    "install:all": "npm-run-all --sequential install:swiftlint install:swiftgen install:swiftformat"
   },
   "keywords": [],
   "author": "",

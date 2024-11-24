@@ -1,5 +1,5 @@
 // IconButtonComponentTests.swift
-// Simon Ferns created this file on 10/23/24
+// was created on 10/23/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
