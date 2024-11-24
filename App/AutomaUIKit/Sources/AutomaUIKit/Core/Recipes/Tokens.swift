@@ -36,7 +36,7 @@ struct DesignIcons {
   let defaultHeight: CGFloat = 24
 }
 
-struct DesignTokens {
+enum DesignTokens {
   static let colors: DesignColors = .init()
   static let padding: DesignPadding = .init()
   static let icons: DesignIcons = .init()

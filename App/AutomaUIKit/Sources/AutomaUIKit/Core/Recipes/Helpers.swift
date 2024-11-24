@@ -33,7 +33,7 @@ extension Color {
   }
 }
 
-struct DesignImages {
+enum DesignImages {
   static func iconManipulation(_ image: Image) -> some View {
     image
       .resizable()
