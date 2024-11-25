@@ -1,4 +1,4 @@
-# CrimsonFontModifier
+# FontTableFontModifier
 
 ## Overview
 <!-- Give a reason behind this modifier & what it is doing -->
@@ -14,7 +14,7 @@ LINK: <!-- Link any associated file here, view modifiers should always be repres
 ## Props/Parameters
 | Property | Type | Description |
 |----------|------|-------------|
-| `content` | `CrimsonFontModifierViewTypes` | The View to be modified in the custom view modifier |
+| `content` | `FontTableFontModifierViewTypes` | The View to be modified in the custom view modifier |
 
 ## Guidelines
 <!-- Explain when and when not to use this view modifier based on past experience -->
@@ -22,4 +22,4 @@ LINK: <!-- Link any associated file here, view modifiers should always be repres
 ## Customization
 <!-- Give a detailed explanation on how to make the most use of this new modifier -->
 
-crimsonFont
+fontTableFont

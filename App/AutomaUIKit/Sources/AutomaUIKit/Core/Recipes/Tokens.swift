@@ -43,3 +43,77 @@ enum DesignTokens {
 
   static let defaultCornerRadius: CGFloat = 8
 }
+
+protocol IsFontTableFont {
+  var font: SwiftUI.Font { get }
+}
+
+enum FontTable {
+  enum Headings: IsFontTableFont {
+    case head1
+    case head2
+    case head3
+    case head4
+    case head5
+    case head6
+
+    var font: SwiftUI.Font {
+      switch self {
+      case .head1:
+        FontFamily.CrimsonText.bold.swiftUIFont(size: 60)
+      case .head2:
+        FontFamily.CrimsonText.bold.swiftUIFont(size: 48)
+      case .head3:
+        FontFamily.CrimsonText.bold.swiftUIFont(size: 36)
+      case .head4:
+        FontFamily.CrimsonText.bold.swiftUIFont(size: 30)
+      case .head5:
+        FontFamily.CrimsonText.bold.swiftUIFont(size: 24)
+      case .head6:
+        FontFamily.CrimsonText.bold.swiftUIFont(size: 20)
+      }
+    }
+  }
+
+  enum Body: IsFontTableFont {
+    case body1
+    case body2
+    case body3
+    case body4
+
+    var font: SwiftUI.Font {
+      switch self {
+      case .body1:
+        FontFamily.CrimsonText.regular.swiftUIFont(size: 20)
+      case .body2:
+        FontFamily.CrimsonText.regular.swiftUIFont(size: 18)
+      case .body3:
+        FontFamily.CrimsonText.regular.swiftUIFont(size: 16)
+      case .body4:
+        FontFamily.CrimsonText.regular.swiftUIFont(size: 14)
+      }
+    }
+  }
+
+  enum Meta: IsFontTableFont {
+    case label1, label2, caption1
+
+    var font: SwiftUI.Font {
+      switch self {
+      case .label1:
+        FontFamily.CrimsonText.regular.swiftUIFont(size: 14)
+      case .label2:
+        FontFamily.CrimsonText.regular.swiftUIFont(size: 12)
+      case .caption1:
+        FontFamily.CrimsonText.regular.swiftUIFont(size: 12)
+      }
+    }
+  }
+
+//    enum Italics {
+//        enum Body: IsFontTableFont {
+//        }
+//        enum Meta: IsFontTableFont {
+//        }
+//    }
+}

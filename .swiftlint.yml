@@ -17,3 +17,10 @@ excluded:
   - '**/Test*/'                # Exclude any directories with 'Test' in their name
   - '**/Generated/**'          # Exclude generated files/folders
   - '**PropertyEditor.swift'
+
+line_length:
+  warning: 150
+  ignores_function_declarations: true
+  ignores_comments: true
+  ignores_interpolated_strings: true
+  ignores_urls: true
