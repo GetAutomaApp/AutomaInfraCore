@@ -25,8 +25,8 @@ let package = Package(
       exclude: [
         "AutomaUIKit/Components/Buttons/IconButtonComponent/IconButtonComponentDocumentation.md",
         "AutomaUIKit/Components/Frames/ButtonFrameComponent/ButtonFrameComponentDocumentation.md",
-        "AutomaUIKit/Core/Modifiers/CrimsonFontModifier/CrimsonFontModifierDocumentation.md",
         "AutomaUIKit/Core/Modifiers/FontTableFontModifier/FontTableFontModifierDocumentation.md",
+        "AutomaUIKit/Components/Texts/InfoPairComponent/InfoPairComponentDocumentation.md"
       ],
       resources: [
         .process("Assets/Fonts"), // Add this to process the font files from the Assets folder
