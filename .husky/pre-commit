@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+hasSwiftFilesChanged=false
+
 # Check for modified .swift files
 while IFS= read -r file; do
   if [[ "$file" == *.swift ]]; then
@@ -9,11 +11,9 @@ while IFS= read -r file; do
 done <<< "$(git ls-files --modified)"
 
 # Notify the user about the status of the .swift files
-if [[ "$hasSwiftFilesChanged" == true ]]; then
+if [[ "$hasSwiftFilesChanged" == "true" ]]; then
   echo "Swift files have changed."
-  # Run formatting + lintint
   npm run format && npm run lint
-  # Add all tracked modified files
   git add -u
 else
   echo "No Swift files have changed."
