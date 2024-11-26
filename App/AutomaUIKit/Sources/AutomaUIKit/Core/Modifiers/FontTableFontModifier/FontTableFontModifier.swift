@@ -26,7 +26,7 @@ import SwiftUI
  ```swift
  Text("This is a Heading 1!")
      .fontTableFont(FontTable.Headings.h1)
- 
+
  Text("This is a Heading 1!")
      .fontTableFont(FontTable.Headings.h1, .black)
  ```

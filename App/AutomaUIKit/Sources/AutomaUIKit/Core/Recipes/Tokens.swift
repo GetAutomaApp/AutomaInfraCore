@@ -8,7 +8,7 @@ import SwiftUI
 
 struct DesignColors {
     let primary: Color = .init(hex: "0FA958")
-    
+
     /// Text Colours
     let primaryText: Color = .init(hex: "FFFFFF")
     let secondaryText: Color = .init(hex: "B4B4B4")
@@ -18,7 +18,6 @@ struct DesignColors {
     let primaryWhitespace1: Color = .init(hex: "000000")
     let primaryWhitespace2: Color = .init(hex: "3C3C3C")
     let primaryWhitespace3: Color = .init(hex: "7C7C7C")
-
 }
 
 struct DesignPadding {
