@@ -27,12 +27,12 @@ struct InfoPairComponent: View {
                 .fontTableFont(
                     FontTable.Headings.head4,
                     DesignTokens.colors.primaryText
-                )
+                ).tag("title")
             Text(config.description)
                 .fontTableFont(
                     FontTable.Body.body1,
                     DesignTokens.colors.secondaryText
-                )
+                ).tag("description")
         }
     }
 }
