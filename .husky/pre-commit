@@ -5,6 +5,7 @@ hasSwiftFilesChanged=false
 
 # Check for modified .swift files
 while IFS= read -r file; do
+  echo $file
   if [[ "$file" == *.swift ]]; then
     hasSwiftFilesChanged=true
   fi
