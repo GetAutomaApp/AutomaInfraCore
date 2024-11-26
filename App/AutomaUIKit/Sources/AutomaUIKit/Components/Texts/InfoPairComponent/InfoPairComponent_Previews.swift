@@ -11,8 +11,7 @@ import SwiftUI
 struct InfoPairComponent_Previews: PreviewProvider {
     static var previews: some View {
         InfoPairComponent()
+        
+        
     }
-    
-    
-    
 }
