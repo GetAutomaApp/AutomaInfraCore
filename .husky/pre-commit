@@ -11,6 +11,8 @@ while IFS= read -r file; do
   fi
 done <<< "$(git ls-files --modified)"
 
+git ls-files --modified
+
 # Notify the user about the status of the .swift files
 if [[ "$hasSwiftFilesChanged" == "true" ]]; then
   echo "Swift files have changed."
