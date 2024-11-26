@@ -1,5 +1,5 @@
 // InfoPairComponentConfig.swift
-// was created on 11/24/24
+// was created on 10/23/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -7,12 +7,11 @@
 import SwiftUI
 
 enum InfoPairVariants {
-  case variant1, variant2
+    case generic
 }
 
-struct InfoPairComponentConfig {
-  var someProperty: String = "Default Value" // Default value
-  var variant: InfoPairVariants = .variant1
-
-  let textColor: Color = .black
+class InfoPairComponentConfig: ObservableObject {
+    @Published var title: String = "Enter a title here"
+    @Published var description: String = "Enter a 3 line / 2 line description here"
+    @Published var variant: InfoPairVariants = .generic
 }

@@ -15,31 +15,31 @@ import SwiftUI
  - Provides an initializer to initialize the code via a KeyPath
  */
 struct AnyKeyPath<TheObservedObject, TheValueType> {
-  let label: String
-  let get: (TheObservedObject) -> TheValueType
-  let set: (inout TheObservedObject, TheValueType) -> Void
-  let type: Any.Type
+    let label: String
+    let get: (TheObservedObject) -> TheValueType
+    let set: (inout TheObservedObject, TheValueType) -> Void
+    let type: Any.Type
 
-  // MARK: - 1. First initializer. Initialize this struct by providing a writable keypath
+    // MARK: - 1. First initializer. Initialize this struct by providing a writable keypath
 
-  /**
-   Initializes an `AnyKeyPath` where the `get` and `set` properties makes use of KeyPath syntax
+    /**
+     Initializes an `AnyKeyPath` where the `get` and `set` properties makes use of KeyPath syntax
 
-    - Parameter label: The friendly **label** you want to represent to the user in the UI
-    - Parameter keyPath: A `WritableKeyPath` reference from an `ObservableObject`
-    */
-  init<ObservableWrappedValueType>(
-    _ label: String,
-    keyPath: WritableKeyPath<TheObservedObject, ObservableWrappedValueType>
-  ) where ObservableWrappedValueType: Any {
-    self.label = label
-    get = { object in object[keyPath: keyPath] as! TheValueType }
-    set = { object, value in
-      var mutableObject = object
-      mutableObject[keyPath: keyPath] = value as! ObservableWrappedValueType
+      - Parameter label: The friendly **label** you want to represent to the user in the UI
+      - Parameter keyPath: A `WritableKeyPath` reference from an `ObservableObject`
+      */
+    init<ObservableWrappedValueType>(
+        _ label: String,
+        keyPath: WritableKeyPath<TheObservedObject, ObservableWrappedValueType>
+    ) where ObservableWrappedValueType: Any {
+        self.label = label
+        get = { object in object[keyPath: keyPath] as! TheValueType }
+        set = { object, value in
+            var mutableObject = object
+            mutableObject[keyPath: keyPath] = value as! ObservableWrappedValueType
+        }
+        type = ObservableWrappedValueType.self
     }
-    type = ObservableWrappedValueType.self
-  }
 }
 
 /**
@@ -50,41 +50,41 @@ struct AnyKeyPath<TheObservedObject, TheValueType> {
  - Parameter max: The maximum that the `value` property is allowed to be.
  */
 struct PaddingSliderInput: View {
-  @Binding var value: CGFloat
-  let label: String
-  let max: CGFloat = 30
+    @Binding var value: CGFloat
+    let label: String
+    let max: CGFloat = 30
 
-  var body: some View {
-    HStack {
-      Text("\(label):")
-      Slider(value: $value, in: 0 ... max, step: 1)
-        .padding(.leading)
-      TextField("", value: $value, formatter: NumberFormatter())
-        .onChange(of: value) { oldValue, newValue in
-          if oldValue != newValue {
-            value = newValue
-          }
+    var body: some View {
+        HStack {
+            Text("\(label):")
+            Slider(value: $value, in: 0 ... max, step: 1)
+                .padding(.leading)
+            TextField("", value: $value, formatter: NumberFormatter())
+                .onChange(of: value) { oldValue, newValue in
+                    if oldValue != newValue {
+                        value = newValue
+                    }
+                }
+                .frame(width: 30)
         }
-        .frame(width: 30)
     }
-  }
 }
 
 /**
  Renders a SwiftUI view to edit edge insets via a binding to that value.
  */
 struct PaddingEditor: View {
-  @Binding var edgeInsets: EdgeInsets
+    @Binding var edgeInsets: EdgeInsets
 
-  var body: some View {
-    VStack(spacing: 16) {
-      PaddingSliderInput(value: $edgeInsets.top, label: "Top")
-      PaddingSliderInput(value: $edgeInsets.leading, label: "Left")
-      PaddingSliderInput(value: $edgeInsets.bottom, label: "Bottom")
-      PaddingSliderInput(value: $edgeInsets.trailing, label: "Right")
+    var body: some View {
+        VStack(spacing: 16) {
+            PaddingSliderInput(value: $edgeInsets.top, label: "Top")
+            PaddingSliderInput(value: $edgeInsets.leading, label: "Left")
+            PaddingSliderInput(value: $edgeInsets.bottom, label: "Bottom")
+            PaddingSliderInput(value: $edgeInsets.trailing, label: "Right")
+        }
+        .padding()
     }
-    .padding()
-  }
 }
 
 /**
@@ -94,16 +94,16 @@ struct PaddingEditor: View {
  - Parameter cases: All the cases that you want to allow the editor to switch to.
  */
 struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View where E.RawValue == String {
-  @Binding var value: E
-  let cases: [E]
+    @Binding var value: E
+    let cases: [E]
 
-  var body: some View {
-    Picker("Select", selection: $value) {
-      ForEach(cases, id: \.self) { variant in
-        Text(variant.rawValue)
-      }
-    }.pickerStyle(.segmented)
-  }
+    var body: some View {
+        Picker("Select", selection: $value) {
+            ForEach(cases, id: \.self) { variant in
+                Text(variant.rawValue)
+            }
+        }.pickerStyle(.segmented)
+    }
 }
 
 /**
@@ -121,112 +121,112 @@ struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View whe
  This method currently isn't perfect but it does reduce the code duplication by 10 fold.
  */
 struct PropertyEditor<T: ObservableObject, Content: View>: View {
-  @ObservedObject var object: T
-  let properties: [[AnyKeyPath<T, Any>]]
+    @ObservedObject var object: T
+    let properties: [[AnyKeyPath<T, Any>]]
 
-  let viewer: () -> Content
+    let viewer: () -> Content
 
-  var body: some View {
-    Form {
-      viewer()
+    var body: some View {
+        Form {
+            viewer()
 
-      ForEach(properties.indices, id: \.self) { index in
-        HStack {
-          ForEach(properties[index].indices, id: \.self) { item in
-            propertyRow(for: properties[index][item])
-          }
+            ForEach(properties.indices, id: \.self) { index in
+                HStack {
+                    ForEach(properties[index].indices, id: \.self) { item in
+                        propertyRow(for: properties[index][item])
+                    }
+                }
+            }
         }
-      }
     }
-  }
 
-  /**
-   Builds a SwiftUI View for a form element which modifies its property.
+    /**
+     Builds a SwiftUI View for a form element which modifies its property.
 
-   - Parameter property: The `AnyKeyPath` object you want to generate a row for.
+     - Parameter property: The `AnyKeyPath` object you want to generate a row for.
 
-   Supported Types: Strings, Integers, Booleans, Doubles, CGFloats, EdgeInsets, Colors
-   Types Coming Soon: Arrays (Generic), Dictionaries
+     Supported Types: Strings, Integers, Booleans, Doubles, CGFloats, EdgeInsets, Colors
+     Types Coming Soon: Arrays (Generic), Dictionaries
 
-   TODO: Add support for specifying modifications in the AnyKeyPath initializer
-   */
-  @ViewBuilder
-  func propertyRow(for property: AnyKeyPath<T, Any>) -> some View {
-    // TODO: Handle nested Observable Objects
-    if property.type == String.self {
-      let value = property.get(object) as! String
-      HStack {
-        Text("\(property.label):")
-        TextField(property.label, text: Binding(
-          get: { value },
-          set: { newValue in
-            var mutableObject = object
-            property.set(&mutableObject, newValue)
-          }
-        ))
-      }
-    } else if property.type == Int.self {
-      let value = property.get(object) as! Int
-      Stepper(
-        "\(property.label): \(value)",
-        value: Binding(
-          get: { value },
-          set: { newValue in
-            var mutableObject = object
-            property.set(&mutableObject, newValue)
-          }
-        ),
-        in: 0 ... 100
-      )
-    } else if property.type == Bool.self {
-      let value = property.get(object) as! Bool
-      Toggle("\(property.label): ", isOn: Binding(
-        get: { value },
-        set: { newValue in
-          var mutableObject = object
-          property.set(&mutableObject, newValue)
+     TODO: Add support for specifying modifications in the AnyKeyPath initializer
+     */
+    @ViewBuilder
+    func propertyRow(for property: AnyKeyPath<T, Any>) -> some View {
+        // TODO: Handle nested Observable Objects
+        if property.type == String.self {
+            let value = property.get(object) as! String
+            HStack {
+                Text("\(property.label):")
+                TextField(property.label, text: Binding(
+                    get: { value },
+                    set: { newValue in
+                        var mutableObject = object
+                        property.set(&mutableObject, newValue)
+                    }
+                ))
+            }
+        } else if property.type == Int.self {
+            let value = property.get(object) as! Int
+            Stepper(
+                "\(property.label): \(value)",
+                value: Binding(
+                    get: { value },
+                    set: { newValue in
+                        var mutableObject = object
+                        property.set(&mutableObject, newValue)
+                    }
+                ),
+                in: 0 ... 100
+            )
+        } else if property.type == Bool.self {
+            let value = property.get(object) as! Bool
+            Toggle("\(property.label): ", isOn: Binding(
+                get: { value },
+                set: { newValue in
+                    var mutableObject = object
+                    property.set(&mutableObject, newValue)
+                }
+            ))
+        } else if property.type == Double.self {
+            let value = property.get(object) as! Double
+            Slider(
+                value: Binding(
+                    get: { value },
+                    set: { newValue in
+                        var mutableObject = object
+                        property.set(&mutableObject, newValue)
+                    }
+                ),
+                in: 0 ... 100
+            ) {
+                Text("\(property.label): \(value, specifier: "%.1f")")
+            }
+        } else if type(of: property.get(object)) == EdgeInsets.self {
+            let value = property.get(object) as! EdgeInsets
+            PaddingEditor(edgeInsets: Binding(
+                get: { value },
+                set: { newValue in
+                    var mutableObject = object
+                    property.set(&mutableObject, newValue)
+                }
+            ))
+        } else if property.type == CGFloat.self {
+            let value = property.get(object) as! CGFloat
+            PaddingSliderInput(value: Binding(get: { value }, set: { newValue in
+                var mutableObject = object
+                property.set(&mutableObject, newValue)
+            }),
+            label: property.label)
+        } else if property.type == Color.self {
+            let value = property.get(object) as! Color
+            ColorPicker("\(property.label):", selection: Binding(get: {
+                value
+            }, set: { newValue in
+                var mutableObject = object
+                property.set(&mutableObject, newValue)
+            }))
+        } else {
+            Text("\(property.label)")
         }
-      ))
-    } else if property.type == Double.self {
-      let value = property.get(object) as! Double
-      Slider(
-        value: Binding(
-          get: { value },
-          set: { newValue in
-            var mutableObject = object
-            property.set(&mutableObject, newValue)
-          }
-        ),
-        in: 0 ... 100
-      ) {
-        Text("\(property.label): \(value, specifier: "%.1f")")
-      }
-    } else if type(of: property.get(object)) == EdgeInsets.self {
-      let value = property.get(object) as! EdgeInsets
-      PaddingEditor(edgeInsets: Binding(
-        get: { value },
-        set: { newValue in
-          var mutableObject = object
-          property.set(&mutableObject, newValue)
-        }
-      ))
-    } else if property.type == CGFloat.self {
-      let value = property.get(object) as! CGFloat
-      PaddingSliderInput(value: Binding(get: { value }, set: { newValue in
-        var mutableObject = object
-        property.set(&mutableObject, newValue)
-      }),
-      label: property.label)
-    } else if property.type == Color.self {
-      let value = property.get(object) as! Color
-      ColorPicker("\(property.label):", selection: Binding(get: {
-        value
-      }, set: { newValue in
-        var mutableObject = object
-        property.set(&mutableObject, newValue)
-      }))
-    } else {
-      Text("\(property.label)")
     }
-  }
 }

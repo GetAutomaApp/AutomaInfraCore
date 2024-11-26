@@ -7,12 +7,32 @@
 import SwiftUI
 
 struct InfoPairComponent: View {
-  var config: InfoPairComponentConfig = .init()
+    @ObservedObject var config: InfoPairComponentConfig
 
-  var body: some View {
-    VStack(alignment: .leading) {
-      Text("Enter a title here").fontTableFont(FontTable.Headings.head4)
-      Text("Enter a 3 line / 2 line description here").fontTableFont(FontTable.Body.body1)
+    init(config: InfoPairComponentConfig = .init(), title: String? = nil, description: String? = nil) {
+        if let title {
+            config.title = title
+        }
+
+        if let description {
+            config.description = description
+        }
+
+        _config = .init(initialValue: config)
     }
-  }
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(config.title)
+                .fontTableFont(
+                    FontTable.Headings.head4,
+                    DesignTokens.colors.primaryText
+                )
+            Text(config.description)
+                .fontTableFont(
+                    FontTable.Body.body1,
+                    DesignTokens.colors.secondaryText
+                )
+        }
+    }
 }

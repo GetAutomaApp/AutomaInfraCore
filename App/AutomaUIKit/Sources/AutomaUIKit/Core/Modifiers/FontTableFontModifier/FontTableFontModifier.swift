@@ -1,5 +1,5 @@
 // FontTableFontModifier.swift
-// was created on 11/23/24
+// was created on 11/24/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -26,21 +26,29 @@ import SwiftUI
  ```swift
  Text("This is a Heading 1!")
      .fontTableFont(FontTable.Headings.h1)
+ 
+ Text("This is a Heading 1!")
+     .fontTableFont(FontTable.Headings.h1, .black)
  ```
  */
 struct FontTableFontModifier: ViewModifier {
-  let fontTableType: IsFontTableFont
+    let fontTableType: IsFontTableFont
+    let colour: Color?
 
-  func body(content: Content) -> some View {
-    content.font(fontTableType.font)
-  }
+    func body(content: Content) -> some View {
+        if let colour {
+            content.font(fontTableType.font).foregroundStyle(colour)
+        } else {
+            content.font(fontTableType.font)
+        }
+    }
 }
 
 typealias FontTableFontModifierViewTypes = Text // Use Type Narrowing Please!
 
 @MainActor
 extension FontTableFontModifierViewTypes {
-  func fontTableFont(_ font: IsFontTableFont) -> some View {
-    modifier(FontTableFontModifier(fontTableType: font))
-  }
+    func fontTableFont(_ font: IsFontTableFont, _ colour: Color? = nil) -> some View {
+        modifier(FontTableFontModifier(fontTableType: font, colour: colour))
+    }
 }
