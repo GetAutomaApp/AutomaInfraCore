@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# Run linting and formatting
 npm run format && npm run lint
-git add --all
+
+# This only stages the recently modified tracked files
+git add -u
