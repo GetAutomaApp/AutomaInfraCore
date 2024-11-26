@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 . "$(dirname -- "$0")/_/husky.sh"
 
 hasSwiftFilesChanged=false
@@ -9,7 +9,7 @@ while IFS= read -r file; do
   if [[ "$file" == *.swift ]]; then
     hasSwiftFilesChanged=true
   fi
-done <<<"$(git ls-files --modified)"
+done <<< "$(git ls-files --modified)"
 
 # Notify the user about the status of the .swift files
 if [[ "$hasSwiftFilesChanged" == "true" ]]; then
