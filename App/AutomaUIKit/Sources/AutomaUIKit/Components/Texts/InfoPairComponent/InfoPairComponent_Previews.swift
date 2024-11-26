@@ -13,6 +13,7 @@ struct InfoPairComponent_Previews: PreviewProvider {
         
         
         
+        
         InfoPairComponent()
     }
 }
