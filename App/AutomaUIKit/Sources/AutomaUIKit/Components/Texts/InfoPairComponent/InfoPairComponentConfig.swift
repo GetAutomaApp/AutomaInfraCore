@@ -10,6 +10,9 @@ enum InfoPairVariants {
     case generic
 }
 
+/**
+ This is the default config for the Info Pair Component
+ */
 class InfoPairComponentConfig: ObservableObject {
     @Published var title: String = "Enter a title here"
     @Published var description: String = "Enter a 3 line / 2 line description here"

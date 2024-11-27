@@ -6,6 +6,15 @@
 
 import SwiftUI
 
+/**
+ The `InfoPairComponent` is a UI element that renders a title + subtext.
+
+ The component can be used for the following:
+ - To render out a title + description information for onboarding screens
+ - To render a title & subtext component for a description page
+
+ For more information on how to use this, take a look at `InfoPairComponentDocumentation.md`
+ */
 struct InfoPairComponent: View {
     @ObservedObject var config: InfoPairComponentConfig
 
