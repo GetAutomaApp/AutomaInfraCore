@@ -47,11 +47,84 @@ InfoPairComponent(...) { config in
 
 ## Guidelines
 <!-- Explain when and when not to use the component based on past experience -->
-- **When to Use**: This component should only be used when the text hierarchy could be maintained
+- **When to Use**: This component should only be used when the text hierarchy could be maintained.
 
 ## Customization
 <!-- Explain how users can customize the component via the "Config" object in InfoPairComponentConfig Struct -->
 This component can be customised via the `InfoPairComponentConfig`.
 
-**Current Variations**:
-- `.generic`
+## InfoPairComponentConfig
+
+The `InfoPairComponentConfig` class is a key part of customizing the `InfoPairComponent`. It defines the appearance and behavior of the information pair, allowing for flexible and consistent styling across your application.
+
+### Overview
+The `InfoPairComponentConfig` class conforms to `ObservableObject` and is typically used with the `@StateObject` or `@ObservedObject` property wrapper in SwiftUI to manage the component's state. The class contains several published properties that allow you to adjust key aspects of the information pair's presentation.
+
+### Properties
+
+| Property      | Type                | Description |
+|--------------|---------------------|-------------|
+| `title`      | `String`            | The primary text or title of the information pair. Defaults to "Enter a title here". |
+| `description`| `String`            | The secondary text or description of the information pair. Defaults to "Enter a 3 line / 2 line description here". |
+| `variant`    | `InfoPairVariants`  | Defines the visual variant of the information pair. Currently supports `.generic` variant. |
+
+### Example: Customizing InfoPair Appearance
+You can modify the `InfoPairComponentConfig` to change the information pair's content and appearance:
+
+```swift
+@StateObject var infoPairConfig = InfoPairComponentConfig()
+
+InfoPairComponent(config: infoPairConfig)
+.onAppear {
+    // Customize the info pair's configuration
+    infoPairConfig.title = "User Profile"
+    infoPairConfig.description = "Software engineer passionate about creating intuitive user interfaces"
+}
+```
+
+### Example: Using InfoPairComponentConfig Directly
+Here's an example of creating an InfoPairComponent with a custom configuration:
+
+```swift
+InfoPairComponent(
+    title: "Project Details", 
+    description: "A comprehensive project management tool designed to streamline team collaboration"
+)
+```
+
+### Example: Modifying Configuration on Appearance
+You can use the `onSelfAppear` closure to dynamically configure the component:
+
+```swift
+InfoPairComponent { config in
+    // Modify configuration when the component appears
+    config.title = "Dynamic Title"
+    config.description = "Dynamically updated description"
+}
+```
+
+### Best Practices for Customization
+- **Use Meaningful Titles and Descriptions**: Ensure that the title and description provide clear, concise information.
+- **Maintain Consistency**: Try to keep the styling consistent across your application by using design tokens or a centralized configuration strategy.
+- **Consider Variants**: As more variants are added to `InfoPairVariants`, you'll be able to create more diverse information pair styles.
+
+## Advanced Usage
+
+### Extending InfoPairComponentConfig
+As your design system evolves, you might want to add more properties to the configuration:
+
+```swift
+class ExtendedInfoPairComponentConfig: InfoPairComponentConfig {
+    @Published var textColor: Color = .primary
+    @Published var fontSize: CGFloat = 16
+}
+```
+
+This approach allows you to create more specialized configurations while maintaining the base functionality.
+
+## Future Enhancements
+The current implementation is deliberately simple to allow for future expansion. Potential future enhancements might include:
+- Additional variants for different visual styles
+- Support for custom typography
+- Accessibility configuration options
+- Localization support
