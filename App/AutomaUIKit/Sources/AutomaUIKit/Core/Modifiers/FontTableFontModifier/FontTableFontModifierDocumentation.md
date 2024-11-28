@@ -25,6 +25,7 @@ Text("This is a custom font").fontManagerFont(FontTable.Body.h1, .red)
 | Property | Type | Description |
 |----------|------|-------------|
 | `content` | `FontTableFontModifierViewTypes` | The View to be modified in the custom view modifier |
+| `colour` | `Color` | The colour you want the font to be, defaults to the system default.
 
 ## Guidelines
 <!-- Explain when and when not to use this view modifier based on past experience -->
