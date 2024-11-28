@@ -8,7 +8,7 @@ on:
       - prod
 
 jobs:
-  run-lint:
+  cloc:
     runs-on: macos
     steps:
       - name: Checkout code
