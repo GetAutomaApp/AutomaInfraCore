@@ -4,6 +4,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+// TODO: Make the correct variables private
 import SwiftUI
 
 enum ProgressIndicatorVariants {
@@ -13,7 +14,7 @@ enum ProgressIndicatorVariants {
 class ProgressIndicatorComponentConfig: ObservableObject {
     @Published var variant: ProgressIndicatorVariants
     @Published var totalSteps: Int
-    var currentStep: Binding<Int>
+    @Published var currentStep: Int = 1
     @Published var isAnimating: Bool
 
     @Published var stepLength: CGFloat
@@ -22,14 +23,12 @@ class ProgressIndicatorComponentConfig: ObservableObject {
     init(
         variant: ProgressIndicatorVariants = .generic,
         totalSteps: Int = 4,
-        currentStep: Binding<Int>,
         isAnimating: Bool = false,
         stepLength: CGFloat = 7,
         stepHeight: CGFloat = 7
     ) {
         self.variant = variant
         self.totalSteps = totalSteps
-        self.currentStep = currentStep
         self.isAnimating = isAnimating
         self.stepLength = stepLength
         self.stepHeight = stepHeight
@@ -40,7 +39,7 @@ class ProgressIndicatorComponentConfig: ObservableObject {
             stepLength + CGFloat(determineSpaceBetweenSteps)
         )
 
-        let currentStepRelative = CGFloat(currentStep.wrappedValue)
+        let currentStepRelative = CGFloat(currentStep)
 
         let totalStepsRelative = CGFloat(totalSteps)
 
@@ -63,8 +62,26 @@ class ProgressIndicatorComponentConfig: ObservableObject {
 
     func determineStepColour(_ step: Int) -> Color {
         (
-            currentStep.wrappedValue - 1 == step && currentStep.wrappedValue - 1 > 0
+            currentStep - 1 == step && currentStep - 1 > 0
         ) ? DesignTokens.colors.primary
             .opacity(0.5) : DesignTokens.colors.primary
+    }
+
+    func incrementStep(_ by: Int = 1) {
+        let setStepTo = currentStep + by
+        guard setStepTo <= totalSteps else { return }
+        currentStep = setStepTo
+    }
+
+    func decrementStep(_ by: Int = 1) {
+        let setStepTo = currentStep - by
+        guard setStepTo >= 1 else { return }
+        currentStep = setStepTo
+    }
+
+    func setStep(_ step: Int) {
+        guard currentStep != step, step > 0, step <= totalSteps else { return }
+
+        currentStep = step
     }
 }

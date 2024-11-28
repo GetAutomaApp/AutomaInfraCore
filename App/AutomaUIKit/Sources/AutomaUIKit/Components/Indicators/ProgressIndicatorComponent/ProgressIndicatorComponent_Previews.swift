@@ -15,33 +15,24 @@ struct ProgressIndicatorComponent_Previews: PreviewProvider {
 }
 
 struct TestProgressView: View {
-    @State private var currentCount: Int = 1
-
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @ObservedObject var config = ProgressIndicatorComponentConfig()
 
     var body: some View {
         VStack {
-            ProgressIndicatorComponent(
-                totalSteps: 4,
-                currentStep: $currentCount
-            )
+            ProgressIndicatorComponent(config: config)
 
             Button("+") {
-                currentCount += 1
+                config.incrementStep(3)
             }
 
             Button("-") {
-                currentCount -= 1
+                config.decrementStep(3)
             }
 
-            Text("Current Count: \(currentCount)")
-        }
-        .onReceive(timer) { _ in
-            // If you want automatic increment
-            if currentCount < 4 {
-                currentCount += 1
-            } else {
-                currentCount = 1
+            Text("\(config.currentStep)")
+
+            Button("Reset") {
+                config.setStep(1)
             }
         }
     }
