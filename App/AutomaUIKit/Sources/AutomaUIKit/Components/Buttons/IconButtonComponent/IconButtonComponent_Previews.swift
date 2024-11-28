@@ -1,5 +1,5 @@
 // IconButtonComponent_Previews.swift
-// AdonisCodes created this file on 11/6/24
+// was created on 11/6/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -7,51 +7,51 @@
 import SwiftUI
 
 struct IconButtonComponent_Previews: PreviewProvider {
-  static var previews: some View {
-    IconButtonComponent_PreviewsView()
-  }
+    static var previews: some View {
+        IconButtonComponent_PreviewsView()
+    }
 }
 
 struct IconButtonComponent_PreviewsView: View {
-  @StateObject private var sharedConfig = IconButtonComponentConfig()
+    @StateObject private var sharedConfig = IconButtonComponentConfig()
 
-  var body: some View {
-    PropertyEditor(
-      object: sharedConfig,
-      properties: [
-        [AnyKeyPath("Is Disabled", keyPath: \.isDisabled)],
-        [AnyKeyPath("Fill Space", keyPath: \.fillSpace)],
-        [AnyKeyPath("Is Circular", keyPath: \.isCircular)],
-        [AnyKeyPath("Padding", keyPath: \.defaultPadding)],
-        [AnyKeyPath("Roundness", keyPath: \.roundness)],
-        [AnyKeyPath("Generic Background", keyPath: \.variantGenericBackground)],
-        [AnyKeyPath("Disabled Background", keyPath: \.variantDisabledBackground)],
-      ]
-    ) {
-      VStack {
-        HStack {
-          IconButtonComponent(config: sharedConfig, onSelfAppear: { config in
-            config.icon = .play
-          },
-          action: { config in
-            if config.icon == .play {
-              config.icon = .pause
-            } else {
-              config.icon = .play
+    var body: some View {
+        PropertyEditor(
+            object: sharedConfig,
+            properties: [
+                [AnyKeyPath("Is Disabled", keyPath: \.isDisabled)],
+                [AnyKeyPath("Fill Space", keyPath: \.fillSpace)],
+                [AnyKeyPath("Is Circular", keyPath: \.isCircular)],
+                [AnyKeyPath("Padding", keyPath: \.defaultPadding)],
+                [AnyKeyPath("Roundness", keyPath: \.roundness)],
+                [AnyKeyPath("Generic Background", keyPath: \.variantGenericBackground)],
+                [AnyKeyPath("Disabled Background", keyPath: \.variantDisabledBackground)],
+            ]
+        ) {
+            VStack {
+                HStack {
+                    IconButtonComponent(config: sharedConfig, onSelfAppear: { config in
+                        config.icon = .play
+                    },
+                    action: { config in
+                        if config.icon == .play {
+                            config.icon = .pause
+                        } else {
+                            config.icon = .play
+                        }
+                    }).contentTransition(.symbolEffect(.replace))
+                }
+
+                EnumPropertyView(
+                    value: $sharedConfig.frameVariant,
+                    cases: ButtonFrameVariants.allCases
+                )
+
+                EnumPropertyView(
+                    value: $sharedConfig.variant,
+                    cases: IconButtonVariants.allCases
+                )
             }
-          }).contentTransition(.symbolEffect(.replace))
         }
-
-        EnumPropertyView(
-          value: $sharedConfig.frameVariant,
-          cases: ButtonFrameVariants.allCases
-        )
-
-        EnumPropertyView(
-          value: $sharedConfig.variant,
-          cases: IconButtonVariants.allCases
-        )
-      }
     }
-  }
 }

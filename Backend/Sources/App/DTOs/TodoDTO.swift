@@ -1,5 +1,5 @@
 // TodoDTO.swift
-// Simon Ferns created this file on 10/22/24
+// was created on 10/22/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -8,16 +8,16 @@ import Fluent
 import Vapor
 
 struct TodoDTO: Content {
-  var id: UUID?
-  var title: String?
+    var id: UUID?
+    var title: String?
 
-  func toModel() -> Todo {
-    let model = Todo()
+    func toModel() -> Todo {
+        let model = Todo()
 
-    model.id = id
-    if let title {
-      model.title = title
+        model.id = id
+        if let title {
+            model.title = title
+        }
+        return model
     }
-    return model
-  }
 }

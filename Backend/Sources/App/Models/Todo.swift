@@ -1,5 +1,5 @@
 // Todo.swift
-// Simon Ferns created this file on 10/22/24
+// was created on 10/22/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -11,25 +11,25 @@ import struct Foundation.UUID
 /// It is recommended you write your model with sendability checking on and then suppress the warning
 /// afterwards with `@unchecked Sendable`.
 final class Todo: Model, @unchecked Sendable {
-  static let schema = "todos"
+    static let schema = "todos"
 
-  @ID(key: .id)
-  var id: UUID?
+    @ID(key: .id)
+    var id: UUID?
 
-  @Field(key: "title")
-  var title: String
+    @Field(key: "title")
+    var title: String
 
-  init() {}
+    init() {}
 
-  init(id: UUID? = nil, title: String) {
-    self.id = id
-    self.title = title
-  }
+    init(id: UUID? = nil, title: String) {
+        self.id = id
+        self.title = title
+    }
 
-  func toDTO() -> TodoDTO {
-    .init(
-      id: id,
-      title: $title.value
-    )
-  }
+    func toDTO() -> TodoDTO {
+        .init(
+            id: id,
+            title: $title.value
+        )
+    }
 }

@@ -1,5 +1,5 @@
 // IconButtonComponentConfig.swift
-// Simon Ferns created this file on 10/23/24
+// was created on 10/23/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -8,72 +8,72 @@ import SwiftUI
 
 /// Enum defining the different variants of the IconButton component.
 enum IconButtonVariants: String, CaseIterable {
-  case generic
-  case square
-  case circle
-  case pill
+    case generic
+    case square
+    case circle
+    case pill
 }
 
 /// Configuration for the IconButtonComponent that extends from `ButtonFrameComponentConfig`.
 /// It defines the visual style, state (enabled/disabled), and icon for the button.
 class IconButtonComponentConfig: ButtonFrameComponentConfig {
-  /// The variant of the button (e.g., generic, square, circle, pill).
-  /// This controls the button's shape and layout style.
-  @Published var variant: IconButtonVariants = .generic {
-    didSet {
-      applyVariantStyling()
+    /// The variant of the button (e.g., generic, square, circle, pill).
+    /// This controls the button's shape and layout style.
+    @Published var variant: IconButtonVariants = .generic {
+        didSet {
+            applyVariantStyling()
+        }
     }
-  }
 
-  /// Whether the button is disabled or not. When disabled, the button appears inactive.
-  @Published var isDisabled: Bool = false {
-    didSet {
-      manageDisabledState()
+    /// Whether the button is disabled or not. When disabled, the button appears inactive.
+    @Published var isDisabled: Bool = false {
+        didSet {
+            manageDisabledState()
+        }
     }
-  }
 
-  /// The icon to display on the button. This defines the visual icon that the button will use.
-  @Published var icon: DesignIconsEnum = .unknown
+    /// The icon to display on the button. This defines the visual icon that the button will use.
+    @Published var icon: DesignIconsEnum = .unknown
 
-  /// Initializes the `IconButtonComponentConfig` with default styling.
-  ///
-  /// This calls the superclass's initializer and applies the default styling for the button's variant.
-  override init() {
-    super.init()
-    applyVariantStyling()
-  }
-
-  /// Applies the appropriate styling based on the selected variant.
-  ///
-  /// This method adjusts properties like `isCircular`, `roundness`, `fillSpace`, and `defaultPadding`
-  /// based on the button's variant (generic, square, circle, or pill).
-  func applyVariantStyling() {
-    switch variant {
-    case .generic:
-      isCircular = false
-      roundness = DesignTokens.defaultCornerRadius
-      fillSpace = true
-    case .square:
-      isCircular = false
-      roundness = DesignTokens.defaultCornerRadius
-      fillSpace = false
-      defaultPadding = DesignTokens.padding.buttonEven
-    case .circle:
-      isCircular = true
-      fillSpace = false
-      defaultPadding = DesignTokens.padding.buttonEven
-    case .pill:
-      isCircular = true
-      fillSpace = true
-      defaultPadding = DesignTokens.padding.button
+    /// Initializes the `IconButtonComponentConfig` with default styling.
+    ///
+    /// This calls the superclass's initializer and applies the default styling for the button's variant.
+    override init() {
+        super.init()
+        applyVariantStyling()
     }
-  }
 
-  /// Manages the disabled state of the button.
-  ///
-  /// When the button is disabled (`isDisabled = true`), the button's frame variant is set to `.disabled`.
-  /// If the button is not disabled, it uses the `.generic` frame variant.
-  func manageDisabledState() {
-    frameVariant = isDisabled ? .disabled : .generic
-  }
+    /// Applies the appropriate styling based on the selected variant.
+    ///
+    /// This method adjusts properties like `isCircular`, `roundness`, `fillSpace`, and `defaultPadding`
+    /// based on the button's variant (generic, square, circle, or pill).
+    func applyVariantStyling() {
+        switch variant {
+        case .generic:
+            isCircular = false
+            roundness = DesignTokens.defaultCornerRadius
+            fillSpace = true
+        case .square:
+            isCircular = false
+            roundness = DesignTokens.defaultCornerRadius
+            fillSpace = false
+            defaultPadding = DesignTokens.padding.buttonEven
+        case .circle:
+            isCircular = true
+            fillSpace = false
+            defaultPadding = DesignTokens.padding.buttonEven
+        case .pill:
+            isCircular = true
+            fillSpace = true
+            defaultPadding = DesignTokens.padding.button
+        }
+    }
+
+    /// Manages the disabled state of the button.
+    ///
+    /// When the button is disabled (`isDisabled = true`), the button's frame variant is set to `.disabled`.
+    /// If the button is not disabled, it uses the `.generic` frame variant.
+    func manageDisabledState() {
+        frameVariant = isDisabled ? .disabled : .generic
+    }
 }

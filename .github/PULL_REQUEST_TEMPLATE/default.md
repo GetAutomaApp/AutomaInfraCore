@@ -19,7 +19,6 @@
 <!-- Any notable link here that can aid in the exploration review of the PR, as well as context -->
 
 [ISSUE-ISSUEID](https://github.com/GetAutomaApp/AutomaInfraCore/issues/ISSUEID)
-[Tech Spec](https://app.gitbook.com/o/OdEofGJqMv1yjQ0zudyz/s/kJrDes9Is2G8TEVunuGS/)
 
 # Testing
 
