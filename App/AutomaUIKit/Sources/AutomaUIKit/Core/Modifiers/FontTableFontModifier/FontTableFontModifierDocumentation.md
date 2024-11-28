@@ -41,5 +41,3 @@ Here is how to add custom fonts:
 3. Run `swiftgen` to generate the fonts file in `Core/Generated/Fonts.swift`
 4. Add these fonts to the `FontTable` in the design tokens, ensuring that any new enums conform to `IsFontTable`.
 5. Test the usage of these new fonts by applying the modifier!
-
-fontTableFont

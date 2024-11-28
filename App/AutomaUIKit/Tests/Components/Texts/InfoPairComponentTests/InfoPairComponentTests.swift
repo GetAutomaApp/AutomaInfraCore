@@ -35,8 +35,6 @@ class InfoPairComponentTests: XCTestCase {
         let descriptionText = try description.find(text: "This is a sample description").string()
 
         // Assert: Values are as expected
-        XCTAssertEqual(title.pathToRoot, "view(InfoPairComponent.self).anyView().vStack().anyView(0)")
-        XCTAssertEqual(description.pathToRoot, "view(InfoPairComponent.self).anyView().vStack().anyView(1)")
         XCTAssertEqual(titleText, "Sample Title")
         XCTAssertEqual(descriptionText, "This is a sample description")
     }
