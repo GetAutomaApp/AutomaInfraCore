@@ -19,7 +19,9 @@ struct TestProgressView: View {
 
     var body: some View {
         VStack {
-            ProgressIndicatorComponent(config: config)
+            ProgressIndicatorComponent(config: config) { config in
+                config.currentStep = 2
+            }
 
             Button("+") {
                 config.incrementStep(3)

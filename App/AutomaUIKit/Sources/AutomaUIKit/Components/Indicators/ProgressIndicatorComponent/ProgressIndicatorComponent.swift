@@ -9,6 +9,16 @@ import SwiftUI
 struct ProgressIndicatorComponent: View {
     @ObservedObject var config: ProgressIndicatorComponentConfig
 
+    let onSelfAppear: (ProgressIndicatorComponentConfig) -> Void
+
+    init(
+        config: ProgressIndicatorComponentConfig,
+        onSelfAppear: @escaping (ProgressIndicatorComponentConfig) -> Void = { _ in }
+    ) {
+        self.config = config
+        self.onSelfAppear = onSelfAppear
+    }
+
     var body: some View {
         ZStack(alignment: .leading) {
             HStack(spacing: 0) {
@@ -37,6 +47,8 @@ struct ProgressIndicatorComponent: View {
                 )
                 .foregroundStyle(DesignTokens.colors.primary)
                 .animation(.smooth, value: config.currentStep)
+        }.onAppear {
+            onSelfAppear(config)
         }
     }
 }
