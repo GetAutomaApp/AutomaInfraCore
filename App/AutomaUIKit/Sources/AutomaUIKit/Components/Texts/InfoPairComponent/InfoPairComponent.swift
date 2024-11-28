@@ -18,7 +18,14 @@ import SwiftUI
 struct InfoPairComponent: View {
     @ObservedObject var config: InfoPairComponentConfig
 
-    init(config: InfoPairComponentConfig = .init(), title: String? = nil, description: String? = nil) {
+    let onSelfAppear: (InfoPairComponentConfig) -> Void
+
+    init(
+        config: InfoPairComponentConfig = .init(),
+        title: String? = nil,
+        description: String? = nil,
+        onSelfAppear: @escaping (InfoPairComponentConfig) -> Void = { _ in }
+    ) {
         if let title {
             config.title = title
         }
@@ -28,6 +35,8 @@ struct InfoPairComponent: View {
         }
 
         _config = .init(initialValue: config)
+
+        self.onSelfAppear = onSelfAppear
     }
 
     var body: some View {
@@ -42,6 +51,8 @@ struct InfoPairComponent: View {
                     FontTable.Body.body1,
                     DesignTokens.colors.secondaryText
                 ).tag("description")
+        }.onAppear {
+            onSelfAppear(config)
         }
     }
 }
