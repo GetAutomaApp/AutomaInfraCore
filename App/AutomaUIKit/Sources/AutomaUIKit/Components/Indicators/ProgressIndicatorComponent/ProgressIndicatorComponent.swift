@@ -32,9 +32,10 @@ struct ProgressIndicatorComponent: View {
                         .foregroundStyle(
                             config.determineStepColour(step)
                         )
-                        .padding(.trailing, config.determineSpaceBetweenSteps)
+                        .padding(.trailing,
+                                 step == config.totalSteps - 1 ? 0 : config.determineSpaceBetweenSteps)
                         .animation(
-                            .spring,
+                            config.isAnimating ? .spring : nil,
                             value: config.currentStep
                         )
                 }
@@ -45,10 +46,10 @@ struct ProgressIndicatorComponent: View {
                     width: config.determineStepGrowSize,
                     height: config.stepHeight
                 )
-                .foregroundStyle(DesignTokens.colors.primary)
-                .animation(.smooth, value: config.currentStep)
+                .foregroundStyle(config.stepColor)
+                .animation(config.isAnimating ? .smooth : nil, value: config.currentStep)
         }.onAppear {
             onSelfAppear(config)
-        }
+        }.animation(config.isAnimating ? .spring : nil, value: config.totalSteps)
     }
 }

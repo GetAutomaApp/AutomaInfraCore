@@ -6,8 +6,6 @@
 
 import SwiftUI
 
-// Add a preview per state difference (No need to add all states)
-
 struct ProgressIndicatorComponent_Previews: PreviewProvider {
     static var previews: some View {
         TestProgressView()
@@ -19,22 +17,27 @@ struct TestProgressView: View {
 
     var body: some View {
         VStack {
-            ProgressIndicatorComponent(config: config) { config in
-                config.currentStep = 2
-            }
+            PropertyEditor(object: config, properties: [
+                [AnyKeyPath("Total Steps", keyPath: \.totalSteps)],
+                [AnyKeyPath("Current Step", keyPath: \.currentStep)],
+                [AnyKeyPath("Enable Animation", keyPath: \.isAnimating)],
+                [AnyKeyPath("Step Length", keyPath: \.stepLength)],
+                [AnyKeyPath("Step Height", keyPath: \.stepHeight)],
+                [AnyKeyPath("Step Colour", keyPath: \.stepColor)],
+            ]) {
+                VStack {
+                    HStack {
+                        Spacer()
+                        ProgressIndicatorComponent(config: config) { config in
+                            config.currentStep = 1
+                        }
+                        Spacer()
+                    }.padding(.bottom)
 
-            Button("+") {
-                config.incrementStep(3)
-            }
-
-            Button("-") {
-                config.decrementStep(3)
-            }
-
-            Text("\(config.currentStep)")
-
-            Button("Reset") {
-                config.setStep(1)
+                    Button("Reset Current Step") {
+                        config.setStep(1)
+                    }
+                }
             }
         }
     }

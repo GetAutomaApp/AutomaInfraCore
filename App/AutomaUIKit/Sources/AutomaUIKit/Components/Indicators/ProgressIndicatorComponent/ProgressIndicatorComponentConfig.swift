@@ -19,19 +19,22 @@ class ProgressIndicatorComponentConfig: ObservableObject {
 
     @Published var stepLength: CGFloat
     @Published var stepHeight: CGFloat
+    @Published var stepColor: Color
 
     init(
         variant: ProgressIndicatorVariants = .generic,
         totalSteps: Int = 4,
-        isAnimating: Bool = false,
+        isAnimating: Bool = true,
         stepLength: CGFloat = 7,
-        stepHeight: CGFloat = 7
+        stepHeight: CGFloat = 7,
+        stepColor: Color = DesignTokens.colors.primary
     ) {
         self.variant = variant
         self.totalSteps = totalSteps
         self.isAnimating = isAnimating
         self.stepLength = stepLength
         self.stepHeight = stepHeight
+        self.stepColor = stepColor
     }
 
     var determineStepGrowSize: CGFloat {
@@ -63,8 +66,7 @@ class ProgressIndicatorComponentConfig: ObservableObject {
     func determineStepColour(_ step: Int) -> Color {
         (
             currentStep - 1 == step && currentStep - 1 > 0
-        ) ? DesignTokens.colors.primary
-            .opacity(0.5) : DesignTokens.colors.primary
+        ) ? stepColor.opacity(0.5) : stepColor
     }
 
     func incrementStep(_ by: Int = 1) {
