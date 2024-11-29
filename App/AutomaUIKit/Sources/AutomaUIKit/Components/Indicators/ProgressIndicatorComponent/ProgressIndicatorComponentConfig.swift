@@ -6,10 +6,12 @@
 
 import SwiftUI
 
+/// This enum contains all of the different variants that the `ProgressIndicatorComponent` can use to represent it self
 enum ProgressIndicatorVariants {
     case generic
 }
 
+/// Configuration class for customizing the appearance and behaviour of the `ProgressIndicatorComponent`
 class ProgressIndicatorComponentConfig: ObservableObject {
     /// Determines the variation of the ProgressIndicator component (more to come in the future)
     @Published var variant: ProgressIndicatorVariants

@@ -12,6 +12,9 @@ struct ProgressIndicatorComponent_Previews: PreviewProvider {
     }
 }
 
+/**
+
+ */
 struct TestProgressView: View {
     @ObservedObject var config = ProgressIndicatorComponentConfig()
 
