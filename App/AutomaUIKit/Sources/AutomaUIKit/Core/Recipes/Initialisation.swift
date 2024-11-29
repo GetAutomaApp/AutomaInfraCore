@@ -11,7 +11,7 @@ import SwiftUI
     import AppKit
 #endif
 
-extension View {
+public extension View {
     func isMacOS() -> Bool {
         #if os(iOS)
             return false

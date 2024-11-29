@@ -31,11 +31,11 @@ import SwiftUI
      .fontTableFont(FontTable.Headings.h1, .black)
  ```
  */
-struct FontTableFontModifier: ViewModifier {
+public struct FontTableFontModifier: ViewModifier {
     let fontTableType: IsFontTableFont
     let colour: Color?
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         if let colour {
             content.font(fontTableType.font).foregroundStyle(colour)
         } else {
@@ -44,10 +44,10 @@ struct FontTableFontModifier: ViewModifier {
     }
 }
 
-typealias FontTableFontModifierViewTypes = Text // Use Type Narrowing Please!
+public typealias FontTableFontModifierViewTypes = Text // Use Type Narrowing Please!
 
 @MainActor
-extension FontTableFontModifierViewTypes {
+public extension FontTableFontModifierViewTypes {
     func fontTableFont(_ font: IsFontTableFont, _ colour: Color? = nil) -> some View {
         modifier(FontTableFontModifier(fontTableType: font, colour: colour))
     }
