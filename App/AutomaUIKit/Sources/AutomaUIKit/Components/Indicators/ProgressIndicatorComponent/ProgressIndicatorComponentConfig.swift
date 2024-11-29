@@ -69,14 +69,14 @@ class ProgressIndicatorComponentConfig: ObservableObject {
         ) ? stepColor.opacity(0.5) : stepColor
     }
 
-    func incrementStep(_ by: Int = 1) {
-        let setStepTo = currentStep + by
+    func incrementStep(_ byCount: Int = 1) {
+        let setStepTo = currentStep + byCount
         guard setStepTo <= totalSteps else { return }
         currentStep = setStepTo
     }
 
-    func decrementStep(_ by: Int = 1) {
-        let setStepTo = currentStep - by
+    func decrementStep(_ byCount: Int = 1) {
+        let setStepTo = currentStep - byCount
         guard setStepTo >= 1 else { return }
         currentStep = setStepTo
     }
