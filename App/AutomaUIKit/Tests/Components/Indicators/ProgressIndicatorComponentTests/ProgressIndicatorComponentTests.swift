@@ -29,6 +29,8 @@ class ProgressIndicatorComponentTests: XCTestCase {
             onSelfAppear: onSelfAppear
         )
 
+        try component.inspect().find(ViewType.ZStack.self).callOnAppear()
+
         XCTAssertNotNil(component)
         XCTAssertEqual(IGotCalledAmount, 1)
     }
