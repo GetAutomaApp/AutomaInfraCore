@@ -6,7 +6,7 @@
 
 import SwiftUI
 
-enum InfoPairVariants {
+enum InfoPairVariants: String, CaseIterable {
     case generic
 }
 

@@ -1,10 +1,11 @@
 import SwiftUI
 
-enum __CAPNAME__Variants {
+enum __CAPNAME__ComponentVariants {
     case variant1, variant2
 
 }
 
+/// Add a short description here about the config
 struct __CAPNAME__ComponentConfig {
     var someProperty: String = "Default Value"  // Default value
     var variant: __CAPNAME__Variants = .variant1

@@ -3,6 +3,12 @@ import SwiftUI
 
 struct __CAPNAME__Modifier_Previews: PreviewProvider {
     static var previews: some View {
-        // Add Previews Here
+        __CAPNAME__ModifierWrapperView()
+    }
+}
+
+struct __CAPNAME__ModifierWrapperView: View {
+    var body: some View {
+        // TODO: Add the previews here
     }
 }

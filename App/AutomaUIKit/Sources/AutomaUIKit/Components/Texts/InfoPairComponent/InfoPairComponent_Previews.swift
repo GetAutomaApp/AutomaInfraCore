@@ -8,6 +8,29 @@ import SwiftUI
 
 struct InfoPairComponent_Previews: PreviewProvider {
     static var previews: some View {
-        InfoPairComponent().padding()
+        InfoPairWrapperView()
+    }
+}
+
+struct InfoPairWrapperView: View {
+    @ObservedObject var config = InfoPairComponentConfig()
+
+    var body: some View {
+        PropertyEditor(
+            object: config,
+            properties: [
+                [AnyKeyPath("Title", keyPath: \.title)],
+                [AnyKeyPath("Description", keyPath: \.description)],
+            ],
+            viewer: {
+                VStack {
+                    InfoPairComponent(config: config)
+                    EnumPropertyView(
+                        value: $config.variant,
+                        cases: InfoPairVariants.allCases
+                    )
+                }
+            }
+        )
     }
 }
