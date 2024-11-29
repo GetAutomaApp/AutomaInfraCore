@@ -43,11 +43,12 @@ struct ProgressIndicatorComponent: View {
 
             Rectangle()
                 .frame(
-                    width: config.determineStepGrowSize,
+                    width: config.determineStepLengthGrowSize,
                     height: config.stepHeight
                 )
-                .foregroundStyle(config.stepColor)
+                .foregroundStyle(config.stepColour)
                 .animation(config.isAnimating ? .smooth : nil, value: config.currentStep)
+                .tag("progress-indicator-overlay")
         }.onAppear {
             onSelfAppear(config)
         }.animation(config.isAnimating ? .spring : nil, value: config.totalSteps)
