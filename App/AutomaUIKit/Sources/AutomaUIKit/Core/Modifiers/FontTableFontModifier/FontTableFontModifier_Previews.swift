@@ -1,5 +1,5 @@
 // FontTableFontModifier_Previews.swift
-// was created on 11/24/24
+// was created on 11/28/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -59,6 +59,6 @@ struct ContentView: View {
 
             Text("This is bold Crimson Text!")
                 .fontTableFont(FontTable.Meta.caption1)
-        }
+        }.padding()
     }
 }

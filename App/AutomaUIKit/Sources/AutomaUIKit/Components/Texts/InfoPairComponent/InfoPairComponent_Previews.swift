@@ -1,5 +1,5 @@
 // InfoPairComponent_Previews.swift
-// was created on 11/6/24
+// was created on 11/28/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -8,6 +8,29 @@ import SwiftUI
 
 struct InfoPairComponent_Previews: PreviewProvider {
     static var previews: some View {
-        InfoPairComponent()
+        InfoPairWrapperView()
+    }
+}
+
+struct InfoPairWrapperView: View {
+    @ObservedObject var config = InfoPairComponentConfig()
+
+    var body: some View {
+        PropertyEditor(
+            object: config,
+            properties: [
+                [AnyKeyPath("Title", keyPath: \.title)],
+                [AnyKeyPath("Description", keyPath: \.description)],
+            ],
+            viewer: {
+                VStack {
+                    InfoPairComponent(config: config)
+                    EnumPropertyView(
+                        value: $config.variant,
+                        cases: InfoPairVariants.allCases
+                    )
+                }
+            }
+        )
     }
 }
