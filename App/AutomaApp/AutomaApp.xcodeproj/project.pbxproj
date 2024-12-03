@@ -7,16 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		38B792432CFD109400FB165C /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38B792422CFD109400FB165C /* SplashScreen.storyboard */; };
-		38B792452CFD109400FB165C /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38B792422CFD109400FB165C /* SplashScreen.storyboard */; };
-		38B792472CFD143300FB165C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38F8D3DD2CFA40D700CC1E46 /* Preview Assets.xcassets */; };
-		38B792482CFD143300FB165C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38F8D3DD2CFA40D700CC1E46 /* Preview Assets.xcassets */; };
-		38F8D3DE2CFA40D700CC1E46 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38F8D3DD2CFA40D700CC1E46 /* Preview Assets.xcassets */; };
-		38F8D3DF2CFA40D700CC1E46 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38F8D3DD2CFA40D700CC1E46 /* Preview Assets.xcassets */; };
 		38F8D4D32CFA43E500CC1E46 /* AutomaUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 38F8D4D22CFA43E500CC1E46 /* AutomaUIKit */; };
 		38F8D4D62CFA445B00CC1E46 /* AutomaUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 38F8D4D52CFA445B00CC1E46 /* AutomaUIKit */; };
 		38F8D4D82CFA446900CC1E46 /* AutomaUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 38F8D4D72CFA446900CC1E46 /* AutomaUIKit */; };
 		38F8D4DA2CFA446E00CC1E46 /* AutomaUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 38F8D4D92CFA446E00CC1E46 /* AutomaUIKit */; };
+		38F973D42CFF3CB3003D8308 /* AutomaAppShared in Frameworks */ = {isa = PBXBuildFile; productRef = 38F973D32CFF3CB3003D8308 /* AutomaAppShared */; };
+		38F973D62CFF3D80003D8308 /* AutomaAppShared in Frameworks */ = {isa = PBXBuildFile; productRef = 38F973D52CFF3D80003D8308 /* AutomaAppShared */; };
+		38F973D82CFF3D89003D8308 /* AutomaAppShared in Frameworks */ = {isa = PBXBuildFile; productRef = 38F973D72CFF3D89003D8308 /* AutomaAppShared */; };
+		38F973DA2CFF3D92003D8308 /* AutomaAppShared in Frameworks */ = {isa = PBXBuildFile; productRef = 38F973D92CFF3D92003D8308 /* AutomaAppShared */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,16 +77,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		38B792402CFD0DF400FB165C /* MACOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MACOS.entitlements; sourceTree = "<group>"; };
-		38B792412CFD0E0700FB165C /* IOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IOS.entitlements; sourceTree = "<group>"; };
-		38B792422CFD109400FB165C /* SplashScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		38F8D37B2CFA3F3700CC1E46 /* IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F8D38B2CFA3F3800CC1E46 /* IOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F8D3952CFA3F3800CC1E46 /* IOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F8D3AA2CFA3F7000CC1E46 /* MACOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MACOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F8D3BA2CFA3F7100CC1E46 /* MACOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MACOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F8D3C42CFA3F7100CC1E46 /* MACOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MACOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		38F8D3DD2CFA40D700CC1E46 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		38F8D4142CFA42D200CC1E46 /* IOS-ADMIN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IOS-ADMIN.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F8D4232CFA42D300CC1E46 /* IOS-ADMINTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "IOS-ADMINTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F8D42D2CFA42D300CC1E46 /* IOS-ADMINUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "IOS-ADMINUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -250,29 +244,39 @@
 			);
 			target = 38F8D4A32CFA431800CC1E46 /* MACOS-ADMINUITests */;
 		};
+		38F973C32CFF39F7003D8308 /* Exceptions for "Shared" folder in "IOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Preview Content/Preview Assets.xcassets",
+				"Preview Content/SplashScreen.storyboard",
+			);
+			target = 38F8D37A2CFA3F3700CC1E46 /* IOS */;
+		};
+		38F973C42CFF39F7003D8308 /* Exceptions for "Shared" folder in "MACOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Preview Content/Preview Assets.xcassets",
+			);
+			target = 38F8D3A92CFA3F7000CC1E46 /* MACOS */;
+		};
+		38F973C52CFF39F7003D8308 /* Exceptions for "Shared" folder in "IOS-ADMIN" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Preview Content/Preview Assets.xcassets",
+				"Preview Content/SplashScreen.storyboard",
+			);
+			target = 38F8D4132CFA42D200CC1E46 /* IOS-ADMIN */;
+		};
+		38F973C62CFF39F7003D8308 /* Exceptions for "Shared" folder in "MACOS-ADMIN" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Preview Content/Preview Assets.xcassets",
+			);
+			target = 38F8D4892CFA431600CC1E46 /* MACOS-ADMIN */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		383CA5C02CFDE2130096E194 /* Screens */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Screens;
-			sourceTree = "<group>";
-		};
-		383CA5CC2CFDE6950096E194 /* State */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = State;
-			sourceTree = "<group>";
-		};
-		387152D62CFF2DFA0001C8B8 /* Business Logic */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Business Logic";
-			sourceTree = "<group>";
-		};
-		387152E62CFF2EFA0001C8B8 /* UI */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = UI;
-			sourceTree = "<group>";
-		};
 		38F8D43F2CFA42EC00CC1E46 /* Core */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -301,6 +305,27 @@
 			path = Admin;
 			sourceTree = "<group>";
 		};
+		38F973022CFF3937003D8308 /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				38F973C32CFF39F7003D8308 /* Exceptions for "Shared" folder in "IOS" target */,
+				38F973C42CFF39F7003D8308 /* Exceptions for "Shared" folder in "MACOS" target */,
+				38F973C52CFF39F7003D8308 /* Exceptions for "Shared" folder in "IOS-ADMIN" target */,
+				38F973C62CFF39F7003D8308 /* Exceptions for "Shared" folder in "MACOS-ADMIN" target */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		38F973132CFF3938003D8308 /* SharedTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SharedTests;
+			sourceTree = "<group>";
+		};
+		38F9731D2CFF3938003D8308 /* SharedUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SharedUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -308,6 +333,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38F973D42CFF3CB3003D8308 /* AutomaAppShared in Frameworks */,
 				38F8D4D32CFA43E500CC1E46 /* AutomaUIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -330,6 +356,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38F973D62CFF3D80003D8308 /* AutomaAppShared in Frameworks */,
 				38F8D4D62CFA445B00CC1E46 /* AutomaUIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -352,6 +379,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38F973D82CFF3D89003D8308 /* AutomaAppShared in Frameworks */,
 				38F8D4D82CFA446900CC1E46 /* AutomaUIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -374,6 +402,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38F973DA2CFF3D92003D8308 /* AutomaAppShared in Frameworks */,
 				38F8D4DA2CFA446E00CC1E46 /* AutomaUIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -398,10 +427,13 @@
 		38F8D3702CFA3EBB00CC1E46 = {
 			isa = PBXGroup;
 			children = (
+				38F973022CFF3937003D8308 /* Shared */,
+				38F973132CFF3938003D8308 /* SharedTests */,
+				38F9731D2CFF3938003D8308 /* SharedUITests */,
 				38F8D37C2CFA3F3700CC1E46 /* Products */,
-				38F8D3D52CFA3F8800CC1E46 /* Shared */,
 				38F8D43F2CFA42EC00CC1E46 /* Core */,
 				38F8D46D2CFA42F900CC1E46 /* Admin */,
+				38F973C72CFF3BC5003D8308 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -424,27 +456,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		38F8D3D52CFA3F8800CC1E46 /* Shared */ = {
+		38F973C72CFF3BC5003D8308 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				387152E62CFF2EFA0001C8B8 /* UI */,
-				387152D62CFF2DFA0001C8B8 /* Business Logic */,
-				383CA5CC2CFDE6950096E194 /* State */,
-				383CA5C02CFDE2130096E194 /* Screens */,
-				38F8D3DC2CFA40AD00CC1E46 /* Preview Content */,
-				38B792402CFD0DF400FB165C /* MACOS.entitlements */,
-				38B792412CFD0E0700FB165C /* IOS.entitlements */,
 			);
-			path = Shared;
-			sourceTree = "<group>";
-		};
-		38F8D3DC2CFA40AD00CC1E46 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				38F8D3DD2CFA40D700CC1E46 /* Preview Assets.xcassets */,
-				38B792422CFD109400FB165C /* SplashScreen.storyboard */,
-			);
-			path = "Preview Content";
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -463,16 +479,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				383CA5C02CFDE2130096E194 /* Screens */,
-				383CA5CC2CFDE6950096E194 /* State */,
-				387152D62CFF2DFA0001C8B8 /* Business Logic */,
-				387152E62CFF2EFA0001C8B8 /* UI */,
 				38F8D43F2CFA42EC00CC1E46 /* Core */,
 				38F8D46D2CFA42F900CC1E46 /* Admin */,
 			);
 			name = IOS;
 			packageProductDependencies = (
 				38F8D4D22CFA43E500CC1E46 /* AutomaUIKit */,
+				38F973D32CFF3CB3003D8308 /* AutomaAppShared */,
 			);
 			productName = IOS;
 			productReference = 38F8D37B2CFA3F3700CC1E46 /* IOS.app */;
@@ -531,16 +544,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				383CA5C02CFDE2130096E194 /* Screens */,
-				383CA5CC2CFDE6950096E194 /* State */,
-				387152D62CFF2DFA0001C8B8 /* Business Logic */,
-				387152E62CFF2EFA0001C8B8 /* UI */,
 				38F8D43F2CFA42EC00CC1E46 /* Core */,
 				38F8D46D2CFA42F900CC1E46 /* Admin */,
 			);
 			name = MACOS;
 			packageProductDependencies = (
 				38F8D4D52CFA445B00CC1E46 /* AutomaUIKit */,
+				38F973D52CFF3D80003D8308 /* AutomaAppShared */,
 			);
 			productName = MACOS;
 			productReference = 38F8D3AA2CFA3F7000CC1E46 /* MACOS.app */;
@@ -598,15 +608,10 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				383CA5C02CFDE2130096E194 /* Screens */,
-				383CA5CC2CFDE6950096E194 /* State */,
-				387152D62CFF2DFA0001C8B8 /* Business Logic */,
-				387152E62CFF2EFA0001C8B8 /* UI */,
-			);
 			name = "IOS-ADMIN";
 			packageProductDependencies = (
 				38F8D4D72CFA446900CC1E46 /* AutomaUIKit */,
+				38F973D72CFF3D89003D8308 /* AutomaAppShared */,
 			);
 			productName = "IOS-ADMIN";
 			productReference = 38F8D4142CFA42D200CC1E46 /* IOS-ADMIN.app */;
@@ -664,15 +669,10 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				383CA5C02CFDE2130096E194 /* Screens */,
-				383CA5CC2CFDE6950096E194 /* State */,
-				387152D62CFF2DFA0001C8B8 /* Business Logic */,
-				387152E62CFF2EFA0001C8B8 /* UI */,
-			);
 			name = "MACOS-ADMIN";
 			packageProductDependencies = (
 				38F8D4D92CFA446E00CC1E46 /* AutomaUIKit */,
+				38F973D92CFF3D92003D8308 /* AutomaAppShared */,
 			);
 			productName = "MACOS-ADMIN";
 			productReference = 38F8D48A2CFA431600CC1E46 /* MACOS-ADMIN.app */;
@@ -785,6 +785,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				38F8D4D12CFA43E500CC1E46 /* XCLocalSwiftPackageReference "../AutomaUIKit" */,
+				38F973D22CFF3CB3003D8308 /* XCLocalSwiftPackageReference "../AutomaAppShared" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 38F8D37C2CFA3F3700CC1E46 /* Products */;
@@ -812,8 +813,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38B792452CFD109400FB165C /* SplashScreen.storyboard in Resources */,
-				38F8D3DE2CFA40D700CC1E46 /* Preview Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -835,7 +834,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38F8D3DF2CFA40D700CC1E46 /* Preview Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -857,8 +855,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38B792472CFD143300FB165C /* Preview Assets.xcassets in Resources */,
-				38B792432CFD109400FB165C /* SplashScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -880,7 +876,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38B792482CFD143300FB165C /* Preview Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1083,7 +1078,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_ASSET_PATHS = "Core/IOS/IOS/Preview\\ Content Shared/Preview\\ Content";
+				DEVELOPMENT_ASSET_PATHS = "Core/IOS/IOS/Preview\\ Content";
 				DEVELOPMENT_TEAM = 6D6QTRW962;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1178,7 +1173,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_ASSET_PATHS = "Core/IOS/IOS/Preview\\ Content Shared/Preview\\ Content";
+				DEVELOPMENT_ASSET_PATHS = "Core/IOS/IOS/Preview\\ Content";
 				DEVELOPMENT_TEAM = 6D6QTRW962;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_PREVIEWS = YES;
@@ -1193,7 +1188,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Automa - Productive Content Automation";
+				INFOPLIST_KEY_CFBundleDisplayName = "Debug: Automa - Productive Content Automation";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -2980,6 +2975,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../AutomaUIKit;
 		};
+		38F973D22CFF3CB3003D8308 /* XCLocalSwiftPackageReference "../AutomaAppShared" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../AutomaAppShared;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -3001,6 +3000,25 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 38F8D4D12CFA43E500CC1E46 /* XCLocalSwiftPackageReference "../AutomaUIKit" */;
 			productName = AutomaUIKit;
+		};
+		38F973D32CFF3CB3003D8308 /* AutomaAppShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AutomaAppShared;
+		};
+		38F973D52CFF3D80003D8308 /* AutomaAppShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 38F973D22CFF3CB3003D8308 /* XCLocalSwiftPackageReference "../AutomaAppShared" */;
+			productName = AutomaAppShared;
+		};
+		38F973D72CFF3D89003D8308 /* AutomaAppShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 38F973D22CFF3CB3003D8308 /* XCLocalSwiftPackageReference "../AutomaAppShared" */;
+			productName = AutomaAppShared;
+		};
+		38F973D92CFF3D92003D8308 /* AutomaAppShared */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 38F973D22CFF3CB3003D8308 /* XCLocalSwiftPackageReference "../AutomaAppShared" */;
+			productName = AutomaAppShared;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

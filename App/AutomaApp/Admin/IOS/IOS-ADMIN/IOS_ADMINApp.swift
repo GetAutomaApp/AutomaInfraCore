@@ -11,6 +11,7 @@ struct IOS_ADMINApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .preferredColorScheme(.dark)
         }
     }
 }
