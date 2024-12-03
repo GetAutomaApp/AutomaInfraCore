@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		383CA5C82CFDE5190096E194 /* BackendInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383CA5C72CFDE4F40096E194 /* BackendInteractor.swift */; };
-		383CA5C92CFDE5190096E194 /* BackendInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383CA5C72CFDE4F40096E194 /* BackendInteractor.swift */; };
-		383CA5CA2CFDE5190096E194 /* BackendInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383CA5C72CFDE4F40096E194 /* BackendInteractor.swift */; };
-		383CA5CB2CFDE5190096E194 /* BackendInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383CA5C72CFDE4F40096E194 /* BackendInteractor.swift */; };
 		38B792432CFD109400FB165C /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38B792422CFD109400FB165C /* SplashScreen.storyboard */; };
 		38B792452CFD109400FB165C /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38B792422CFD109400FB165C /* SplashScreen.storyboard */; };
 		38B792472CFD143300FB165C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38F8D3DD2CFA40D700CC1E46 /* Preview Assets.xcassets */; };
@@ -83,7 +79,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		383CA5C72CFDE4F40096E194 /* BackendInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendInteractor.swift; sourceTree = "<group>"; };
 		38B792402CFD0DF400FB165C /* MACOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MACOS.entitlements; sourceTree = "<group>"; };
 		38B792412CFD0E0700FB165C /* IOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IOS.entitlements; sourceTree = "<group>"; };
 		38B792422CFD109400FB165C /* SplashScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
@@ -268,6 +263,16 @@
 			path = State;
 			sourceTree = "<group>";
 		};
+		387152D62CFF2DFA0001C8B8 /* Business Logic */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Business Logic";
+			sourceTree = "<group>";
+		};
+		387152E62CFF2EFA0001C8B8 /* UI */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UI;
+			sourceTree = "<group>";
+		};
 		38F8D43F2CFA42EC00CC1E46 /* Core */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -422,22 +427,15 @@
 		38F8D3D52CFA3F8800CC1E46 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				387152E62CFF2EFA0001C8B8 /* UI */,
+				387152D62CFF2DFA0001C8B8 /* Business Logic */,
 				383CA5CC2CFDE6950096E194 /* State */,
-				383CA5C72CFDE4F40096E194 /* BackendInteractor.swift */,
 				383CA5C02CFDE2130096E194 /* Screens */,
 				38F8D3DC2CFA40AD00CC1E46 /* Preview Content */,
-				38F8D3D82CFA3FE700CC1E46 /* Views */,
 				38B792402CFD0DF400FB165C /* MACOS.entitlements */,
 				38B792412CFD0E0700FB165C /* IOS.entitlements */,
 			);
 			path = Shared;
-			sourceTree = "<group>";
-		};
-		38F8D3D82CFA3FE700CC1E46 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		38F8D3DC2CFA40AD00CC1E46 /* Preview Content */ = {
@@ -467,6 +465,8 @@
 			fileSystemSynchronizedGroups = (
 				383CA5C02CFDE2130096E194 /* Screens */,
 				383CA5CC2CFDE6950096E194 /* State */,
+				387152D62CFF2DFA0001C8B8 /* Business Logic */,
+				387152E62CFF2EFA0001C8B8 /* UI */,
 				38F8D43F2CFA42EC00CC1E46 /* Core */,
 				38F8D46D2CFA42F900CC1E46 /* Admin */,
 			);
@@ -533,6 +533,8 @@
 			fileSystemSynchronizedGroups = (
 				383CA5C02CFDE2130096E194 /* Screens */,
 				383CA5CC2CFDE6950096E194 /* State */,
+				387152D62CFF2DFA0001C8B8 /* Business Logic */,
+				387152E62CFF2EFA0001C8B8 /* UI */,
 				38F8D43F2CFA42EC00CC1E46 /* Core */,
 				38F8D46D2CFA42F900CC1E46 /* Admin */,
 			);
@@ -599,6 +601,8 @@
 			fileSystemSynchronizedGroups = (
 				383CA5C02CFDE2130096E194 /* Screens */,
 				383CA5CC2CFDE6950096E194 /* State */,
+				387152D62CFF2DFA0001C8B8 /* Business Logic */,
+				387152E62CFF2EFA0001C8B8 /* UI */,
 			);
 			name = "IOS-ADMIN";
 			packageProductDependencies = (
@@ -663,6 +667,8 @@
 			fileSystemSynchronizedGroups = (
 				383CA5C02CFDE2130096E194 /* Screens */,
 				383CA5CC2CFDE6950096E194 /* State */,
+				387152D62CFF2DFA0001C8B8 /* Business Logic */,
+				387152E62CFF2EFA0001C8B8 /* UI */,
 			);
 			name = "MACOS-ADMIN";
 			packageProductDependencies = (
@@ -899,7 +905,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				383CA5CA2CFDE5190096E194 /* BackendInteractor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -921,7 +926,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				383CA5C92CFDE5190096E194 /* BackendInteractor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -943,7 +947,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				383CA5C82CFDE5190096E194 /* BackendInteractor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -965,7 +968,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				383CA5CB2CFDE5190096E194 /* BackendInteractor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
