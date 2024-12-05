@@ -53,12 +53,12 @@ enum DesignTokens {
     static let defaultCornerRadius: CGFloat = 8
 }
 
-protocol IsFontTableFont {
+public protocol IsFontTableFont {
     var font: SwiftUI.Font { get }
 }
 
-enum FontTable {
-    enum Headings: IsFontTableFont {
+public enum FontTable {
+    public enum Headings: IsFontTableFont {
         case head1
         case head2
         case head3
@@ -66,7 +66,7 @@ enum FontTable {
         case head5
         case head6
 
-        var font: SwiftUI.Font {
+        public var font: SwiftUI.Font {
             switch self {
             case .head1:
                 FontFamily.CrimsonText.bold.swiftUIFont(size: 60)
@@ -84,13 +84,13 @@ enum FontTable {
         }
     }
 
-    enum Body: IsFontTableFont {
+    public enum Body: IsFontTableFont {
         case body1
         case body2
         case body3
         case body4
 
-        var font: SwiftUI.Font {
+        public var font: SwiftUI.Font {
             switch self {
             case .body1:
                 FontFamily.CrimsonText.regular.swiftUIFont(size: 20)
@@ -104,10 +104,10 @@ enum FontTable {
         }
     }
 
-    enum Meta: IsFontTableFont {
+    public enum Meta: IsFontTableFont {
         case label1, label2, caption1
 
-        var font: SwiftUI.Font {
+        public var font: SwiftUI.Font {
             switch self {
             case .label1:
                 FontFamily.CrimsonText.regular.swiftUIFont(size: 14)
