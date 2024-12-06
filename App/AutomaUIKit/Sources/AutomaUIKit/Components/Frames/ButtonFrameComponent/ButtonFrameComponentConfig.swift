@@ -1,5 +1,4 @@
 // ButtonFrameComponentConfig.swift
-// was created on 11/6/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -15,7 +14,7 @@ enum ButtonFrameVariants: String, CaseIterable {
 }
 
 /// Configuration class for customizing the appearance and behavior of buttons.
-class ButtonFrameComponentConfig: ObservableObject {
+public class ButtonFrameComponentConfig: ObservableObject {
     /// The variant of the button's appearance (e.g., generic, disabled, or rainbow).
     @Published var frameVariant: ButtonFrameVariants = .generic
 

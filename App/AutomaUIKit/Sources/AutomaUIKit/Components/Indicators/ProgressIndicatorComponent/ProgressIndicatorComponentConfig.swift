@@ -1,5 +1,4 @@
 // ProgressIndicatorComponentConfig.swift
-// was created on 11/29/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -7,18 +6,18 @@
 import SwiftUI
 
 /// This enum contains all of the different variants that the `ProgressIndicatorComponent` can use to represent it self
-enum ProgressIndicatorVariants {
+public enum ProgressIndicatorVariants {
     case generic
 }
 
 /// Configuration class for customizing the appearance and behaviour of the `ProgressIndicatorComponent`
-class ProgressIndicatorComponentConfig: ObservableObject {
+public class ProgressIndicatorComponentConfig: ObservableObject {
     /// Determines the variation of the ProgressIndicator component (more to come in the future)
     @Published var variant: ProgressIndicatorVariants
     /// The total steps that the component should generate. Defaults to 4
-    @Published var totalSteps: Int
+    @Published public var totalSteps: Int
     /// The current step the stepper should be at (represented & managed by the variant)
-    @Published var currentStep: Int = 1
+    @Published public var currentStep: Int = 1
     /// If the component should have any animation at all (this is for testing purposes, or to extend this component and
     /// add custom animations)
     @Published var isAnimating: Bool
@@ -34,12 +33,12 @@ class ProgressIndicatorComponentConfig: ObservableObject {
     @Published var stepColour: Color
 
     /// Default initializer
-    init(
+    public init(
         variant: ProgressIndicatorVariants = .generic,
         totalSteps: Int = 4,
         isAnimating: Bool = true,
-        stepLength: CGFloat = 7,
-        stepHeight: CGFloat = 7,
+        stepLength: CGFloat = 5,
+        stepHeight: CGFloat = 5,
         stepColor: Color = DesignTokens.colors.primary
     ) {
         self.variant = variant

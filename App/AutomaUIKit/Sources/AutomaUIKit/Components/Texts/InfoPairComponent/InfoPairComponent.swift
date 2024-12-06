@@ -1,5 +1,4 @@
 // InfoPairComponent.swift
-// was created on 11/28/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -15,31 +14,21 @@ import SwiftUI
 
  For more information on how to use this, take a look at `InfoPairComponentDocumentation.md`
  */
-struct InfoPairComponent: View {
+public struct InfoPairComponent: View {
     @ObservedObject var config: InfoPairComponentConfig
 
     let onSelfAppear: (InfoPairComponentConfig) -> Void
 
-    init(
+    public init(
         config: InfoPairComponentConfig = .init(),
-        title: String? = nil,
-        description: String? = nil,
         onSelfAppear: @escaping (InfoPairComponentConfig) -> Void = { _ in }
     ) {
-        if let title {
-            config.title = title
-        }
-
-        if let description {
-            config.description = description
-        }
-
         _config = .init(initialValue: config)
 
         self.onSelfAppear = onSelfAppear
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading) {
             Text(config.title)
                 .fontTableFont(

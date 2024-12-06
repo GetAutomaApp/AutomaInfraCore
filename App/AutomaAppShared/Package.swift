@@ -15,12 +15,12 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/nalexn/ViewInspector", from: "0.9.0"),
+        .package(path: "../AutomaUIKit"),
     ],
     targets: [
         .target(
             name: "AutomaAppShared",
-            dependencies: [],
+            dependencies: ["AutomaUIKit"],
             path: "Sources"
         ),
     ]
