@@ -1,6 +1,15 @@
 {
-  "originHash" : "2d4cae1c5a29c67b2c09e2dabd8c3d31785457d9fb482c51b935f8f16f674c30",
+  "originHash" : "95cc8c9029573ad64547a73463cc97461d18556945cf566d6157f75fb1a98f85",
   "pins" : [
+    {
+      "identity" : "viewextractor",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GetAutomaApp/ViewExtractor",
+      "state" : {
+        "revision" : "e20b1944524d4454c2a65c0054ce345c2c5d0185",
+        "version" : "1.0.0"
+      }
+    },
     {
       "identity" : "viewinspector",
       "kind" : "remoteSourceControl",

@@ -3,12 +3,6 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-//
-//  OnboardingScreen.swift
-//  AutomaAppShared
-//
-//  Created by Simon Ferns on 12/5/24.
-//
 import AutomaUIKit
 import SwiftUI
 
@@ -18,8 +12,6 @@ struct OnboardingScreenContent {
     let background: Color = DesignTokens.colors.primary
 }
 
-// TODO: Figure this out
-// TODO: Extend `.frame` to allow for (variant: .screen, height: 0.7)
 public struct OnboardingScreen: View {
     @ObservedObject var titleConfig: InfoPairComponentConfig = .init()
     @ObservedObject var progressIndicatorConfig: ProgressIndicatorComponentConfig = .init()
@@ -45,50 +37,66 @@ public struct OnboardingScreen: View {
         ),
     ]
 
+    public init() {}
+
     public var body: some View {
-        VStack(spacing: 0) {
-            VStack {
-                Spacer()
-            }
-            .frame(height: UIScreen.main.bounds.height * 0.6)
-            .frame(maxWidth: .infinity)
-            .background(.green)
-
-            VStack(alignment: .leading) {
-                HStack {
-                    InfoPairComponent(config: titleConfig) { config in
-                        config.title = "Create & manage profiles"
-                        config
-                            .description =
-                            "Automa provides a platform to create and manage social media accounts seamlessly with our integrated tools."
-                    }
-                    Spacer()
-                }
-                Spacer()
-
-                HStack(alignment: .bottom) {
-                    ProgressIndicatorComponent(config: progressIndicatorConfig) { config in
-                        config.totalSteps = onboardingScreenContent.count
-                    }
-                    Spacer()
-                    IconButtonComponent(
-                        config: iconButtonConfig,
-                        onSelfAppear: { _ in
-                            iconButtonConfig.variant = .circle
-                            iconButtonConfig.icon = .arrowRight
-                        }
-                    ) { _ in
-                        handleOnboardingNextScreen()
-                    }
-                }
-            }
-            .padding(.horizontal, 30)
-            .padding(.vertical, 40)
-            .frame(height: UIScreen.main.bounds.height * 0.4)
-            .frame(maxWidth: .infinity)
-            .background(.black)
+        if !shouldShowApplyScreen {
+            generateOnboardingView()
+        } else {
+            generateApplyView()
         }
-        .ignoresSafeArea()
+    }
+
+    @ViewBuilder
+    private func generateOnboardingView() -> some View {
+        OnboardingScreenFrame(
+            titleContent: {
+                InfoPairComponent(config: titleConfig, onSelfAppear: { config in
+                    config.title = onboardingScreenContent[0].title
+                    config.description = onboardingScreenContent[0].description
+                })
+                .animation(
+                    .bouncy,
+                    value: progressIndicatorConfig.currentStep
+                )
+            },
+            footerContent: {
+                ProgressIndicatorComponent(config: progressIndicatorConfig) { config in
+                    config.totalSteps = onboardingScreenContent.count
+                }
+                Spacer()
+                IconButtonComponent(
+                    config: iconButtonConfig,
+                    onSelfAppear: { _ in
+                        iconButtonConfig.variant = .circle
+                        iconButtonConfig.icon = .arrowRight
+                    }
+                ) { _ in
+                    handleOnboardingNextScreen()
+                }
+            }
+        )
+    }
+
+    @ViewBuilder
+    private func generateApplyView() -> some View {
+        OnboardingScreenFrame(
+            titleContent: {
+                InfoPairComponent(config: titleConfig) { config in
+                    config.title = "Apply to Join"
+                    config
+                        .description =
+                        "We are a closed community, accepting the highest quality candidates only. If you are ambitious, click next!"
+                }
+            },
+            footerContent: {
+                IconButtonComponent(
+                    defaultIcon: .arrowRight
+                ) { _ in
+                    print("handle apply status")
+                }
+            }
+        ).animation(.bouncy)
     }
 
     func handleOnboardingNextScreen() {
@@ -98,10 +106,8 @@ public struct OnboardingScreen: View {
         }
 
         progressIndicatorConfig.currentStep += 1
-        let currentScreen = onboardingScreenContent[progressIndicatorConfig.currentStep - 1]
-
-        titleConfig.title = currentScreen.title
-        titleConfig.description = currentScreen.description
+        titleConfig.title = onboardingScreenContent[progressIndicatorConfig.currentStep - 1].title
+        titleConfig.description = onboardingScreenContent[progressIndicatorConfig.currentStep - 1].description
     }
 }
 

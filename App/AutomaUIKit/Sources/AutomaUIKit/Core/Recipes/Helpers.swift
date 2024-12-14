@@ -41,6 +41,7 @@ enum DesignImages {
                 height: DesignTokens.icons.defaultHeight
             )
             .padding(0)
+            .foregroundStyle(DesignTokens.colors.textDark)
     }
 }
 

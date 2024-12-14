@@ -35,11 +35,15 @@ public struct InfoPairComponent: View {
                     FontTable.Headings.head4,
                     DesignTokens.colors.primaryText
                 ).tag("title")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text(config.description)
                 .fontTableFont(
                     FontTable.Body.body1,
                     DesignTokens.colors.secondaryText
                 ).tag("description")
+                .lineLimit(3)
+                .minimumScaleFactor(0.5)
         }.onAppear {
             onSelfAppear(config)
         }

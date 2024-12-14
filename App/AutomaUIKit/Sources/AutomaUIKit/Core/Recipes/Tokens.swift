@@ -11,7 +11,7 @@ public struct DesignColors: Sendable {
     /// Text Colours
     public let primaryText: Color = .init(hex: "FFFFFF")
     public let secondaryText: Color = .init(hex: "B4B4B4")
-    public let textDark: Color = .init(hex: "00000")
+    public let textDark: Color = .init(hex: "000000")
 
     /// Whitespace Colours
     public let primaryWhitespace1: Color = .init(hex: "000000")
@@ -20,7 +20,7 @@ public struct DesignColors: Sendable {
 }
 
 public struct DesignPadding: Sendable {
-    public let button: EdgeInsets = .init(top: 10, leading: 20, bottom: 10, trailing: 20)
+    public let button: EdgeInsets = .init(top: 20, leading: 30, bottom: 20, trailing: 30)
     public let buttonEven: EdgeInsets = .init(top: 20, leading: 20, bottom: 20, trailing: 20)
 }
 

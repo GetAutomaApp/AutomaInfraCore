@@ -7,9 +7,6 @@ import SwiftUI
 
 /// A custom button component that displays an icon and allows for flexible configuration and action handling.
 public struct IconButtonComponent: View {
-    /// The internal configuration of the button, managed within the component.
-    @StateObject private var internalConfig: IconButtonComponentConfig = .init()
-
     /// The external configuration of the button, provided by the parent view.
     @ObservedObject private var externalConfig: IconButtonComponentConfig
 
@@ -56,12 +53,8 @@ public struct IconButtonComponent: View {
         self.onSelfAppear = onSelfAppear
         self.action = action
 
-        _internalConfig = StateObject(wrappedValue: {
-            let config = IconButtonComponentConfig()
-            config.icon = defaultIcon
-            return config
-        }())
-        externalConfig = _internalConfig.wrappedValue
+        _externalConfig = .init(initialValue: .init())
+        externalConfig.icon = defaultIcon
     }
 
     // MARK: - 3. Initializer with action without config
