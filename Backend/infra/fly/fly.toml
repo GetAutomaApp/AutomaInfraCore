@@ -3,10 +3,11 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'backend-solitary-voice-65'
+app = 'automa-backend-__FLY_ENVIRONMENT__'
 primary_region = 'jnb'
 
 [build]
+  
 
 [http_service]
   internal_port = 8080
