@@ -5,15 +5,25 @@
 
 import SwiftUI
 
-enum InfoPairVariants: String, CaseIterable {
+public enum InfoPairVariants: String, CaseIterable {
     case generic
 }
 
 /**
  This is the default config for the Info Pair Component
  */
-class InfoPairComponentConfig: ObservableObject {
-    @Published var title: String = "Enter a title here"
-    @Published var description: String = "Enter a 3 line / 2 line description here"
-    @Published var variant: InfoPairVariants = .generic
+public class InfoPairComponentConfig: ObservableObject {
+    @Published public var title: String
+    @Published public var description: String
+    @Published public var variant: InfoPairVariants
+
+    public init(
+        title: String = "Enter a title here",
+        description: String = "Enter a 3 line / 2 line description here",
+        variant: InfoPairVariants = .generic
+    ) {
+        self.title = title
+        self.description = description
+        self.variant = variant
+    }
 }

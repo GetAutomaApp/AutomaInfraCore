@@ -6,10 +6,7 @@
 import SwiftUI
 
 /// A custom button component that displays an icon and allows for flexible configuration and action handling.
-struct IconButtonComponent: View {
-    /// The internal configuration of the button, managed within the component.
-    @StateObject private var internalConfig: IconButtonComponentConfig = .init()
-
+public struct IconButtonComponent: View {
     /// The external configuration of the button, provided by the parent view.
     @ObservedObject private var externalConfig: IconButtonComponentConfig
 
@@ -30,7 +27,7 @@ struct IconButtonComponent: View {
     ///   - config: The external configuration that defines the button's appearance and behavior.
     ///   - onSelfAppear: A closure called when the button appears on screen (default is no-op).
     ///   - action: A closure called when the button is tapped (default is no-op).
-    init(
+    public init(
         config: IconButtonComponentConfig,
         onSelfAppear: @escaping (IconButtonComponentConfig) -> Void = { _ in },
         action: @escaping (IconButtonComponentConfig) -> Void = { _ in }
@@ -48,7 +45,7 @@ struct IconButtonComponent: View {
     ///   - onSelfAppear: A closure called when the button appears on screen (default is no-op).
     ///   - defaultIcon: The default icon to display (default is `.unknown`).
     ///   - action: A closure called when the button is tapped (default is no-op).
-    init(
+    public init(
         onSelfAppear: @escaping (IconButtonComponentConfig) -> Void = { _ in },
         defaultIcon: DesignIconsEnum = .unknown,
         action: @escaping (IconButtonComponentConfig) -> Void = { _ in }
@@ -56,12 +53,8 @@ struct IconButtonComponent: View {
         self.onSelfAppear = onSelfAppear
         self.action = action
 
-        _internalConfig = StateObject(wrappedValue: {
-            let config = IconButtonComponentConfig()
-            config.icon = defaultIcon
-            return config
-        }())
-        externalConfig = _internalConfig.wrappedValue
+        _externalConfig = .init(initialValue: .init())
+        externalConfig.icon = defaultIcon
     }
 
     // MARK: - 3. Initializer with action without config
@@ -72,7 +65,7 @@ struct IconButtonComponent: View {
     ///   - onSelfAppear: A closure called when the button appears on screen (default is no-op).
     ///   - defaultIcon: The default icon to display (default is `.unknown`).
     ///   - action: A closure called when the button is tapped (default is no-op).
-    init(
+    public init(
         onSelfAppear: @escaping (IconButtonComponentConfig) -> Void = { _ in },
         defaultIcon: DesignIconsEnum = .unknown,
         action: @escaping () -> Void = {}
@@ -89,7 +82,7 @@ struct IconButtonComponent: View {
     /// The view body that represents the button. It renders a button frame with the specified icon.
     ///
     /// - Returns: A Button view wrapped in a custom frame, displaying the icon and triggering the associated action.
-    var body: some View {
+    public var body: some View {
         ButtonFrameComponent(config: config, action: {
             action(config)
         }) {

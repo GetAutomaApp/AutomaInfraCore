@@ -16,11 +16,12 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/nalexn/ViewInspector", from: "0.9.0"),
+        .package(url: "https://github.com/GetAutomaApp/ViewExtractor", from: "1.0.0"),
     ],
     targets: [
         .target(
             name: "AutomaUIKit",
-            dependencies: [],
+            dependencies: ["ViewExtractor"],
             path: "Sources",
             exclude: [
                 "AutomaUIKit/Components/Buttons/IconButtonComponent/IconButtonComponentDocumentation.md",

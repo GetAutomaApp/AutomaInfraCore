@@ -5,34 +5,36 @@
 
 import SwiftUI
 
-/// Enum representing the different visual variants of the button.
-/// All variants are displayed int he `ButtonFrameComponent_Previews.swift` file
-enum ButtonFrameVariants: String, CaseIterable {
+public enum ButtonFrameVariants: String, CaseIterable {
     case generic
     case disabled
     case rainbow
 }
 
-/// Configuration class for customizing the appearance and behavior of buttons.
-class ButtonFrameComponentConfig: ObservableObject {
-    /// The variant of the button's appearance (e.g., generic, disabled, or rainbow).
-    @Published var frameVariant: ButtonFrameVariants = .generic
+public class ButtonFrameComponentConfig: ObservableObject {
+    @Published public var frameVariant: ButtonFrameVariants = .generic
+    @Published public var fillSpace: Bool = true
+    @Published public var isCircular: Bool = false
+    @Published public var roundness = DesignTokens.defaultCornerRadius
+    @Published public var variantGenericBackground = DesignTokens.colors.primary
+    @Published public var variantDisabledBackground = DesignTokens.colors.primaryWhitespace3
+    @Published public var defaultPadding = DesignTokens.padding.button
 
-    /// Determines if the button should expand to fill the available space or resize based on its content.
-    @Published var fillSpace: Bool = true
-
-    /// If `true`, makes the button circular. Overrides `roundness` with `CGFloat.infinity`.
-    @Published var isCircular: Bool = false
-
-    /// Corner radius for the button. Ignored if `isCircular` is `true`.
-    @Published var roundness = DesignTokens.defaultCornerRadius
-
-    /// Background color for the generic button variant (default is the primary color).
-    @Published var variantGenericBackground = DesignTokens.colors.primary
-
-    /// Background color for the disabled button variant (default is a lighter primary color).
-    @Published var variantDisabledBackground = DesignTokens.colors.primaryWhitespace3
-
-    /// Default padding for the button’s content.
-    @Published var defaultPadding = DesignTokens.padding.button
+    public init(
+        frameVariant: ButtonFrameVariants = .generic,
+        fillSpace: Bool = true,
+        isCircular: Bool = false,
+        roundness: CGFloat = DesignTokens.defaultCornerRadius,
+        variantGenericBackground: Color = DesignTokens.colors.primary,
+        variantDisabledBackground: Color = DesignTokens.colors.primaryWhitespace3,
+        defaultPadding: EdgeInsets = DesignTokens.padding.button
+    ) {
+        self.frameVariant = frameVariant
+        self.fillSpace = fillSpace
+        self.isCircular = isCircular
+        self.roundness = roundness
+        self.variantGenericBackground = variantGenericBackground
+        self.variantDisabledBackground = variantDisabledBackground
+        self.defaultPadding = defaultPadding
+    }
 }

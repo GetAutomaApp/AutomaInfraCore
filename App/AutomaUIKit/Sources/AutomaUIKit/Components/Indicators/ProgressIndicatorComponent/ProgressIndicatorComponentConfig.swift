@@ -6,34 +6,34 @@
 import SwiftUI
 
 /// This enum contains all of the different variants that the `ProgressIndicatorComponent` can use to represent it self
-enum ProgressIndicatorVariants {
+public enum ProgressIndicatorVariants {
     case generic
 }
 
 /// Configuration class for customizing the appearance and behaviour of the `ProgressIndicatorComponent`
-class ProgressIndicatorComponentConfig: ObservableObject {
+public class ProgressIndicatorComponentConfig: ObservableObject {
     /// Determines the variation of the ProgressIndicator component (more to come in the future)
-    @Published var variant: ProgressIndicatorVariants
+    @Published public var variant: ProgressIndicatorVariants
     /// The total steps that the component should generate. Defaults to 4
-    @Published var totalSteps: Int
+    @Published public var totalSteps: Int
     /// The current step the stepper should be at (represented & managed by the variant)
-    @Published var currentStep: Int = 1
+    @Published public var currentStep: Int = 1
     /// If the component should have any animation at all (this is for testing purposes, or to extend this component and
     /// add custom animations)
-    @Published var isAnimating: Bool
+    @Published public var isAnimating: Bool
 
     /// The length the steps should be (the variant can change the length of a step based on current step & other
     /// factors)
-    @Published var stepLength: CGFloat
+    @Published public var stepLength: CGFloat
     /// The height the steps should be (the variant can change the height of a step based on current step & other
     /// factors)
-    @Published var stepHeight: CGFloat
+    @Published public var stepHeight: CGFloat
     /// The `primary` colour used by the ProgressIndicator (the variant can change the colour based on the current step
     /// and other factors)
-    @Published var stepColour: Color
+    @Published public var stepColour: Color
 
     /// Default initializer
-    init(
+    public init(
         variant: ProgressIndicatorVariants = .generic,
         totalSteps: Int = 4,
         isAnimating: Bool = true,

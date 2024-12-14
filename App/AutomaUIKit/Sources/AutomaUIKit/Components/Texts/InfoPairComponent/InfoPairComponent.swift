@@ -14,12 +14,12 @@ import SwiftUI
 
  For more information on how to use this, take a look at `InfoPairComponentDocumentation.md`
  */
-struct InfoPairComponent: View {
+public struct InfoPairComponent: View {
     @ObservedObject var config: InfoPairComponentConfig
 
     let onSelfAppear: (InfoPairComponentConfig) -> Void
 
-    init(
+    public init(
         config: InfoPairComponentConfig = .init(),
         title: String? = nil,
         description: String? = nil,
@@ -38,18 +38,22 @@ struct InfoPairComponent: View {
         self.onSelfAppear = onSelfAppear
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading) {
             Text(config.title)
                 .fontTableFont(
                     FontTable.Headings.head4,
                     DesignTokens.colors.primaryText
                 ).tag("title")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text(config.description)
                 .fontTableFont(
                     FontTable.Body.body1,
                     DesignTokens.colors.secondaryText
                 ).tag("description")
+                .lineLimit(3)
+                .minimumScaleFactor(0.5)
         }.onAppear {
             onSelfAppear(config)
         }

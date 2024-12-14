@@ -6,7 +6,7 @@
 import SwiftUI
 
 /// Enum defining the different variants of the IconButton component.
-enum IconButtonVariants: String, CaseIterable {
+public enum IconButtonVariants: String, CaseIterable {
     case generic
     case square
     case circle
@@ -15,10 +15,10 @@ enum IconButtonVariants: String, CaseIterable {
 
 /// Configuration for the IconButtonComponent that extends from `ButtonFrameComponentConfig`.
 /// It defines the visual style, state (enabled/disabled), and icon for the button.
-class IconButtonComponentConfig: ButtonFrameComponentConfig {
+public class IconButtonComponentConfig: ButtonFrameComponentConfig {
     /// The variant of the button (e.g., generic, square, circle, pill).
     /// This controls the button's shape and layout style.
-    @Published var variant: IconButtonVariants = .generic {
+    @Published public var variant: IconButtonVariants = .generic {
         didSet {
             applyVariantStyling()
         }
@@ -32,12 +32,12 @@ class IconButtonComponentConfig: ButtonFrameComponentConfig {
     }
 
     /// The icon to display on the button. This defines the visual icon that the button will use.
-    @Published var icon: DesignIconsEnum = .unknown
+    @Published public var icon: DesignIconsEnum = .unknown
 
     /// Initializes the `IconButtonComponentConfig` with default styling.
     ///
     /// This calls the superclass's initializer and applies the default styling for the button's variant.
-    override init() {
+    public init() {
         super.init()
         applyVariantStyling()
     }

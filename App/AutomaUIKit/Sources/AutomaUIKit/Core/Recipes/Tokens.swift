@@ -5,27 +5,28 @@
 
 import SwiftUI
 
-struct DesignColors {
-    let primary: Color = .init(hex: "0FA958")
+public struct DesignColors: Sendable {
+    public let primary: Color = .init(hex: "0FA958")
 
     /// Text Colours
-    let primaryText: Color = .init(hex: "FFFFFF")
-    let secondaryText: Color = .init(hex: "B4B4B4")
-    let textDark: Color = .init(hex: "00000")
+    public let primaryText: Color = .init(hex: "FFFFFF")
+    public let secondaryText: Color = .init(hex: "B4B4B4")
+    public let textDark: Color = .init(hex: "000000")
 
     /// Whitespace Colours
-    let primaryWhitespace1: Color = .init(hex: "000000")
-    let primaryWhitespace2: Color = .init(hex: "3C3C3C")
-    let primaryWhitespace3: Color = .init(hex: "7C7C7C")
+    public let primaryWhitespace1: Color = .init(hex: "000000")
+    public let primaryWhitespace2: Color = .init(hex: "3C3C3C")
+    public let primaryWhitespace3: Color = .init(hex: "7C7C7C")
 }
 
-struct DesignPadding {
-    let button: EdgeInsets = .init(top: 10, leading: 20, bottom: 10, trailing: 20)
-    let buttonEven: EdgeInsets = .init(top: 10, leading: 10, bottom: 10, trailing: 10)
+public struct DesignPadding: Sendable {
+    public let button: EdgeInsets = .init(top: 20, leading: 30, bottom: 20, trailing: 30)
+    public let buttonEven: EdgeInsets = .init(top: 20, leading: 20, bottom: 20, trailing: 20)
 }
 
-enum DesignIconsEnum: CaseIterable {
+public enum DesignIconsEnum: CaseIterable {
     case pause, play, unknown
+    case arrowRight
 
     var image: some View {
         switch self {
@@ -35,21 +36,23 @@ enum DesignIconsEnum: CaseIterable {
             Image(systemName: "play.circle.fill").toIcon()
         case .unknown:
             Image(systemName: "questionmark.circle.fill").toIcon()
+        case .arrowRight:
+            Image(systemName: "arrow.right").toIcon()
         }
     }
 }
 
-struct DesignIcons {
-    let defaultWidth: CGFloat = 24
-    let defaultHeight: CGFloat = 24
+public struct DesignIcons: Sendable {
+    let defaultWidth: CGFloat = 17.5
+    let defaultHeight: CGFloat = 17.5
 }
 
-enum DesignTokens {
-    static let colors: DesignColors = .init()
-    static let padding: DesignPadding = .init()
-    static let icons: DesignIcons = .init()
+public enum DesignTokens {
+    public static let colors: DesignColors = .init()
+    public static let padding: DesignPadding = .init()
+    public static let icons: DesignIcons = .init()
 
-    static let defaultCornerRadius: CGFloat = 8
+    public static let defaultCornerRadius: CGFloat = 12
 }
 
 public protocol IsFontTableFont {

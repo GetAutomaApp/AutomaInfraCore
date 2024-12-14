@@ -14,7 +14,7 @@ import SwiftUI
 
  For more information, refer to the documentation in `ProgressIndicatorComponentDocumentation.md`
  */
-struct ProgressIndicatorComponent: View {
+public struct ProgressIndicatorComponent: View {
     // The Config used to manipulate this component's state.
     @ObservedObject var config: ProgressIndicatorComponentConfig
 
@@ -22,7 +22,7 @@ struct ProgressIndicatorComponent: View {
     // complex cases like scroll views.
     let onSelfAppear: (ProgressIndicatorComponentConfig) -> Void
 
-    init(
+    public init(
         config: ProgressIndicatorComponentConfig,
         onSelfAppear: @escaping (ProgressIndicatorComponentConfig) -> Void = { _ in }
     ) {
@@ -30,7 +30,7 @@ struct ProgressIndicatorComponent: View {
         self.onSelfAppear = onSelfAppear
     }
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .leading) {
             HStack(spacing: 0) {
                 ForEach(0 ..< config.totalSteps, id: \.self) { step in

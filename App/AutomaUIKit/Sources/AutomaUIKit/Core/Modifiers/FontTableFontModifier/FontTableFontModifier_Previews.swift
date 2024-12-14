@@ -59,6 +59,6 @@ struct ContentView: View {
             Text("This is bold Crimson Text!")
                 .fontTableFont(FontTable.Meta.caption1)
 
-        }.padding().onAppear { getRect() }
+        }.padding()
     }
 }
