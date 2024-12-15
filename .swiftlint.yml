@@ -4,6 +4,9 @@ disabled_rules:
   - opening_brace
   - multiple_closures_with_trailing_closure
   - void_function_in_ternary
+  # TODO: Remove these
+  - todo
+  - static_over_final_class
 
 excluded:
   - '**/.build/**'            # Exclude all .build directories, including nested ones

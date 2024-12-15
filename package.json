@@ -22,7 +22,8 @@
     "install:swiftlint": "brew install swiftlint",
     "install:swiftgen": "brew install swiftgen",
     "install:swiftformat": "brew install swiftformat",
-    "install:all": "npm-run-all --sequential install:swiftlint install:swiftgen install:swiftformat"
+    "install:all": "npm-run-all --sequential install:swiftlint install:swiftgen install:swiftformat",
+    "pull:secrets": ""
   },
   "keywords": [],
   "author": "",
