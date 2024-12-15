@@ -13,7 +13,11 @@ func routes(_ app: Application) throws {
     }
 
     app.get("hello") { req async -> String in
-        try await Todo().save(on: req.dbWrite)
+        do {
+            try await Todo().save(on: req.dbWrite)
+        } catch {
+            return "Error saving: \(error)"
+        }
         return ""
     }
 

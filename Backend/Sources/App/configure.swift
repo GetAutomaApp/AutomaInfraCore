@@ -24,11 +24,11 @@ public func configure(_ app: Application) async throws {
 
     print(primaryDatabaseURL, regionalDatabaseURL)
 
-    app.databases.use(try .postgres(
+    try app.databases.use(.postgres(
         url: primaryDatabaseURL
     ), as: .primary)
 
-    app.databases.use(try .postgres(
+    try app.databases.use(.postgres(
         url: regionalDatabaseURL
     ), as: .readOnly)
 
