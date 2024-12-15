@@ -12,14 +12,7 @@ func routes(_ app: Application) throws {
         "It works!"
     }
 
-    app.get("hello") { req async -> String in
-        do {
-            try await Todo().save(on: req.dbWrite)
-        } catch {
-            return "Error saving: \(error)"
-        }
+    app.get("hello") { _ async -> String in
         return ""
     }
-
-    try app.register(collection: TodoController())
 }
