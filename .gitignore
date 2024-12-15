@@ -193,3 +193,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+wireguard-sandbox.conf
+wireguard-prod.conf

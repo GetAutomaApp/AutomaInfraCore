@@ -6,26 +6,49 @@
 
 import Fluent
 import FluentPostgresDriver
-import NIOSSL
 import Vapor
 
-// configures your application
+// Configures your application
 public func configure(_ app: Application) async throws {
-    // uncomment to serve files from /Public folder
+    // Middleware for serving files (if needed)
     // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+
     app.commands.use(GenerateAppComponent(), as: "generate")
     app.commands.use(FlyConfigGenerator(), as: "fly-config")
 
-    try app.databases.use(DatabaseConfigurationFactory.postgres(configuration: .init(
-        hostname: Environment.get("DATABASE_HOST") ?? "localhost",
-        port: Environment.get("DATABASE_PORT").flatMap(Int.init(_:)) ?? SQLPostgresConfiguration.ianaPortNumber,
-        username: Environment.get("DATABASE_USERNAME") ?? "vapor_username",
-        password: Environment.get("DATABASE_PASSWORD") ?? "vapor_password",
-        database: Environment.get("DATABASE_NAME") ?? "vapor_database",
-        tls: .prefer(.init(configuration: .clientDefault))
-    )), as: .psql)
+    guard let primaryDatabaseURL = Environment.get("PRIMARY_POSTGRES_URL"),
+          let regionalDatabaseURL = Environment.get("REGIONAL_POSTGRES_URL")
+    else {
+        throw Abort(.notFound, reason: "Primary or Regional Postgres URL not found")
+    }
+
+    print(primaryDatabaseURL, regionalDatabaseURL)
+
+    try app.databases.use(.postgres(
+        url: primaryDatabaseURL
+    ), as: .primary)
+
+    try app.databases.use(.postgres(
+        url: regionalDatabaseURL
+    ), as: .readOnly)
 
     app.migrations.add(CreateTodo())
-    // register routes
+
     try routes(app)
+}
+
+// Extend DatabaseID to define custom database identifiers
+extension DatabaseID {
+    static let primary = DatabaseID(string: "primary") // Write DB
+    static let readOnly = DatabaseID(string: "readOnly") // Read-only DB
+}
+
+extension Request {
+    var dbWrite: Database {
+        db(.primary)
+    }
+
+    var dbReadOnly: Database {
+        db(.readOnly)
+    }
 }
