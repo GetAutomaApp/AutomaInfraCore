@@ -16,28 +16,28 @@ public func configure(_ app: Application) async throws {
     app.commands.use(GenerateAppComponent(), as: "generate")
     app.commands.use(FlyConfigGenerator(), as: "fly-config")
 
-    guard let primaryDatabaseURL = Environment.get("PRIMARY_POSTGRES_URL"),
-          let regionalDatabaseURL = Environment.get("REGIONAL_POSTGRES_URL")
-    else {
-        throw Abort(.notFound, reason: "Primary or Regional Postgres URL not found")
+    let primaryDatabaseURL = Environment.get("PRIMARY_POSTGRES_URL")
+
+    let regionalDatabaseURL = Environment.get("REGIONAL_POSTGRES_URL")
+
+    let hasDatabaseUrls = primaryDatabaseURL != nil && regionalDatabaseURL != nil
+
+    if hasDatabaseUrls {
+        try app.databases.use(.postgres(
+            url: primaryDatabaseURL!
+        ), as: .primary)
+
+        try app.databases.use(.postgres(
+            url: regionalDatabaseURL!
+        ), as: .readOnly)
+
+        app.migrations.add(CreateUserStorageItem())
+
+        try await app.autoMigrate()
+
+        try app.register(collection: UserStorageController())
+        try routes(app)
     }
-
-    print(primaryDatabaseURL, regionalDatabaseURL)
-
-    try app.databases.use(.postgres(
-        url: primaryDatabaseURL
-    ), as: .primary)
-
-    try app.databases.use(.postgres(
-        url: regionalDatabaseURL
-    ), as: .readOnly)
-
-    app.migrations.add(CreateUserStorageItem())
-
-    try await app.autoMigrate()
-
-    try app.register(collection: UserStorageController())
-    try routes(app)
 }
 
 // Extend DatabaseID to define custom database identifiers
