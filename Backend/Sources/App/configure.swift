@@ -32,8 +32,11 @@ public func configure(_ app: Application) async throws {
         url: regionalDatabaseURL
     ), as: .readOnly)
 
-    app.migrations.add(CreateTodo())
+    app.migrations.add(CreateUserStorageItem())
 
+    try await app.autoMigrate()
+
+    try app.register(collection: UserStorageController())
     try routes(app)
 }
 
