@@ -18,6 +18,16 @@ struct FileConfig {
     let templates: [String]
 }
 
+struct AddToFileType {
+    let name: String
+    let configurations: [AddToFileConfig]
+}
+
+struct AddToFileConfig {
+    let template: String
+    let addToFile: String
+}
+
 let fileTypes: [FileType] = [
     FileType(name: "ui-component", configurations: [
         FileConfig(
@@ -60,6 +70,56 @@ let fileTypes: [FileType] = [
             ]
         ),
     ]),
+    FileType(
+        name: "backend-controller",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/backend-controller/",
+                toDirectory: "Sources/App/Controllers/",
+                nestToDirectory: "__CAPNAME__Controller/",
+                templates: [
+                    "__CAPNAME__Controller.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/backend-controller/",
+                toDirectory: "Tests/AppTests/Controllers/",
+                nestToDirectory: "__CAPNAME__ControllerTests/",
+                templates: [
+                    "__CAPNAME__ControllerIntegrationTests.swift.template",
+                    "__CAPNAME__ControllerUnitTests.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/backend-controller/",
+                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Interactors",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__ControllerInteractor.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "model",
+        configurations: []
+    ),
+    FileType(
+        name: "dto",
+        configurations: []
+    ),
+    FileType(
+        name: "migration",
+        configurations: []
+    ),
+    FileType(
+        name: "proc",
+        configurations: []
+    ),
+    FileType(
+        name: "service",
+        configurations: []
+    ),
 ]
 
 struct GenerateAppComponent: Command {
@@ -151,6 +211,8 @@ struct GenerateAppComponent: Command {
 
         // Write the content to the new file
         try content.write(toFile: destination, atomically: true, encoding: .utf8)
+
+        print(destination)
     }
 
     func rename(text: String, componentName: String) -> String {
