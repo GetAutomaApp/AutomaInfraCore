@@ -40,7 +40,7 @@ struct FlyConfigGenerator: Command {
             throw Abort(.notFound, reason: "Invalid environment: \(environment)")
         }
 
-        var content = try String(contentsOfFile: configPath)
+        var content = try String(contentsOfFile: configPath, encoding: .utf8)
 
         content = content
             .replacingOccurrences(

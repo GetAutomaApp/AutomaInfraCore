@@ -127,9 +127,8 @@ let fileTypes: [FileType] = [
                     "__CAPNAME__Migration__TIMESTAMP__.swift.template",
                 ]
             ),
-
-            ]
-        ),
+        ]
+    ),
     FileType(
         name: "dto",
         configurations: [
@@ -140,7 +139,7 @@ let fileTypes: [FileType] = [
                 templates: [
                     "__CAPNAME__DTO.swift.template",
                 ]
-            )
+            ),
         ]
     ),
     FileType(

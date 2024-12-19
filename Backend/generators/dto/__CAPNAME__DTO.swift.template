@@ -2,4 +2,8 @@ import Vapor
 
 public struct __CAPNAME__DTO: Content {
     public var id: UUID?
+
+    public init(id: UUID?) {
+        self.id = id
+    }
 }
