@@ -1,0 +1,5 @@
+import Vapor
+
+public struct __CAPNAME__DTO: Content {
+    public var id: UUID?
+}

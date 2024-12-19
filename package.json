@@ -9,6 +9,7 @@
     "fly:config": "npm run cli -- fly-config",
     "cli": "cd Backend && swift run App",
     "format": "npm run build:all && swiftformat .",
+    "server:local": "npm run cli -- --env local",
     "deploy:backend:sandbox": "npm run fly:config -- infra/fly/fly.toml sandbox | npm run deploy:to:fly",
     "deploy:to:fly": "tail -n 1 | xargs -Ixx cp xx Backend/.fly.toml && cd Backend && flyctl deploy --config=.fly.toml",
     "deploy:backend:staging": "npm run fly:config -- infra/fly/fly.toml staging | npm run deploy:to:fly",
@@ -23,6 +24,10 @@
     "install:swiftgen": "brew install swiftgen",
     "install:swiftformat": "brew install swiftformat",
     "install:all": "npm-run-all --sequential install:swiftlint install:swiftgen install:swiftformat",
+    "compose:up": "npm run compose -- up -d",
+    "compose:down": "npm run compose -- down",
+    "compose:ps": "npm run compose -- ps -a",
+    "compose": "cd Backend && docker compose",
     "pull:secrets": ""
   },
   "keywords": [],

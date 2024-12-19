@@ -1,31 +1,22 @@
-//
-//  Test.swift
-//  Backend
-//
-//  Created by Simon Ferns on 12/17/24.
-//
+import XCTVapor
+@testable import App
 
-// UserStorageController.swift
-// was created on 12/15/24
-// Copyright (c) 2024 GetAutomaApp
-// All source code and related assets are the property of GetAutomaApp.
-// All rights reserved.
+final class __CAPNAME__ControllerIntegrationTests: XCTestCase {
+    var app: Application!
 
-import Fluent
-import Vapor
-
-struct __CAPNAME__Controller: RouteCollection {
-    func boot(routes: RoutesBuilder) throws {
-        let __CAPNAME_HASKELL__Route = routes.grouped("__CAPNAME_DASHED__")
-        
-        __CAPNAME_HASKELL__Route.get("request", use: request)
+    override func setUp() {
+        app = Application(.testing)
+        try! configure(app)
     }
-    
-    @Sendable
-    func request(req: Request) async throws -> HTTPStatus {
-        return .noContent
+
+    override func tearDown() {
+        app.shutdown()
     }
-    
-    // use npm run gen-add route <route name> to smartly insert a new route!
+
+    func testRequest() throws {
+        try app.test(.GET, "__CAPNAME_DASHED__/request") { res in
+            XCTAssertEqual(res.status, .ok)
+            // Add more assertions based on the expected response
+        }
+    }
 }
-

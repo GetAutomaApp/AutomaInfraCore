@@ -92,7 +92,7 @@ let fileTypes: [FileType] = [
             ),
             FileConfig(
                 fromDirectory: "./generators/backend-controller/",
-                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Interactors",
+                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Interactors/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__ControllerInteractor.swift.template",
@@ -102,11 +102,46 @@ let fileTypes: [FileType] = [
     ),
     FileType(
         name: "model",
-        configurations: []
-    ),
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/model/",
+                toDirectory: "./Sources/App/Models/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__Model.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/model/",
+                toDirectory: "../DataTypes/Sources/DataTypes/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__DTO.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/migration/",
+                toDirectory: "./Sources/App/Migrations/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__Migration__TIMESTAMP__.swift.template",
+                ]
+            ),
+
+            ]
+        ),
     FileType(
         name: "dto",
-        configurations: []
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/dto/",
+                toDirectory: "../DataTypes/Sources/DataTypes/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__DTO.swift.template",
+                ]
+            )
+        ]
     ),
     FileType(
         name: "migration",
@@ -204,7 +239,7 @@ struct GenerateAppComponent: Command {
         }
 
         // Read the file content
-        var content = try String(contentsOfFile: source)
+        var content = try String(contentsOfFile: source, encoding: .utf8)
 
         // Rename occurrences of __CAPNAME__ in the content
         content = rename(text: content, componentName: componentName)
@@ -235,6 +270,9 @@ struct GenerateAppComponent: Command {
             // Replace all occurrences of __CAPNAME_SPACING__ with with the correct format helloComponent -> hello
             // Component
             .replacingOccurrences(of: "__CAPNAME_SPACING__", with: arrayToSpaceDelimited(words))
+            // Replaces all occurences of __TIMESTAMP__ with the current timestamp
+            // __TIMESTAMP__ -> 173847283
+            .replacingOccurrences(of: "__TIMESTAMP__", with: "\(Int(Date().timeIntervalSince1970))")
     }
 
     func pascalToWordsArray(_ pascal: String) -> [String] {

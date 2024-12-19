@@ -1,31 +1,13 @@
-//
-//  Test.swift
-//  Backend
-//
-//  Created by Simon Ferns on 12/17/24.
-//
-
-// UserStorageController.swift
-// was created on 12/15/24
-// Copyright (c) 2024 GetAutomaApp
-// All source code and related assets are the property of GetAutomaApp.
-// All rights reserved.
-
 import Fluent
 import Vapor
 
 struct __CAPNAME__Controller: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let __CAPNAME_HASKELL__Route = routes.grouped("__CAPNAME_DASHED__")
-        
+
         __CAPNAME_HASKELL__Route.get("request", use: request)
     }
-    
-    @Sendable
-    func request(req: Request) async throws -> HTTPStatus {
-        return .noContent
-    }
-    
-    // use npm run gen-add route <route name> to smartly insert a new route!
+
+    // use npm run generate  contoller-route <controller name>:<route name> to smartly insert a new route!
 }
 

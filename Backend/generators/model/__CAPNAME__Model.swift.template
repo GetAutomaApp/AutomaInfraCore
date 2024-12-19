@@ -1,0 +1,32 @@
+import Vapor
+import Fluent
+import DataTypes
+
+final class __CAPNAME__Model: Model, @unchecked Sendable {
+    static let schema = "__CAPNAME_DASHED__"
+
+    @ID(key: .id)
+    var id: UUID?
+
+    @Timestamp(key: "created_at", on: .create)
+    var createdAt: Date?
+
+    @Timestamp(key: "updated_at", on: .update)
+    var updatedAt: Date?
+
+    @Timestamp(key: "deleted_at", on: .delete)
+    var deletedAt: Date?
+
+    func toDTO() -> __CAPNAME__DTO {
+        .init(id: id, createdAt: createdAt, updatedAt: updatedAt, deletedAt: deletedAt)
+    }
+
+    static func fromDTO(dto: __CAPNAME__DTO) -> __CAPNAME__Model {
+        let model = __CAPNAME__Model()
+        model.id = dto.id
+        model.createdAt = dto.createdAt
+        model.updatedAt = dto.updatedAt
+        model.deletedAt = dto.deletedAt
+        return model
+    }
+}
