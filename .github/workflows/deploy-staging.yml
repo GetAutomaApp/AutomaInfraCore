@@ -16,5 +16,3 @@ jobs:
       - run: npm run deploy:backend:staging
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_PROD_API_KEY }}
-          PRIMARY_POSTGRES_URL: ${{ secrets.POSTGRES_PROD_URL }}
-          REGIONAL_POSTGRES_URL: ${{ secrets.POSTGRES_PROD_URL }}

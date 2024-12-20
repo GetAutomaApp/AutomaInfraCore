@@ -1,0 +1,43 @@
+import Alamofire
+import Foundation
+
+struct __CAPNAME__ControllerInteractor {
+    let baseURL: String
+
+    init(baseURL: String) {
+        self.baseURL = baseURL
+    }
+
+    // Private method for making generic requests using Alamofire
+    private func performRequest(
+        endpoint: String,
+        method: HTTPMethod,
+        headers: HTTPHeaders? = nil,
+        parameters: Parameters? = nil,
+        encoding: ParameterEncoding = URLEncoding.default
+    ) async throws -> DataResponse<Data?, AFError> {
+        let url = "\(baseURL)\(endpoint)"
+
+        // Alamofire's asynchronous request
+        return await withCheckedContinuation { continuation in
+            AF.request(
+                url,
+                method: method,
+                parameters: parameters,
+                encoding: encoding,
+                headers: headers
+            ).validate().response { response in
+                continuation.resume(returning: response)
+            }
+        }
+    }
+
+    /// Makes a request to /__CAPNAME_DASHED__/request
+    /// Change the return type to your Decodable DTO
+    func makeRequest() async throws -> DataResponse<Data?, AFError> {
+        return try await performRequest(
+            endpoint: "/__CAPNAME_DASHED__/request",
+            method: .get
+        )
+    }
+}

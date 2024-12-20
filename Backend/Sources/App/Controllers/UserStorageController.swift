@@ -11,8 +11,8 @@ struct UserStorageController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let userStorageRoute = routes.grouped("user-storage")
 
-        userStorageRoute.post("create", use: create) // Create a new user storage item
-        userStorageRoute.get("find", use: find) // Find a user storage item by query params
+        userStorageRoute.post("create", use: create)
+        userStorageRoute.get("find", use: find)
         userStorageRoute.delete("delete", use: delete) // Delete a user storage item by id
     }
 
