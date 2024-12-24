@@ -17,6 +17,8 @@ struct AuthenticationController: RouteCollection {
 
         authenticationRoute.post("login-code", use: loginCode)
         authenticationRoute.post("login", use: login)
+
+        authenticationRoute.get("refresh-token", use: refreshToken)
     }
 
     @Sendable
@@ -35,6 +37,8 @@ struct AuthenticationController: RouteCollection {
         let code = try await authService.sendLoginAuthCode(
             phoneNumber: dto.phoneNumber
         )
+
+        print("\(code)")
 
         return .noContent
     }
@@ -74,6 +78,8 @@ struct AuthenticationController: RouteCollection {
             phoneNumber: dto.phoneNumber
         )
 
+        print("\(code)")
+
         return .noContent
     }
 
@@ -89,5 +95,37 @@ struct AuthenticationController: RouteCollection {
         let tokens = try await authService.login(payload: dto, signer: req.jwt)
 
         return tokens
+    }
+
+    @Sendable
+    func refreshToken(req: Request) async throws -> AccessTokenPayloadDTO {
+        let tokenString = try req.query.get(String?.self, at: "xxrt")
+
+        guard let tokenString else {
+            throw AuthenticationError.invalidToken
+        }
+
+        let token = try await req.jwt.verify(
+            tokenString,
+            as: JWTTokenPayload.self
+        )
+
+        print("\(token)")
+
+        if token.subject != .refresh {
+            throw AuthenticationError.invalidToken
+        }
+
+        let authService = AuthenticationService(
+            writeDb: req.dbWrite,
+            readDb: req.dbReadOnly
+        )
+
+        let refreshedAccessToken = try await authService.refreshToken(
+            userId: token.userId,
+            signer: req.jwt
+        )
+
+        return .init(accessToken: refreshedAccessToken)
     }
 }

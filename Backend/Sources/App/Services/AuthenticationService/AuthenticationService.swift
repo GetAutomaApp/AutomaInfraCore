@@ -41,6 +41,7 @@ enum AuthenticationError: Error {
     case invalidCode
     case userAlreadyExists
     case userNotFound
+    case invalidToken
 }
 
 struct AuthenticationService {
@@ -249,7 +250,14 @@ struct AuthenticationService {
     }
 
     // 4. Refresh Token
-    func refreshToken() throws {}
+    func refreshToken(userId: String, signer: Request.JWT) async throws -> String {
+        try await generateAccessToken(
+            userId: userId,
+            expiresIn: 86400,
+            type: .access,
+            signer: signer
+        )
+    }
 
     // 5. Logout
     func logout() throws {}
@@ -288,12 +296,12 @@ struct AuthenticationService {
     func generateAccessToken(
         userId: String,
         expiresIn: TimeInterval,
-        type _: JWTTokenSubject,
+        type subject: JWTTokenSubject,
         signer: Request.JWT
     ) async throws -> String {
         // TODO: Add Token TO DB
         let token = JWTTokenPayload(
-            subject: .access,
+            subject: subject,
             expiration: .init(value: Date()
                 .addingTimeInterval(expiresIn)),
             userId: userId,
