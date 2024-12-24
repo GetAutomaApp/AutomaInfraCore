@@ -32,6 +32,7 @@ public func configure(_ app: Application) async throws {
         ), as: .readOnly)
 
         app.migrations.add(CreateUserStorageItem())
+        app.migrations.add(UserMigration1735067533())
 
         try await app.autoMigrate()
 
