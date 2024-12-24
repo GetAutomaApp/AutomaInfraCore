@@ -33,10 +33,12 @@ public func configure(_ app: Application) async throws {
 
         app.migrations.add(CreateUserStorageItem())
         app.migrations.add(UserMigration1735067533())
+        app.migrations.add(AuthenticationCodeMigration1735069859())
 
         try await app.autoMigrate()
 
         try app.register(collection: UserStorageController())
+        try app.register(collection: AuthenticationController())
     }
 }
 

@@ -1,12 +1,24 @@
-import Vapor
-import Fluent
-import DataTypes
+// AuthenticationCodeModel.swift
+// was created on 12/24/24
+// Copyright (c) 2024 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
 
-final class __CAPNAME__Model: Model, @unchecked Sendable {
-    static let schema = "__CAPNAME_DASHED__"
+import DataTypes
+import Fluent
+import Vapor
+
+final class AuthenticationCodeModel: Model, @unchecked Sendable {
+    static let schema = "Authentication-Code"
 
     @ID(key: .id)
     var id: UUID?
+
+    @Field(key: "code")
+    var code: String
+
+    @Field(key: "phone_number")
+    var phoneNumber: String
 
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
@@ -35,19 +47,22 @@ final class __CAPNAME__Model: Model, @unchecked Sendable {
         self.deletedAt = deletedAt
     }
 
-
-    func toDTO() -> __CAPNAME__DTO {
+    func toDTO() -> AuthenticationCodeDTO {
         .init(
             id: id,
+            phoneNumber: phoneNumber,
+            code: code,
             createdAt: createdAt,
             updatedAt: updatedAt,
             deletedAt: deletedAt
         )
     }
 
-    static func fromDTO(dto: __CAPNAME__DTO) -> __CAPNAME__Model {
-        let model = __CAPNAME__Model(
-            id: dto.id,  createdAt: dto.createdAt, updatedAt: dto.updatedAt, deletedAt: dto.deletedAt
+    static func fromDTO(dto: AuthenticationCodeDTO) -> AuthenticationCodeModel {
+        let model = AuthenticationCodeModel(
+            id: dto.id, code: dto.code, phoneNumber: dto.phoneNumber, createdAt: dto.createdAt,
+            updatedAt: dto.updatedAt,
+            deletedAt: dto.deletedAt
         )
         return model
     }
