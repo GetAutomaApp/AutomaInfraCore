@@ -17,6 +17,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         .package(path: "../DataTypes"),
         .package(url: "https://github.com/awslabs/aws-sdk-swift.git", from: "1.0.66"),
+        .package(url: "https://github.com/vapor/jwt.git", from: "5.0.0"),
     ],
     targets: [
         .executableTarget(
@@ -29,6 +30,7 @@ let package = Package(
                 .product(name: "NIOPosix", package: "swift-nio"),
                 .product(name: "DataTypes", package: "DataTypes"),
                 .product(name: "AWSSNS", package: "aws-sdk-swift"),
+                .product(name: "JWT", package: "jwt"),
             ],
             exclude: [
                 "Documentation.md",

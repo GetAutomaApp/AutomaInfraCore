@@ -40,7 +40,7 @@ struct AuthenticationController: RouteCollection {
     }
 
     @Sendable
-    func register(req: Request) async throws -> String {
+    func register(req: Request) async throws -> AuthenticationTokensPayloadDTO {
         let dto = try req.content.decode(AuthPhoneCodePayloadDTO.self)
 
         let authService = AuthenticationService(
@@ -52,7 +52,7 @@ struct AuthenticationController: RouteCollection {
             throw AuthenticationError.userAlreadyExists
         }
 
-        let tokens = try await authService.register(payload: dto)
+        let tokens = try await authService.register(payload: dto, signer: req.jwt)
 
         return tokens
     }
@@ -66,6 +66,10 @@ struct AuthenticationController: RouteCollection {
             readDb: req.dbReadOnly
         )
 
+        if try await !(authService.doesUserExist(phoneNumber: dto.phoneNumber)) {
+            throw AuthenticationError.userNotFound
+        }
+
         let code = try await authService.sendLoginAuthCode(
             phoneNumber: dto.phoneNumber
         )
@@ -74,7 +78,7 @@ struct AuthenticationController: RouteCollection {
     }
 
     @Sendable
-    func login(req: Request) async throws -> String {
+    func login(req: Request) async throws -> AuthenticationTokensPayloadDTO {
         let dto = try req.content.decode(AuthPhoneCodePayloadDTO.self)
 
         let authService = AuthenticationService(
@@ -82,7 +86,7 @@ struct AuthenticationController: RouteCollection {
             readDb: req.dbReadOnly
         )
 
-        let tokens = try await authService.login(payload: dto)
+        let tokens = try await authService.login(payload: dto, signer: req.jwt)
 
         return tokens
     }

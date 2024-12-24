@@ -6,9 +6,36 @@
 
 import DataTypes
 import Fluent
+import JWT
 import Vapor
 
 import AWSSNS
+
+enum JWTTokenSubject: String, Codable {
+    case access
+    case refresh
+}
+
+struct JWTTokenPayload: JWTPayload {
+    enum CodingKeys: String, CodingKey {
+        case subject = "sub"
+        case expiration = "exp"
+        case userId = "uid"
+        case tokenId = "tid"
+    }
+
+    var subject: JWTTokenSubject
+
+    var expiration: ExpirationClaim
+
+    var userId: String
+
+    let tokenId: UUID
+
+    func verify(using _: some JWTAlgorithm) async throws {
+        try expiration.verifyNotExpired()
+    }
+}
 
 enum AuthenticationError: Error {
     case invalidCode
@@ -130,7 +157,9 @@ struct AuthenticationService {
 
     // 1. Register
     // This method will create a new User with a specific phone number
-    func register(payload: AuthPhoneCodePayloadDTO) async throws -> String {
+    func register(payload: AuthPhoneCodePayloadDTO,
+                  signer: Request.JWT) async throws -> AuthenticationTokensPayloadDTO
+    {
         // TODO: Validate the code
         let isValidCode = try await AuthenticationCodeModel
             .query(on: readDb)
@@ -154,9 +183,10 @@ struct AuthenticationService {
 
         try await user.save(on: writeDb)
 
-        // TODO: Generate JWT
-        // TODO: Return JWT & Refresh Token
-        return userId.uuidString
+        return try await createRegistrationTokens(
+            userId: userId.uuidString,
+            signer: signer
+        )
     }
 
     // 2. Send Login Auth Code
@@ -188,7 +218,7 @@ struct AuthenticationService {
     }
 
     // 3. Login
-    func login(payload: AuthPhoneCodePayloadDTO) async throws -> String {
+    func login(payload: AuthPhoneCodePayloadDTO, signer: Request.JWT) async throws -> AuthenticationTokensPayloadDTO {
         let isValidCode = try await AuthenticationCodeModel
             .query(on: readDb)
             .filter(\.$phoneNumber == payload.phoneNumber)
@@ -210,8 +240,12 @@ struct AuthenticationService {
 
         // TODO: Generate JWT
         // TODO: Return JWT & Refresh Token
+        // TODO: Limit the login limt to (5) per account
 
-        return user.id!.uuidString
+        return try await createRegistrationTokens(
+            userId: user.id!.uuidString,
+            signer: signer
+        )
     }
 
     // 4. Refresh Token
@@ -249,5 +283,38 @@ struct AuthenticationService {
 
     func doesUserExist(phoneNumber: String) async throws -> Bool {
         try await UserModel.query(on: readDb).filter(\.$phoneNumber == phoneNumber).first() != nil
+    }
+
+    func generateAccessToken(
+        userId: String,
+        expiresIn: TimeInterval,
+        type _: JWTTokenSubject,
+        signer: Request.JWT
+    ) async throws -> String {
+        // TODO: Add Token TO DB
+        let token = JWTTokenPayload(
+            subject: .access,
+            expiration: .init(value: Date()
+                .addingTimeInterval(expiresIn)),
+            userId: userId,
+            tokenId: UUID()
+        )
+
+        // TODO: TokenModel
+        // TODO: Store the tokens (separate)
+
+        return try await signer.sign(token)
+    }
+
+    func createRegistrationTokens(userId: String, signer: Request.JWT) async throws -> AuthenticationTokensPayloadDTO {
+        let accessToken = try await generateAccessToken(userId: userId, expiresIn: 86400, type: .access, signer: signer)
+        let refreshToken = try await generateAccessToken(
+            userId: userId,
+            expiresIn: 31_536_000,
+            type: .refresh,
+            signer: signer
+        )
+
+        return .init(accessToken: accessToken, refreshToken: refreshToken)
     }
 }

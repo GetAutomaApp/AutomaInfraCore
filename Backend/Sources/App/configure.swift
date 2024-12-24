@@ -6,6 +6,7 @@
 
 import Fluent
 import FluentPostgresDriver
+import JWT
 import Vapor
 
 // Configures your application
@@ -39,6 +40,9 @@ public func configure(_ app: Application) async throws {
 
         try app.register(collection: UserStorageController())
         try app.register(collection: AuthenticationController())
+
+        await app.jwt.keys
+            .add(hmac: .init(stringLiteral: Environment.get("JWT_ENCRYPTION_SECRET")!), digestAlgorithm: .sha256)
     }
 }
 
