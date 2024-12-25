@@ -42,6 +42,7 @@ enum AuthenticationError: Error {
     case userAlreadyExists
     case userNotFound
     case invalidToken
+    case invalidUserId
 }
 
 struct AuthenticationService {
@@ -299,19 +300,54 @@ struct AuthenticationService {
         type subject: JWTTokenSubject,
         signer: Request.JWT
     ) async throws -> String {
-        // TODO: Add Token TO DB
+        guard let userId = UUID(uuidString: userId) else {
+            throw AuthenticationError.invalidUserId
+        }
+
+        let expiresAt = Date().addingTimeInterval(expiresIn)
         let token = JWTTokenPayload(
             subject: subject,
-            expiration: .init(value: Date()
-                .addingTimeInterval(expiresIn)),
-            userId: userId,
+            expiration: .init(value: expiresAt),
+            userId: userId.uuidString,
             tokenId: UUID()
         )
 
-        // TODO: TokenModel
-        // TODO: Store the tokens (separate)
+        let signedToken = try await signer.sign(token)
 
-        return try await signer.sign(token)
+        // If we generate a new refresh token delete the old ones
+        if subject == .refresh {
+            try await JwtTokenModel
+                .query(on: writeDb)
+                .filter(\.$userId == userId)
+                .filter(\.$subject == subject.rawValue)
+                .delete()
+        }
+
+        // IF access token being generated only keep the 5 newest tokens & delete the rest
+        if subject == .access {
+            let tokensToDelete = try await JwtTokenModel.query(on: writeDb)
+                .filter(\.$userId == userId)
+                .filter(\.$subject == subject.rawValue)
+                .sort(\.$createdAt, .descending)
+                .range(5...) // Fetch tokens beyond the first 5
+                .all()
+
+            for token in tokensToDelete {
+                try await token.delete(on: writeDb)
+            }
+        }
+
+        let tokenId = UUID()
+
+        try await JwtTokenModel(
+            id: tokenId,
+            token: signedToken,
+            userId: userId,
+            subject: subject.rawValue,
+            deletedAt: expiresAt
+        ).create(on: writeDb)
+
+        return signedToken
     }
 
     func createRegistrationTokens(userId: String, signer: Request.JWT) async throws -> AuthenticationTokensPayloadDTO {

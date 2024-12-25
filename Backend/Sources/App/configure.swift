@@ -35,6 +35,7 @@ public func configure(_ app: Application) async throws {
         app.migrations.add(CreateUserStorageItem())
         app.migrations.add(UserMigration1735067533())
         app.migrations.add(AuthenticationCodeMigration1735069859())
+        app.migrations.add(JwtTokenMigration1735121142())
 
         try await app.autoMigrate()
 

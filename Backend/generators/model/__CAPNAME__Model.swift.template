@@ -21,15 +21,11 @@ final class __CAPNAME__Model: Model, @unchecked Sendable {
 
     init(
         id: UUID? = nil,
-        code: String,
-        phoneNumber: String,
         createdAt: Date? = nil,
         updatedAt: Date? = nil,
         deletedAt: Date? = nil
     ) {
         self.id = id
-        self.code = code
-        self.phoneNumber = phoneNumber
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
