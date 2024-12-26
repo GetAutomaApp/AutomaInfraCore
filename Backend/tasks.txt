@@ -5,6 +5,7 @@ X Message Service
 - Logging (Full Codebase)
 - Random Service
 - User profile pics + default
+- OptionalField <- Figure out this Fluent property / field type
 - Mobile Interactor
 - Testing Suite
 - Deploy to staging + prod envs

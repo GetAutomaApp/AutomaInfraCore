@@ -37,6 +37,7 @@ public func configure(_ app: Application) async throws {
         app.migrations.add(AuthenticationCodeMigration1735069859())
         app.migrations.add(JwtTokenMigration1735121142())
         app.migrations.add(JWTTokenShouldBeBoundToParentUserObjectMigration1735140054())
+        app.migrations.add(UserProfileAddProfilePictureMigration1735216565())
 
         try await app.autoMigrate()
 
@@ -45,6 +46,14 @@ public func configure(_ app: Application) async throws {
 
         await app.jwt.keys
             .add(hmac: .init(stringLiteral: Environment.get("JWT_ENCRYPTION_SECRET")!), digestAlgorithm: .sha256)
+
+        try await print(
+            TigrisService()
+                .sign(
+                    input: "s3://automa-media-sandbox/Logo.png",
+                    expiresIn: .hours(1)
+                )
+        )
     }
 }
 

@@ -1,5 +1,5 @@
 {
-  "originHash" : "6bb119097694f56927bb116f8c3969a50a79e1109f896d5129d739381e4ec0f2",
+  "originHash" : "e7162046acecf9875882f8f7687c7a772460e3b009b0f442a34f6ebaf7c71c50",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -74,6 +74,15 @@
       }
     },
     {
+      "identity" : "jmespath.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/adam-fowler/jmespath.swift.git",
+      "state" : {
+        "revision" : "3877a5060e85ae33e3b9fe51ab581784f65ec80e",
+        "version" : "1.0.3"
+      }
+    },
+    {
       "identity" : "jwt",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/jwt.git",
@@ -98,6 +107,15 @@
       "state" : {
         "revision" : "3498e60218e6003894ff95192d756e238c01f44e",
         "version" : "4.7.1"
+      }
+    },
+    {
+      "identity" : "openai",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MacPaw/OpenAI.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "843e087929aa806adb611dbca93f9a4a7f28be04"
       }
     },
     {
@@ -134,6 +152,24 @@
       "state" : {
         "revision" : "d51fb5d2fbae16a3bcd4b731dc623cbfe8300d15",
         "version" : "0.105.0"
+      }
+    },
+    {
+      "identity" : "soto",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/soto-project/soto.git",
+      "state" : {
+        "revision" : "444b728342f8c33d3ff12f637cfb7a2396edd7e9",
+        "version" : "7.3.0"
+      }
+    },
+    {
+      "identity" : "soto-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/soto-project/soto-core.git",
+      "state" : {
+        "revision" : "2614aa43ab0eef94b873d84249fc974368b39369",
+        "version" : "7.3.0"
       }
     },
     {

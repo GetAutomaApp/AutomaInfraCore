@@ -7,12 +7,28 @@ services:
     container_name: postgres-container
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres     
-      POSTGRES_DB: postgres           
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     ports:
-      - "5432:5432"                  
+      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data 
+      - postgres_data:/var/lib/postgresql/data
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    ports:
+      - "4566-4597:4566-4597"
+      - 8999:8080
+    environment:
+      - SERVICES=s3
+      - DEBUG=${DEBUG- }
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - PERSISTENCE=1
+      - PERSISTENCE_DIR=/tmp/localstack_data
+
+    volumes:
+      - "$PWD/infra/local/localstack/s3.sh:/etc/localstack/init/ready.d/init-aws.sh"
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
 volumes:
   postgres_data:
