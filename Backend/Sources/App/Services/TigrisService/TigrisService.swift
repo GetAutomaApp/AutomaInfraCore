@@ -11,7 +11,7 @@ import Vapor
 struct TigrisService: ~Copyable {
     let client: S3
 
-    let TIGRIS_BASE_URL = "https://fly.storage.tigris.dev/"
+    let tigrisBaseUrl = "https://fly.storage.tigris.dev/"
 
     init() throws {
         let clientAuth = try AWSClient(
@@ -24,14 +24,14 @@ struct TigrisService: ~Copyable {
         client = S3(
             client: clientAuth,
             region: .init(rawValue: "auto"),
-            endpoint: TIGRIS_BASE_URL
+            endpoint: tigrisBaseUrl
         )
     }
 
     deinit {
         do {
             try client.client.syncShutdown()
-        }
+        } catch {}
     }
 
     func get(_: String) throws -> String {
