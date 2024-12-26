@@ -10,10 +10,6 @@ import Foundation
 struct AuthenticationControllerInteractor {
     let baseURL: String
 
-    init(baseURL: String) {
-        self.baseURL = baseURL
-    }
-
     // Private method for making generic requests using Alamofire
     private func performRequest(
         endpoint: String,

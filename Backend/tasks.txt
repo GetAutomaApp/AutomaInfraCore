@@ -1,0 +1,11 @@
+X Refactor stuff to use foreign key relationships
+X Make enums usable
+X Message Service
+    X Discord Webhook Stuff (Messages on events)
+- Logging (Full Codebase)
+- Random Service
+- User profile pics + default
+- Mobile Interactor
+- Testing Suite
+- Deploy to staging + prod envs
+- Feature Enablements PR

@@ -144,7 +144,16 @@ let fileTypes: [FileType] = [
     ),
     FileType(
         name: "migration",
-        configurations: []
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/migration/",
+                toDirectory: "./Sources/App/Migrations/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__Migration__TIMESTAMP__.swift.template",
+                ]
+            ),
+        ]
     ),
     FileType(
         name: "proc",

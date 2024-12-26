@@ -16,9 +16,15 @@ struct AuthenticationController: RouteCollection {
         authenticationRoute.post("register-code", use: registerCode)
 
         authenticationRoute.post("login-code", use: loginCode)
-        authenticationRoute.post("login", use: login)
 
         authenticationRoute.get("refresh-token", use: refreshToken)
+        authenticationRoute.post("login", use: login)
+
+        let authenticatedRouteGroup = authenticationRoute.grouped(
+            RequestIsAuthenticatedMiddleware()
+        )
+
+        authenticatedRouteGroup.post("logout", use: logout)
     }
 
     @Sendable
@@ -27,18 +33,17 @@ struct AuthenticationController: RouteCollection {
 
         let authService = AuthenticationService(
             writeDb: req.dbWrite,
-            readDb: req.dbReadOnly
+            readDb: req.dbReadOnly,
+            logger: req.logger
         )
 
         if try await authService.doesUserExist(phoneNumber: dto.phoneNumber) {
             throw AuthenticationError.userAlreadyExists
         }
 
-        let code = try await authService.sendLoginAuthCode(
+        _ = try await authService.sendAuthCode(
             phoneNumber: dto.phoneNumber
         )
-
-        print("\(code)")
 
         return .noContent
     }
@@ -49,7 +54,8 @@ struct AuthenticationController: RouteCollection {
 
         let authService = AuthenticationService(
             writeDb: req.dbWrite,
-            readDb: req.dbReadOnly
+            readDb: req.dbReadOnly,
+            logger: req.logger
         )
 
         if try await authService.doesUserExist(phoneNumber: dto.phoneNumber) {
@@ -67,18 +73,21 @@ struct AuthenticationController: RouteCollection {
 
         let authService = AuthenticationService(
             writeDb: req.dbWrite,
-            readDb: req.dbReadOnly
+            readDb: req.dbReadOnly,
+            logger: req.logger
         )
 
         if try await !(authService.doesUserExist(phoneNumber: dto.phoneNumber)) {
             throw AuthenticationError.userNotFound
         }
 
-        let code = try await authService.sendLoginAuthCode(
+        let code = try await authService.sendAuthCode(
             phoneNumber: dto.phoneNumber
         )
 
-        print("\(code)")
+        if Environment.get("ENVIRONMENT") == "local" {
+            req.logger.info("sent code `\(code)` to \(dto.phoneNumber) ")
+        }
 
         return .noContent
     }
@@ -89,7 +98,8 @@ struct AuthenticationController: RouteCollection {
 
         let authService = AuthenticationService(
             writeDb: req.dbWrite,
-            readDb: req.dbReadOnly
+            readDb: req.dbReadOnly,
+            logger: req.logger
         )
 
         let tokens = try await authService.login(payload: dto, signer: req.jwt)
@@ -110,15 +120,14 @@ struct AuthenticationController: RouteCollection {
             as: JWTTokenPayload.self
         )
 
-        print("\(token)")
-
         if token.subject != .refresh {
             throw AuthenticationError.invalidToken
         }
 
         let authService = AuthenticationService(
             writeDb: req.dbWrite,
-            readDb: req.dbReadOnly
+            readDb: req.dbReadOnly,
+            logger: req.logger
         )
 
         let refreshedAccessToken = try await authService.refreshToken(
@@ -127,5 +136,26 @@ struct AuthenticationController: RouteCollection {
         )
 
         return .init(accessToken: refreshedAccessToken)
+    }
+
+    @Sendable
+    func logout(req: Request) async throws -> HTTPStatus {
+        let token = try await req.jwt.verify(as: JWTTokenPayload.self)
+
+        let userId = UUID(uuidString: token.userId)
+
+        if let userId {
+            let authService = AuthenticationService(
+                writeDb: req.dbWrite,
+                readDb: req.dbReadOnly,
+                logger: req.logger
+            )
+
+            try await authService.logout(userId: userId)
+        } else {
+            throw AuthenticationError.invalidUserId
+        }
+
+        return .ok
     }
 }

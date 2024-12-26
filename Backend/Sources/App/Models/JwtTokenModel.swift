@@ -1,5 +1,5 @@
 // JwtTokenModel.swift
-// was created on 12/25/24
+// was created on 12/24/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -20,8 +20,8 @@ final class JwtTokenModel: Model, @unchecked Sendable {
     @Field(key: "user_id")
     var userId: UUID
 
-    @Field(key: "subject")
-    var subject: String
+    @Enum(key: "subject")
+    var subject: JWTTokenSubject
 
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
@@ -38,7 +38,7 @@ final class JwtTokenModel: Model, @unchecked Sendable {
         id: UUID? = nil,
         token: String,
         userId: UUID,
-        subject: String,
+        subject: JWTTokenSubject,
         createdAt: Date? = nil,
         updatedAt: Date? = nil,
         deletedAt: Date? = nil

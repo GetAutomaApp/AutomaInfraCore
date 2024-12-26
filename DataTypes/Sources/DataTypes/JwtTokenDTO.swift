@@ -1,5 +1,5 @@
 // JwtTokenDTO.swift
-// was created on 12/25/24
+// was created on 12/24/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -10,7 +10,7 @@ public struct JwtTokenDTO: Content {
     public var id: UUID?
     public var token: String
     public var userId: UUID
-    public var subject: String
+    public var subject: JWTTokenSubject
     public var createdAt: Date?
     public var updatedAt: Date?
     public var deletedAt: Date?
@@ -19,7 +19,7 @@ public struct JwtTokenDTO: Content {
         id: UUID? = nil,
         token: String,
         userId: UUID,
-        subject: String,
+        subject: JWTTokenSubject,
         createdAt: Date? = nil,
         updatedAt: Date? = nil,
         deletedAt: Date? = nil
