@@ -48,16 +48,12 @@ public func configure(_ app: Application) async throws {
             .add(hmac: .init(stringLiteral: Environment.get("JWT_ENCRYPTION_SECRET")!), digestAlgorithm: .sha256)
 
         try await print(
-            TigrisService()
-                .sign(
-                    input: "s3://automa-media-sandbox/Logo.png",
-                    expiresIn: .hours(1)
-                )
+            ProfilePictureService()
+                .createProfilePicture(for: .init(username: "Quirky-Zebra-9C78", phoneNumber: "+27791931251"))
         )
     }
 }
 
-// Extend DatabaseID to define custom database identifiers
 extension DatabaseID {
     static let primary = DatabaseID(string: "primary") // Write DB
     static let readOnly = DatabaseID(string: "readOnly") // Read-only DB

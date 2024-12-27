@@ -11,6 +11,7 @@ import Vapor
 struct ProfilePictureService {
     func createProfilePicture(for user: UserDTO) async throws -> String {
         let openaiService = try OpenAiService()
+        let tigrisService = try TigrisService()
 
         let prompt = AIPromptFormatterService.createProfilePicturePrompt(
             username: user.username
@@ -19,8 +20,23 @@ struct ProfilePictureService {
         let images = try await openaiService.createImage(prompt).data
 
         // TODO: Send the image to tigris
-        return images[0].b64Json ?? ""
+        if let image = images[0].b64Json, let data = Data(base64Encoded: image) {
+            let key = "profile-picture/v1/\(user.username)-\(UUID().uuidString).jpg" // TODO: Ensure openai uses JPEG
+            let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
+            let s3Url = "s3://\(bucket)/\(key)"
 
-        // TODO: Return the image url
+            let output = try await tigrisService
+                .put(input: s3Url, content: .init(data: data), acl: .publicRead)
+
+            print(output) // TODO: Turn to log
+
+            let url = try tigrisService.getTigrisUrl(s3Url)
+
+            return url
+        } else {
+            // Throw Error TODO
+        }
+
+        return ""
     }
 }

@@ -8,10 +8,13 @@ import Fluent
 import SotoS3
 import Vapor
 
+import SotoS3FileTransfer
+
 struct TigrisService: ~Copyable {
     let client: S3
+    let s3FileTransferManager: S3FileTransferManager
 
-    let tigrisBaseUrl = "https://fly.storage.tigris.dev/"
+    let tigrisBaseUrl = "https://fly.storage.tigris.dev"
 
     init() throws {
         let clientAuth = try AWSClient(
@@ -26,6 +29,8 @@ struct TigrisService: ~Copyable {
             region: .init(rawValue: "auto"),
             endpoint: tigrisBaseUrl
         )
+
+        s3FileTransferManager = .init(s3: client)
     }
 
     deinit {
@@ -34,7 +39,7 @@ struct TigrisService: ~Copyable {
         } catch {}
     }
 
-    func get(_: String) throws -> String {
+    func get(_: String) async throws -> String {
         ""
     }
 
@@ -59,7 +64,7 @@ struct TigrisService: ~Copyable {
         acl: S3.ObjectCannedACL = .private,
         metadata: [String: String]? = nil,
         expires: Date? = nil
-    ) async throws -> S3.PutObjectOutput {
+    ) async throws -> S3.PutObjectOutput? {
         let path = try decodeS3Path(input)
 
         let output = try await client
@@ -67,7 +72,8 @@ struct TigrisService: ~Copyable {
                 acl: acl,
                 body: .init(buffer: content),
                 bucket: path.bucket,
-                expires: expires, key: path.key,
+                expires: expires,
+                key: path.key,
                 metadata: metadata
             )
 
@@ -98,6 +104,7 @@ struct TigrisService: ~Copyable {
 
         let environment = try Environment.getOrThrow("ENVIRONMENT")
 
+        // TODO: (We have a task for this)
 //        if environment == "local" {
 //            return "http://localhost:4566"
 //        } else {

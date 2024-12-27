@@ -11,8 +11,13 @@ import Vapor
 struct OpenAiService {
     let client: OpenAI
 
-    init() throws {
-        client = try .init(apiToken: Environment.getOrThrow("OPENAI_API_KEY"))
+    init(timeout: TimeInterval = 180) throws {
+        client = try .init(
+            configuration: .init(
+                token: Environment.getOrThrow("OPENAI_API_KEY"),
+                timeoutInterval: timeout
+            )
+        )
     }
 
     func createImage(_ query: ImagesQuery) async throws -> ImagesResult {

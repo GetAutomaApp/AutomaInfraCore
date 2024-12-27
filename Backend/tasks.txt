@@ -2,11 +2,12 @@ X Refactor stuff to use foreign key relationships
 X Make enums usable
 X Message Service
     X Discord Webhook Stuff (Messages on events)
-- Logging (Full Codebase)
+X Logging (Full Codebase)
 - Random Service
 - User profile pics + default
 - OptionalField <- Figure out this Fluent property / field type
 - Mobile Interactor
 - Testing Suite
 - Deploy to staging + prod envs
+- Fix insecure .env secets + get them into the right environments
 - Feature Enablements PR
