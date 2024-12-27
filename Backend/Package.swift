@@ -41,7 +41,14 @@ let package = Package(
             exclude: [
                 "Documentation.md",
             ],
-            swiftSettings: swiftSettings
+            swiftSettings: swiftSettings,
+            linkerSettings: [
+                .linkedLibrary("crypto", .when(platforms: [.linux])),
+                .linkedLibrary("icudata", .when(platforms: [.linux])),
+                .linkedLibrary("icuuc", .when(platforms: [.linux])),
+                .linkedLibrary("ssl", .when(platforms: [.linux])),
+                .linkedLibrary("z", .when(platforms: [.linux])),
+            ]
         ),
         .testTarget(
             name: "AppTests",

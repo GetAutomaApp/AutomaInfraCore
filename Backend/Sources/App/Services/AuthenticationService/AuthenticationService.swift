@@ -138,7 +138,7 @@ struct AuthenticationService: Sendable {
             ]
         )
 
-        Task.detached {
+        Task.detachedLogOnError(to: "AuthenticationService.sendAuthCode", logger: logger) {
             _ = try await messageService.sendSmS(
                 to: phoneNumber,
                 message: MessageFormatterService

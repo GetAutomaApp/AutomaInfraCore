@@ -5,7 +5,11 @@
 
 import AWSSNS
 import Fluent
+import Foundation
 import Vapor
+#if canImport(FoundationNetworking)
+    import FoundationNetworking
+#endif
 
 enum MessageServiceErrors: Error {
     case discordWebhookMessageFailed
@@ -108,7 +112,7 @@ struct MessageService: Decodable {
         imageUrl: String? = nil,
         logger: Logger
     ) throws {
-        Task.detached {
+        Task.detachedLogOnError(to: "MessageService.sendDiscordWebhookAppEvent", logger: logger) {
             try await sendWebhookMessage(
                 webhookURL: URL(string: Environment.get("DISCORD_APP_EVENTS_URL")!)!,
                 message: MessageFormatterService

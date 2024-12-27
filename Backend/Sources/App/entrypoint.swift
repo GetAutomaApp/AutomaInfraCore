@@ -23,7 +23,7 @@ enum Entrypoint {
         // failures.
         // let executorTakeoverSuccess =
         // NIOSingletons.unsafeTryInstallSingletonPosixEventLoopGroupAsConcurrencyGlobalExecutor()
-        // app.logger.debug("Tried to install SwiftNIO's EventLoopGroup as Swift's global concurrency executor",
+        // app.logger.debug("Tried to install SwiftNIO's EventLoopGroup as Swif s global concurrency executor",
         // metadata:
         // ["success": .stringConvertible(executorTakeoverSuccess)])
 

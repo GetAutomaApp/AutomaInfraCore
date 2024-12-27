@@ -14,3 +14,27 @@ extension Environment {
         return value
     }
 }
+
+extension Task where Success == Void, Failure == any Error {
+    static func detachedLogOnError(
+        to: String,
+        logger: Logger,
+        method: @escaping @Sendable () async throws -> Void
+    ) {
+        Task.detached {
+            do {
+                try await method()
+            } catch {
+                logger.trace(
+                    "Error ocurred while running detached task",
+                    metadata: [
+                        "to": .array([
+                            .string(to),
+                            .string("Task.detachedLogOnError"),
+                        ]),
+                    ]
+                )
+            }
+        }
+    }
+}
