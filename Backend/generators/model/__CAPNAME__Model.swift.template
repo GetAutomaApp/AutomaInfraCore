@@ -17,16 +17,34 @@ final class __CAPNAME__Model: Model, @unchecked Sendable {
     @Timestamp(key: "deleted_at", on: .delete)
     var deletedAt: Date?
 
+    init() {}
+
+    init(
+        id: UUID? = nil,
+        createdAt: Date? = nil,
+        updatedAt: Date? = nil,
+        deletedAt: Date? = nil
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+    }
+
+
     func toDTO() -> __CAPNAME__DTO {
-        .init(id: id, createdAt: createdAt, updatedAt: updatedAt, deletedAt: deletedAt)
+        .init(
+            id: id,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            deletedAt: deletedAt
+        )
     }
 
     static func fromDTO(dto: __CAPNAME__DTO) -> __CAPNAME__Model {
-        let model = __CAPNAME__Model()
-        model.id = dto.id
-        model.createdAt = dto.createdAt
-        model.updatedAt = dto.updatedAt
-        model.deletedAt = dto.deletedAt
+        let model = __CAPNAME__Model(
+            id: dto.id,  createdAt: dto.createdAt, updatedAt: dto.updatedAt, deletedAt: dto.deletedAt
+        )
         return model
     }
 }

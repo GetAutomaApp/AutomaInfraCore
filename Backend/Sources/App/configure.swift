@@ -6,6 +6,7 @@
 
 import Fluent
 import FluentPostgresDriver
+import JWT
 import Vapor
 
 // Configures your application
@@ -32,14 +33,23 @@ public func configure(_ app: Application) async throws {
         ), as: .readOnly)
 
         app.migrations.add(CreateUserStorageItem())
+        app.migrations.add(UserMigration1735067533())
+        app.migrations.add(AuthenticationCodeMigration1735069859())
+        app.migrations.add(JwtTokenMigration1735121142())
+        app.migrations.add(JWTTokenShouldBeBoundToParentUserObjectMigration1735140054())
+        app.migrations.add(UserProfileAddProfilePictureMigration1735216565())
+        app.migrations.add(UserProfileConvertIdToImageKeyMigration1735294202())
 
         try await app.autoMigrate()
 
         try app.register(collection: UserStorageController())
+        try app.register(collection: AuthenticationController())
+
+        await app.jwt.keys
+            .add(hmac: .init(stringLiteral: Environment.get("JWT_ENCRYPTION_SECRET")!), digestAlgorithm: .sha256)
     }
 }
 
-// Extend DatabaseID to define custom database identifiers
 extension DatabaseID {
     static let primary = DatabaseID(string: "primary") // Write DB
     static let readOnly = DatabaseID(string: "readOnly") // Read-only DB

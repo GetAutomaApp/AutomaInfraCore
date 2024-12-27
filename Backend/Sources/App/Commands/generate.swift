@@ -144,15 +144,42 @@ let fileTypes: [FileType] = [
     ),
     FileType(
         name: "migration",
-        configurations: []
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/migration/",
+                toDirectory: "./Sources/App/Migrations/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__Migration__TIMESTAMP__.swift.template",
+                ]
+            ),
+        ]
     ),
     FileType(
         name: "proc",
         configurations: []
     ),
     FileType(
-        name: "service",
-        configurations: []
+        name: "backend-service",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/backend-service/",
+                toDirectory: "Sources/App/Services/",
+                nestToDirectory: "__CAPNAME__Service/",
+                templates: [
+                    "__CAPNAME__Service.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/backend-service/",
+                toDirectory: "Tests/AppTests/Services/",
+                nestToDirectory: "__CAPNAME__ServiceTests/",
+                templates: [
+                    "__CAPNAME__ServiceIntegrationTests.swift.template",
+                    "__CAPNAME__ServiceUnitTests.swift.template",
+                ]
+            ),
+        ]
     ),
 ]
 

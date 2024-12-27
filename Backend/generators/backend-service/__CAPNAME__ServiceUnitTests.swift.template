@@ -1,0 +1,22 @@
+import XCTVapor
+@testable import App
+
+final class __CAPNAME__ControllerUnitTests: XCTestCase {
+    var app: Application!
+
+    override func setUp() {
+        app = Application(.testing)
+        try! configure(app)
+    }
+
+    override func tearDown() {
+        app.shutdown()
+    }
+
+    func testRequest() throws {
+        try app.test(.GET, "__CAPNAME_DASHED__/request") { res in
+            XCTAssertEqual(res.status, .ok)
+            // Add more assertions based on the expected response
+        }
+    }
+}
