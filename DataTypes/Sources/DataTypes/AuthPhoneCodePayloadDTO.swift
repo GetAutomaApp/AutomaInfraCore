@@ -11,4 +11,9 @@ public struct AuthPhoneCodePayloadDTO: Content {
     public let code: String
 
     // TODO: Add validators
+
+    public init(phoneNumber: String, code: String) {
+        self.phoneNumber = phoneNumber
+        self.code = code
+    }
 }

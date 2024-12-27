@@ -5,8 +5,10 @@
 // All rights reserved.
 
 import Alamofire
+import DataTypes
 import Foundation
 
+// TODO: Error Handeling
 struct AuthenticationControllerInteractor {
     let baseURL: String
 
@@ -17,7 +19,7 @@ struct AuthenticationControllerInteractor {
         headers: HTTPHeaders? = nil,
         parameters: Parameters? = nil,
         encoding: ParameterEncoding = URLEncoding.default
-    ) async throws -> DataResponse<Data?, AFError> {
+    ) async -> DataResponse<Data?, AFError> {
         let url = "\(baseURL)\(endpoint)"
 
         // Alamofire's asynchronous request
@@ -34,12 +36,93 @@ struct AuthenticationControllerInteractor {
         }
     }
 
-    /// Makes a request to /Authentication/request
+    /// Makes a request to /Authentication/register-code
     /// Change the return type to your Decodable DTO
-    func makeRequest() async throws -> DataResponse<Data?, AFError> {
-        try await performRequest(
-            endpoint: "/Authentication/request",
-            method: .get
+    func makeRegisterCodeRequest(_ phoneNumber: String) async throws -> String {
+        let params = try PhoneNumberPayloadDTO(phoneNumber: phoneNumber).encodeToDictionary()
+
+        let response = await performRequest(
+            endpoint: "/Authentication/register-code",
+            method: .post,
+            parameters: params,
+            encoding: JSONEncoding.default
         )
+
+        // ensure response code is 204
+        guard let statusCode = response.response?.statusCode else {
+            throw AuthenticationError.excessiveRefresh
+        }
+
+        print(response)
+
+        return ""
+    }
+
+    func makeRegisterRequest(_ phoneNumber: String, _ code: String) async throws -> String {
+        let params = try AuthPhoneCodePayloadDTO(phoneNumber: phoneNumber, code: code).encodeToDictionary()
+
+        let response = await performRequest(
+            endpoint: "/Authentication/register",
+            method: .post,
+            parameters: params,
+            encoding: JSONEncoding.default
+        )
+
+        let authTokens = try AuthenticationTokensPayloadDTO.decodeJSONFromData(
+            data: response.data
+        )
+
+        return authTokens.accessToken
+    }
+
+    func makeLoginCodeRequest(_ phoneNumber: String) async throws -> String {
+        let params = try PhoneNumberPayloadDTO(phoneNumber: phoneNumber).encodeToDictionary()
+
+        let response = await performRequest(
+            endpoint: "/Authentication/login-code",
+            method: .post,
+            parameters: params,
+            encoding: JSONEncoding.default
+        )
+
+        guard let statusCode = response.response?.statusCode else {
+            throw AuthenticationError.excessiveRefresh
+        }
+
+        print(response)
+
+        return ""
+    }
+
+    func makeLoginRequest(_ phoneNumber: String, _ code: String) async throws -> String {
+        let params = try AuthPhoneCodePayloadDTO(phoneNumber: phoneNumber, code: code).encodeToDictionary()
+
+        let response = await performRequest(
+            endpoint: "/Authentication/login",
+            method: .post,
+            parameters: params,
+            encoding: JSONEncoding.default
+        )
+
+        let authTokens = try AuthenticationTokensPayloadDTO.decodeJSONFromData(
+            data: response.data
+        )
+
+        return authTokens.accessToken
+    }
+
+    func makeRefreshTokenRequest(_ refreshToken: String) async throws -> AccessTokenPayloadDTO {
+        let params = ["xxrt": refreshToken]
+
+        let response = await performRequest(
+            endpoint: "/Authentication/refresh-token",
+            method: .get,
+            parameters: params
+        )
+
+        // Default response is a string
+        let authToken = try AccessTokenPayloadDTO.decodeJSONFromData(data: response.data)
+
+        return authToken
     }
 }

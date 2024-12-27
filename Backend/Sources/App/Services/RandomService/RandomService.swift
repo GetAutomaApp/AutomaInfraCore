@@ -7,7 +7,7 @@
 import Fluent
 import Vapor
 
-struct RandomService {
+enum RandomService {
     static let animals = [
         "Dog",
         "Cat",

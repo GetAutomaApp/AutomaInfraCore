@@ -6,9 +6,13 @@ X Logging (Full Codebase)
 X Random Service
 X User profile pics + default
 X OptionalField <- Figure out this Fluent property / field type
-- Logging Again
-- Mobile Interactor
-- Testing Suite
+X Logging Again
+X Mobile Interactor
 - Deploy to staging + prod envs
 - Fix insecure .env secets + get them into the right environments
+- PR to write tests for everything + properly create test templates to cover every single loc
+- PR to go over error handeling + stack tracing
+- PR to go over alerting + metrics (probably datadog or some other solutoin)
+- .generateImage should take a param to prevent text from appearing
+    - keep regenerating for x amount of times (default 3) to prevent text
 - Feature Enablements PLANNING
