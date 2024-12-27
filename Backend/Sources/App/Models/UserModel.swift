@@ -23,8 +23,8 @@ final class UserModel: Model, @unchecked Sendable {
     @Field(key: "instagram_handle")
     var instagramHandle: String?
 
-    @Field(key: "profile_picture_id")
-    var profilePictureId: UUID?
+    @Field(key: "profile_picture_key")
+    var profilePictureKey: String?
 
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
@@ -42,7 +42,7 @@ final class UserModel: Model, @unchecked Sendable {
         username: String,
         phoneNumber: String,
         instagramHandle: String? = nil,
-        profilePictureId: UUID? = nil,
+        profilePictureKey: String? = nil,
         createdAt: Date? = nil,
         updatedAt: Date? = nil,
         deletedAt: Date? = nil
@@ -51,7 +51,7 @@ final class UserModel: Model, @unchecked Sendable {
         self.username = username
         self.phoneNumber = phoneNumber
         self.instagramHandle = instagramHandle
-        self.profilePictureId = profilePictureId
+        self.profilePictureKey = profilePictureKey
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
@@ -66,14 +66,14 @@ final class UserModel: Model, @unchecked Sendable {
             username: username,
             phoneNumber: phoneNumber,
             instagramHandle: instagramHandle,
-            profilePictureId: profilePictureId
+            profilePictureKey: profilePictureKey
         )
     }
 
     static func fromDTO(dto: UserDTO) -> UserModel {
         UserModel(
             id: dto.id, username: dto.username, phoneNumber: dto.phoneNumber, instagramHandle: dto.instagramHandle,
-            profilePictureId: dto.profilePictureId
+            profilePictureKey: dto.profilePictureKey
         )
     }
 }

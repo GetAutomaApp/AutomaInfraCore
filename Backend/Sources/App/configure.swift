@@ -38,6 +38,7 @@ public func configure(_ app: Application) async throws {
         app.migrations.add(JwtTokenMigration1735121142())
         app.migrations.add(JWTTokenShouldBeBoundToParentUserObjectMigration1735140054())
         app.migrations.add(UserProfileAddProfilePictureMigration1735216565())
+        app.migrations.add(UserProfileConvertIdToImageKeyMigration1735294202())
 
         try await app.autoMigrate()
 
@@ -46,11 +47,6 @@ public func configure(_ app: Application) async throws {
 
         await app.jwt.keys
             .add(hmac: .init(stringLiteral: Environment.get("JWT_ENCRYPTION_SECRET")!), digestAlgorithm: .sha256)
-
-        try await print(
-            ProfilePictureService()
-                .createProfilePicture(for: .init(username: "Quirky-Zebra-9C78", phoneNumber: "+27791931251"))
-        )
     }
 }
 

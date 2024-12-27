@@ -14,7 +14,7 @@ public struct UserDTO: Content {
     public var username: String
     public var phoneNumber: String
     public var instagramHandle: String?
-    public var profilePictureId: UUID?
+    public var profilePictureKey: String?
 
     public init(
         id: UUID? = nil,
@@ -24,7 +24,7 @@ public struct UserDTO: Content {
         username: String,
         phoneNumber: String,
         instagramHandle: String? = nil,
-        profilePictureId: UUID? = nil
+        profilePictureKey: String? = nil
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -33,6 +33,6 @@ public struct UserDTO: Content {
         self.username = username
         self.phoneNumber = phoneNumber
         self.instagramHandle = instagramHandle
-        self.profilePictureId = profilePictureId
+        self.profilePictureKey = profilePictureKey
     }
 }
