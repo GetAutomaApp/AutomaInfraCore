@@ -25,54 +25,79 @@ struct ProfilePictureService {
             username: user.username
         )
 
-        if let userId = user.id?.uuidString {
-            try messageService
-                .sendDiscordWebhookAppEvent(
-                    input: "generating profile picture for \(userId) - \(user.username)",
-                    event: "\(prompt.prompt)",
-                    logger: logger
-                )
+        guard let userId = user.id?.uuidString else {
+            throw AuthenticationError.invalidUserId
         }
 
-        // TODO: All openai responses should be stored as json blobs in s3/openai/images (for
+        logger.info(
+            "Generating profile picture",
+            metadata: [
+                "to": .string("ProfilePictureService.createProfilePicture"),
+                "userId": .string(userId),
+                "username": .string(user.username),
+                "prompt": .string(prompt.prompt),
+            ]
+        )
+
+        try messageService
+            .sendDiscordWebhookAppEvent(
+                input: "generating profile picture for \(userId) - \(user.username)",
+                event: "\(prompt.prompt)",
+                logger: logger
+            )
+
         let images = try await openaiService.createImage(prompt).data
 
-        // TODO: Send the image to tigris
-        if let image = images[0].b64Json, let data = Data(base64Encoded: image) {
-            let key = "profile-picture/v1/\(user.username)-\(UUID().uuidString).jpg" // TODO: Ensure openai uses JPEG
-            let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
-            let s3Url = "s3://\(bucket)/\(key)"
+        guard let image = images[0].b64Json, let data = Data(base64Encoded: image) else {
+            throw OpenAiErrors.missingImage
+        }
 
-            let output = try await tigrisService
+        let key = "profile-picture/v1/\(user.username)-\(UUID().uuidString).jpg" // TODO: Ensure openai uses JPEG
+        let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
+        let s3Url = "s3://\(bucket)/\(key)"
+        let openaiOutputs3Url = "s3://\(bucket)/openai/\(user.username)-\(UUID().uuidString).json"
+
+        let jsonEncoder = JSONEncoder()
+
+        _ = try await (
+            tigrisService
                 .put(
                     input: s3Url,
                     content: .init(data: data),
                     acl: .publicRead,
                     contentType: "image/jpeg"
-                )
+                ),
+            tigrisService.put(
+                input: openaiOutputs3Url,
+                content: .init(
+                    string: jsonEncoder.encode(images).base64EncodedString()
+                ),
+                acl: .private,
+                contentType: "application/json"
+            )
+        )
 
-            print(output) // TODO: Turn to log
+        let url = try tigrisService.getTigrisUrl(s3Url)
 
-            let url = try tigrisService.getTigrisUrl(s3Url)
+        try messageService
+            .sendDiscordWebhookAppEvent(
+                input: "generated profile picture for \(userId) - \(user.username)",
+                event: "\(prompt.prompt)",
+                imageUrl: url,
+                logger: logger
+            )
 
-            if let userId = user.id?.uuidString {
-                try messageService
-                    .sendDiscordWebhookAppEvent(
-                        input: "generated profile picture for \(userId) - \(user.username)",
-                        event: "\(prompt.prompt)",
-                        imageUrl: url,
-                        logger: logger
-                    )
-            }
+        logger.info(
+            "Successfully generated profile picture for user",
+            metadata: [
+                "to": .string("ProfilePictureService.createProfilePicture"),
+                "userId": .string(userId),
+                "username": .string(user.username),
+                "imageKey": .string(s3Url),
+                "cacheKey": .string(openaiOutputs3Url),
+            ]
+        )
 
-            print(url)
-
-            // Log url
-            return s3Url
-        } else {
-            // Throw Error TODO
-        }
-
-        return ""
+        return s3Url
     }
 }

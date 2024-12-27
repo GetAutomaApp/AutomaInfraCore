@@ -5,7 +5,7 @@ X Message Service
 X Logging (Full Codebase)
 X Random Service
 X User profile pics + default
-- OptionalField <- Figure out this Fluent property / field type
+X OptionalField <- Figure out this Fluent property / field type
 - Logging Again
 - Mobile Interactor
 - Testing Suite

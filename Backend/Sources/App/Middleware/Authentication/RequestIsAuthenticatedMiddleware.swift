@@ -37,6 +37,7 @@ struct RequestIsAuthenticatedMiddleware: AsyncMiddleware {
             }
 
             // We want this to alert us in discord alerts + email alert (phone, email and discord automa-alerts)
+            // TODO: Automa Alerts (events no noti, alerts noti)
             request.logger.trace(
                 "Unknown error in Authentication Middleware",
                 metadata: [

@@ -7,126 +7,94 @@
 import Fluent
 import Vapor
 
-enum RandomService {
-    static let whimsicalWords = [
-        "Whimsical",
-        "Giraffe",
-        "Banana",
-        "Monkey",
-        "Penguin",
+struct RandomService {
+    static let animals = [
+        "Dog",
+        "Cat",
+        "Bird",
         "Elephant",
+        "Penguin",
+        "Panda",
+        "Zebra",
+        "Walrus",
+        "Otter",
+        "Kangaroo",
+        "Moose",
+        "Donkey",
+        "Hedgehog",
+    ]
+
+    static let objects = [
+        "Chair",
+        "Table",
+        "Spoon",
+        "Toaster",
+        "Cup",
+        "Waffle",
+        "Lollipop",
+        "Bubble",
+        "Cupcake",
+        "Biscuit",
+        "Sprinkle",
+        "Banjo",
+        "Popsicle",
+        "Doodle",
+    ]
+
+    static let adjectives = [
+        "Whimsical",
         "Cute",
         "Adorable",
         "Funny",
         "Cool",
         "Awesome",
-        "Puppy",
-        "Kitten",
-        "Chair",
-        "Dog",
-        "Cat",
-        "Bird",
-        "Table",
-        "Spoon",
-        "Vegetable",
-        "Fruit",
-        "Animal",
-        "Vehicle",
-        "Potato",
-        "Carrot",
-        "Apple",
-        "Orange",
-        "Rainbow",
-        "Giggle",
         "Fluffy",
         "Bouncy",
-        "Ducky",
-        "Zebra",
-        "Cloudy",
-        "Taco",
-        "Pickle",
-        "Snuggle",
-        "Sparkle",
+        "Snuggly",
+        "Sparkly",
         "Wiggly",
-        "Froggy",
-        "Cupcake",
-        "Bubble",
-        "Biscuit",
-        "Squishy",
-        "Jelly",
-        "Marshmallow",
-        "Sprinkle",
-        "Huggy",
-        "Doodle",
-        "Slinky",
         "Wacky",
         "Bizarre",
-        "Lollipop",
-        "Quirky",
-        "Scooter",
-        "Chuckle",
-        "Cuddle",
-        "Plushy",
-        "Panda",
-        "Moose",
-        "Donkey",
-        "Blossom",
-        "Sunshine",
-        "Snappy",
-        "Jumpy",
-        "Chirpy",
-        "Toaster",
-        "Banjo",
-        "Twinkle",
         "Cheeky",
         "Peachy",
         "Fizzy",
-        "Slinky",
         "Dizzy",
         "Goofy",
-        "Muffin",
-        "Walrus",
-        "Otter",
-        "Silly",
-        "Candy",
-        "Cup",
-        "Waffle",
-        "Penguin",
-        "Kangaroo",
-        "Smiley",
-        "Lemon",
         "Fuzzy",
-        "Pumpkin",
-        "Popsicle",
-        "Starfish",
-        "Pineapple",
-        "Doodlebug",
-        "Cherry",
-        "Mango",
-        "Snickerdoodle",
-        "Dandelion",
-        "Hedgehog",
-        "Pluto",
+        "Smiley",
+        "Chirpy",
     ]
 
-    static func randomUsername() -> String {
-        let first = whimsicalWords.randomElement()!
-        var second: String
+    static let moods = [
+        "Snappy",
+        "Sunny",
+        "Quirky",
+        "Jolly",
+        "Happy",
+        "Bright",
+        "Playful",
+        "Glittery",
+        "Dreamy",
+        "Friendly",
+    ]
 
-        repeat {
-            second = whimsicalWords.randomElement()!
-        } while second == first
+    static let allWords = adjectives + moods + animals + objects
+
+    static func randomUsername() -> String {
+        let mood = moods.randomElement()!
+        let adjective = adjectives.randomElement()!
+        let object = objects.randomElement()!
 
         let randomAppend = UUID().uuidString.split(separator: "-").first!.prefix(4)
 
-        let username = "\(first)-\(second)-\(randomAppend)"
+        let username = "\(mood)\(adjective)\(object)\(randomAppend)"
 
         return username
     }
 
     static func randomCode() -> String {
-        let first = whimsicalWords.randomElement()!.lowercased()
-        let second = whimsicalWords.randomElement()!.lowercased()
+        let first = allWords.randomElement()!.lowercased()
+        let second = allWords.randomElement()!.lowercased()
 
         let code = "\(first)-\(second)"
         return code

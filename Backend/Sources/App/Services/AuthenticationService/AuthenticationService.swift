@@ -10,12 +10,9 @@ import JWT
 import Vapor
 
 struct AuthenticationService: Sendable {
-    // Add Service Methods Here
     var writeDb: Database
     var readDb: Database
     var logger: Logger
-
-    // TODO: Move this to the `Random` Service
 
     init(writeDb: Database, readDb: Database, logger: Logger) {
         self.writeDb = writeDb
@@ -40,8 +37,7 @@ struct AuthenticationService: Sendable {
             .filter(\.$code == code)
             .first()
 
-        let isValidCode = validCode != nil
-        if !isValidCode {
+        guard let validCode else {
             logger.error(
                 "Authentication code is invalid",
                 metadata: [
@@ -49,7 +45,6 @@ struct AuthenticationService: Sendable {
                     "code": .string(code),
                     "phoneNumber": .string(phoneNumber),
                     "validCode": .string(String(describing: validCode)),
-                    "isValidCode": .string(String(describing: isValidCode)),
                 ]
             )
             throw AuthenticationError.invalidCode
@@ -62,7 +57,6 @@ struct AuthenticationService: Sendable {
                 "code": .string(code),
                 "phoneNumber": .string(phoneNumber),
                 "validCode": .string(String(describing: validCode)),
-                "isValidCode": .string(String(describing: isValidCode)),
             ]
         )
 
@@ -72,7 +66,7 @@ struct AuthenticationService: Sendable {
             logger: logger
         )
 
-        try await validCode?.delete(on: writeDb)
+        try await validCode.delete(on: writeDb)
     }
 
     // 1. Register
