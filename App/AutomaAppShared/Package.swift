@@ -18,7 +18,7 @@ let package = Package(
         .package(url: "https://github.com/nalexn/ViewInspector", from: "0.9.0"),
         .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.10.0")),
         .package(path: "../AutomaUIKit"),
-        .package(path: "../../DataTypes"),
+        .package(path: "../../Backend/DataTypes"),
     ],
     targets: [
         .target(

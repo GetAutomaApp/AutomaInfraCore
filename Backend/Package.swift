@@ -15,7 +15,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.8.0"),
         // 🔵 Non-blocking, event-driven networking for Swift. Used for custom executors
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
-        .package(path: "../DataTypes"),
+        .package(path: "./DataTypes"),
         .package(url: "https://github.com/awslabs/aws-sdk-swift.git", from: "1.0.66"),
         .package(url: "https://github.com/vapor/jwt.git", from: "5.0.0"),
         .package(url: "https://github.com/MacPaw/OpenAI.git", branch: "main"),
