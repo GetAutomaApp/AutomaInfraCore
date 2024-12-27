@@ -15,4 +15,8 @@ X Mobile Interactor
 - PR to go over alerting + metrics (probably datadog or some other solutoin)
 - .generateImage should take a param to prevent text from appearing
     - keep regenerating for x amount of times (default 3) to prevent text
-- Feature Enablements PLANNING
+- Logging Again
+- Mobile Interactor
+- Testing Suite
+- Deploy to staging + prod envs
+- Fix insecure .env secets + get them into the right environments
