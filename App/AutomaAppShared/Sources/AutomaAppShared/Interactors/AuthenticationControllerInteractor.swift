@@ -1,5 +1,4 @@
 // AuthenticationControllerInteractor.swift
-// was created on 12/20/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -7,6 +6,9 @@
 import Alamofire
 import DataTypes
 import Foundation
+#if canImport(FoundationNetworking)
+    import FoundationNetworking
+#endif
 
 // TODO: Error Handeling
 struct AuthenticationControllerInteractor {

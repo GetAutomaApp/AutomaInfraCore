@@ -1,5 +1,4 @@
 // MessageService.swift
-// was created on 12/26/24
 // Copyright (c) 2024 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -23,10 +22,12 @@ struct MessageService: Decodable {
     ) async throws -> String {
         let client = try SNSClient(region: snsRegion)
 
-        if let fromPhoneNumber {
-            // TODO: We don't currently have a persistent phone number setup
-            return ""
-        }
+        // if let fromPhoneNumber {
+        //     // TODO: We don't currently have a persistent phone number setup
+        //     return ""
+        // }
+
+        print("\(String(describing: fromPhoneNumber))")
 
         let output = try await client.publish(input: .init(
             message: message,
