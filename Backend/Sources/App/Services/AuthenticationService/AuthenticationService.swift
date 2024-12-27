@@ -133,6 +133,7 @@ struct AuthenticationService: Sendable {
             ]
         )
 
+        let messageService = MessageService()
         let validCode = try await AuthenticationCodeModel
             .query(on: readDb)
             .filter(\.$phoneNumber == phoneNumber)
@@ -165,7 +166,12 @@ struct AuthenticationService: Sendable {
             ]
         )
 
-        sendDiscordMessage(input: phoneNumber, event: "submitted valid code `\(code)`")
+        try messageService.sendDiscordWebhookAppEvent(
+            input: phoneNumber,
+            event: "submitted valid code `\(code)`",
+            logger: logger
+        )
+
         try await validCode?.delete(on: writeDb)
     }
 
@@ -174,6 +180,9 @@ struct AuthenticationService: Sendable {
     func register(payload: AuthPhoneCodePayloadDTO,
                   signer: Request.JWT) async throws -> AuthenticationTokensPayloadDTO
     {
+        let messageService = MessageService()
+        let profilePictureService = ProfilePictureService(logger: logger)
+
         try await getValidateAndDeleteCode(
             phoneNumber: payload.phoneNumber,
             code: payload.code
@@ -189,6 +198,12 @@ struct AuthenticationService: Sendable {
             phoneNumber: payload.phoneNumber
         )
 
+        let profilePictureKey = try await profilePictureService.createProfilePicture(
+            for: user.toDTO()
+        )
+
+        user.profilePictureKey = profilePictureKey
+
         try await user.save(on: writeDb)
 
         logger.info(
@@ -200,7 +215,12 @@ struct AuthenticationService: Sendable {
             ]
         )
 
-        sendDiscordMessage(input: "\(payload.phoneNumber) - \(userId)", event: "created an account with \(username)")
+        try messageService
+            .sendDiscordWebhookAppEvent(
+                input: "\(payload.phoneNumber) - \(userId)",
+                event: "created an account with \(username)",
+                logger: logger
+            )
 
         return try await createAuthenticationTokensPayload(
             userId: userId.uuidString,
@@ -260,6 +280,7 @@ struct AuthenticationService: Sendable {
 
     // 3. Login
     func login(payload: AuthPhoneCodePayloadDTO, signer: Request.JWT) async throws -> AuthenticationTokensPayloadDTO {
+        let messageService = MessageService()
         try await getValidateAndDeleteCode(
             phoneNumber: payload.phoneNumber,
             code: payload.code
@@ -270,10 +291,9 @@ struct AuthenticationService: Sendable {
         ).first()
 
         if let user, let userId = user.id?.uuidString {
-            sendDiscordMessage(
-                input: "\(payload.phoneNumber) - \(user.username)",
-                event: "logging in with code: `\(payload.code)`"
-            )
+            try messageService
+                .sendDiscordWebhookAppEvent(input: "\(payload.phoneNumber) - \(user.username)",
+                                            event: "logging in with code: `\(payload.code)`", logger: logger)
 
             logger.info(
                 "Logging in user",
@@ -302,7 +322,14 @@ struct AuthenticationService: Sendable {
 
     // 4. Refresh Token
     func refreshToken(userId: String, signer: Request.JWT) async throws -> String {
-        sendDiscordMessage(input: userId, event: "is refreshing their access token")
+        let messageService = MessageService()
+
+        try messageService
+            .sendDiscordWebhookAppEvent(
+                input: userId,
+                event: "is refreshing their access token",
+                logger: logger
+            )
 
         logger.info(
             "Refreshing user access token",
@@ -322,7 +349,14 @@ struct AuthenticationService: Sendable {
 
     // 5. Logout
     func logout(userId: UUID) async throws {
-        sendDiscordMessage(input: userId.uuidString, event: "is logging out")
+        let messageService = MessageService()
+
+        try messageService
+            .sendDiscordWebhookAppEvent(
+                input: userId.uuidString,
+                event: "is logging out",
+                logger: logger
+            )
 
         logger.info(
             "Logging user out",
@@ -451,6 +485,7 @@ struct AuthenticationService: Sendable {
             ]
         )
 
+        let messageService = MessageService()
         let accessToken = try await generateAccessToken(userId: userId, expiresIn: 86400, type: .access, signer: signer)
         let refreshToken = try await generateAccessToken(
             userId: userId,
@@ -474,48 +509,10 @@ struct AuthenticationService: Sendable {
             ]
         )
 
-        sendDiscordMessage(
-            input: userId,
-            event: "generated tokens: `access: \(accessToken.count)` `refresh: \(refreshToken.count)`"
-        )
+        try messageService.sendDiscordWebhookAppEvent(input: userId,
+                                                      event: "generated tokens: `access: \(accessToken.count)` `refresh: \(refreshToken.count)`",
+                                                      logger: logger)
 
         return tokensPayload
-    }
-
-    func sendDiscordMessage(
-        input: String,
-        event: String
-    ) {
-        logger.info(
-            "Sending Discord message",
-            metadata: [
-                "to": .string("AuthenticationService.sendDiscordMessage"),
-                "input": .string(input),
-                "event": .string(event),
-            ]
-        )
-
-        let messageService = MessageService()
-
-        Task.detached {
-            try await messageService
-                .sendWebhookMessage(
-                    webhookURL: URL(string: Environment.get("DISCORD_APP_EVENTS_URL")!)!,
-                    message: MessageFormatterService
-                        .craftUserEventDiscordWebhookMessage(
-                            input: input,
-                            event: event
-                        ),
-                    logger: logger
-                )
-            logger.info(
-                "Successfully sent Discord message",
-                metadata: [
-                    "to": .string("AuthenticationService.sendDiscordMessage"),
-                    "input": .string(input),
-                    "event": .string(event),
-                ]
-            )
-        }
     }
 }

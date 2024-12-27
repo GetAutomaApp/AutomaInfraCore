@@ -10,17 +10,28 @@ import Vapor
 
 struct OpenAiService {
     let client: OpenAI
+    let logger: Logger
 
-    init(timeout: TimeInterval = 180) throws {
+    init(logger: Logger, timeout: TimeInterval = 180) throws {
         client = try .init(
             configuration: .init(
                 token: Environment.getOrThrow("OPENAI_API_KEY"),
                 timeoutInterval: timeout
             )
         )
+        self.logger = logger
     }
 
     func createImage(_ query: ImagesQuery) async throws -> ImagesResult {
-        try await client.images(query: query)
+        let messageService = MessageService()
+
+        try messageService
+            .sendDiscordWebhookAppEvent(
+                input: "generating image",
+                event: "\(query.prompt)\n\n\(query)",
+                logger: logger
+            )
+
+        return try await client.images(query: query)
     }
 }

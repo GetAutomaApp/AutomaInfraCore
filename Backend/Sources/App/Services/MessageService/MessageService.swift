@@ -33,7 +33,7 @@ struct MessageService: Decodable {
             phoneNumber: phoneNumber
         ))
 
-        try await sendDiscordMessage(
+        try sendDiscordWebhookAppEvent(
             input: "\(fromPhoneNumber ?? "random") -> \(phoneNumber)",
             event: "sending message: `\(message)`",
             logger: logger
@@ -101,11 +101,11 @@ struct MessageService: Decodable {
         }
     }
 
-    private func sendDiscordMessage(
+    func sendDiscordWebhookAppEvent(
         input: String,
         event: String,
         logger: Logger
-    ) async throws {
+    ) throws {
         Task.detached {
             try await sendWebhookMessage(
                 webhookURL: URL(string: Environment.get("DISCORD_APP_EVENTS_URL")!)!,

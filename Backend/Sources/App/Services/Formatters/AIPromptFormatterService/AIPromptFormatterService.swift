@@ -13,7 +13,7 @@ enum AIPromptFormatterService {
 
     static func createProfilePicturePrompt(username: String) -> ImagesQuery {
         let prompt =
-            "Generate a cute, emoji-like icon in a minimalistic style with a dark background (#000000) and subtle neon green (#00FF00) accents to match the aesthetic of a sleek and modern design. Incorporate soft and rounded edges, ensuring the character or object is whimsical and playful. Use the keyword \(username) to define the main theme of the icon (e.g., Potato-Plushy, Penguin-Rainbow, Peachy-Carrot, Whimsical-Spoon, Fuzzy-Slinky). Ensure the design feels cohesive, vibrant, and adorable, with a touch of neon glow around the object for added emphasis. The background should remain simple and dark to enhance the contrast."
+            "Generate a cute, emoji-like icon in a minimalistic style with a dark background (#000000) and subtle neon green (#00FF00) accents to match the aesthetic of a sleek and modern design. Incorporate soft and rounded edges, ensuring the character or object is whimsical and playful. Use the keyword \(username) to define the main theme of the icon (e.g., Potato-Plushy, Penguin-Rainbow, Peachy-Carrot, Whimsical-Spoon, Fuzzy-Slinky). Ensure the design feels cohesive, vibrant, and adorable, with a touch of neon glow around the object for added emphasis. The background should remain simple and dark to enhance the contrast. Focus heavily on the visuals, while completely excluding any typogrophy or text."
 
         let imageQuery = ImagesQuery(
             prompt: prompt,

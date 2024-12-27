@@ -58,7 +58,19 @@ final class UserModel: Model, @unchecked Sendable {
     }
 
     func toDTO() -> UserDTO {
-        .init(
+        let profilePictureUrl: String?
+        do {
+            guard let profilePictureKey else {
+                // TODO: Log here as well (not as important, but good to have)
+                throw URLError(.badURL)
+            }
+
+            profilePictureUrl = try TigrisService().getTigrisUrl("s3://\(profilePictureKey)")
+        } catch {
+            profilePictureUrl = nil
+        }
+
+        return .init(
             id: id,
             createdAt: createdAt,
             updatedAt: updatedAt,
@@ -66,13 +78,17 @@ final class UserModel: Model, @unchecked Sendable {
             username: username,
             phoneNumber: phoneNumber,
             instagramHandle: instagramHandle,
-            profilePictureKey: profilePictureKey
+            profilePictureKey: profilePictureKey,
+            profilePictureUrl: profilePictureUrl
         )
     }
 
     static func fromDTO(dto: UserDTO) -> UserModel {
         UserModel(
-            id: dto.id, username: dto.username, phoneNumber: dto.phoneNumber, instagramHandle: dto.instagramHandle,
+            id: dto.id,
+            username: dto.username,
+            phoneNumber: dto.phoneNumber,
+            instagramHandle: dto.instagramHandle,
             profilePictureKey: dto.profilePictureKey
         )
     }

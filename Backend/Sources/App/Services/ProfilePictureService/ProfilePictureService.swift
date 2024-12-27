@@ -9,14 +9,22 @@ import Fluent
 import Vapor
 
 struct ProfilePictureService {
+    let logger: Logger
+
+    init(logger: Logger) {
+        self.logger = logger
+    }
+
+    // TODO: Feature enablement to choose one of 10 randomly generated profile pictures when openai services are down
     func createProfilePicture(for user: UserDTO) async throws -> String {
-        let openaiService = try OpenAiService()
+        let openaiService = try OpenAiService(logger: logger)
         let tigrisService = try TigrisService()
 
         let prompt = AIPromptFormatterService.createProfilePicturePrompt(
             username: user.username
         )
 
+        // TODO: All openai responses should be stored as json blobs in s3/openai/images (for
         let images = try await openaiService.createImage(prompt).data
 
         // TODO: Send the image to tigris
@@ -32,7 +40,10 @@ struct ProfilePictureService {
 
             let url = try tigrisService.getTigrisUrl(s3Url)
 
-            return url
+            print(url)
+
+            // Log url
+            return key
         } else {
             // Throw Error TODO
         }
