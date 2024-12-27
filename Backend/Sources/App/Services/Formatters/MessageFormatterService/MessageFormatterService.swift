@@ -17,12 +17,15 @@ enum MessageFormatterService {
         "your automa verification code is: \"\(code)\""
     }
 
-    static func craftUserEventDiscordWebhookMessage(input: String, event: String) -> DiscordWebhookMessage {
+    static func craftUserEventDiscordWebhookMessage(input: String, event: String,
+                                                    imageUrl: String? = nil) -> DiscordWebhookMessage
+    {
         .init(
             embeds: [
                 .init(
                     title: "**[\(input)]**",
-                    description: "\(event)"
+                    description: "\(event)",
+                    image: .init(url: imageUrl)
                 ),
             ]
         )

@@ -40,7 +40,7 @@ struct DiscordEmbedFooter: Codable {
 }
 
 struct DiscordEmbedImage: Codable {
-    var url: String
+    var url: String?
 }
 
 struct DiscordEmbedAuthor: Codable {

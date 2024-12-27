@@ -14,8 +14,6 @@ struct TigrisService: ~Copyable {
     let client: S3
     let s3FileTransferManager: S3FileTransferManager
 
-    let tigrisBaseUrl = "https://fly.storage.tigris.dev"
-
     init() throws {
         let clientAuth = try AWSClient(
             credentialProvider: .static(
@@ -24,10 +22,10 @@ struct TigrisService: ~Copyable {
             )
         )
 
-        client = S3(
+        client = try S3(
             client: clientAuth,
             region: .init(rawValue: "auto"),
-            endpoint: tigrisBaseUrl
+            endpoint: Environment.getOrThrow("TIGRIS_BASE_URL")
         )
 
         s3FileTransferManager = .init(s3: client)
@@ -63,7 +61,8 @@ struct TigrisService: ~Copyable {
         content: ByteBuffer,
         acl: S3.ObjectCannedACL = .private,
         metadata: [String: String]? = nil,
-        expires: Date? = nil
+        expires: Date? = nil,
+        contentType: String? = nil
     ) async throws -> S3.PutObjectOutput? {
         let path = try decodeS3Path(input)
 
@@ -72,7 +71,7 @@ struct TigrisService: ~Copyable {
                 acl: acl,
                 body: .init(buffer: content),
                 bucket: path.bucket,
-                expires: expires,
+                contentType: contentType, expires: expires,
                 key: path.key,
                 metadata: metadata
             )
@@ -104,12 +103,31 @@ struct TigrisService: ~Copyable {
 
         let environment = try Environment.getOrThrow("ENVIRONMENT")
 
+        let url = URL(string: tigrisUrl)
+
         // TODO: (We have a task for this)
-//        if environment == "local" {
-//            return "http://localhost:4566"
-//        } else {
-        return "https://\(path.bucket).fly.storage.tigris.dev/\(path.key)"
-//        }
+
+        guard let url else {
+            throw URLError(.badURL)
+        }
+
+        if environment == "local" {
+            return url
+                .appending(path: path.bucket)
+                .appending(path: path.key).absoluteString
+        } else {
+            guard let host = url.host() else {
+                throw URLError(.badURL)
+            }
+
+            guard let returnableUrl = URL(
+                string: "https://\(path.bucket).\(host)\(path.key)"
+            )?.absoluteString else {
+                throw URLError(.badURL)
+            }
+
+            return returnableUrl
+        }
     }
 
     struct S3Path {

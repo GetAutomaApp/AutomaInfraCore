@@ -19,10 +19,20 @@ struct ProfilePictureService {
     func createProfilePicture(for user: UserDTO) async throws -> String {
         let openaiService = try OpenAiService(logger: logger)
         let tigrisService = try TigrisService()
+        let messageService = MessageService()
 
         let prompt = AIPromptFormatterService.createProfilePicturePrompt(
             username: user.username
         )
+
+        if let userId = user.id?.uuidString {
+            try messageService
+                .sendDiscordWebhookAppEvent(
+                    input: "generating profile picture for \(userId) - \(user.username)",
+                    event: "\(prompt.prompt)",
+                    logger: logger
+                )
+        }
 
         // TODO: All openai responses should be stored as json blobs in s3/openai/images (for
         let images = try await openaiService.createImage(prompt).data
@@ -34,16 +44,31 @@ struct ProfilePictureService {
             let s3Url = "s3://\(bucket)/\(key)"
 
             let output = try await tigrisService
-                .put(input: s3Url, content: .init(data: data), acl: .publicRead)
+                .put(
+                    input: s3Url,
+                    content: .init(data: data),
+                    acl: .publicRead,
+                    contentType: "image/jpeg"
+                )
 
             print(output) // TODO: Turn to log
 
             let url = try tigrisService.getTigrisUrl(s3Url)
 
+            if let userId = user.id?.uuidString {
+                try messageService
+                    .sendDiscordWebhookAppEvent(
+                        input: "generated profile picture for \(userId) - \(user.username)",
+                        event: "\(prompt.prompt)",
+                        imageUrl: url,
+                        logger: logger
+                    )
+            }
+
             print(url)
 
             // Log url
-            return key
+            return s3Url
         } else {
             // Throw Error TODO
         }

@@ -16,106 +16,6 @@ struct AuthenticationService: Sendable {
     var logger: Logger
 
     // TODO: Move this to the `Random` Service
-    let nameSegments = [
-        "Whimsical",
-        "Giraffe",
-        "Banana",
-        "Monkey",
-        "Penguin",
-        "Elephant",
-        "Cute",
-        "Adorable",
-        "Funny",
-        "Cool",
-        "Awesome",
-        "Puppy",
-        "Kitten",
-        "Chair",
-        "Dog",
-        "Cat",
-        "Bird",
-        "Table",
-        "Spoon",
-        "Vegetable",
-        "Fruit",
-        "Animal",
-        "Vehicle",
-        "Potato",
-        "Carrot",
-        "Apple",
-        "Orange",
-        "Rainbow",
-        "Giggle",
-        "Fluffy",
-        "Bouncy",
-        "Ducky",
-        "Zebra",
-        "Cloudy",
-        "Taco",
-        "Pickle",
-        "Snuggle",
-        "Sparkle",
-        "Wiggly",
-        "Froggy",
-        "Cupcake",
-        "Bubble",
-        "Biscuit",
-        "Squishy",
-        "Jelly",
-        "Marshmallow",
-        "Sprinkle",
-        "Huggy",
-        "Doodle",
-        "Slinky",
-        "Wacky",
-        "Bizarre",
-        "Lollipop",
-        "Quirky",
-        "Scooter",
-        "Chuckle",
-        "Cuddle",
-        "Plushy",
-        "Panda",
-        "Moose",
-        "Donkey",
-        "Blossom",
-        "Sunshine",
-        "Snappy",
-        "Jumpy",
-        "Chirpy",
-        "Toaster",
-        "Banjo",
-        "Twinkle",
-        "Cheeky",
-        "Peachy",
-        "Fizzy",
-        "Slinky",
-        "Dizzy",
-        "Goofy",
-        "Muffin",
-        "Walrus",
-        "Otter",
-        "Silly",
-        "Candy",
-        "Cup",
-        "Waffle",
-        "Penguin",
-        "Kangaroo",
-        "Smiley",
-        "Lemon",
-        "Fuzzy",
-        "Pumpkin",
-        "Popsicle",
-        "Starfish",
-        "Pineapple",
-        "Doodlebug",
-        "Cherry",
-        "Mango",
-        "Snickerdoodle",
-        "Dandelion",
-        "Hedgehog",
-        "Pluto",
-    ]
 
     init(writeDb: Database, readDb: Database, logger: Logger) {
         self.writeDb = writeDb
@@ -188,7 +88,7 @@ struct AuthenticationService: Sendable {
             code: payload.code
         )
 
-        let username = randomUsername()
+        let username = RandomService.randomUsername()
 
         let userId = UUID()
 
@@ -234,7 +134,7 @@ struct AuthenticationService: Sendable {
     func sendAuthCode(phoneNumber: String) async throws -> String {
         let messageService = MessageService()
 
-        let code = randomCode()
+        let code = RandomService.randomCode()
 
         logger.info(
             "Sending verification code to user",
@@ -368,29 +268,6 @@ struct AuthenticationService: Sendable {
 
         try await deleteOldTokens(userId: userId, subject: .refresh)
         try await deleteOldTokens(userId: userId, subject: .access)
-    }
-
-    func randomUsername() -> String {
-        let first = nameSegments.randomElement()!
-        var second = nameSegments.randomElement()!
-
-        repeat {
-            second = nameSegments.randomElement()!
-        } while second == first
-
-        let randomAppend = UUID().uuidString.split(separator: "-").first!.prefix(4)
-
-        let username = "\(first)-\(second)-\(randomAppend)"
-
-        return username
-    }
-
-    func randomCode() -> String {
-        let first = nameSegments.randomElement()!.lowercased()
-        let second = nameSegments.randomElement()!.lowercased()
-
-        let code = "\(first)-\(second)"
-        return code
     }
 
     func codeDeletionTime() -> Date {

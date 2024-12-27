@@ -20,10 +20,10 @@ final class UserModel: Model, @unchecked Sendable {
     @Field(key: "phone_number")
     var phoneNumber: String
 
-    @Field(key: "instagram_handle")
+    @OptionalField(key: "instagram_handle")
     var instagramHandle: String?
 
-    @Field(key: "profile_picture_key")
+    @OptionalField(key: "profile_picture_key")
     var profilePictureKey: String?
 
     @Timestamp(key: "created_at", on: .create)
@@ -65,7 +65,7 @@ final class UserModel: Model, @unchecked Sendable {
                 throw URLError(.badURL)
             }
 
-            profilePictureUrl = try TigrisService().getTigrisUrl("s3://\(profilePictureKey)")
+            profilePictureUrl = try TigrisService().getTigrisUrl(profilePictureKey)
         } catch {
             profilePictureUrl = nil
         }

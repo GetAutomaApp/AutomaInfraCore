@@ -3,11 +3,12 @@ X Make enums usable
 X Message Service
     X Discord Webhook Stuff (Messages on events)
 X Logging (Full Codebase)
-- Random Service
-- User profile pics + default
+X Random Service
+X User profile pics + default
 - OptionalField <- Figure out this Fluent property / field type
+- Logging Again
 - Mobile Interactor
 - Testing Suite
 - Deploy to staging + prod envs
 - Fix insecure .env secets + get them into the right environments
-- Feature Enablements PR
+- Feature Enablements PLANNING

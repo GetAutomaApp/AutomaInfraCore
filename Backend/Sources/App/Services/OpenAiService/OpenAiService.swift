@@ -23,15 +23,6 @@ struct OpenAiService {
     }
 
     func createImage(_ query: ImagesQuery) async throws -> ImagesResult {
-        let messageService = MessageService()
-
-        try messageService
-            .sendDiscordWebhookAppEvent(
-                input: "generating image",
-                event: "\(query.prompt)\n\n\(query)",
-                logger: logger
-            )
-
-        return try await client.images(query: query)
+        try await client.images(query: query)
     }
 }

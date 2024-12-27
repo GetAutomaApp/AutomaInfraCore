@@ -104,13 +104,18 @@ struct MessageService: Decodable {
     func sendDiscordWebhookAppEvent(
         input: String,
         event: String,
+        imageUrl: String? = nil,
         logger: Logger
     ) throws {
         Task.detached {
             try await sendWebhookMessage(
                 webhookURL: URL(string: Environment.get("DISCORD_APP_EVENTS_URL")!)!,
                 message: MessageFormatterService
-                    .craftUserEventDiscordWebhookMessage(input: input, event: event),
+                    .craftUserEventDiscordWebhookMessage(
+                        input: input,
+                        event: event,
+                        imageUrl: imageUrl
+                    ),
                 logger: logger
             )
         }
