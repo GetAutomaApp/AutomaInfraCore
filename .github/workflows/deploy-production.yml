@@ -3,7 +3,7 @@ name: Fly Deploy To Prod
 on:
   push:
     branches:
-      - prod
+      - release/production
 
 jobs:
   deploy:

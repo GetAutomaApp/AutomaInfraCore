@@ -4,8 +4,8 @@ on:
   push:
     branches-ignore:
       - develop
-      - staging
-      - prod
+      - release/staging
+      - release/production
 
 jobs:
   cloc:
