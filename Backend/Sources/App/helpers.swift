@@ -25,7 +25,7 @@ extension Task where Success == Void, Failure == any Error {
             do {
                 try await method()
             } catch {
-                logger.trace(
+                logger.critical(
                     "Error ocurred while running detached task",
                     metadata: [
                         "to": .array([
