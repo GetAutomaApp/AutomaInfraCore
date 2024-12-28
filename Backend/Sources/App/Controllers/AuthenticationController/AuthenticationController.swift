@@ -37,7 +37,7 @@ struct AuthenticationController: RouteCollection {
         )
 
         if try await authService.doesUserExist(phoneNumber: dto.phoneNumber) {
-            throw AuthenticationError.userAlreadyExists
+            throw GenericErrors.userAlreadyExists
         }
 
         _ = try await authService.sendAuthCode(
@@ -58,7 +58,7 @@ struct AuthenticationController: RouteCollection {
         )
 
         if try await authService.doesUserExist(phoneNumber: dto.phoneNumber) {
-            throw AuthenticationError.userAlreadyExists
+            throw GenericErrors.userAlreadyExists
         }
 
         let tokens = try await authService.register(payload: dto, signer: req.jwt)
@@ -77,7 +77,7 @@ struct AuthenticationController: RouteCollection {
         )
 
         if try await !(authService.doesUserExist(phoneNumber: dto.phoneNumber)) {
-            throw AuthenticationError.userNotFound
+            throw GenericErrors.userNotFound
         }
 
         let code = try await authService.sendAuthCode(
@@ -111,7 +111,7 @@ struct AuthenticationController: RouteCollection {
         let tokenString = try req.query.get(String?.self, at: "xxrt")
 
         guard let tokenString else {
-            throw AuthenticationError.invalidToken
+            throw GenericErrors.invalidToken
         }
 
         let token = try await req.jwt.verify(
@@ -120,7 +120,7 @@ struct AuthenticationController: RouteCollection {
         )
 
         if token.subject != .refresh {
-            throw AuthenticationError.invalidToken
+            throw GenericErrors.invalidToken
         }
 
         let authService = AuthenticationService(
@@ -152,7 +152,7 @@ struct AuthenticationController: RouteCollection {
 
             try await authService.logout(userId: userId)
         } else {
-            throw AuthenticationError.invalidUserId
+            throw GenericErrors.invalidUserId
         }
 
         return .ok

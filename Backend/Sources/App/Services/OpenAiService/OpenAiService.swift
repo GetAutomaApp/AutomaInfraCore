@@ -7,10 +7,6 @@ import Fluent
 import OpenAI
 import Vapor
 
-enum OpenAiErrors: Error {
-    case missingImage
-}
-
 struct OpenAiService {
     let client: OpenAI
     let logger: Logger

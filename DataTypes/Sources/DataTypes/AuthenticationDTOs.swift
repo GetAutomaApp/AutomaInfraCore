@@ -43,11 +43,3 @@ public struct JWTTokenPayload: JWTPayload {
         self.tokenId = tokenId
     }
 }
-
-public enum AuthenticationError: Error {
-    case invalidCode
-    case userAlreadyExists
-    case userNotFound
-    case invalidToken
-    case invalidUserId
-}

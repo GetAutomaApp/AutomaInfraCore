@@ -12,6 +12,7 @@ import Vapor
 public func configure(_ app: Application) async throws {
     // Middleware for serving files (if needed)
     // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+    app.middleware.use(ErrorStringMiddleware())
 
     app.commands.use(GenerateAppComponent(), as: "generate")
     app.commands.use(FlyConfigGenerator(), as: "fly-config")
