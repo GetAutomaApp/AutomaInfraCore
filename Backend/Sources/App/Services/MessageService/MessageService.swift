@@ -7,6 +7,7 @@ import AWSSNS
 import Fluent
 import Foundation
 import Vapor
+
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
@@ -70,6 +71,10 @@ struct MessageService: Decodable {
     }
 
     func sendWebhookMessage(webhookURL: URL, message: DiscordWebhookMessage, logger: Logger) async throws {
+        if try Environment.getOrThrow("ENVIRONMENT") == "local" {
+            return
+        }
+
         do {
             let encoder = JSONEncoder()
             let jsonData = try encoder.encode(message)

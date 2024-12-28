@@ -7,11 +7,8 @@ import Fluent
 import SotoS3
 import Vapor
 
-import SotoS3FileTransfer
-
 struct TigrisService: ~Copyable {
     let client: S3
-    let s3FileTransferManager: S3FileTransferManager
 
     init() throws {
         let clientAuth = try AWSClient(
@@ -26,8 +23,6 @@ struct TigrisService: ~Copyable {
             region: .init(rawValue: "auto"),
             endpoint: Environment.getOrThrow("TIGRIS_BASE_URL")
         )
-
-        s3FileTransferManager = .init(s3: client)
     }
 
     deinit {

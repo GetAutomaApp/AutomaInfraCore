@@ -1,5 +1,5 @@
 {
-  "originHash" : "fe4bdec08558d3572a5b11911a595b329a4c72ced477acbe7ca873e0c2a2b759",
+  "originHash" : "f1cfbe63325c622da500cb89a3e6f55d1385a8ec7e45c58cb6ffbd94c3630894",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -170,15 +170,6 @@
       "state" : {
         "revision" : "2614aa43ab0eef94b873d84249fc974368b39369",
         "version" : "7.3.0"
-      }
-    },
-    {
-      "identity" : "soto-s3-file-transfer",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/soto-project/soto-s3-file-transfer.git",
-      "state" : {
-        "revision" : "5104491d1a8f76a2839e4476e9644b3885ba758c",
-        "version" : "2.1.0"
       }
     },
     {
