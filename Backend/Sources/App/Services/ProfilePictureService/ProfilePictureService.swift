@@ -94,6 +94,7 @@ struct ProfilePictureService {
                 "username": .string(user.username),
                 "imageKey": .string(s3Url),
                 "cacheKey": .string(openaiOutputs3Url),
+                "tigrisUrl": .string(url),
             ]
         )
 
