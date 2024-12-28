@@ -28,10 +28,10 @@ struct RequestIsAuthenticatedMiddleware: AsyncMiddleware {
                         ),
                     ]
                 )
-                throw AuthenticationError.invalidToken
+                throw GenericErrors.invalidToken
             }
         } catch {
-            if let error = error as? AuthenticationError {
+            if let error = error as? GenericErrors {
                 throw error
             }
 

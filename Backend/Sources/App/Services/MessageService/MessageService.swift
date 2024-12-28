@@ -4,6 +4,7 @@
 // All rights reserved.
 
 import AWSSNS
+import DataTypes
 import Fluent
 import Foundation
 import Vapor
@@ -11,11 +12,6 @@ import Vapor
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-
-enum MessageServiceErrors: Error {
-    case discordWebhookMessageFailed
-    case smsMessageFailed
-}
 
 struct MessageService: Decodable {
     func sendSmS(
@@ -66,7 +62,7 @@ struct MessageService: Decodable {
                     "message": .string(message),
                 ]
             )
-            throw MessageServiceErrors.smsMessageFailed
+            throw GenericErrors.smsMessageFailed
         }
     }
 
@@ -87,7 +83,7 @@ struct MessageService: Decodable {
             let (data, response) = try await URLSession.shared.data(for: request)
 
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 204 {
-                throw MessageServiceErrors.discordWebhookMessageFailed
+                throw GenericErrors.discordWebhookMessageFailed
             }
 
             logger.info(
@@ -107,7 +103,7 @@ struct MessageService: Decodable {
                     "error": .string(error.localizedDescription),
                 ]
             )
-            throw MessageServiceErrors.discordWebhookMessageFailed
+            throw GenericErrors.discordWebhookMessageFailed
         }
     }
 
