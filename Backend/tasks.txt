@@ -11,7 +11,7 @@ X Mobile Interactor
 X Logging Again
 X Mobile Interactor
 X Fix insecure .env secets + get them into the right environments
-- Deploy to staging + prod envs
+X Deploy to staging + prod envs
 - PR to write tests for everything + properly create test templates to cover every single loc
 - PR to go over error handeling + stack tracing
 - PR to go over alerting + metrics (probably datadog or some other solutoin)
@@ -21,4 +21,6 @@ X Fix insecure .env secets + get them into the right environments
 - SMS logic to Vapor Job
 - Testing Suite
 - Deploy to staging + prod envs
-- Fix insecure .env secets + get them into the right environments
+X Fix insecure .env secets + get them into the right environments
+- PR To implement Mobile UI for Account Creation (Application Next)
+- Plan Feature Enablements

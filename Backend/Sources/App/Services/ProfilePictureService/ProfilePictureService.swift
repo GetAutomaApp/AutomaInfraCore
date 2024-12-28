@@ -25,7 +25,7 @@ struct ProfilePictureService {
         )
 
         guard let userId = user.id?.uuidString else {
-            throw AuthenticationError.invalidUserId
+            throw GenericErrors.invalidUserId
         }
 
         logger.info(
@@ -48,7 +48,7 @@ struct ProfilePictureService {
         let images = try await openaiService.createImage(prompt).data
 
         guard let image = images[0].b64Json, let data = Data(base64Encoded: image) else {
-            throw OpenAiErrors.missingImage
+            throw GenericErrors.missingImage
         }
 
         let key = "profile-picture/v1/\(user.username)-\(UUID().uuidString).jpg" // TODO: Ensure openai uses JPEG

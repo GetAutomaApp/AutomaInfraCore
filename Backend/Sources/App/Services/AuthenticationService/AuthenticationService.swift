@@ -46,7 +46,7 @@ struct AuthenticationService: Sendable {
                     "validCode": .string(String(describing: validCode)),
                 ]
             )
-            throw AuthenticationError.invalidCode
+            throw GenericErrors.invalidCode
         }
 
         logger.info(
@@ -209,7 +209,7 @@ struct AuthenticationService: Sendable {
                     "phoneNumber": .string(payload.phoneNumber),
                 ]
             )
-            throw AuthenticationError.userNotFound
+            throw GenericErrors.userNotFound
         }
     }
 
@@ -278,7 +278,7 @@ struct AuthenticationService: Sendable {
         signer: Request.JWT
     ) async throws -> String {
         guard let userId = UUID(uuidString: userId) else {
-            throw AuthenticationError.invalidUserId
+            throw GenericErrors.invalidUserId
         }
 
         let expiresAt = Date().addingTimeInterval(expiresIn)
