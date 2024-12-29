@@ -10,7 +10,7 @@ import Vapor
 
 // Configures your application
 public func configure(_ app: Application) async throws {
-    // Middleware for serving files (if needed)
+    // This is file middleware
     // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
     app.middleware.use(ErrorStringMiddleware())
 

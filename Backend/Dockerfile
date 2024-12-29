@@ -17,11 +17,12 @@ WORKDIR /build
 # This creates a cached layer that can be reused
 # as long as your Package.swift/Package.resolved
 # files do not change.
-COPY . .
-RUN swift package resolve \
-        $([ -f ./Package.resolved ] && echo "--force-resolved-versions" || true)
 
+COPY Package.swift Package.resolved ./
+COPY DataTypes ./DataTypes
+RUN swift package resolve $([ -f ./Package.resolved ] && echo "--force-resolved-versions" || true)
 # Copy entire repo into container
+COPY . .
 
 # Build everything, with optimizations, with static linking, and using jemalloc
 # N.B.: The static version of jemalloc is incompatible with the static Swift runtime.
