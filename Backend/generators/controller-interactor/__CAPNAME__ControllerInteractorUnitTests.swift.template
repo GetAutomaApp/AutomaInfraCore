@@ -1,0 +1,17 @@
+import XCTest
+
+final class __CAPNAME__ControllerInteractorUnitTests: XCTestCase {
+    var interactor: __CAPNAME__ControllerInteractor!
+
+    override func setUp() {
+        super.setUp()
+        interactor = __CAPNAME__ControllerInteractor()
+    }
+
+    override func tearDown() {
+        interactor = nil
+        super.tearDown()
+    }
+
+    // Note: These integration tests should not be run against the main backend if it is a backend interactor.
+}
