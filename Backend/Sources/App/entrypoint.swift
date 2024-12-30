@@ -4,8 +4,10 @@
 // All rights reserved.
 
 import Logging
+import Metrics
 import NIOCore
 import NIOPosix
+import Prometheus
 import Vapor
 
 @main

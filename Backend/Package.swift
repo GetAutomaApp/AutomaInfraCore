@@ -20,6 +20,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/jwt.git", from: "5.0.0"),
         .package(url: "https://github.com/MacPaw/OpenAI.git", branch: "main"),
         .package(url: "https://github.com/soto-project/soto.git", from: "7.3.0"),
+        .package(url: "https://github.com/swift-server/swift-prometheus.git", from: "2.0.0"),
     ],
     targets: [
         .executableTarget(
@@ -36,6 +37,7 @@ let package = Package(
                 .product(name: "OpenAI", package: "OpenAI"),
                 .product(name: "SotoS3", package: "soto"),
                 .product(name: "SotoSNS", package: "soto"),
+                .product(name: "Prometheus", package: "swift-prometheus"),
             ],
             exclude: [
                 "Documentation.md",

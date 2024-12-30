@@ -44,6 +44,8 @@ struct AuthenticationController: RouteCollection {
             phoneNumber: dto.phoneNumber
         )
 
+        BackendMetrics.totalSuccessfulRegistrationCodesSent.increment()
+
         return .noContent
     }
 

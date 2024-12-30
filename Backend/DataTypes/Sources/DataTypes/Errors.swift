@@ -26,5 +26,6 @@ public struct ResponseError: Encodable, Decodable {
         self.error = error
     }
 
+    // Make this encodable to json object
     public func encode(to _: any Encoder) throws {}
 }

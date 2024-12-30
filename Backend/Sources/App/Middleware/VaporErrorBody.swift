@@ -36,8 +36,10 @@ struct ErrorStringMiddleware: Middleware {
             let jsonResponse: ResponseError = .init(error: reason)
 
             do {
+                // TODO: Fix
                 response.body = try .init(data: JSONEncoder().encode(jsonResponse))
             } catch {
+                print(error)
                 response.body = .init(
                     stringLiteral: "{\"error\":\"\(GenericErrors.failedToEncodeResponse)\"}"
                 )

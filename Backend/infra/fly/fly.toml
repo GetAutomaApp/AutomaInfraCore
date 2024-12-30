@@ -21,3 +21,7 @@ primary_region = 'jnb'
   memory = '1gb'
   cpu_kind = 'shared'
   cpus = 2
+
+[metrics]
+  port = 8080
+  path = "/Prometheus/metrics"
