@@ -17,10 +17,9 @@ struct MessageService: Decodable {
     func sendSmS(
         to phoneNumber: String,
         message: String,
-        snsRegion: String = "us-east-1",
         logger: Logger
     ) async throws -> String {
-        let client = try SNSClient(region: snsRegion)
+        let client = try await SNSClient()
 
         let output = try await client.publish(input: .init(
             message: message,

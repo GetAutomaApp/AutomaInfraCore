@@ -26,11 +26,12 @@ extension Task where Success == Void, Failure == any Error {
                 try await method()
             } catch {
                 logger.critical(
-                    "Error ocurred while running detached task",
+                    "Error occurred while running detached task",
                     metadata: [
                         "to": .array([
                             .string(to),
                             .string("Task.detachedLogOnError"),
+                            .string(error.localizedDescription),
                         ]),
                     ]
                 )

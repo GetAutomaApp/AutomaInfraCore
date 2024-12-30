@@ -109,7 +109,7 @@ struct TigrisService: ~Copyable {
                 .appending(path: path.key).absoluteString
         } else {
             guard let returnableUrl = URL(
-                string: "https://\(path.bucket).\(host)\(path.key)"
+                string: "https://\(path.bucket).\(host)/\(path.key)"
             )?.absoluteString else {
                 throw URLError(.badURL)
             }

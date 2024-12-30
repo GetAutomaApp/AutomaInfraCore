@@ -6,41 +6,17 @@
 import Alamofire
 import DataTypes
 import Foundation
-#if canImport(FoundationNetworking)
-    import FoundationNetworking
-#endif
 
-// TODO: Error Handeling
-struct AuthenticationControllerInteractor {
+// NOTE: This ControllerInteractor can be used for 3rd party apis on both the frontend + backend
+// A ControllerInteractor automatically gets generated when creating a backend-controller (on client)
+struct AuthenticationControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
-    // Private method for making generic requests using Alamofire
-    private func performRequest(
-        endpoint: String,
-        method: HTTPMethod,
-        headers: HTTPHeaders? = nil,
-        parameters: Parameters? = nil,
-        encoding: ParameterEncoding = URLEncoding.default
-    ) async -> DataResponse<Data?, AFError> {
-        let url = "\(baseURL)\(endpoint)"
-
-        // Alamofire's asynchronous request
-        return await withCheckedContinuation { continuation in
-            AF.request(
-                url,
-                method: method,
-                parameters: parameters,
-                encoding: encoding,
-                headers: headers
-            ).validate().response { response in
-                continuation.resume(returning: response)
-            }
-        }
+    init(baseURL: String) {
+        self.baseURL = baseURL
     }
 
-    /// Makes a request to /Authentication/register-code
-    /// Change the return type to your Decodable DTO
-    func makeRegisterCodeRequest(_ phoneNumber: String) async throws -> String {
+    func makeRegisterCodeRequest(_ phoneNumber: String) async throws {
         let params = try PhoneNumberPayloadDTO(phoneNumber: phoneNumber).encodeToDictionary()
 
         let response = await performRequest(
@@ -50,14 +26,21 @@ struct AuthenticationControllerInteractor {
             encoding: JSONEncoding.default
         )
 
-        // ensure response code is 204
-        guard let statusCode = response.response?.statusCode else {
-            throw AuthenticationError.excessiveRefresh
+        let output = decodeResponse(response)
+
+        if let error = output.error {
+            switch output.error {
+            case .userAlreadyExists, .networkConnectivityError:
+                throw error
+            default:
+                // TODO: Log what the actual error was here
+                throw GenericErrors.unknownError
+            }
+        } else {
+            guard response.response?.statusCode == 204 else {
+                throw GenericErrors.unknownError
+            }
         }
-
-        print(response)
-
-        return ""
     }
 
     func makeRegisterRequest(_ phoneNumber: String, _ code: String) async throws -> String {
@@ -70,14 +53,29 @@ struct AuthenticationControllerInteractor {
             encoding: JSONEncoding.default
         )
 
-        let authTokens = try AuthenticationTokensPayloadDTO.decodeJSONFromData(
-            data: response.data
+        let output = decodeResponse(
+            response,
+            AuthenticationTokensPayloadDTO.self
         )
 
-        return authTokens.accessToken
+        if let error = output.error {
+            switch output.error {
+            case .userAlreadyExists, .invalidCode, .networkConnectivityError:
+                throw error
+            default:
+                // TODO: Log what the actual error was here
+                throw GenericErrors.unknownError
+            }
+        }
+
+        guard let data = output.data else {
+            throw GenericErrors.failedToDecodeResponse
+        }
+
+        return data.accessToken
     }
 
-    func makeLoginCodeRequest(_ phoneNumber: String) async throws -> String {
+    func makeLoginCodeRequest(_ phoneNumber: String) async throws {
         let params = try PhoneNumberPayloadDTO(phoneNumber: phoneNumber).encodeToDictionary()
 
         let response = await performRequest(
@@ -87,13 +85,21 @@ struct AuthenticationControllerInteractor {
             encoding: JSONEncoding.default
         )
 
-        guard let statusCode = response.response?.statusCode else {
-            throw AuthenticationError.excessiveRefresh
+        let output = decodeResponse(response)
+
+        if let error = output.error {
+            switch output.error {
+            case .userNotFound, .invalidCode, .networkConnectivityError:
+                throw error
+            default:
+                // TODO: Log what the actual error was here
+                throw GenericErrors.unknownError
+            }
+        } else {
+            guard response.response?.statusCode == 204 else {
+                throw GenericErrors.unknownError
+            }
         }
-
-        print(response)
-
-        return ""
     }
 
     func makeLoginRequest(_ phoneNumber: String, _ code: String) async throws -> String {
@@ -106,14 +112,32 @@ struct AuthenticationControllerInteractor {
             encoding: JSONEncoding.default
         )
 
-        let authTokens = try AuthenticationTokensPayloadDTO.decodeJSONFromData(
-            data: response.data
+        let output = decodeResponse(
+            response,
+            AuthenticationTokensPayloadDTO.self
         )
 
-        return authTokens.accessToken
+        if let error = output.error {
+            switch error {
+            case .userNotFound, .invalidCode, .networkConnectivityError:
+                throw error
+            default:
+                // TODO: Log what the actual error was here
+                throw GenericErrors.unknownError
+            }
+        }
+
+        guard let data = output.data else {
+            throw GenericErrors.failedToDecodeResponse
+        }
+
+        return data.accessToken
     }
 
-    func makeRefreshTokenRequest(_ refreshToken: String) async throws -> AccessTokenPayloadDTO {
+    func makeRefreshTokenRequest(_ refreshToken: String,
+                                 handleInvalidToken: @escaping () async throws -> Void) async throws
+        -> AccessTokenPayloadDTO
+    {
         let params = ["xxrt": refreshToken]
 
         let response = await performRequest(
@@ -122,9 +146,23 @@ struct AuthenticationControllerInteractor {
             parameters: params
         )
 
-        // Default response is a string
-        let authToken = try AccessTokenPayloadDTO.decodeJSONFromData(data: response.data)
+        let output = decodeResponse(response, AccessTokenPayloadDTO.self)
 
-        return authToken
+        if let error = output.error {
+            switch error {
+            case .invalidUserId, .userNotFound, .networkConnectivityError:
+                throw error
+            case .invalidToken:
+                try await handleInvalidToken()
+            default:
+                throw GenericErrors.unknownError
+            }
+        }
+
+        guard let data = output.data else {
+            throw GenericErrors.failedToDecodeResponse
+        }
+
+        return data
     }
 }
