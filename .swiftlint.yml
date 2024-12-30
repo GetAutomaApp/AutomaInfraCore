@@ -32,3 +32,5 @@ line_length:
   ignores_interpolated_strings: true
   ignores_urls: true
 
+identifier_name:
+  min_length: 2
