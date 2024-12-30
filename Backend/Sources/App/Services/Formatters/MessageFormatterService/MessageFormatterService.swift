@@ -8,8 +8,6 @@ import Fluent
 import Vapor
 
 enum MessageFormatterService {
-    // Add Service Methods Here
-
     static func craftVerificationCodeMessage(
         code: String
     ) -> String {

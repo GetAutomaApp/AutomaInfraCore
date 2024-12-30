@@ -16,19 +16,11 @@ import Vapor
 struct MessageService: Decodable {
     func sendSmS(
         to phoneNumber: String,
-        from fromPhoneNumber: String? = nil,
         message: String,
         snsRegion: String = "us-east-1",
         logger: Logger
     ) async throws -> String {
         let client = try SNSClient(region: snsRegion)
-
-        // if let fromPhoneNumber {
-        //     // TODO: We don't currently have a persistent phone number setup
-        //     return ""
-        // }
-
-        print("\(String(describing: fromPhoneNumber))")
 
         let output = try await client.publish(input: .init(
             message: message,
@@ -36,7 +28,7 @@ struct MessageService: Decodable {
         ))
 
         try sendDiscordWebhookAppEvent(
-            input: "\(fromPhoneNumber ?? "random") -> \(phoneNumber)",
+            input: "random -> \(phoneNumber)",
             event: "sending message: `\(message)`",
             logger: logger
         )
@@ -98,7 +90,7 @@ struct MessageService: Decodable {
             logger.error(
                 "Failed to send Discord webhook message",
                 metadata: [
-                    "to": .string("MessageService.sendSmS"),
+                    "to": .string("MessageService.sendWebhookMessage"),
                     "webhook": .string(webhookURL.absoluteString),
                     "error": .string(error.localizedDescription),
                 ]

@@ -13,7 +13,7 @@ struct ErrorStringMiddleware: Middleware {
             response.status = .internalServerError
             response.headers.replaceOrAdd(name: .contentType, value: "application/json; charset=utf-8")
 
-            var reason: String = if let authError = error as? DataTypes.GenericErrors {
+            let reason: String = if let authError = error as? DataTypes.GenericErrors {
                 "\(authError)"
             } else if let localizedError = error as? LocalizedError {
                 localizedError.errorDescription ?? "Unknown error"

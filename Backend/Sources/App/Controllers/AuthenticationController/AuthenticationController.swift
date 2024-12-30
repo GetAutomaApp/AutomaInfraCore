@@ -80,13 +80,9 @@ struct AuthenticationController: RouteCollection {
             throw GenericErrors.userNotFound
         }
 
-        let code = try await authService.sendAuthCode(
+        _ = try await authService.sendAuthCode(
             phoneNumber: dto.phoneNumber
         )
-
-        if Environment.get("ENVIRONMENT") == "local" {
-            req.logger.info("sent code `\(code)` to \(dto.phoneNumber) ")
-        }
 
         return .noContent
     }
