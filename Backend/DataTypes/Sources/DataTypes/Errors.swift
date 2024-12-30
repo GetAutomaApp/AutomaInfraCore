@@ -3,7 +3,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-public enum GenericErrors: String, Error {
+public enum GenericErrors: String, Error, Decodable {
     case invalidCode
     case userAlreadyExists
     case userNotFound
@@ -12,4 +12,19 @@ public enum GenericErrors: String, Error {
     case discordWebhookMessageFailed
     case smsMessageFailed
     case missingImage
+    case failedToDecodeResponse
+    case failedToEncodeResponse
+    case unknownError
+    case alamofireError
+    case networkConnectivityError
+}
+
+public struct ResponseError: Encodable, Decodable {
+    let error: GenericErrors
+
+    public init(error: GenericErrors) {
+        self.error = error
+    }
+
+    public func encode(to _: any Encoder) throws {}
 }

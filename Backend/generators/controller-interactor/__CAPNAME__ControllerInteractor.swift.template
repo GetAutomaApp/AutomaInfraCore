@@ -1,36 +1,14 @@
 import Alamofire
 import Foundation
+import DataTypes
 
 // NOTE: This ControllerInteractor can be used for 3rd party apis on both the frontend + backend
 // A ControllerInteractor automatically gets generated when creating a backend-controller (on client)
-struct __CAPNAME__ControllerInteractor {
+struct __CAPNAME__ControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
     init(baseURL: String) {
         self.baseURL = baseURL
-    }
-
-    // Private method for making generic requests using Alamofire
-    private func performRequest(
-        endpoint: String,
-        method: HTTPMethod,
-        headers: HTTPHeaders? = nil,
-        parameters: Parameters? = nil,
-        encoding: ParameterEncoding = URLEncoding.default
-    ) async throws -> DataResponse<Data?, AFError> {
-        let url = "\(baseURL)\(endpoint)"
-
-        return await withCheckedContinuation { continuation in
-            AF.request(
-                url,
-                method: method,
-                parameters: parameters,
-                encoding: encoding,
-                headers: headers
-            ).validate().response { response in
-                continuation.resume(returning: response)
-            }
-        }
     }
 
     /// Makes a request to /__CAPNAME_DASHED__/request
@@ -38,7 +16,7 @@ struct __CAPNAME__ControllerInteractor {
     func makeRequest() async throws -> DataResponse<Data?, AFError> {
         return try await performRequest(
             endpoint: "/__CAPNAME_DASHED__/request",
-            method: .get
+            method: .GET
         )
     }
 }

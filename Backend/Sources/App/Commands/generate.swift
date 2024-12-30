@@ -121,7 +121,7 @@ let fileTypes: [FileType] = [
             ),
             FileConfig(
                 fromDirectory: "./generators/model/",
-                toDirectory: "../DataTypes/Sources/DataTypes/",
+                toDirectory: "./DataTypes/Sources/DataTypes/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__DTO.swift.template",
@@ -142,7 +142,7 @@ let fileTypes: [FileType] = [
         configurations: [
             FileConfig(
                 fromDirectory: "./generators/dto/",
-                toDirectory: "../DataTypes/Sources/DataTypes/",
+                toDirectory: "./DataTypes/Sources/DataTypes/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__DTO.swift.template",
@@ -185,6 +185,28 @@ let fileTypes: [FileType] = [
                 templates: [
                     "__CAPNAME__ServiceIntegrationTests.swift.template",
                     "__CAPNAME__ServiceUnitTests.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "backend-interactor",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/controller-interactor/",
+                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Interactors/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__ControllerInteractor.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/controller-interactor/",
+                toDirectory: "../App/AutomaAppShared/Tests/ControllerInteractors/",
+                nestToDirectory: "__CAPNAME__ControllerTests/",
+                templates: [
+                    "__CAPNAME__ControllerInteractorUnitTests.swift.template",
+                    "__CAPNAME__ControllerInteractorIntegrationTests.swift.template",
                 ]
             ),
         ]

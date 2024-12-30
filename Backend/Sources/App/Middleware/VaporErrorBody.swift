@@ -13,22 +13,34 @@ struct ErrorStringMiddleware: Middleware {
             response.status = .internalServerError
             response.headers.replaceOrAdd(name: .contentType, value: "application/json; charset=utf-8")
 
-            let reason: String = if let authError = error as? DataTypes.GenericErrors {
-                "\(authError)"
-            } else if let localizedError = error as? LocalizedError {
-                localizedError.errorDescription ?? "Unknown error"
+            let reason: DataTypes.GenericErrors = if let genericError = error as? DataTypes.GenericErrors {
+                genericError
+            } else if let _ = error as? LocalizedError {
+                GenericErrors.unknownError
             } else {
-                "Unknown error"
+                GenericErrors.unknownError
             }
 
-            let jsonResponse: [String: String] = [
-                "error": reason,
-            ]
+            if reason == .unknownError, let localizedError = error as? LocalizedError {
+                request.logger.error(
+                    "Unknown Error ocurred",
+                    metadata: [
+                        "to": .string("ErrorStringMiddleware.respond"),
+                        "localizedDescription": .string(localizedError.localizedDescription),
+                        "localizedError": .string(localizedError.errorDescription ?? ""),
+                        "localizedFailureReason": .string(localizedError.failureReason ?? ""),
+                    ]
+                )
+            }
+
+            let jsonResponse: ResponseError = .init(error: reason)
 
             do {
                 response.body = try .init(data: JSONEncoder().encode(jsonResponse))
             } catch {
-                response.body = .init(string: "{\"error\":true,\"reason\":\"Failed to encode error\"}")
+                response.body = .init(
+                    stringLiteral: "{\"error\":\"\(GenericErrors.failedToEncodeResponse)\"}"
+                )
             }
 
             return request.eventLoop.makeSucceededFuture(response)
