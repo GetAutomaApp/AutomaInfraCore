@@ -17,6 +17,6 @@ struct PrometheusController: RouteCollection {
 
     @Sendable
     func metrics(req _: Request) async throws -> String {
-        MetricsInitializer.global.emit()
+        MetricsService.global.emit()
     }
 }

@@ -99,7 +99,7 @@ struct ProfilePictureService {
                 ]
             )
 
-            BackendMetrics.totalProfilePicturesGenerated.increment()
+            BackendMetric.totalProfilePicturesGenerated.increment()
             return s3Url
         } catch {
             logger.error(
@@ -111,7 +111,7 @@ struct ProfilePictureService {
                 ]
             )
 
-            BackendMetrics.totalProfilePicturesGenerationFailed.increment()
+            BackendMetric.totalProfilePicturesGenerationFailed.increment()
 
             throw error
         }

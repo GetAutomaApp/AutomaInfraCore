@@ -44,7 +44,7 @@ struct MessageService: Decodable {
                         "sequenceNumber": .string(output.sequenceNumber ?? ""),
                     ]
                 )
-                BackendMetrics.totalTextMessagesSent.increment()
+                BackendMetric.totalTextMessagesSent.increment()
                 return messageId
             } else {
                 logger.error(
@@ -67,13 +67,13 @@ struct MessageService: Decodable {
                     "error": .string(error.localizedDescription),
                 ]
             )
-            BackendMetrics.totalTextMessagesSentFailed.increment()
+            BackendMetric.totalTextMessagesSentFailed.increment()
             throw error
         }
     }
 
     func sendWebhookMessage(webhookURL: URL, message: DiscordWebhookMessage, logger: Logger) async throws {
-        BackendMetrics.totalDiscordWebhookMessagesSent.increment()
+        BackendMetric.totalDiscordWebhookMessagesSent.increment()
 
         if try Environment.getOrThrow("ENVIRONMENT") == "local" {
             return

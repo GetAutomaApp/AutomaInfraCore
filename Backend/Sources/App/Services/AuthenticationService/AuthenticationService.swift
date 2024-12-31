@@ -98,7 +98,7 @@ struct AuthenticationService: Sendable {
 
         try await user.save(on: writeDb)
 
-        BackendMetrics.totalUsersCreated.increment()
+        BackendMetric.totalUsersCreated.increment()
 
         logger.info(
             "Successfully Registered User",
@@ -143,10 +143,10 @@ struct AuthenticationService: Sendable {
             to: "AuthenticationService.sendAuthCode",
             logger: logger,
             onError: { _ in
-                BackendMetrics.totalFailedVerificationCodesSent.increment()
+                BackendMetric.totalFailedVerificationCodesSent.increment()
             },
             onSuccess: {
-                BackendMetrics.totalSuccessfulVerificationCodesSent.increment()
+                BackendMetric.totalSuccessfulVerificationCodesSent.increment()
             }
         ) {
             _ = try await messageService.sendSmS(
@@ -250,7 +250,7 @@ struct AuthenticationService: Sendable {
                 signer: signer
             )
         } catch {
-            BackendMetrics.totalFailedTokensRefreshed.increment()
+            BackendMetric.totalFailedTokensRefreshed.increment()
             throw error
         }
     }
@@ -286,7 +286,7 @@ struct AuthenticationService: Sendable {
         let exists = try await UserModel.query(on: readDb).filter(\.$phoneNumber == phoneNumber).first()
 
         if let exists {
-            BackendMetrics.totalUsersAlreadyExists.increment()
+            BackendMetric.totalUsersAlreadyExists.increment()
             return true
         }
 

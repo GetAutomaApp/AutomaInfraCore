@@ -71,10 +71,10 @@ struct TigrisService: ~Copyable {
                     metadata: metadata
                 )
 
-            BackendMetrics.totalMediaFilesUploadedToTigris.increment()
+            BackendMetric.totalMediaFilesUploadedToTigris.increment()
             return output
         } catch {
-            BackendMetrics.totalMediaFilesUploadedToTigrisFailed.increment()
+            BackendMetric.totalMediaFilesUploadedToTigrisFailed.increment()
             throw error
         }
     }

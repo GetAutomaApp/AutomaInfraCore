@@ -22,7 +22,7 @@ struct OpenAiService {
     }
 
     func createImage(_ query: ImagesQuery) async throws -> ImagesResult {
-        BackendMetrics.openaiImageGenerationRequests.increment()
+        BackendMetric.openaiImageGenerationRequests.increment()
         return try await client.images(query: query)
     }
 }

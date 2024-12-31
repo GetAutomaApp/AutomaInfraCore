@@ -130,10 +130,10 @@ struct AuthenticationController: RouteCollection {
                 userId: token.userId,
                 signer: req.jwt
             )
-            BackendMetrics.totalSuccessfulTokensRefreshed.increment()
+            BackendMetric.totalSuccessfulTokensRefreshed.increment()
             return .init(accessToken: refreshedAccessToken)
         } catch {
-            BackendMetrics.totalFailedTokensRefreshed.increment()
+            BackendMetric.totalFailedTokensRefreshed.increment()
             throw error
         }
     }
@@ -164,11 +164,11 @@ struct AuthenticationController: RouteCollection {
                     "error": .string("\(error.localizedDescription)"),
                 ]
             )
-            BackendMetrics.totalFailedLogoutAttempted.increment()
+            BackendMetric.totalFailedLogoutAttempted.increment()
             throw error
         }
 
-        BackendMetrics.totalLogoutAttempted.increment()
+        BackendMetric.totalLogoutAttempted.increment()
         return .ok
     }
 }
