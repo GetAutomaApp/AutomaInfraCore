@@ -16,88 +16,104 @@ struct ProfilePictureService {
 
     // TODO: Feature enablement to choose one of 10 randomly generated profile pictures when openai services are down
     func createProfilePicture(for user: UserDTO) async throws -> String {
-        let openaiService = try OpenAiService(logger: logger)
-        let tigrisService = try TigrisService()
-        let messageService = MessageService()
+        do {
+            let openaiService = try OpenAiService(logger: logger)
+            let tigrisService = try TigrisService()
+            let messageService = MessageService()
 
-        let prompt = AIPromptFormatterService.createProfilePicturePrompt(
-            username: user.username
-        )
+            let prompt = AIPromptFormatterService.createProfilePicturePrompt(
+                username: user.username
+            )
 
-        guard let userId = user.id?.uuidString else {
-            throw GenericErrors.invalidUserId
+            guard let userId = user.id?.uuidString else {
+                throw GenericErrors.invalidUserId
+            }
+
+            logger.info(
+                "Generating profile picture",
+                metadata: [
+                    "to": .string("ProfilePictureService.createProfilePicture"),
+                    "userId": .string(userId),
+                    "username": .string(user.username),
+                    "prompt": .string(prompt.prompt),
+                ]
+            )
+
+            try messageService
+                .sendDiscordWebhookAppEvent(
+                    input: "generating profile picture for \(userId) - \(user.username)",
+                    event: "\(prompt.prompt)",
+                    logger: logger
+                )
+
+            let images = try await openaiService.createImage(prompt).data
+
+            guard let image = images[0].b64Json, let data = Data(base64Encoded: image) else {
+                throw GenericErrors.missingImage
+            }
+
+            let key = "profile-picture/v1/\(user.username)-\(UUID().uuidString).jpg" // TODO: Ensure openai uses JPEG
+            let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
+            let s3Url = "s3://\(bucket)/\(key)"
+            let openaiOutputs3Url = "s3://\(bucket)/openai/\(user.username)-\(UUID().uuidString).json"
+
+            let jsonEncoder = JSONEncoder()
+
+            _ = try await (
+                tigrisService
+                    .put(
+                        input: s3Url,
+                        content: .init(data: data),
+                        acl: .publicRead,
+                        contentType: "image/jpeg"
+                    ),
+                tigrisService.put(
+                    input: openaiOutputs3Url,
+                    content: .init(
+                        string: jsonEncoder.encode(images).base64EncodedString()
+                    ),
+                    acl: .private,
+                    contentType: "application/json"
+                )
+            )
+
+            let url = try tigrisService.getTigrisUrl(s3Url)
+
+            try messageService
+                .sendDiscordWebhookAppEvent(
+                    input: "generated profile picture for \(userId) - \(user.username)",
+                    event: "\(prompt.prompt)",
+                    imageUrl: url,
+                    logger: logger
+                )
+
+            logger.info(
+                "Successfully generated profile picture for user",
+                metadata: [
+                    "to": .string("ProfilePictureService.createProfilePicture"),
+                    "userId": .string(userId),
+                    "username": .string(user.username),
+                    "imageKey": .string(s3Url),
+                    "cacheKey": .string(openaiOutputs3Url),
+                    "tigrisUrl": .string(url),
+                ]
+            )
+
+            BackendMetrics.totalProfilePicturesGenerated.increment()
+            return s3Url
+        } catch {
+            logger.error(
+                "Failed to generate profile picture",
+                metadata: [
+                    "to": .string("ProfilePictureService.createProfilePicture"),
+                    "user": .string("\(user)"),
+                    "error": .string("\(error.localizedDescription)"),
+                ]
+            )
+
+            BackendMetrics.totalProfilePicturesGenerationFailed.increment()
+
+            throw error
         }
-
-        logger.info(
-            "Generating profile picture",
-            metadata: [
-                "to": .string("ProfilePictureService.createProfilePicture"),
-                "userId": .string(userId),
-                "username": .string(user.username),
-                "prompt": .string(prompt.prompt),
-            ]
-        )
-
-        try messageService
-            .sendDiscordWebhookAppEvent(
-                input: "generating profile picture for \(userId) - \(user.username)",
-                event: "\(prompt.prompt)",
-                logger: logger
-            )
-
-        let images = try await openaiService.createImage(prompt).data
-
-        guard let image = images[0].b64Json, let data = Data(base64Encoded: image) else {
-            throw GenericErrors.missingImage
-        }
-
-        let key = "profile-picture/v1/\(user.username)-\(UUID().uuidString).jpg" // TODO: Ensure openai uses JPEG
-        let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
-        let s3Url = "s3://\(bucket)/\(key)"
-        let openaiOutputs3Url = "s3://\(bucket)/openai/\(user.username)-\(UUID().uuidString).json"
-
-        let jsonEncoder = JSONEncoder()
-
-        _ = try await (
-            tigrisService
-                .put(
-                    input: s3Url,
-                    content: .init(data: data),
-                    acl: .publicRead,
-                    contentType: "image/jpeg"
-                ),
-            tigrisService.put(
-                input: openaiOutputs3Url,
-                content: .init(
-                    string: jsonEncoder.encode(images).base64EncodedString()
-                ),
-                acl: .private,
-                contentType: "application/json"
-            )
-        )
-
-        let url = try tigrisService.getTigrisUrl(s3Url)
-
-        try messageService
-            .sendDiscordWebhookAppEvent(
-                input: "generated profile picture for \(userId) - \(user.username)",
-                event: "\(prompt.prompt)",
-                imageUrl: url,
-                logger: logger
-            )
-
-        logger.info(
-            "Successfully generated profile picture for user",
-            metadata: [
-                "to": .string("ProfilePictureService.createProfilePicture"),
-                "userId": .string(userId),
-                "username": .string(user.username),
-                "imageKey": .string(s3Url),
-                "cacheKey": .string(openaiOutputs3Url),
-                "tigrisUrl": .string(url),
-            ]
-        )
-
-        return s3Url
     }
 }

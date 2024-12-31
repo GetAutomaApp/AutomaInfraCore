@@ -28,4 +28,8 @@ public extension Content {
             )
         }
     }
+
+    func encodeToData() throws -> Data {
+        try JSONEncoder().encode(self)
+    }
 }

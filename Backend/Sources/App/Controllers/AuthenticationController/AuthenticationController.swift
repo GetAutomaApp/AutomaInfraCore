@@ -44,8 +44,6 @@ struct AuthenticationController: RouteCollection {
             phoneNumber: dto.phoneNumber
         )
 
-        BackendMetrics.totalSuccessfulRegistrationCodesSent.increment()
-
         return .noContent
     }
 
@@ -127,12 +125,17 @@ struct AuthenticationController: RouteCollection {
             logger: req.logger
         )
 
-        let refreshedAccessToken = try await authService.refreshToken(
-            userId: token.userId,
-            signer: req.jwt
-        )
-
-        return .init(accessToken: refreshedAccessToken)
+        do {
+            let refreshedAccessToken = try await authService.refreshToken(
+                userId: token.userId,
+                signer: req.jwt
+            )
+            BackendMetrics.totalSuccessfulTokensRefreshed.increment()
+            return .init(accessToken: refreshedAccessToken)
+        } catch {
+            BackendMetrics.totalFailedTokensRefreshed.increment()
+            throw error
+        }
     }
 
     @Sendable
@@ -141,18 +144,31 @@ struct AuthenticationController: RouteCollection {
 
         let userId = UUID(uuidString: token.userId)
 
-        if let userId {
-            let authService = AuthenticationService(
-                writeDb: req.dbWrite,
-                readDb: req.dbReadOnly,
-                logger: req.logger
-            )
+        do {
+            if let userId {
+                let authService = AuthenticationService(
+                    writeDb: req.dbWrite,
+                    readDb: req.dbReadOnly,
+                    logger: req.logger
+                )
 
-            try await authService.logout(userId: userId)
-        } else {
-            throw GenericErrors.invalidUserId
+                try await authService.logout(userId: userId)
+            } else {
+                throw GenericErrors.invalidUserId
+            }
+        } catch {
+            req.logger.error(
+                "Failed to logout user out",
+                metadata: [
+                    "to": .string("AuthenticationController.logout"),
+                    "error": .string("\(error.localizedDescription)"),
+                ]
+            )
+            BackendMetrics.totalFailedLogoutAttempted.increment()
+            throw error
         }
 
+        BackendMetrics.totalLogoutAttempted.increment()
         return .ok
     }
 }

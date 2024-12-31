@@ -45,8 +45,96 @@ struct MetricsInitializer {
 }
 
 enum BackendMetrics {
-    static let totalSuccessfulRegistrationCodesSent = MetricsInitializer.global.makeCounter(
-        name: "total_registration_codes_sent",
+    static let totalSuccessfulVerificationCodesSent = MetricsInitializer.global.makeCounter(
+        name: "total_verification_codes_sent",
         labels: ["status": "success"]
+    )
+
+    static let totalFailedVerificationCodesSent = MetricsInitializer.global.makeCounter(
+        name: "total_verification_codes_sent",
+        labels: ["status": "fail"]
+    )
+
+    static let totalUsersCreated = MetricsInitializer.global.makeCounter(
+        name: "total_users_created",
+        labels: ["status": "success"]
+    )
+
+    static let totalUsersAlreadyExists = MetricsInitializer.global.makeCounter(
+        name: "total_users_created",
+        labels: ["status": "alreadyExists"]
+    )
+
+    static let totalSuccessfulTokensRefreshed = MetricsInitializer.global.makeCounter(
+        name: "total_token_refresh_attempts",
+        labels: ["status": "success"]
+    )
+
+    static let totalFailedTokensRefreshed = MetricsInitializer.global.makeCounter(
+        name: "total_token_refresh_attempts",
+        labels: ["status": "fail"]
+    )
+
+    static let totalLogoutAttempted = MetricsInitializer.global.makeCounter(
+        name: "total_logout_attempts",
+        labels: ["status": "success"]
+    )
+
+    static let totalFailedLogoutAttempted = MetricsInitializer.global.makeCounter(
+        name: "total_logout_attempts",
+        labels: ["status": "fail"]
+    )
+
+    static let totalProfilePicturesGenerated = MetricsInitializer.global.makeCounter(
+        name: "total_profile_pictures_generated",
+        labels: [
+            "status": "success",
+        ]
+    )
+
+    static let totalProfilePicturesGenerationFailed = MetricsInitializer.global.makeCounter(
+        name: "total_profile_pictures_generated",
+        labels: [
+            "status": "fail",
+        ]
+    )
+
+    static let totalTextMessagesSent = MetricsInitializer.global.makeCounter(
+        name: "total_text_messages_sent",
+        labels: [
+            "status": "success",
+        ]
+    )
+
+    static let totalTextMessagesSentFailed = MetricsInitializer.global.makeCounter(
+        name: "total_text_messages_sent",
+        labels: [
+            "status": "fail",
+        ]
+    )
+
+    static let totalDiscordWebhookMessagesSent = MetricsInitializer.global.makeCounter(
+        name: "total_discord_webhook_messages_sent",
+        labels: [
+            "status": "success",
+        ]
+    )
+
+    static let openaiImageGenerationRequests = MetricsInitializer.global.makeCounter(
+        name: "openai_image_generation_requests"
+    )
+
+    static let totalMediaFilesUploadedToTigris = MetricsInitializer.global.makeCounter(
+        name: "total_media_files_uploaded_to_tigris",
+        labels: [
+            "status": "success",
+        ]
+    )
+
+    static let totalMediaFilesUploadedToTigrisFailed = MetricsInitializer.global.makeCounter(
+        name: "total_media_files_uploaded_to_tigris",
+        labels: [
+            "status": "fail",
+        ]
     )
 }

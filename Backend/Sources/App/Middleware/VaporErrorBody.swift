@@ -8,7 +8,7 @@ import Vapor
 
 struct ErrorStringMiddleware: Middleware {
     func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
-        next.respond(to: request).flatMapError { error in
+        next.respond(to: request).flatMapErrorThrowing { error in
             let response = Response()
             response.status = .internalServerError
             response.headers.replaceOrAdd(name: .contentType, value: "application/json; charset=utf-8")
@@ -36,8 +36,9 @@ struct ErrorStringMiddleware: Middleware {
             let jsonResponse: ResponseError = .init(error: reason)
 
             do {
-                // TODO: Fix
-                response.body = try .init(data: JSONEncoder().encode(jsonResponse))
+                response.body = try .init(
+                    data: jsonResponse.encodeToData()
+                )
             } catch {
                 print(error)
                 response.body = .init(
@@ -45,7 +46,7 @@ struct ErrorStringMiddleware: Middleware {
                 )
             }
 
-            return request.eventLoop.makeSucceededFuture(response)
+            return response
         }
     }
 }

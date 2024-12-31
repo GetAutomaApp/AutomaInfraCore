@@ -72,8 +72,7 @@ struct AuthenticationService: Sendable {
     // This method will create a new User with a specific phone number
     func register(payload: AuthPhoneCodePayloadDTO,
                   signer: Request.JWT) async throws -> AuthenticationTokensPayloadDTO
-    {
-        let messageService = MessageService()
+    { let messageService = MessageService()
         let profilePictureService = ProfilePictureService(logger: logger)
 
         try await getValidateAndDeleteCode(
@@ -98,6 +97,8 @@ struct AuthenticationService: Sendable {
         user.profilePictureKey = profilePictureKey
 
         try await user.save(on: writeDb)
+
+        BackendMetrics.totalUsersCreated.increment()
 
         logger.info(
             "Successfully Registered User",
@@ -138,7 +139,16 @@ struct AuthenticationService: Sendable {
             ]
         )
 
-        Task.detachedLogOnError(to: "AuthenticationService.sendAuthCode", logger: logger) {
+        Task.detachedLogOnError(
+            to: "AuthenticationService.sendAuthCode",
+            logger: logger,
+            onError: { _ in
+                BackendMetrics.totalFailedVerificationCodesSent.increment()
+            },
+            onSuccess: {
+                BackendMetrics.totalSuccessfulVerificationCodesSent.increment()
+            }
+        ) {
             _ = try await messageService.sendSmS(
                 to: phoneNumber,
                 message: MessageFormatterService
@@ -215,29 +225,34 @@ struct AuthenticationService: Sendable {
 
     // 4. Refresh Token
     func refreshToken(userId: String, signer: Request.JWT) async throws -> String {
-        let messageService = MessageService()
+        do {
+            let messageService = MessageService()
 
-        try messageService
-            .sendDiscordWebhookAppEvent(
-                input: userId,
-                event: "is refreshing their access token",
-                logger: logger
+            try messageService
+                .sendDiscordWebhookAppEvent(
+                    input: userId,
+                    event: "is refreshing their access token",
+                    logger: logger
+                )
+
+            logger.info(
+                "Refreshing user access token",
+                metadata: [
+                    "to": .string("AuthenticationService.refreshToken"),
+                    "userId": .string(userId),
+                ]
             )
 
-        logger.info(
-            "Refreshing user access token",
-            metadata: [
-                "to": .string("AuthenticationService.refreshToken"),
-                "userId": .string(userId),
-            ]
-        )
-
-        return try await generateAccessToken(
-            userId: userId,
-            expiresIn: 86400,
-            type: .access,
-            signer: signer
-        )
+            return try await generateAccessToken(
+                userId: userId,
+                expiresIn: 86400,
+                type: .access,
+                signer: signer
+            )
+        } catch {
+            BackendMetrics.totalFailedTokensRefreshed.increment()
+            throw error
+        }
     }
 
     // 5. Logout
@@ -268,7 +283,14 @@ struct AuthenticationService: Sendable {
     }
 
     func doesUserExist(phoneNumber: String) async throws -> Bool {
-        try await UserModel.query(on: readDb).filter(\.$phoneNumber == phoneNumber).first() != nil
+        let exists = try await UserModel.query(on: readDb).filter(\.$phoneNumber == phoneNumber).first()
+
+        if let exists {
+            BackendMetrics.totalUsersAlreadyExists.increment()
+            return true
+        }
+
+        return false
     }
 
     func generateAccessToken(

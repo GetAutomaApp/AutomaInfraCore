@@ -58,19 +58,25 @@ struct TigrisService: ~Copyable {
         expires: Date? = nil,
         contentType: String? = nil
     ) async throws -> S3.PutObjectOutput? {
-        let path = try decodeS3Path(input)
+        do {
+            let path = try decodeS3Path(input)
 
-        let output = try await client
-            .putObject(
-                acl: acl,
-                body: .init(buffer: content),
-                bucket: path.bucket,
-                contentType: contentType, expires: expires,
-                key: path.key,
-                metadata: metadata
-            )
+            let output = try await client
+                .putObject(
+                    acl: acl,
+                    body: .init(buffer: content),
+                    bucket: path.bucket,
+                    contentType: contentType, expires: expires,
+                    key: path.key,
+                    metadata: metadata
+                )
 
-        return output
+            BackendMetrics.totalMediaFilesUploadedToTigris.increment()
+            return output
+        } catch {
+            BackendMetrics.totalMediaFilesUploadedToTigrisFailed.increment()
+            throw error
+        }
     }
 
     func decodeS3Path(_ s3Path: String) throws -> TigrisService.S3Path {

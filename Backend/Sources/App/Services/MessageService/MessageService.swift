@@ -19,45 +19,62 @@ struct MessageService: Decodable {
         message: String,
         logger: Logger
     ) async throws -> String {
-        let client = try await SNSClient()
+        do {
+            let client = try await SNSClient()
 
-        let output = try await client.publish(input: .init(
-            message: message,
-            phoneNumber: phoneNumber
-        ))
+            let output = try await client.publish(input: .init(
+                message: message,
+                phoneNumber: phoneNumber
+            ))
 
-        try sendDiscordWebhookAppEvent(
-            input: "random -> \(phoneNumber)",
-            event: "sending message: `\(message)`",
-            logger: logger
-        )
-
-        if let messageId = output.messageId {
-            logger.info(
-                "Sent sms message to user",
-                metadata: [
-                    "to": .string("MessageService.sendSmS"),
-                    "messageId": .string(messageId),
-                    "phoneNumber": .string(phoneNumber),
-                    "message": .string(message),
-                    "sequenceNumber": .string(output.sequenceNumber ?? ""),
-                ]
+            try sendDiscordWebhookAppEvent(
+                input: "random -> \(phoneNumber)",
+                event: "sending message: `\(message)`",
+                logger: logger
             )
-            return messageId
-        } else {
+
+            if let messageId = output.messageId {
+                logger.info(
+                    "Sent sms message to user",
+                    metadata: [
+                        "to": .string("MessageService.sendSmS"),
+                        "messageId": .string(messageId),
+                        "phoneNumber": .string(phoneNumber),
+                        "message": .string(message),
+                        "sequenceNumber": .string(output.sequenceNumber ?? ""),
+                    ]
+                )
+                BackendMetrics.totalTextMessagesSent.increment()
+                return messageId
+            } else {
+                logger.error(
+                    "Failed to send message to user",
+                    metadata: [
+                        "to": .string("MessageService.sendSmS"),
+                        "phoneNumber": .string(phoneNumber),
+                        "message": .string(message),
+                    ]
+                )
+                throw GenericErrors.smsMessageFailed
+            }
+        } catch {
             logger.error(
-                "Failed to send message to user",
+                "Failed to send message",
                 metadata: [
                     "to": .string("MessageService.sendSmS"),
                     "phoneNumber": .string(phoneNumber),
                     "message": .string(message),
+                    "error": .string(error.localizedDescription),
                 ]
             )
-            throw GenericErrors.smsMessageFailed
+            BackendMetrics.totalTextMessagesSentFailed.increment()
+            throw error
         }
     }
 
     func sendWebhookMessage(webhookURL: URL, message: DiscordWebhookMessage, logger: Logger) async throws {
+        BackendMetrics.totalDiscordWebhookMessagesSent.increment()
+
         if try Environment.getOrThrow("ENVIRONMENT") == "local" {
             return
         }
@@ -85,6 +102,7 @@ struct MessageService: Decodable {
                     "response": .string(String(data: data, encoding: .utf8) ?? ""),
                 ]
             )
+
         } catch {
             logger.error(
                 "Failed to send Discord webhook message",

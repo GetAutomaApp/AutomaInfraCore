@@ -19,6 +19,8 @@ extension Task where Success == Void, Failure == any Error {
     static func detachedLogOnError(
         to: String,
         logger: Logger,
+        onError: @escaping @Sendable (Error) async throws -> Void = { _ in },
+        onSuccess: @escaping @Sendable () async throws -> Void = {},
         method: @escaping @Sendable () async throws -> Void
     ) {
         Task.detached {
@@ -35,7 +37,10 @@ extension Task where Success == Void, Failure == any Error {
                         ]),
                     ]
                 )
+                try await onError(error)
             }
+
+            try await onSuccess()
         }
     }
 }
