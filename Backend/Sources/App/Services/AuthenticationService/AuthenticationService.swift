@@ -1,5 +1,5 @@
 // AuthenticationService.swift
-// Copyright (c) 2024 GetAutomaApp
+// Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
@@ -283,9 +283,9 @@ struct AuthenticationService: Sendable {
     }
 
     func doesUserExist(phoneNumber: String) async throws -> Bool {
-        let exists = try await UserModel.query(on: readDb).filter(\.$phoneNumber == phoneNumber).first()
+        let exists = try await UserModel.query(on: readDb).filter(\.$phoneNumber == phoneNumber).first() != nil
 
-        if let exists {
+        if exists {
             BackendMetric.totalUsersAlreadyExists.increment()
             return true
         }
