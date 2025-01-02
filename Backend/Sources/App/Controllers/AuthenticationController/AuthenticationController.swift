@@ -41,7 +41,7 @@ struct AuthenticationController: RouteCollection {
         }
 
         _ = try await authService.sendAuthCode(
-            phoneNumber: dto.phoneNumber
+            phoneNumber: dto.phoneNumber, queue: req.queue
         )
 
         return .noContent
@@ -81,7 +81,7 @@ struct AuthenticationController: RouteCollection {
         }
 
         _ = try await authService.sendAuthCode(
-            phoneNumber: dto.phoneNumber
+            phoneNumber: dto.phoneNumber, queue: req.queue
         )
 
         return .noContent

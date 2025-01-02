@@ -6,6 +6,7 @@
 import Fluent
 import FluentPostgresDriver
 import JWT
+import QueuesFluentDriver
 import Vapor
 
 // Configures your application
@@ -32,6 +33,7 @@ public func configure(_ app: Application) async throws {
             url: regionalDatabaseURL!
         ), as: .readOnly)
 
+        // Migrations
         app.migrations.add(CreateUserStorageItem())
         app.migrations.add(UserMigration1735067533())
         app.migrations.add(AuthenticationCodeMigration1735069859())
@@ -39,16 +41,34 @@ public func configure(_ app: Application) async throws {
         app.migrations.add(JWTTokenShouldBeBoundToParentUserObjectMigration1735140054())
         app.migrations.add(UserProfileAddProfilePictureMigration1735216565())
         app.migrations.add(UserProfileConvertIdToImageKeyMigration1735294202())
+        app.migrations.add(JobMetadataMigrate())
 
         try await app.autoMigrate()
 
+        // Controllers
         try app.register(collection: UserStorageController())
         try app.register(collection: AuthenticationController())
-        try app.register(collection: PrometheusController())
 
+        // Authentication
         await app.jwt.keys
             .add(hmac: .init(stringLiteral: Environment.get("JWT_ENCRYPTION_SECRET")!), digestAlgorithm: .sha256)
+
+        // Queues
+        // Future: get prometheus metrics to be submitted to prom & not scraped!
+        // We would like to run this in a separate process on a seperate fly app
+        app.queues.use(.fluent(useSoftDeletes: true))
+        try app.queues.startInProcessJobs(on: .default)
+        app.queues.configuration.workerCount = 1
+
+        // Jobs
+        app.queues.add(TransactionalMessageAsyncJob())
+
+        // Schedules
     }
+}
+
+public func configureMetrics(_ app: Application) async throws {
+    try app.register(collection: PrometheusController())
 }
 
 extension DatabaseID {

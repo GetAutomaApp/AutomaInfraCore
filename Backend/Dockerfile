@@ -83,4 +83,4 @@ EXPOSE 8080
 
 # Start the Vapor service when the image is run, default to listening on 8080 in production environment
 ENTRYPOINT ["./App"]
-CMD ["serve", "--hostname", "0.0.0.0", "--port", "8080"]
+CMD ["eval", "$RUN_COMMAND"]

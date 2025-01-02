@@ -1,5 +1,5 @@
 {
-  "originHash" : "9526615dd04912c91c6c21e7a29eed4722d6a3a1d6bbadb6989ad66b034f22a6",
+  "originHash" : "2ced795052838378a59aa4d648bff4213fca5a1b239f949aa89906ee622f48e3",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -143,6 +143,15 @@
       "state" : {
         "revision" : "fd0e415a705c490499f983639b04f491a2ed9d99",
         "version" : "1.23.0"
+      }
+    },
+    {
+      "identity" : "queues",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/queues.git",
+      "state" : {
+        "revision" : "7511f2d573f032c4d5e6929d2bc36f5191d1c424",
+        "version" : "1.17.0"
       }
     },
     {
@@ -386,6 +395,15 @@
       "state" : {
         "revision" : "1f29415ed888a942bb23486ca9e422123a07e70f",
         "version" : "4.110.0"
+      }
+    },
+    {
+      "identity" : "vapor-queues-fluent-driver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/m-barthelemy/vapor-queues-fluent-driver.git",
+      "state" : {
+        "revision" : "e2ce6775850bdbe277cb2e5792d05eff42434f52",
+        "version" : "3.0.0-beta1"
       }
     },
     {

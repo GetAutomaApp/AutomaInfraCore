@@ -164,10 +164,6 @@ let fileTypes: [FileType] = [
         ]
     ),
     FileType(
-        name: "proc",
-        configurations: []
-    ),
-    FileType(
         name: "backend-service",
         configurations: [
             FileConfig(
@@ -207,6 +203,28 @@ let fileTypes: [FileType] = [
                 templates: [
                     "__CAPNAME__ControllerInteractorUnitTests.swift.template",
                     "__CAPNAME__ControllerInteractorIntegrationTests.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "async-job",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/backend-async-job/",
+                toDirectory: "Sources/App/Procs/Jobs/",
+                nestToDirectory: "__CAPNAME__AsyncJob/",
+                templates: [
+                    "__CAPNAME__AsyncJob.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/backend-async-job/",
+                toDirectory: "Tests/Procs/Jobs/",
+                nestToDirectory: "__CAPNAME__AsyncJobTests/",
+                templates: [
+                    "__CAPNAME__AsyncJobUnitTests.swift.template",
+                    "__CAPNAME__AsyncJobIntegrationTests.swift.template",
                 ]
             ),
         ]

@@ -6,6 +6,7 @@
 import DataTypes
 import Fluent
 import JWT
+import Queues
 import Vapor
 
 struct AuthenticationService: Sendable {
@@ -125,7 +126,7 @@ struct AuthenticationService: Sendable {
     // 2. Send Login Auth Code
     // This will also be used to send the user a registeration code
     // We don't care if the user exists in this route or not
-    func sendAuthCode(phoneNumber: String) async throws -> String {
+    func sendAuthCode(phoneNumber: String, queue: Queue) async throws -> String {
         let messageService = MessageService()
 
         let code = RandomService.randomCode()
@@ -149,11 +150,15 @@ struct AuthenticationService: Sendable {
                 BackendMetric.totalSuccessfulVerificationCodesSent.increment()
             }
         ) {
-            _ = try await messageService.sendSmS(
-                to: phoneNumber,
-                message: MessageFormatterService
-                    .craftVerificationCodeMessage(code: code),
-                logger: logger
+            try await queue.dispatch(
+                TransactionalMessageAsyncJob.self,
+                .init(
+                    content: MessageFormatterService
+                        .craftVerificationCodeMessage(
+                            code: code
+                        ),
+                    toPhoneNumber: phoneNumber
+                )
             )
 
             let codeModelId = UUID()
