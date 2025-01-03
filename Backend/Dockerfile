@@ -60,6 +60,7 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
       libjemalloc2 \
       ca-certificates \
       tzdata \
+    && apt-get install bash \
     && apt-get install -y openssl libssl-dev libcurl4 libxml2 \
     && rm -r /var/lib/apt/lists/*
 
@@ -81,6 +82,4 @@ USER vapor:vapor
 # Let Docker bind to port 8080
 EXPOSE 8080
 
-# Start the Vapor service when the image is run, default to listening on 8080 in production environment
-ENTRYPOINT ["./App"]
-CMD ["eval", "$RUN_COMMAND"]
+CMD /bin/bash -c "eval './App $RUN_COMMAND'"

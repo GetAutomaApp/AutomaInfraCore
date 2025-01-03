@@ -3,26 +3,18 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'automa-backend-__FLY_ENVIRONMENT__'
+app = 'automa-backend-workers-__FLY_ENVIRONMENT__'
 primary_region = 'jnb'
 
 [build]
 
 [env]
-  RUN_COMMAND = "queues"
-
-[http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = 'stop'
-  auto_start_machines = true
-  min_machines_running = 1
-  processes = ['app']
+  RUN_COMMAND = "vapor-queues"
 
 [[vm]]
-  memory = '2gb'
+  memory = '256mb'
   cpu_kind = 'shared'
-  cpus = 4
+  cpus = 1
 
 [metrics]
   port = 9113

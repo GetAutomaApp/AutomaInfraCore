@@ -229,6 +229,19 @@ let fileTypes: [FileType] = [
             ),
         ]
     ),
+    FileType(
+        name: "command",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/command/",
+                toDirectory: "Sources/App/Commands/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME_LOWER__.swift.template",
+                ]
+            ),
+        ]
+    ),
 ]
 
 struct GenerateAppComponent: Command {

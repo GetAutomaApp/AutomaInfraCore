@@ -15,8 +15,6 @@ struct ErrorStringMiddleware: Middleware {
 
             let reason: DataTypes.GenericErrors = if let genericError = error as? DataTypes.GenericErrors {
                 genericError
-            } else if let _ = error as? LocalizedError {
-                GenericErrors.unknownError
             } else {
                 GenericErrors.unknownError
             }
