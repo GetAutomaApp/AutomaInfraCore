@@ -27,7 +27,7 @@ struct AuthenticationController: RouteCollection {
     }
 
     @Sendable
-    func registerCode(req: Request) async throws -> HTTPStatus {
+    func registerCode(req: Request) async throws -> AuthenticationCodeResponseDTO {
         let dto = try req.content.decode(PhoneNumberPayloadDTO.self)
 
         let authService = AuthenticationService(
@@ -40,11 +40,9 @@ struct AuthenticationController: RouteCollection {
             throw GenericErrors.userAlreadyExists
         }
 
-        _ = try await authService.sendAuthCode(
+        return try await authService.sendAuthCode(
             phoneNumber: dto.phoneNumber, queue: req.queue
         )
-
-        return .noContent
     }
 
     @Sendable
@@ -67,7 +65,7 @@ struct AuthenticationController: RouteCollection {
     }
 
     @Sendable
-    func loginCode(req: Request) async throws -> HTTPStatus {
+    func loginCode(req: Request) async throws -> AuthenticationCodeResponseDTO {
         let dto = try req.content.decode(PhoneNumberPayloadDTO.self)
 
         let authService = AuthenticationService(
@@ -80,11 +78,9 @@ struct AuthenticationController: RouteCollection {
             throw GenericErrors.userNotFound
         }
 
-        _ = try await authService.sendAuthCode(
+        return try await authService.sendAuthCode(
             phoneNumber: dto.phoneNumber, queue: req.queue
         )
-
-        return .noContent
     }
 
     @Sendable

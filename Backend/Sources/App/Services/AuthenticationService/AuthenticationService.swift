@@ -126,9 +126,7 @@ struct AuthenticationService: Sendable {
     // 2. Send Login Auth Code
     // This will also be used to send the user a registeration code
     // We don't care if the user exists in this route or not
-    func sendAuthCode(phoneNumber: String, queue: Queue) async throws -> String {
-        let messageService = MessageService()
-
+    func sendAuthCode(phoneNumber: String, queue: Queue) async throws -> AuthenticationCodeResponseDTO {
         let code = RandomService.randomCode()
 
         logger.info(
@@ -139,6 +137,19 @@ struct AuthenticationService: Sendable {
                 "code": .string(code),
             ]
         )
+
+        let distance: Double = 60
+        let dateToCheck = Date()
+        if
+            let mostRecentCodeSent = try await AuthenticationCodeModel
+            .query(on: readDb)
+            .filter(\.$createdAt > dateToCheck.addingTimeInterval(-distance))
+            .filter(\.$phoneNumber == phoneNumber)
+            .first() // TODO: Create ConfigRoute (configure client remotely, change this to an env var
+        {
+            let timeout = distance - (mostRecentCodeSent.createdAt?.distance(to: dateToCheck) ?? distance)
+            return .init(success: timeout == 0, timeout: timeout)
+        }
 
         Task.detachedLogOnError(
             to: "AuthenticationService.sendAuthCode",
@@ -183,7 +194,7 @@ struct AuthenticationService: Sendable {
             )
         }
 
-        return code
+        return .init(success: true, timeout: 0)
     }
 
     // 3. Login
