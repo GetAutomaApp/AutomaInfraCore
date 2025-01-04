@@ -264,10 +264,15 @@ struct GenerateAppComponent: Command {
             help: "The directory you want to nest the component into (added to the default path)."
         )
         var nestedDir: String?
+
+        @Flag(name: "copy", help: "Copy files to the destination directory.")
+        var copy: Bool
     }
 
     func run(using _: CommandContext, signature: Signature) throws {
         let componentName = signature.filename
+        let copy = signature.copy
+        var output = ""
 
         for fileType in fileTypes {
             guard fileType.name == signature.component else { continue }
@@ -300,26 +305,36 @@ struct GenerateAppComponent: Command {
                     let destinationFile =
                         "\(destinationPath)\(fileNameFormatted)"
 
-                    if FileManager.default.fileExists(atPath: destinationFile) {
+                    // Ignore this check when we are copying by appending !copy
+                    if FileManager.default.fileExists(atPath: destinationFile), !copy {
                         throw Abort(
                             .badRequest,
                             reason: "Component implementation '\(destinationFile)' already exists."
                         )
                     }
 
-                    try moveAndRenameFile(
+                    output += try moveAndRenameFile(
                         source: sourceFile,
                         destination: destinationFile,
-                        componentName: componentName
+                        componentName: componentName,
+                        shouldWrite: !copy
                     )
                 }
 
                 print("Successfully created a \(fileType.name) called '\(componentName)' in '\(toNestedDir)'.")
             }
         }
+
+        if copy {
+            let shell = Shell()
+
+            let commandOutput = shell.run("echo '\(output)' | pbcopy")
+        }
     }
 
-    func moveAndRenameFile(source: String, destination: String, componentName: String) throws {
+    func moveAndRenameFile(source: String, destination: String, componentName: String,
+                           shouldWrite: Bool = true) throws -> String
+    {
         // Check if the source file exists before trying to read it
         guard FileManager.default.fileExists(atPath: source) else {
             throw Abort(.notFound, reason: "Template file not found: \(source)")
@@ -332,9 +347,11 @@ struct GenerateAppComponent: Command {
         content = rename(text: content, componentName: componentName)
 
         // Write the content to the new file
-        try content.write(toFile: destination, atomically: true, encoding: .utf8)
+        if shouldWrite {
+            try content.write(toFile: destination, atomically: true, encoding: .utf8)
+        }
 
-        print(destination)
+        return "\(destination)\n\(content)"
     }
 
     func rename(text: String, componentName: String) -> String {

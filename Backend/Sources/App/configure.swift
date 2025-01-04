@@ -18,7 +18,12 @@ public func configure(_ app: Application) async throws {
 
     app.commands.use(GenerateAppComponent(), as: "generate")
     app.commands.use(FlyConfigGenerator(), as: "fly-config")
-    app.asyncCommands.use(QueuesCommand(application: app), as: "vapor-queues")
+
+    // Errors are getting thrown locally, this prevents run App & ./App execution diffs
+    let environment = Environment.get("ENVIRONMENT") ?? "local"
+    if environment != "local" {
+        app.asyncCommands.use(QueuesCommand(application: app), as: "vapor-queues")
+    }
 
     let primaryDatabaseURL = Environment.get("PRIMARY_POSTGRES_URL")
 
@@ -56,20 +61,12 @@ public func configure(_ app: Application) async throws {
             .add(hmac: .init(stringLiteral: Environment.get("JWT_ENCRYPTION_SECRET")!), digestAlgorithm: .sha256)
 
         // Queues
-        // Future: get prometheus metrics to be submitted to prom & not scraped!
-        // We would like to run this in a separate process on a seperate fly app
         app.queues.use(.fluent(useSoftDeletes: true))
         app.queues.configuration.workerCount = 1
 
         // Jobs
         app.queues.add(TransactionalMessageAsyncJob())
-
-        // Schedules
     }
-}
-
-public func configureMetrics(_ app: Application) async throws {
-    try app.register(collection: PrometheusController())
 }
 
 extension DatabaseID {

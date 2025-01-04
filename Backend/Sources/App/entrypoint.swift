@@ -3,6 +3,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+import FlyingFox
 import Logging
 import Metrics
 import NIOCore
@@ -17,7 +18,20 @@ enum Entrypoint {
         try LoggingSystem.bootstrap(from: &env)
 
         let app = try await Application.make(env)
-        let metricsApp = try await Application.make(env)
+
+        Task {
+            let server = HTTPServer(port: 9113)
+
+            await server.appendRoute("Prometheus/metrics") { _ in
+                let metrics = MetricsService.global.emit()
+                return HTTPResponse(
+                    statusCode: .ok,
+                    body: metrics
+                )
+            }
+
+            try await server.run()
+        }
 
         // This attempts to install NIO as the Swift Concurrency global executor.
         // You can enable it if you'd like to reduce the amount of context switching between NIO and Swift Concurrency.
@@ -32,18 +46,14 @@ enum Entrypoint {
 
         do {
             try await configure(app)
-            try await configureMetrics(metricsApp)
         } catch {
             app.logger.report(error: error)
             try? await app.asyncShutdown()
             throw error
         }
-        Task.detached {
-            try await metricsApp.server
-                .start(address: .hostname("0.0.0.0", port: 9113))
-        }
         try await app.execute()
         try await app.asyncShutdown()
-        try await metricsApp.asyncShutdown()
     }
+
+    static func startMetricsServer() {}
 }

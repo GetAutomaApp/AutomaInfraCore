@@ -22,6 +22,7 @@ let package = Package(
         .package(url: "https://github.com/soto-project/soto.git", from: "7.3.0"),
         .package(url: "https://github.com/swift-server/swift-prometheus.git", from: "2.0.0"),
         .package(url: "https://github.com/m-barthelemy/vapor-queues-fluent-driver.git", from: "3.0.0-beta1"),
+        .package(url: "https://github.com/swhitty/FlyingFox.git", .upToNextMajor(from: "0.20.0")),
     ],
     targets: [
         .executableTarget(
@@ -40,6 +41,7 @@ let package = Package(
                 .product(name: "SotoSNS", package: "soto"),
                 .product(name: "Prometheus", package: "swift-prometheus"),
                 .product(name: "QueuesFluentDriver", package: "vapor-queues-fluent-driver"),
+                .product(name: "FlyingFox", package: "FlyingFox"),
             ],
             exclude: [
                 "Documentation.md",

@@ -9,6 +9,8 @@
 //
 //  Created by Simon Ferns on 12/30/24.
 //
+import FlyingFox
+import Foundation
 import Metrics
 import Prometheus
 
@@ -25,10 +27,11 @@ struct MetricsService {
         prometheus = prometheusRegistry
     }
 
-    func emit() -> String {
+    func emit() -> Data {
         var buffer = [UInt8]()
         prometheus.emit(into: &buffer)
-        return String(decoding: buffer, as: Unicode.UTF8.self)
+        let data = String(decoding: buffer, as: Unicode.UTF8.self)
+        return Data(data.utf8)
     }
 
     func makeCounter(name: String, labels: [String: String] = [:]) -> Prometheus.Counter {
