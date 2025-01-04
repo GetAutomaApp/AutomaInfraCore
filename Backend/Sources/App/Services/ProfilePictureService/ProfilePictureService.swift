@@ -151,6 +151,15 @@ struct ProfilePictureService {
             totalAttemptsLeft -= 1
         } while excludeText && hasText && totalAttemptsLeft > 0
 
+        logger.info(
+            "Attempted to generate an image without text",
+            metadata: [
+                "to": .string("ProfilePictureService.generateImage"),
+                "totalAttempts": .string("\(totalRegenerationAttempts - totalAttemptsLeft)"),
+                "hasText": .string("\(hasText)"),
+            ]
+        )
+
         guard let imageData else {
             throw GenericErrors.missingImage
         }
