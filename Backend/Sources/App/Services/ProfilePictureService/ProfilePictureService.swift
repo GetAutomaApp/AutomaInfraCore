@@ -5,6 +5,7 @@
 
 import DataTypes
 import Fluent
+import OpenAI
 import Vapor
 
 struct ProfilePictureService {
@@ -15,9 +16,10 @@ struct ProfilePictureService {
     }
 
     // TODO: Feature enablement to choose one of 10 randomly generated profile pictures when openai services are down
-    func createProfilePicture(for user: UserDTO) async throws -> String {
+    func createProfilePicture(for user: UserDTO, totalRegenerationAttempts: Int = 3,
+                              excludeText: Bool = true) async throws -> String
+    {
         do {
-            let openaiService = try OpenAiService(logger: logger)
             let tigrisService = try TigrisService()
             let messageService = MessageService()
 
@@ -46,11 +48,11 @@ struct ProfilePictureService {
                     logger: logger
                 )
 
-            let images = try await openaiService.createImage(prompt).data
-
-            guard let image = images[0].b64Json, let data = Data(base64Encoded: image) else {
-                throw GenericErrors.missingImage
-            }
+            let (images, imageData) = try await generateImage(
+                totalRegenerationAttempts: totalRegenerationAttempts,
+                prompt: prompt,
+                excludeText: excludeText
+            )
 
             let key = "profile-picture/v1/\(user.username)-\(UUID().uuidString).jpg" // TODO: Ensure openai uses JPEG
             let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
@@ -63,7 +65,7 @@ struct ProfilePictureService {
                 tigrisService
                     .put(
                         input: s3Url,
-                        content: .init(data: data),
+                        content: .init(data: imageData),
                         acl: .publicRead,
                         contentType: "image/jpeg"
                     ),
@@ -115,5 +117,44 @@ struct ProfilePictureService {
 
             throw error
         }
+    }
+
+    private func generateImage(totalRegenerationAttempts: Int, prompt: ImagesQuery,
+                               excludeText: Bool) async throws -> ([ImagesResult.Image], Data)
+    {
+        let textExtractionService = TextExtractionService()
+        let openaiService = try OpenAiService(logger: logger)
+
+        var hasText = false
+        var image: String?
+        var imageData: Data?
+        var images: [ImagesResult.Image] = []
+        var totalAttemptsLeft = totalRegenerationAttempts
+
+        // If there is still text on the image after 3 attempts, we will ignore the text and continue generating the
+        // image
+        repeat {
+            images = try await openaiService.createImage(prompt).data
+            image = images[0].b64Json
+
+            guard let image else { throw GenericErrors.missingImage }
+
+            imageData = Data(base64Encoded: image)
+
+            guard let imageData else { throw GenericErrors.missingImage }
+
+            hasText = try await !textExtractionService
+                .getText(
+                    from: imageData
+                ).isEmpty
+
+            totalAttemptsLeft -= 1
+        } while excludeText && hasText && totalAttemptsLeft > 0
+
+        guard let imageData else {
+            throw GenericErrors.missingImage
+        }
+
+        return (images, imageData)
     }
 }

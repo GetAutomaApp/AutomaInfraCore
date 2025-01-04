@@ -42,6 +42,7 @@ let package = Package(
                 .product(name: "Prometheus", package: "swift-prometheus"),
                 .product(name: "QueuesFluentDriver", package: "vapor-queues-fluent-driver"),
                 .product(name: "FlyingFox", package: "FlyingFox"),
+                .product(name: "SotoTextract", package: "soto"),
             ],
             exclude: [
                 "Documentation.md",
