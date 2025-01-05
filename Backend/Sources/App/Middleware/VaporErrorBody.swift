@@ -12,7 +12,7 @@ struct ErrorStringMiddleware: Middleware {
             let response = Response()
             response.status = .internalServerError
             response.headers.replaceOrAdd(name: .contentType, value: "application/json; charset=utf-8")
-
+                                                        
             let reason: DataTypes.GenericErrors = if let genericError = error as? DataTypes.GenericErrors {
                 genericError
             } else if let error = error as? AbortError {
