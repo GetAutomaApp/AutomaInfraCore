@@ -14,10 +14,14 @@ struct TextExtractionService {
         client = Textract(client: .init())
     }
 
-    func getText(from image: Data) async throws -> String {
-        let response = try await client.detectDocumentText(.init(document: .init(
+    func getText(from image: Data) async throws -> Textract.DetectDocumentTextResponse {
+        try await client.detectDocumentText(.init(document: .init(
             bytes: .base64(image.base64EncodedString())
         )))
+    }
+
+    func getTextToSimpleString(from image: Data) async throws -> String {
+        let response = try await getText(from: image)
 
         var text = ""
         for block in response.blocks! {

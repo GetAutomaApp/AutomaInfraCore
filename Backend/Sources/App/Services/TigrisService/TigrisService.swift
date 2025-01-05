@@ -3,6 +3,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+import DataTypes
 import Fluent
 import SotoS3
 import Vapor
@@ -83,7 +84,7 @@ struct TigrisService: ~Copyable {
         var pathComponents = s3Path.pathComponents
 
         if pathComponents.count < 3 {
-            throw Abort(.conflict, reason: "Invalid S3 path")
+            throw GenericErrors.s3PathTooShort
         }
 
         let bucket = pathComponents[1].description
@@ -106,7 +107,7 @@ struct TigrisService: ~Copyable {
         let url = URL(string: tigrisUrl)
 
         guard let url, let host = url.host() else {
-            throw URLError(.badURL)
+            throw GenericErrors.invalidUrl
         }
 
         if environment == "local" {
@@ -117,7 +118,7 @@ struct TigrisService: ~Copyable {
             guard let returnableUrl = URL(
                 string: "https://\(path.bucket).\(host)/\(path.key)"
             )?.absoluteString else {
-                throw URLError(.badURL)
+                throw GenericErrors.invalidUrl
             }
 
             return returnableUrl

@@ -23,7 +23,7 @@ struct ProfilePictureService {
             let tigrisService = try TigrisService()
             let messageService = MessageService()
 
-            let prompt = AIPromptFormatterService.createProfilePicturePrompt(
+            let prompt = AIPromptFormatterService.createOpenAIProfilePicturePrompt(
                 username: user.username
             )
 
@@ -144,7 +144,7 @@ struct ProfilePictureService {
             guard let imageData else { throw GenericErrors.missingImage }
 
             hasText = try await !textExtractionService
-                .getText(
+                .getTextToSimpleString(
                     from: imageData
                 ).isEmpty
 

@@ -70,13 +70,13 @@ public func configure(_ app: Application) async throws {
 }
 
 extension DatabaseID {
-    static let primary = DatabaseID(string: "primary") // Write DB
-    static let readOnly = DatabaseID(string: "readOnly") // Read-only DB
+    static let primary = DatabaseID(string: "primary")
+    static let readOnly = DatabaseID(string: "readOnly")
 }
 
 extension Request {
     var dbWrite: Database {
-        db(.primary)
+        db(.readOnly)
     }
 
     var dbReadOnly: Database {

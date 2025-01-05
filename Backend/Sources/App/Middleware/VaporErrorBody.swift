@@ -15,12 +15,10 @@ struct ErrorStringMiddleware: Middleware {
 
             let reason: DataTypes.GenericErrors = if let genericError = error as? DataTypes.GenericErrors {
                 genericError
+            } else if let error = error as? AbortError {
+                GenericErrors.abortError
             } else {
                 GenericErrors.unknownError
-            }
-
-            if let error = error as? AbortError {
-                throw error
             }
 
             if reason == .unknownError, let localizedError = error as? LocalizedError {

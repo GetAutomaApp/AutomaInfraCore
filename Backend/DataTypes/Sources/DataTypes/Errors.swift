@@ -20,6 +20,9 @@ public enum GenericErrors: String, Error, Decodable, Encodable {
     case alamofireError
     case networkConnectivityError
     case verificationCodeRateLimit
+    case abortError
+    case s3PathTooShort
+    case invalidUrl
 }
 
 public struct ResponseError: Content {
