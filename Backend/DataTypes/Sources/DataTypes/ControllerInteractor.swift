@@ -97,7 +97,6 @@ public extension BackendControllerInteractor {
             return .init(data: nil, error: error)
         }
 
-        let decoder = JSONDecoder()
         do {
             let value = try K.decodeJSONFromData(data: data)
             return .init(data: value, error: nil)
@@ -180,8 +179,6 @@ public extension BackendControllerInteractor {
         } catch {
             return nil
         }
-
-        return nil
     }
 }
 

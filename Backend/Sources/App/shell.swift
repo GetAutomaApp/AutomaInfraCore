@@ -54,8 +54,6 @@ struct Shell {
 
         let status = Int(task.terminationStatus)
 
-        let out = stdoutOutput?.count ?? 0 > 0 ? stdoutOutput : stderrOutput
-
         return .init(
             stdout: stdoutOutput,
             stderr: stderrOutput,

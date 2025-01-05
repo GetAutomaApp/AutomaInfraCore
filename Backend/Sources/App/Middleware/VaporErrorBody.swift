@@ -19,6 +19,10 @@ struct ErrorStringMiddleware: Middleware {
                 GenericErrors.unknownError
             }
 
+            if let error = error as? AbortError {
+                throw error
+            }
+
             if reason == .unknownError, let localizedError = error as? LocalizedError {
                 request.logger.error(
                     "Unknown Error ocurred",

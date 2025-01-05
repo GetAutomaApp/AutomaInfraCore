@@ -326,9 +326,7 @@ struct GenerateAppComponent: Command {
         }
 
         if copy {
-            let shell = Shell()
-
-            let commandOutput = shell.run("echo '\(output)' | pbcopy")
+            Shell().run("echo '\(output)' | pbcopy")
         }
     }
 

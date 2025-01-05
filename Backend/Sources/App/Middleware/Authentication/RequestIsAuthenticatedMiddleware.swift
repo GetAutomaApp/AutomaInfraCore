@@ -9,6 +9,7 @@ import Vapor
 struct RequestIsAuthenticatedMiddleware: AsyncMiddleware {
     func respond(to request: Request, chainingTo next: AsyncResponder) async throws -> Response {
         let tokenPayload = try await request.jwt.verify(as: JWTTokenPayload.self)
+        let messageService = MessageService()
 
         do {
             let token = try await JwtTokenModel.find(
@@ -44,6 +45,13 @@ struct RequestIsAuthenticatedMiddleware: AsyncMiddleware {
                     "error": .string(error.localizedDescription),
                 ]
             )
+
+            try messageService.sendDiscordAlert(
+                alertTitle: "Error in Authentication Middleware",
+                error: error,
+                logger: request.logger
+            )
+
             throw error
         }
     }

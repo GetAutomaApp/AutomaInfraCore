@@ -120,11 +120,14 @@ struct MessageService: Decodable {
         input: String,
         event: String,
         imageUrl: String? = nil,
-        logger: Logger
+        logger: Logger,
+        withUrl: URL = URL(
+            string: try! Environment.getOrThrow("DISCORD_APP_EVENTS_URL")
+        )!
     ) throws {
         Task.detachedLogOnError(to: "MessageService.sendDiscordWebhookAppEvent", logger: logger) {
             try await sendWebhookMessage(
-                webhookURL: URL(string: Environment.get("DISCORD_APP_EVENTS_URL")!)!,
+                webhookURL: withUrl,
                 message: MessageFormatterService
                     .craftUserEventDiscordWebhookMessage(
                         input: input,
@@ -134,5 +137,18 @@ struct MessageService: Decodable {
                 logger: logger
             )
         }
+    }
+
+    func sendDiscordAlert(
+        alertTitle: String,
+        error: Error,
+        logger: Logger
+    ) throws {
+        try sendDiscordWebhookAppEvent(
+            input: "Critical Error Occurred - \(alertTitle)",
+            event: "\(error) - \(error.localizedDescription)",
+            logger: logger,
+            withUrl: URL(string: Environment.getOrThrow("DISCORD_AUTOMA_ALERTS_WEBHOOK_URL"))!
+        )
     }
 }
