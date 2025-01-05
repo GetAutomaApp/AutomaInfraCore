@@ -10,6 +10,10 @@ disabled_rules:
   - static_over_final_class
   - file_length # Set this to a max of 1500
   - type_body_length # set this to 1500
+  - force_try
+  - function_body_length # Set this to 100
+
+
 
 excluded:
   - '**/.build/**'            # Exclude all .build directories, including nested ones

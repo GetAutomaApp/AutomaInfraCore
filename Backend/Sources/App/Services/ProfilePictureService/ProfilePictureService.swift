@@ -11,10 +11,6 @@ import Vapor
 struct ProfilePictureService {
     let logger: Logger
 
-    init(logger: Logger) {
-        self.logger = logger
-    }
-
     // TODO: Feature enablement to choose one of 10 randomly generated profile pictures when openai services are down
     func createProfilePicture(for user: UserDTO, totalRegenerationAttempts: Int = 3,
                               excludeText: Bool = true) async throws -> String

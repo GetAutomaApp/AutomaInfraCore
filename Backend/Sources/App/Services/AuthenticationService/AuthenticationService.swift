@@ -10,15 +10,9 @@ import Queues
 import Vapor
 
 struct AuthenticationService: Sendable {
-    var writeDb: Database
-    var readDb: Database
-    var logger: Logger
-
-    init(writeDb: Database, readDb: Database, logger: Logger) {
-        self.writeDb = writeDb
-        self.readDb = readDb
-        self.logger = logger
-    }
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
 
     func getValidateAndDeleteCode(phoneNumber: String, code: String) async throws {
         logger.info(

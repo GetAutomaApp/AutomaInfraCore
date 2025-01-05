@@ -11,20 +11,6 @@ struct ShellOutput {
     let exitStatus: Int
     let isError: Bool
     let commad: String
-
-    init(
-        stdout: String?,
-        stderr: String?,
-        exitStatus: Int,
-        isError: Bool,
-        commad: String
-    ) {
-        self.stdout = stdout
-        self.stderr = stderr
-        self.exitStatus = exitStatus
-        self.isError = isError
-        self.commad = commad
-    }
 }
 
 struct Shell {

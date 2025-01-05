@@ -12,10 +12,6 @@ import Foundation
 struct AuthenticationControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
-    init(baseURL: String) {
-        self.baseURL = baseURL
-    }
-
     func makeRegisterCodeRequest(_ phoneNumber: String) async throws {
         let params = try PhoneNumberPayloadDTO(phoneNumber: phoneNumber).encodeToDictionary()
 
