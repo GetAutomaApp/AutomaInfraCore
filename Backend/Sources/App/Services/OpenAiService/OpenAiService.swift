@@ -1,5 +1,5 @@
 // OpenAiService.swift
-// Copyright (c) 2024 GetAutomaApp
+// Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
@@ -22,6 +22,7 @@ struct OpenAiService {
     }
 
     func createImage(_ query: ImagesQuery) async throws -> ImagesResult {
-        try await client.images(query: query)
+        BackendMetric.openaiImageGenerationRequests.increment()
+        return try await client.images(query: query)
     }
 }

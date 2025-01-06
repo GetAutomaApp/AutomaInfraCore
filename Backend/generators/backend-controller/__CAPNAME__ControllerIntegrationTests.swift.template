@@ -4,9 +4,9 @@ import XCTVapor
 final class __CAPNAME__ControllerIntegrationTests: XCTestCase {
     var app: Application!
 
-    override func setUp() {
-        app = Application(.testing)
-        try! configure(app)
+    override func setUp() async throws {
+        app = try! await Application.make(.testing)
+        try! await configure(app)
     }
 
     override func tearDown() {

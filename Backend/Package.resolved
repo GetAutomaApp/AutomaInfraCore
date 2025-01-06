@@ -1,6 +1,15 @@
 {
-  "originHash" : "f1cfbe63325c622da500cb89a3e6f55d1385a8ec7e45c58cb6ffbd94c3630894",
+  "originHash" : "30b961b1a07f6d1080a421cab0f2a3c950b58603d0565e17960a75d14031fc85",
   "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire.git",
+      "state" : {
+        "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
+        "version" : "5.10.2"
+      }
+    },
     {
       "identity" : "async-http-client",
       "kind" : "remoteSourceControl",
@@ -74,6 +83,15 @@
       }
     },
     {
+      "identity" : "flyingfox",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swhitty/FlyingFox.git",
+      "state" : {
+        "revision" : "5653d61252af7f2dd8b43a77fb2a03678290f393",
+        "version" : "0.20.0"
+      }
+    },
+    {
       "identity" : "jmespath.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/adam-fowler/jmespath.swift.git",
@@ -134,6 +152,15 @@
       "state" : {
         "revision" : "fd0e415a705c490499f983639b04f491a2ed9d99",
         "version" : "1.23.0"
+      }
+    },
+    {
+      "identity" : "queues",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/queues.git",
+      "state" : {
+        "revision" : "7511f2d573f032c4d5e6929d2bc36f5191d1c424",
+        "version" : "1.17.0"
       }
     },
     {
@@ -335,6 +362,15 @@
       }
     },
     {
+      "identity" : "swift-prometheus",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-server/swift-prometheus.git",
+      "state" : {
+        "revision" : "bfcd4bbfabe11aae4b035424ee9724582e288501",
+        "version" : "2.0.0"
+      }
+    },
+    {
       "identity" : "swift-service-context",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-service-context.git",
@@ -368,6 +404,15 @@
       "state" : {
         "revision" : "1f29415ed888a942bb23486ca9e422123a07e70f",
         "version" : "4.110.0"
+      }
+    },
+    {
+      "identity" : "vapor-queues-fluent-driver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/m-barthelemy/vapor-queues-fluent-driver.git",
+      "state" : {
+        "revision" : "e2ce6775850bdbe277cb2e5792d05eff42434f52",
+        "version" : "3.0.0-beta1"
       }
     },
     {

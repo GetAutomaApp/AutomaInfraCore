@@ -1,5 +1,5 @@
 // AuthenticationController.swift
-// Copyright (c) 2024 GetAutomaApp
+// Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
@@ -27,7 +27,7 @@ struct AuthenticationController: RouteCollection {
     }
 
     @Sendable
-    func registerCode(req: Request) async throws -> HTTPStatus {
+    func registerCode(req: Request) async throws -> AuthenticationCodeResponseDTO {
         let dto = try req.content.decode(PhoneNumberPayloadDTO.self)
 
         let authService = AuthenticationService(
@@ -40,11 +40,9 @@ struct AuthenticationController: RouteCollection {
             throw GenericErrors.userAlreadyExists
         }
 
-        _ = try await authService.sendAuthCode(
-            phoneNumber: dto.phoneNumber
+        return try await authService.sendAuthCode(
+            phoneNumber: dto.phoneNumber, queue: req.queue
         )
-
-        return .noContent
     }
 
     @Sendable
@@ -67,7 +65,7 @@ struct AuthenticationController: RouteCollection {
     }
 
     @Sendable
-    func loginCode(req: Request) async throws -> HTTPStatus {
+    func loginCode(req: Request) async throws -> AuthenticationCodeResponseDTO {
         let dto = try req.content.decode(PhoneNumberPayloadDTO.self)
 
         let authService = AuthenticationService(
@@ -80,15 +78,9 @@ struct AuthenticationController: RouteCollection {
             throw GenericErrors.userNotFound
         }
 
-        let code = try await authService.sendAuthCode(
-            phoneNumber: dto.phoneNumber
+        return try await authService.sendAuthCode(
+            phoneNumber: dto.phoneNumber, queue: req.queue
         )
-
-        if Environment.get("ENVIRONMENT") == "local" {
-            req.logger.info("sent code `\(code)` to \(dto.phoneNumber) ")
-        }
-
-        return .noContent
     }
 
     @Sendable
@@ -129,12 +121,17 @@ struct AuthenticationController: RouteCollection {
             logger: req.logger
         )
 
-        let refreshedAccessToken = try await authService.refreshToken(
-            userId: token.userId,
-            signer: req.jwt
-        )
-
-        return .init(accessToken: refreshedAccessToken)
+        do {
+            let refreshedAccessToken = try await authService.refreshToken(
+                userId: token.userId,
+                signer: req.jwt
+            )
+            BackendMetric.totalSuccessfulTokensRefreshed.increment()
+            return .init(accessToken: refreshedAccessToken)
+        } catch {
+            BackendMetric.totalFailedTokensRefreshed.increment()
+            throw error
+        }
     }
 
     @Sendable
@@ -143,18 +140,31 @@ struct AuthenticationController: RouteCollection {
 
         let userId = UUID(uuidString: token.userId)
 
-        if let userId {
-            let authService = AuthenticationService(
-                writeDb: req.dbWrite,
-                readDb: req.dbReadOnly,
-                logger: req.logger
-            )
+        do {
+            if let userId {
+                let authService = AuthenticationService(
+                    writeDb: req.dbWrite,
+                    readDb: req.dbReadOnly,
+                    logger: req.logger
+                )
 
-            try await authService.logout(userId: userId)
-        } else {
-            throw GenericErrors.invalidUserId
+                try await authService.logout(userId: userId)
+            } else {
+                throw GenericErrors.invalidUserId
+            }
+        } catch {
+            req.logger.error(
+                "Failed to logout user out",
+                metadata: [
+                    "to": .string("AuthenticationController.logout"),
+                    "error": .string("\(error.localizedDescription)"),
+                ]
+            )
+            BackendMetric.totalFailedLogoutAttempted.increment()
+            throw error
         }
 
+        BackendMetric.totalLogoutAttempted.increment()
         return .ok
     }
 }

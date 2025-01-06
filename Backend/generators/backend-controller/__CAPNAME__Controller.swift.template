@@ -9,5 +9,11 @@ struct __CAPNAME__Controller: RouteCollection {
     }
 
     // use npm run generate  contoller-route <controller name>:<route name> to smartly insert a new route!
+
+
+    @Sendable
+    func request(req: Request) async throws -> HTTPStatus {
+        return .noContent
+    }
 }
 

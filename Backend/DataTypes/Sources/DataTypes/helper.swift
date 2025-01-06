@@ -1,5 +1,5 @@
 // helper.swift
-// Copyright (c) 2024 GetAutomaApp
+// Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
@@ -27,5 +27,9 @@ public extension Content {
                 reason: "Failed to decode JSON to \(Self.self): \(error.localizedDescription)"
             )
         }
+    }
+
+    func encodeToData() throws -> Data {
+        try JSONEncoder().encode(self)
     }
 }

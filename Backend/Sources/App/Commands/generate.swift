@@ -1,5 +1,5 @@
 // generate.swift
-// Copyright (c) 2024 GetAutomaApp
+// Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
@@ -90,11 +90,20 @@ let fileTypes: [FileType] = [
                 ]
             ),
             FileConfig(
-                fromDirectory: "./generators/backend-controller/",
+                fromDirectory: "./generators/controller-interactor/",
                 toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Interactors/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__ControllerInteractor.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/controller-interactor/",
+                toDirectory: "../App/AutomaAppShared/Tests/ControllerInteractors/",
+                nestToDirectory: "__CAPNAME__ControllerTests/",
+                templates: [
+                    "__CAPNAME__ControllerInteractorUnitTests.swift.template",
+                    "__CAPNAME__ControllerInteractorIntegrationTests.swift.template",
                 ]
             ),
         ]
@@ -112,7 +121,7 @@ let fileTypes: [FileType] = [
             ),
             FileConfig(
                 fromDirectory: "./generators/model/",
-                toDirectory: "../DataTypes/Sources/DataTypes/",
+                toDirectory: "./DataTypes/Sources/DataTypes/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__DTO.swift.template",
@@ -133,7 +142,7 @@ let fileTypes: [FileType] = [
         configurations: [
             FileConfig(
                 fromDirectory: "./generators/dto/",
-                toDirectory: "../DataTypes/Sources/DataTypes/",
+                toDirectory: "./DataTypes/Sources/DataTypes/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__DTO.swift.template",
@@ -155,10 +164,6 @@ let fileTypes: [FileType] = [
         ]
     ),
     FileType(
-        name: "proc",
-        configurations: []
-    ),
-    FileType(
         name: "backend-service",
         configurations: [
             FileConfig(
@@ -176,6 +181,63 @@ let fileTypes: [FileType] = [
                 templates: [
                     "__CAPNAME__ServiceIntegrationTests.swift.template",
                     "__CAPNAME__ServiceUnitTests.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "backend-interactor",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/controller-interactor/",
+                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Interactors/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__ControllerInteractor.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/controller-interactor/",
+                toDirectory: "../App/AutomaAppShared/Tests/ControllerInteractors/",
+                nestToDirectory: "__CAPNAME__ControllerTests/",
+                templates: [
+                    "__CAPNAME__ControllerInteractorUnitTests.swift.template",
+                    "__CAPNAME__ControllerInteractorIntegrationTests.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "async-job",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/backend-async-job/",
+                toDirectory: "Sources/App/Procs/Jobs/",
+                nestToDirectory: "__CAPNAME__AsyncJob/",
+                templates: [
+                    "__CAPNAME__AsyncJob.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/backend-async-job/",
+                toDirectory: "Tests/Procs/Jobs/",
+                nestToDirectory: "__CAPNAME__AsyncJobTests/",
+                templates: [
+                    "__CAPNAME__AsyncJobUnitTests.swift.template",
+                    "__CAPNAME__AsyncJobIntegrationTests.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "command",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/command/",
+                toDirectory: "Sources/App/Commands/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME_LOWER__.swift.template",
                 ]
             ),
         ]
@@ -202,10 +264,15 @@ struct GenerateAppComponent: Command {
             help: "The directory you want to nest the component into (added to the default path)."
         )
         var nestedDir: String?
+
+        @Flag(name: "copy", help: "Copy files to the destination directory.")
+        var copy: Bool
     }
 
     func run(using _: CommandContext, signature: Signature) throws {
         let componentName = signature.filename
+        let copy = signature.copy
+        var output = ""
 
         for fileType in fileTypes {
             guard fileType.name == signature.component else { continue }
@@ -238,26 +305,34 @@ struct GenerateAppComponent: Command {
                     let destinationFile =
                         "\(destinationPath)\(fileNameFormatted)"
 
-                    if FileManager.default.fileExists(atPath: destinationFile) {
+                    // Ignore this check when we are copying by appending !copy
+                    if FileManager.default.fileExists(atPath: destinationFile), !copy {
                         throw Abort(
                             .badRequest,
                             reason: "Component implementation '\(destinationFile)' already exists."
                         )
                     }
 
-                    try moveAndRenameFile(
+                    output += try moveAndRenameFile(
                         source: sourceFile,
                         destination: destinationFile,
-                        componentName: componentName
+                        componentName: componentName,
+                        shouldWrite: !copy
                     )
                 }
 
                 print("Successfully created a \(fileType.name) called '\(componentName)' in '\(toNestedDir)'.")
             }
         }
+
+        if copy {
+            Shell().run("echo '\(output)' | pbcopy")
+        }
     }
 
-    func moveAndRenameFile(source: String, destination: String, componentName: String) throws {
+    func moveAndRenameFile(source: String, destination: String, componentName: String,
+                           shouldWrite: Bool = true) throws -> String
+    {
         // Check if the source file exists before trying to read it
         guard FileManager.default.fileExists(atPath: source) else {
             throw Abort(.notFound, reason: "Template file not found: \(source)")
@@ -270,9 +345,11 @@ struct GenerateAppComponent: Command {
         content = rename(text: content, componentName: componentName)
 
         // Write the content to the new file
-        try content.write(toFile: destination, atomically: true, encoding: .utf8)
+        if shouldWrite {
+            try content.write(toFile: destination, atomically: true, encoding: .utf8)
+        }
 
-        print(destination)
+        return "\(destination)\n\(content)"
     }
 
     func rename(text: String, componentName: String) -> String {

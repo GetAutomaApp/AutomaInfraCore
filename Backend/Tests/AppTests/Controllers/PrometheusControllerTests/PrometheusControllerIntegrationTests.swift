@@ -1,17 +1,17 @@
-// RandomServiceUnitTests.swift
-// Copyright (c) 2024 GetAutomaApp
+// PrometheusControllerIntegrationTests.swift
+// Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 @testable import App
 import XCTVapor
 
-final class RandomControllerUnitTests: XCTestCase {
+final class PrometheusControllerIntegrationTests: XCTestCase {
     var app: Application!
 
-    override func setUp() {
-        app = Application(.testing)
-        try! configure(app)
+    override func setUp() async throws {
+        app = try! await Application.make(.testing)
+        try! await configure(app)
     }
 
     override func tearDown() {
@@ -19,7 +19,7 @@ final class RandomControllerUnitTests: XCTestCase {
     }
 
     func testRequest() throws {
-        try app.test(.GET, "Random/request") { res in
+        try app.test(.GET, "Prometheus/request") { res in
             XCTAssertEqual(res.status, .ok)
             // Add more assertions based on the expected response
         }

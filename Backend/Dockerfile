@@ -17,11 +17,12 @@ WORKDIR /build
 # This creates a cached layer that can be reused
 # as long as your Package.swift/Package.resolved
 # files do not change.
-COPY . .
-RUN swift package resolve \
-        $([ -f ./Package.resolved ] && echo "--force-resolved-versions" || true)
 
+COPY Package.swift Package.resolved ./
+COPY DataTypes ./DataTypes
+RUN swift package resolve $([ -f ./Package.resolved ] && echo "--force-resolved-versions" || true)
 # Copy entire repo into container
+COPY . .
 
 # Build everything, with optimizations, with static linking, and using jemalloc
 # N.B.: The static version of jemalloc is incompatible with the static Swift runtime.
@@ -59,6 +60,7 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
       libjemalloc2 \
       ca-certificates \
       tzdata \
+    && apt-get install bash \
     && apt-get install -y openssl libssl-dev libcurl4 libxml2 \
     && rm -r /var/lib/apt/lists/*
 
@@ -80,6 +82,4 @@ USER vapor:vapor
 # Let Docker bind to port 8080
 EXPOSE 8080
 
-# Start the Vapor service when the image is run, default to listening on 8080 in production environment
-ENTRYPOINT ["./App"]
-CMD ["serve", "--hostname", "0.0.0.0", "--port", "8080"]
+CMD /bin/bash -c "eval './App $RUN_COMMAND'"

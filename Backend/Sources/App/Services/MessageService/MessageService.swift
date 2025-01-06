@@ -1,5 +1,5 @@
 // MessageService.swift
-// Copyright (c) 2024 GetAutomaApp
+// Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
@@ -16,57 +16,65 @@ import Vapor
 struct MessageService: Decodable {
     func sendSmS(
         to phoneNumber: String,
-        from fromPhoneNumber: String? = nil,
         message: String,
-        snsRegion: String = "us-east-1",
         logger: Logger
     ) async throws -> String {
-        let client = try SNSClient(region: snsRegion)
+        do {
+            let client = try await SNSClient()
 
-        // if let fromPhoneNumber {
-        //     // TODO: We don't currently have a persistent phone number setup
-        //     return ""
-        // }
+            let output = try await client.publish(input: .init(
+                message: message,
+                phoneNumber: phoneNumber
+            ))
 
-        print("\(String(describing: fromPhoneNumber))")
-
-        let output = try await client.publish(input: .init(
-            message: message,
-            phoneNumber: phoneNumber
-        ))
-
-        try sendDiscordWebhookAppEvent(
-            input: "\(fromPhoneNumber ?? "random") -> \(phoneNumber)",
-            event: "sending message: `\(message)`",
-            logger: logger
-        )
-
-        if let messageId = output.messageId {
-            logger.info(
-                "Sent sms message to user",
-                metadata: [
-                    "to": .string("MessageService.sendSmS"),
-                    "messageId": .string(messageId),
-                    "phoneNumber": .string(phoneNumber),
-                    "message": .string(message),
-                    "sequenceNumber": .string(output.sequenceNumber ?? ""),
-                ]
+            try sendDiscordWebhookAppEvent(
+                input: "random -> \(phoneNumber)",
+                event: "sending message: `\(message)`",
+                logger: logger
             )
-            return messageId
-        } else {
+
+            if let messageId = output.messageId {
+                logger.info(
+                    "Sent sms message to user",
+                    metadata: [
+                        "to": .string("MessageService.sendSmS"),
+                        "messageId": .string(messageId),
+                        "phoneNumber": .string(phoneNumber),
+                        "message": .string(message),
+                        "sequenceNumber": .string(output.sequenceNumber ?? ""),
+                    ]
+                )
+                BackendMetric.totalTextMessagesSent.increment()
+                return messageId
+            } else {
+                logger.error(
+                    "Failed to send message to user",
+                    metadata: [
+                        "to": .string("MessageService.sendSmS"),
+                        "phoneNumber": .string(phoneNumber),
+                        "message": .string(message),
+                    ]
+                )
+                throw GenericErrors.smsMessageFailed
+            }
+        } catch {
             logger.error(
-                "Failed to send message to user",
+                "Failed to send message",
                 metadata: [
                     "to": .string("MessageService.sendSmS"),
                     "phoneNumber": .string(phoneNumber),
                     "message": .string(message),
+                    "error": .string(error.localizedDescription),
                 ]
             )
-            throw GenericErrors.smsMessageFailed
+            BackendMetric.totalTextMessagesSentFailed.increment()
+            throw error
         }
     }
 
     func sendWebhookMessage(webhookURL: URL, message: DiscordWebhookMessage, logger: Logger) async throws {
+        BackendMetric.totalDiscordWebhookMessagesSent.increment()
+
         if try Environment.getOrThrow("ENVIRONMENT") == "local" {
             return
         }
@@ -94,11 +102,12 @@ struct MessageService: Decodable {
                     "response": .string(String(data: data, encoding: .utf8) ?? ""),
                 ]
             )
+
         } catch {
             logger.error(
                 "Failed to send Discord webhook message",
                 metadata: [
-                    "to": .string("MessageService.sendSmS"),
+                    "to": .string("MessageService.sendWebhookMessage"),
                     "webhook": .string(webhookURL.absoluteString),
                     "error": .string(error.localizedDescription),
                 ]
@@ -111,11 +120,14 @@ struct MessageService: Decodable {
         input: String,
         event: String,
         imageUrl: String? = nil,
-        logger: Logger
+        logger: Logger,
+        withUrl: URL = URL(
+            string: try! Environment.getOrThrow("DISCORD_APP_EVENTS_URL")
+        )!
     ) throws {
         Task.detachedLogOnError(to: "MessageService.sendDiscordWebhookAppEvent", logger: logger) {
             try await sendWebhookMessage(
-                webhookURL: URL(string: Environment.get("DISCORD_APP_EVENTS_URL")!)!,
+                webhookURL: withUrl,
                 message: MessageFormatterService
                     .craftUserEventDiscordWebhookMessage(
                         input: input,
@@ -125,5 +137,18 @@ struct MessageService: Decodable {
                 logger: logger
             )
         }
+    }
+
+    func sendDiscordAlert(
+        alertTitle: String,
+        error: Error,
+        logger: Logger
+    ) throws {
+        try sendDiscordWebhookAppEvent(
+            input: "Critical Error Occurred - \(alertTitle)",
+            event: "\(error) - \(error.localizedDescription)",
+            logger: logger,
+            withUrl: URL(string: Environment.getOrThrow("DISCORD_AUTOMA_ALERTS_WEBHOOK_URL"))!
+        )
     }
 }

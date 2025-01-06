@@ -1,5 +1,5 @@
 // helpers.swift
-// Copyright (c) 2024 GetAutomaApp
+// Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
@@ -19,22 +19,28 @@ extension Task where Success == Void, Failure == any Error {
     static func detachedLogOnError(
         to: String,
         logger: Logger,
+        onError: @escaping @Sendable (Error) async throws -> Void = { _ in },
+        onSuccess: @escaping @Sendable () async throws -> Void = {},
         method: @escaping @Sendable () async throws -> Void
     ) {
         Task.detached {
             do {
                 try await method()
             } catch {
-                logger.trace(
-                    "Error ocurred while running detached task",
+                logger.critical(
+                    "Error occurred while running detached task",
                     metadata: [
                         "to": .array([
                             .string(to),
                             .string("Task.detachedLogOnError"),
+                            .string(error.localizedDescription),
                         ]),
                     ]
                 )
+                try await onError(error)
             }
+
+            try await onSuccess()
         }
     }
 }

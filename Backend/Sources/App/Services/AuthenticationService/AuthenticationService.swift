@@ -1,23 +1,18 @@
 // AuthenticationService.swift
-// Copyright (c) 2024 GetAutomaApp
+// Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import DataTypes
 import Fluent
 import JWT
+import Queues
 import Vapor
 
 struct AuthenticationService: Sendable {
-    var writeDb: Database
-    var readDb: Database
-    var logger: Logger
-
-    init(writeDb: Database, readDb: Database, logger: Logger) {
-        self.writeDb = writeDb
-        self.readDb = readDb
-        self.logger = logger
-    }
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
 
     func getValidateAndDeleteCode(phoneNumber: String, code: String) async throws {
         logger.info(
@@ -72,8 +67,7 @@ struct AuthenticationService: Sendable {
     // This method will create a new User with a specific phone number
     func register(payload: AuthPhoneCodePayloadDTO,
                   signer: Request.JWT) async throws -> AuthenticationTokensPayloadDTO
-    {
-        let messageService = MessageService()
+    { let messageService = MessageService()
         let profilePictureService = ProfilePictureService(logger: logger)
 
         try await getValidateAndDeleteCode(
@@ -98,6 +92,8 @@ struct AuthenticationService: Sendable {
         user.profilePictureKey = profilePictureKey
 
         try await user.save(on: writeDb)
+
+        BackendMetric.totalUsersCreated.increment()
 
         logger.info(
             "Successfully Registered User",
@@ -124,9 +120,7 @@ struct AuthenticationService: Sendable {
     // 2. Send Login Auth Code
     // This will also be used to send the user a registeration code
     // We don't care if the user exists in this route or not
-    func sendAuthCode(phoneNumber: String) async throws -> String {
-        let messageService = MessageService()
-
+    func sendAuthCode(phoneNumber: String, queue: Queue) async throws -> AuthenticationCodeResponseDTO {
         let code = RandomService.randomCode()
 
         logger.info(
@@ -138,12 +132,38 @@ struct AuthenticationService: Sendable {
             ]
         )
 
-        Task.detachedLogOnError(to: "AuthenticationService.sendAuthCode", logger: logger) {
-            _ = try await messageService.sendSmS(
-                to: phoneNumber,
-                message: MessageFormatterService
-                    .craftVerificationCodeMessage(code: code),
-                logger: logger
+        let distance: Double = 60
+        let dateToCheck = Date()
+        if
+            let mostRecentCodeSent = try await AuthenticationCodeModel
+            .query(on: readDb)
+            .filter(\.$createdAt > dateToCheck.addingTimeInterval(-distance))
+            .filter(\.$phoneNumber == phoneNumber)
+            .first() // TODO: Create ConfigRoute (configure client remotely, change this to an env var
+        {
+            let timeout = distance - (mostRecentCodeSent.createdAt?.distance(to: dateToCheck) ?? distance)
+            return .init(success: timeout == 0, timeout: timeout)
+        }
+
+        Task.detachedLogOnError(
+            to: "AuthenticationService.sendAuthCode",
+            logger: logger,
+            onError: { _ in
+                BackendMetric.totalFailedVerificationCodesSent.increment()
+            },
+            onSuccess: {
+                BackendMetric.totalSuccessfulVerificationCodesSent.increment()
+            }
+        ) {
+            try await queue.dispatch(
+                TransactionalMessageAsyncJob.self,
+                .init(
+                    content: MessageFormatterService
+                        .craftVerificationCodeMessage(
+                            code: code
+                        ),
+                    toPhoneNumber: phoneNumber
+                )
             )
 
             let codeModelId = UUID()
@@ -168,7 +188,7 @@ struct AuthenticationService: Sendable {
             )
         }
 
-        return code
+        return .init(success: true, timeout: 0)
     }
 
     // 3. Login
@@ -215,29 +235,34 @@ struct AuthenticationService: Sendable {
 
     // 4. Refresh Token
     func refreshToken(userId: String, signer: Request.JWT) async throws -> String {
-        let messageService = MessageService()
+        do {
+            let messageService = MessageService()
 
-        try messageService
-            .sendDiscordWebhookAppEvent(
-                input: userId,
-                event: "is refreshing their access token",
-                logger: logger
+            try messageService
+                .sendDiscordWebhookAppEvent(
+                    input: userId,
+                    event: "is refreshing their access token",
+                    logger: logger
+                )
+
+            logger.info(
+                "Refreshing user access token",
+                metadata: [
+                    "to": .string("AuthenticationService.refreshToken"),
+                    "userId": .string(userId),
+                ]
             )
 
-        logger.info(
-            "Refreshing user access token",
-            metadata: [
-                "to": .string("AuthenticationService.refreshToken"),
-                "userId": .string(userId),
-            ]
-        )
-
-        return try await generateAccessToken(
-            userId: userId,
-            expiresIn: 86400,
-            type: .access,
-            signer: signer
-        )
+            return try await generateAccessToken(
+                userId: userId,
+                expiresIn: 86400,
+                type: .access,
+                signer: signer
+            )
+        } catch {
+            BackendMetric.totalFailedTokensRefreshed.increment()
+            throw error
+        }
     }
 
     // 5. Logout
@@ -268,7 +293,14 @@ struct AuthenticationService: Sendable {
     }
 
     func doesUserExist(phoneNumber: String) async throws -> Bool {
-        try await UserModel.query(on: readDb).filter(\.$phoneNumber == phoneNumber).first() != nil
+        let exists = try await UserModel.query(on: readDb).filter(\.$phoneNumber == phoneNumber).first() != nil
+
+        if exists {
+            BackendMetric.totalUsersAlreadyExists.increment()
+            return true
+        }
+
+        return false
     }
 
     func generateAccessToken(
