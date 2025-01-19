@@ -15,7 +15,6 @@
     "deploy:backend:production": "npm run fly:config -- infra/fly/fly.toml production | npm run deploy:to:fly",
     "deploy:to:fly": "tail -n 1 | xargs -Ixx cp xx Backend/.fly.toml && cd Backend && flyctl deploy --config=.fly.toml --local-only",
     "deploy:worker:sandbox": "npm run fly:config -- infra/fly/fly-jobs.toml sandbox | npm run deploy:to:fly",
-    "deploy:worker:staging": "npm run fly:config -- infra/fly/fly-jobs.toml staging | npm run deploy:to:fly",
     "deploy:worker:production": "npm run fly:config -- infra/fly/fly-jobs.toml production | npm run deploy:to:fly",
     "lint": "swiftlint",
     "build:all": "npm-run-all --parallel build:ui-kit build:backend",

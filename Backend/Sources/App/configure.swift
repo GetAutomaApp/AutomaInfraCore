@@ -63,6 +63,7 @@ public func configure(_ app: Application) async throws {
         // Queues
         app.queues.use(.fluent(useSoftDeletes: true))
         app.queues.configuration.workerCount = 1
+        app.queues.configuration.refreshInterval = .seconds(5)
 
         // Jobs
         app.queues.add(TransactionalMessageAsyncJob())

@@ -20,7 +20,7 @@ struct MessageService: Decodable {
         logger: Logger
     ) async throws -> String {
         do {
-            let client = try await SNSClient()
+            let client = try await SNSClient(region: Environment.getOrThrow("AWS_DEFAULT_REGION"))
 
             let output = try await client.publish(input: .init(
                 message: message,
