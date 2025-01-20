@@ -7,11 +7,14 @@ import Fluent
 import SotoTextract
 import Vapor
 
-struct TextExtractionService {
+struct TextExtractionService: ~Copyable {
     let client: Textract
 
     init() {
-        client = Textract(client: .init())
+        client = Textract(
+            client: .init(),
+            region: .useast1
+        ) // We don't have it in the `default-region` we set in the env
     }
 
     func getText(from image: Data) async throws -> Textract.DetectDocumentTextResponse {
@@ -23,15 +26,16 @@ struct TextExtractionService {
     func getTextToSimpleString(from image: Data) async throws -> String {
         let response = try await getText(from: image)
 
-        var text = ""
-        for block in response.blocks! {
-            text += block.text ?? ""
-        }
-
         return response.blocks!
             .map { $0.text ?? "" }
             .filter(\.isEmpty)
             .joined(separator: " ")
             .trim()
+    }
+
+    deinit {
+        do {
+            try client.client.syncShutdown()
+        } catch {}
     }
 }
