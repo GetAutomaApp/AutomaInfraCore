@@ -86,8 +86,7 @@ struct AuthenticationService: Sendable {
         )
 
         let userDTO = user.toDTO()
-        let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
-        let profilePictureKey = try profilePictureService.generateImageKey(for: userDTO, bucket: bucket)
+        let profilePictureKey = try profilePictureService.generateImageKey(for: userDTO)
 
         try await queue.dispatch(ProfilePictureAsyncJob.self, .init(payload: userDTO))
 

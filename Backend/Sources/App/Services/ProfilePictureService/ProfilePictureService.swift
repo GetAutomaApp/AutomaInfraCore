@@ -49,8 +49,9 @@ struct ProfilePictureService {
                 excludeText: excludeText
             )
 
+            let s3Url = try generateImageKey(for: user)
+
             let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
-            let s3Url = try generateImageKey(for: user, bucket: bucket)
             let openaiOutputs3Url = "s3://\(bucket)/openai/\(user.username)-\(UUID().uuidString).json"
 
             let jsonEncoder = JSONEncoder()
@@ -161,7 +162,9 @@ struct ProfilePictureService {
         return (images, imageData)
     }
 
-    func generateImageKey(for user: UserDTO, bucket: String) throws -> String {
+    func generateImageKey(for user: UserDTO) throws -> String {
+        let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
+
         guard let userId = user.id?.uuidString else {
             throw GenericErrors.invalidUserId
         }
