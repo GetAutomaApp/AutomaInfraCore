@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:AutomaInfraCore}/Backend",
+            "name": "Debug App (Backend)",
+            "program": "${workspaceFolder:AutomaInfraCore}/Backend/.build/debug/App",
+            "preLaunchTask": "swift: Build Debug App (Backend)"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:AutomaInfraCore}/Backend",
+            "name": "Release App (Backend)",
+            "program": "${workspaceFolder:AutomaInfraCore}/Backend/.build/release/App",
+            "preLaunchTask": "swift: Build Release App (Backend)"
+        }
+    ]
+}

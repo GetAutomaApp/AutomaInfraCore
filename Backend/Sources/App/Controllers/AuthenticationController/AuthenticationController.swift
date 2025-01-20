@@ -59,7 +59,7 @@ struct AuthenticationController: RouteCollection {
             throw GenericErrors.userAlreadyExists
         }
 
-        let tokens = try await authService.register(payload: dto, signer: req.jwt)
+        let tokens = try await authService.register(payload: dto, signer: req.jwt, queue: req.queue)
 
         return tokens
     }

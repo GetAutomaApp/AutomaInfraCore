@@ -11,7 +11,6 @@ import Vapor
 struct ProfilePictureService {
     let logger: Logger
 
-    // TODO: Feature enablement to choose one of 10 randomly generated profile pictures when openai services are down
     func createProfilePicture(for user: UserDTO, totalRegenerationAttempts: Int = 3,
                               excludeText: Bool = true) async throws -> String
     {
@@ -50,9 +49,8 @@ struct ProfilePictureService {
                 excludeText: excludeText
             )
 
-            let key = "profile-picture/v1/\(user.username)-\(UUID().uuidString).jpg" // TODO: Ensure openai uses JPEG
             let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
-            let s3Url = "s3://\(bucket)/\(key)"
+            let s3Url = try generateImageKey(for: user, bucket: bucket)
             let openaiOutputs3Url = "s3://\(bucket)/openai/\(user.username)-\(UUID().uuidString).json"
 
             let jsonEncoder = JSONEncoder()
@@ -161,5 +159,13 @@ struct ProfilePictureService {
         }
 
         return (images, imageData)
+    }
+
+    func generateImageKey(for user: UserDTO, bucket: String) throws -> String {
+        guard let userId = user.id?.uuidString else {
+            throw GenericErrors.invalidUserId
+        }
+
+        return "s3://\(bucket)/profile-picture/v1/\(userId).jpg"
     }
 }

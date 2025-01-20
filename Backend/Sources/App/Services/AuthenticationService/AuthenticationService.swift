@@ -66,7 +66,7 @@ struct AuthenticationService: Sendable {
     // 1. Register
     // This method will create a new User with a specific phone number
     func register(payload: AuthPhoneCodePayloadDTO,
-                  signer: Request.JWT) async throws -> AuthenticationTokensPayloadDTO
+                  signer: Request.JWT, queue: Queue) async throws -> AuthenticationTokensPayloadDTO
     { let messageService = MessageService()
         let profilePictureService = ProfilePictureService(logger: logger)
 
@@ -85,9 +85,11 @@ struct AuthenticationService: Sendable {
             phoneNumber: payload.phoneNumber
         )
 
-        let profilePictureKey = try await profilePictureService.createProfilePicture(
-            for: user.toDTO()
-        )
+        let userDTO = user.toDTO()
+        let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
+        let profilePictureKey = try profilePictureService.generateImageKey(for: userDTO, bucket: bucket)
+
+        try await queue.dispatch(ProfilePictureAsyncJob.self, .init(payload: userDTO))
 
         user.profilePictureKey = profilePictureKey
 
@@ -132,14 +134,14 @@ struct AuthenticationService: Sendable {
             ]
         )
 
-        let distance: Double = 60
+        let distance: Double = 60 // TODO: Create ConfigRoute (configure client remotely, change this to an env var
         let dateToCheck = Date()
         if
             let mostRecentCodeSent = try await AuthenticationCodeModel
             .query(on: readDb)
             .filter(\.$createdAt > dateToCheck.addingTimeInterval(-distance))
             .filter(\.$phoneNumber == phoneNumber)
-            .first() // TODO: Create ConfigRoute (configure client remotely, change this to an env var
+            .first()
         {
             let timeout = distance - (mostRecentCodeSent.createdAt?.distance(to: dateToCheck) ?? distance)
             return .init(success: timeout == 0, timeout: timeout)
