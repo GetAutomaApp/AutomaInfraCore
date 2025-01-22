@@ -59,7 +59,66 @@ enum FontFamily {
         static let all: [FontConvertible] = [bold, boldItalic, italic, regular, semiBold, semiBoldItalic]
     }
 
-    static let allCustomFonts: [FontConvertible] = [CrimsonText.all].flatMap(\.self)
+    enum SFProDisplay {
+        static let blackItalic = FontConvertible(
+            name: "SFProDisplay-BlackItalic",
+            family: "SF Pro Display",
+            path: "SFPRODISPLAYBLACKITALIC.OTF"
+        )
+        static let bold = FontConvertible(
+            name: "SFProDisplay-Bold",
+            family: "SF Pro Display",
+            path: "SFPRODISPLAYBOLD.OTF"
+        )
+        static let heavyItalic = FontConvertible(
+            name: "SFProDisplay-HeavyItalic",
+            family: "SF Pro Display",
+            path: "SFPRODISPLAYHEAVYITALIC.OTF"
+        )
+        static let lightItalic = FontConvertible(
+            name: "SFProDisplay-LightItalic",
+            family: "SF Pro Display",
+            path: "SFPRODISPLAYLIGHTITALIC.OTF"
+        )
+        static let medium = FontConvertible(
+            name: "SFProDisplay-Medium",
+            family: "SF Pro Display",
+            path: "SFPRODISPLAYMEDIUM.OTF"
+        )
+        static let regular = FontConvertible(
+            name: "SFProDisplay-Regular",
+            family: "SF Pro Display",
+            path: "SFPRODISPLAYREGULAR.OTF"
+        )
+        static let semiboldItalic = FontConvertible(
+            name: "SFProDisplay-SemiboldItalic",
+            family: "SF Pro Display",
+            path: "SFPRODISPLAYSEMIBOLDITALIC.OTF"
+        )
+        static let thinItalic = FontConvertible(
+            name: "SFProDisplay-ThinItalic",
+            family: "SF Pro Display",
+            path: "SFPRODISPLAYTHINITALIC.OTF"
+        )
+        static let ultralightItalic = FontConvertible(
+            name: "SFProDisplay-UltralightItalic",
+            family: "SF Pro Display",
+            path: "SFPRODISPLAYULTRALIGHTITALIC.OTF"
+        )
+        static let all: [FontConvertible] = [
+            blackItalic,
+            bold,
+            heavyItalic,
+            lightItalic,
+            medium,
+            regular,
+            semiboldItalic,
+            thinItalic,
+            ultralightItalic,
+        ]
+    }
+
+    static let allCustomFonts: [FontConvertible] = [CrimsonText.all, SFProDisplay.all].flatMap(\.self)
     static func registerAllCustomFonts() {
         allCustomFonts.forEach { $0.register() }
     }

@@ -10,7 +10,7 @@ public struct TestScreen: View {
     public init() {} // Add a public initializer
 
     public var body: some View {
-        Text("Hello").fontTableFont(FontTable.Headings.head1)
+        Text("Hello").fontTableFont(FontTable.Crimson.Headings.head1)
     }
 }
 

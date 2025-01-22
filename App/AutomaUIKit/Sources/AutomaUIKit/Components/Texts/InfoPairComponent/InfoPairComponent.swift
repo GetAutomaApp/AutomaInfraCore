@@ -42,14 +42,14 @@ public struct InfoPairComponent: View {
         VStack(alignment: .leading) {
             Text(config.title)
                 .fontTableFont(
-                    FontTable.Headings.head4,
+                    FontTable.Crimson.Headings.head4,
                     DesignTokens.colors.primaryText
                 ).tag("title")
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
             Text(config.description)
                 .fontTableFont(
-                    FontTable.Body.body1,
+                    FontTable.Crimson.Body.body1,
                     DesignTokens.colors.secondaryText
                 ).tag("description")
                 .lineLimit(3)
