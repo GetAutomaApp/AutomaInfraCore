@@ -14,7 +14,9 @@ class AnyOrientationStackComponentTests: XCTestCase {
     // one test case per completed flow (action)
     // one test case per potential edge-case
     @MainActor func testIntegration() throws {
-        let component = AnyOrientationStackComponent()
+        let component = AnyOrientationStackComponent(config: .init()) {
+            Text("HI")
+        }
         XCTAssertNotNil(component)
     }
 }

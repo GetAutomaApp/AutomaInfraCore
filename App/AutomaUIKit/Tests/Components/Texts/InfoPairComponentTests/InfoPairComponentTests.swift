@@ -21,10 +21,10 @@ class InfoPairComponentTests: XCTestCase {
 
     @MainActor func testHasTitleAndDescription() throws {
         // Given: A InfoPairComponent with a title and description
-        let component = InfoPairComponent(
+        let component = InfoPairComponent(config: .init(
             title: "Sample Title",
             description: "This is a sample description"
-        )
+        ))
 
         // When: Inspect the view
         let title = try component.inspect().find(viewWithTag: "title")
