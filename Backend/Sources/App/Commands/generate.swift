@@ -17,6 +17,16 @@ struct FileConfig {
     let templates: [String]
 }
 
+struct AddToFileType {
+    let name: String
+    let configurations: [AddToFileConfig]
+}
+
+struct AddToFileConfig {
+    let template: String
+    let addToFile: String
+}
+
 let fileTypes: [FileType] = [
     FileType(name: "ui-component", configurations: [
         FileConfig(
@@ -59,6 +69,179 @@ let fileTypes: [FileType] = [
             ]
         ),
     ]),
+    FileType(
+        name: "backend-controller",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/backend-controller/",
+                toDirectory: "Sources/App/Controllers/",
+                nestToDirectory: "__CAPNAME__Controller/",
+                templates: [
+                    "__CAPNAME__Controller.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/backend-controller/",
+                toDirectory: "Tests/AppTests/Controllers/",
+                nestToDirectory: "__CAPNAME__ControllerTests/",
+                templates: [
+                    "__CAPNAME__ControllerIntegrationTests.swift.template",
+                    "__CAPNAME__ControllerUnitTests.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/controller-interactor/",
+                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Interactors/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__ControllerInteractor.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/controller-interactor/",
+                toDirectory: "../App/AutomaAppShared/Tests/ControllerInteractors/",
+                nestToDirectory: "__CAPNAME__ControllerTests/",
+                templates: [
+                    "__CAPNAME__ControllerInteractorUnitTests.swift.template",
+                    "__CAPNAME__ControllerInteractorIntegrationTests.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "model",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/model/",
+                toDirectory: "./Sources/App/Models/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__Model.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/model/",
+                toDirectory: "./DataTypes/Sources/DataTypes/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__DTO.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/migration/",
+                toDirectory: "./Sources/App/Migrations/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__Migration__TIMESTAMP__.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "dto",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/dto/",
+                toDirectory: "./DataTypes/Sources/DataTypes/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__DTO.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "migration",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/migration/",
+                toDirectory: "./Sources/App/Migrations/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__Migration__TIMESTAMP__.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "backend-service",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/backend-service/",
+                toDirectory: "Sources/App/Services/",
+                nestToDirectory: "__CAPNAME__Service/",
+                templates: [
+                    "__CAPNAME__Service.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/backend-service/",
+                toDirectory: "Tests/AppTests/Services/",
+                nestToDirectory: "__CAPNAME__ServiceTests/",
+                templates: [
+                    "__CAPNAME__ServiceIntegrationTests.swift.template",
+                    "__CAPNAME__ServiceUnitTests.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "backend-interactor",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/controller-interactor/",
+                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Interactors/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__ControllerInteractor.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/controller-interactor/",
+                toDirectory: "../App/AutomaAppShared/Tests/ControllerInteractors/",
+                nestToDirectory: "__CAPNAME__ControllerTests/",
+                templates: [
+                    "__CAPNAME__ControllerInteractorUnitTests.swift.template",
+                    "__CAPNAME__ControllerInteractorIntegrationTests.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "async-job",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/backend-async-job/",
+                toDirectory: "Sources/App/Procs/Jobs/",
+                nestToDirectory: "__CAPNAME__AsyncJob/",
+                templates: [
+                    "__CAPNAME__AsyncJob.swift.template",
+                ]
+            ),
+            FileConfig(
+                fromDirectory: "./generators/backend-async-job/",
+                toDirectory: "Tests/Procs/Jobs/",
+                nestToDirectory: "__CAPNAME__AsyncJobTests/",
+                templates: [
+                    "__CAPNAME__AsyncJobUnitTests.swift.template",
+                    "__CAPNAME__AsyncJobIntegrationTests.swift.template",
+                ]
+            ),
+        ]
+    ),
+    FileType(
+        name: "command",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/command/",
+                toDirectory: "Sources/App/Commands/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME_LOWER__.swift.template",
+                ]
+            ),
+        ]
+    ),
 ]
 
 struct GenerateAppComponent: Command {
@@ -81,10 +264,15 @@ struct GenerateAppComponent: Command {
             help: "The directory you want to nest the component into (added to the default path)."
         )
         var nestedDir: String?
+
+        @Flag(name: "copy", help: "Copy files to the destination directory.")
+        var copy: Bool
     }
 
     func run(using _: CommandContext, signature: Signature) throws {
         let componentName = signature.filename
+        let copy = signature.copy
+        var output = ""
 
         for fileType in fileTypes {
             guard fileType.name == signature.component else { continue }
@@ -117,39 +305,51 @@ struct GenerateAppComponent: Command {
                     let destinationFile =
                         "\(destinationPath)\(fileNameFormatted)"
 
-                    if FileManager.default.fileExists(atPath: destinationFile) {
+                    // Ignore this check when we are copying by appending !copy
+                    if FileManager.default.fileExists(atPath: destinationFile), !copy {
                         throw Abort(
                             .badRequest,
                             reason: "Component implementation '\(destinationFile)' already exists."
                         )
                     }
 
-                    try moveAndRenameFile(
+                    output += try moveAndRenameFile(
                         source: sourceFile,
                         destination: destinationFile,
-                        componentName: componentName
+                        componentName: componentName,
+                        shouldWrite: !copy
                     )
                 }
 
                 print("Successfully created a \(fileType.name) called '\(componentName)' in '\(toNestedDir)'.")
             }
         }
+
+        if copy {
+            Shell().run("echo '\(output)' | pbcopy")
+        }
     }
 
-    func moveAndRenameFile(source: String, destination: String, componentName: String) throws {
+    func moveAndRenameFile(source: String, destination: String, componentName: String,
+                           shouldWrite: Bool = true) throws -> String
+    {
         // Check if the source file exists before trying to read it
         guard FileManager.default.fileExists(atPath: source) else {
             throw Abort(.notFound, reason: "Template file not found: \(source)")
         }
 
         // Read the file content
-        var content = try String(contentsOfFile: source)
+        var content = try String(contentsOfFile: source, encoding: .utf8)
 
         // Rename occurrences of __CAPNAME__ in the content
         content = rename(text: content, componentName: componentName)
 
         // Write the content to the new file
-        try content.write(toFile: destination, atomically: true, encoding: .utf8)
+        if shouldWrite {
+            try content.write(toFile: destination, atomically: true, encoding: .utf8)
+        }
+
+        return "\(destination)\n\(content)"
     }
 
     func rename(text: String, componentName: String) -> String {
@@ -172,6 +372,9 @@ struct GenerateAppComponent: Command {
             // Replace all occurrences of __CAPNAME_SPACING__ with with the correct format helloComponent -> hello
             // Component
             .replacingOccurrences(of: "__CAPNAME_SPACING__", with: arrayToSpaceDelimited(words))
+            // Replaces all occurences of __TIMESTAMP__ with the current timestamp
+            // __TIMESTAMP__ -> 173847283
+            .replacingOccurrences(of: "__TIMESTAMP__", with: "\(Int(Date().timeIntervalSince1970))")
     }
 
     func pascalToWordsArray(_ pascal: String) -> [String] {

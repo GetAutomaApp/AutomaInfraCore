@@ -4,8 +4,8 @@ on:
   push:
     branches-ignore:
       - develop
-      - staging
-      - prod
+      - release/staging
+      - release/production
 
 jobs:
   run-lint:
@@ -27,7 +27,7 @@ jobs:
       - name: Install NodeJS Dependencies
         run: |
           npm run prepare:action
-
+  
       - name: Run Linting CLI
         run: |
           npm run lint

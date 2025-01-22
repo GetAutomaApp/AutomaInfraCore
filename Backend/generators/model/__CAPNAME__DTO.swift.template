@@ -1,0 +1,15 @@
+import Vapor
+
+public struct __CAPNAME__DTO: Content {
+    public var id: UUID?
+    public var createdAt: Date?
+    public var updatedAt: Date?
+    public var deletedAt: Date?
+
+    public init(id: UUID?, createdAt: Date?, updatedAt: Date?, deletedAt: Date?) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+    }
+}

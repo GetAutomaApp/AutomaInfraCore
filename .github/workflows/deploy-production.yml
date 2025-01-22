@@ -1,0 +1,21 @@
+name: Fly Deploy To Prod
+
+on:
+  push:
+    branches:
+      - release/production
+
+jobs:
+  deploy:
+    name: Deploy app
+    runs-on: ubuntu-latest
+    concurrency: deploy-group
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: |
+          npm run deploy:backend:production
+          npm run deploy:worker:production
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_PROD_API_KEY }}
+
