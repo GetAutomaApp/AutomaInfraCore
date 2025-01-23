@@ -33,6 +33,7 @@ struct ButtonFrameComponent_PreviewsView: View {
                         print("Clicked Me")
                     }) {
                         Text("Hello, World")
+                            .fontTableFont(FontTable.SFPro.Headings.head6)
                     }
 
                     ButtonFrameComponent(config: buttonConfig, action: {
@@ -69,15 +70,6 @@ struct AutoButtonVariationsView: View {
             }
 
             Spacer()
-
-//      ButtonFrameComponent(action: { _ in
-//        isTimerActive ? stopChangingVariant() : startChangingVariant()
-//      }) {
-//        isTimerActive ? DesignIconsEnum.pause.image : DesignIconsEnum.play.image
-//      } onSelfAppear: { config in
-//        config.fillSpace = false
-//      }
-//      .contentTransition(.symbolEffect(.replace))
 
             IconButtonComponent(onSelfAppear: { config in config.variant = .square }, defaultIcon: .pause) { config in
                 isTimerActive ? stopChangingVariant() : startChangingVariant()
