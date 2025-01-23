@@ -1,5 +1,5 @@
 {
-  "originHash" : "3359a62e2dd6d3320dfaf43ec250dd2c2ab5207cacf9e68a81f4c46299484218",
+  "originHash" : "58b2da1536cf60d72794207b249088863c807660b3ecc65a0ed17d1621657536",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -242,6 +242,15 @@
       "state" : {
         "revision" : "4c5d467a96fc4c64f6279327d8fd1e1600e85bc5",
         "version" : "4.110.1"
+      }
+    },
+    {
+      "identity" : "viewextractor",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GetAutomaApp/ViewExtractor",
+      "state" : {
+        "revision" : "e20b1944524d4454c2a65c0054ce345c2c5d0185",
+        "version" : "1.0.0"
       }
     },
     {
