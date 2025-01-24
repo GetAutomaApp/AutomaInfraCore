@@ -48,7 +48,7 @@ public struct TextButtonComponent: View {
     public init(
         onSelfAppear: @escaping (TextButtonComponentConfig) -> Void = { _ in },
         defaultText: String,
-        action: @escaping (TextButtonComponentConfig) -> Void = { _ in }
+        action: @escaping (TextButtonComponentConfig) -> Void
     ) {
         self.onSelfAppear = onSelfAppear
         self.action = action
@@ -86,7 +86,12 @@ public struct TextButtonComponent: View {
         ButtonFrameComponent(config: config, action: {
             action(config)
         }) {
-            Text(config.text).fontTableFont(FontTable.SFPro.Headings.head6)
+            Text(config.text)
+                .fontTableFont(
+                    FontTable.SFPro.Headings.head6,
+                    DesignTokens.colors
+                        .textDark
+                )
         } onSelfAppear: { _ in
             onSelfAppear(config)
         }

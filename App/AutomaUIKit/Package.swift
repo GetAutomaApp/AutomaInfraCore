@@ -24,9 +24,6 @@ let package = Package(
             dependencies: ["ViewExtractor"],
             path: "Sources",
             exclude: [
-                "AutomaUIKit/Components/Buttons/IconButtonComponent/IconButtonComponentDocumentation.md",
-                "AutomaUIKit/Components/Frames/ButtonFrameComponent/ButtonFrameComponentDocumentation.md",
-                "AutomaUIKit/Core/Modifiers/FontTableFontModifier/FontTableFontModifierDocumentation.md",
                 "AutomaUIKit/Components/Texts/InfoPairComponent/InfoPairComponentDocumentation.md",
                 "AutomaUIKit/Components/Indicators/ProgressIndicatorComponent/ProgressIndicatorComponentDocumentation.md",
             ],

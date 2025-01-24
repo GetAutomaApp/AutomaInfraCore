@@ -96,7 +96,7 @@ public struct OnboardingScreen: View {
                     print("handle apply status")
                 }
             }
-        ).animation(.bouncy)
+        ).animation(.bouncy, value: progressIndicatorConfig.currentStep)
     }
 
     func handleOnboardingNextScreen() {

@@ -248,7 +248,7 @@ let fileTypes: [FileType] = [
             FileConfig(
                 fromDirectory: "./generators/screen/",
                 toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Screens/",
-                nestToDirectory: "__CAPNAME__Screen/",
+                nestToDirectory: "",
                 templates: [
                     "__CAPNAME__Screen.swift.template",
                 ]

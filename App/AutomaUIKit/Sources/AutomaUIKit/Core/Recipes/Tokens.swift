@@ -135,17 +135,17 @@ public enum FontTable {
             public var font: SwiftUI.Font {
                 switch self {
                 case .head1:
-                    FontFamily.SFProDisplay.bold.swiftUIFont(size: 60)
+                    FontFamily.SFProText.bold.swiftUIFont(size: 60)
                 case .head2:
-                    FontFamily.SFProDisplay.bold.swiftUIFont(size: 48)
+                    FontFamily.SFProText.bold.swiftUIFont(size: 48)
                 case .head3:
-                    FontFamily.SFProDisplay.bold.swiftUIFont(size: 36)
+                    FontFamily.SFProText.bold.swiftUIFont(size: 36)
                 case .head4:
-                    FontFamily.SFProDisplay.bold.swiftUIFont(size: 30)
+                    FontFamily.SFProText.semibold.swiftUIFont(size: 30)
                 case .head5:
-                    FontFamily.SFProDisplay.bold.swiftUIFont(size: 24)
+                    FontFamily.SFProText.semibold.swiftUIFont(size: 24)
                 case .head6:
-                    FontFamily.SFProDisplay.bold.swiftUIFont(size: 20)
+                    FontFamily.SFProText.semibold.swiftUIFont(size: 18)
                 }
             }
         }
@@ -159,13 +159,13 @@ public enum FontTable {
             public var font: SwiftUI.Font {
                 switch self {
                 case .body1:
-                    FontFamily.SFProDisplay.regular.swiftUIFont(size: 20)
+                    FontFamily.SFProText.regular.swiftUIFont(size: 20)
                 case .body2:
-                    FontFamily.SFProDisplay.regular.swiftUIFont(size: 18)
+                    FontFamily.SFProText.regular.swiftUIFont(size: 18)
                 case .body3:
-                    FontFamily.SFProDisplay.regular.swiftUIFont(size: 16)
+                    FontFamily.SFProText.regular.swiftUIFont(size: 16)
                 case .body4:
-                    FontFamily.SFProDisplay.regular.swiftUIFont(size: 14)
+                    FontFamily.SFProText.regular.swiftUIFont(size: 14)
                 }
             }
         }
@@ -176,11 +176,11 @@ public enum FontTable {
             public var font: SwiftUI.Font {
                 switch self {
                 case .label1:
-                    FontFamily.SFProDisplay.regular.swiftUIFont(size: 14)
+                    FontFamily.SFProText.regular.swiftUIFont(size: 14)
                 case .label2:
-                    FontFamily.SFProDisplay.regular.swiftUIFont(size: 12)
+                    FontFamily.SFProText.regular.swiftUIFont(size: 12)
                 case .caption1:
-                    FontFamily.SFProDisplay.regular.swiftUIFont(size: 12)
+                    FontFamily.SFProText.regular.swiftUIFont(size: 12)
                 }
             }
         }
