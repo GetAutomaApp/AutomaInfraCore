@@ -20,11 +20,39 @@ public struct DesignColors: Sendable {
 }
 
 public struct DesignPadding: Sendable {
+    public enum PaddingSizes: CGFloat {
+        case base, medium, small, large
+
+        var value: CGFloat {
+            switch self {
+            case .base:
+                12
+            case .medium:
+                8
+            case .small:
+                4
+            case .large:
+                16
+            }
+        }
+    }
+
     public let button: EdgeInsets = .init(top: 20, leading: 30, bottom: 20, trailing: 30)
     public let buttonEven: EdgeInsets = .init(top: 20, leading: 20, bottom: 20, trailing: 20)
+    public let smallPaddingVar: EdgeInsets = .init(
+        top: PaddingSizes.base.value,
+        leading: PaddingSizes.large.value,
+        bottom: PaddingSizes.base.value,
+        trailing: PaddingSizes.large.value
+    )
+
+    public let cornerRadiusBase: CGSize = .init(
+        width: PaddingSizes.base.value,
+        height: PaddingSizes.base.value
+    )
 }
 
-public enum DesignIconsEnum: CaseIterable {
+public enum DesignIcons: CaseIterable {
     case pause, play, unknown
     case arrowRight
 
@@ -42,7 +70,7 @@ public enum DesignIconsEnum: CaseIterable {
     }
 }
 
-public struct DesignIcons: Sendable {
+struct DesignIconsConfig: Sendable {
     let defaultWidth: CGFloat = 17.5
     let defaultHeight: CGFloat = 17.5
 }
@@ -50,7 +78,7 @@ public struct DesignIcons: Sendable {
 public enum DesignTokens {
     public static let colors: DesignColors = .init()
     public static let padding: DesignPadding = .init()
-    public static let icons: DesignIcons = .init()
+    static let icons: DesignIconsConfig = .init()
 
     public static let defaultCornerRadius: CGFloat = 12
 }

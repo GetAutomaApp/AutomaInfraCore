@@ -32,7 +32,7 @@ public class IconButtonComponentConfig: ButtonFrameComponentConfig {
     }
 
     /// The icon to display on the button. This defines the visual icon that the button will use.
-    @Published public var icon: DesignIconsEnum = .unknown
+    @Published public var icon: DesignIcons = .unknown
 
     /// Initializes the `IconButtonComponentConfig` with default styling.
     ///

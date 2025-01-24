@@ -47,7 +47,7 @@ public struct IconButtonComponent: View {
     ///   - action: A closure called when the button is tapped (default is no-op).
     public init(
         onSelfAppear: @escaping (IconButtonComponentConfig) -> Void = { _ in },
-        defaultIcon: DesignIconsEnum = .unknown,
+        defaultIcon: DesignIcons = .unknown,
         action: @escaping (IconButtonComponentConfig) -> Void = { _ in }
     ) {
         self.onSelfAppear = onSelfAppear
@@ -67,7 +67,7 @@ public struct IconButtonComponent: View {
     ///   - action: A closure called when the button is tapped (default is no-op).
     public init(
         onSelfAppear: @escaping (IconButtonComponentConfig) -> Void = { _ in },
-        defaultIcon: DesignIconsEnum = .unknown,
+        defaultIcon: DesignIcons = .unknown,
         action: @escaping () -> Void = {}
     ) {
         self.init(
@@ -86,7 +86,7 @@ public struct IconButtonComponent: View {
         ButtonFrameComponent(config: config, action: {
             action(config)
         }) {
-            config.icon.image
+            config.icon.image.foregroundStyle(DesignTokens.colors.textDark)
         } onSelfAppear: { _ in
             onSelfAppear(config)
         }

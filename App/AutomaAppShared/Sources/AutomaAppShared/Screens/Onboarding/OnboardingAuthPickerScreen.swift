@@ -28,7 +28,7 @@ public struct OnboardingAuthPickerScreen: View {
                     OnboardingScreen()
                         .navigationBarBackButtonHidden(true)
                 case .login:
-                    Text("TODO")
+                    LoginScreen()
                 }
             }
         }
