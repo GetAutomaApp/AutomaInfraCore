@@ -6,9 +6,9 @@ enum __CAPNAME__ComponentVariants {
 }
 
 /// Add a short description here about the config
-struct __CAPNAME__ComponentConfig {
+class __CAPNAME__ComponentConfig: ObservableObject {
     var someProperty: String = "Default Value"  // Default value
-    var variant: __CAPNAME__Variants = .variant1
+    var variant: __CAPNAME__ComponentVariants = .variant1
 
     let textColor: Color = .black
 }

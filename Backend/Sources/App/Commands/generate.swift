@@ -242,6 +242,19 @@ let fileTypes: [FileType] = [
             ),
         ]
     ),
+    FileType(
+        name: "screen",
+        configurations: [
+            FileConfig(
+                fromDirectory: "./generators/screen/",
+                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Screens/",
+                nestToDirectory: "",
+                templates: [
+                    "__CAPNAME__Screen.swift.template",
+                ]
+            ),
+        ]
+    ),
 ]
 
 struct GenerateAppComponent: Command {

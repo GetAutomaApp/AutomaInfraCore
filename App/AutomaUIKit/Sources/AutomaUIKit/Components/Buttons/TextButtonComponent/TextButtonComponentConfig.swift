@@ -1,24 +1,24 @@
-// IconButtonComponentConfig.swift
+// TextButtonComponentConfig.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import SwiftUI
 
-/// Enum defining the different variants of the IconButton component.
-public enum IconButtonVariants: String, CaseIterable {
+/// Enum defining the different variants of the TextButton component.
+public enum TextButtonVariants: String, CaseIterable {
     case generic
     case square
     case circle
     case pill
 }
 
-/// Configuration for the IconButtonComponent that extends from `ButtonFrameComponentConfig`.
-/// It defines the visual style, state (enabled/disabled), and icon for the button.
-public class IconButtonComponentConfig: ButtonFrameComponentConfig {
+/// Configuration for the TextButtonComponent that extends from `ButtonFrameComponentConfig`.
+/// It defines the visual style, state (enabled/disabled), and the default text.
+public class TextButtonComponentConfig: ButtonFrameComponentConfig {
     /// The variant of the button (e.g., generic, square, circle, pill).
     /// This controls the button's shape and layout style.
-    @Published public var variant: IconButtonVariants = .generic {
+    @Published public var variant: TextButtonVariants = .generic {
         didSet {
             applyVariantStyling()
         }
@@ -31,10 +31,10 @@ public class IconButtonComponentConfig: ButtonFrameComponentConfig {
         }
     }
 
-    /// The icon to display on the button. This defines the visual icon that the button will use.
-    @Published public var icon: DesignIcons = .unknown
+    /// The text to display on the button. This defines the visual text that the button will use
+    @Published public var text: String = "Enter Text Here"
 
-    /// Initializes the `IconButtonComponentConfig` with default styling.
+    /// Initializes the `TextButtonComponentConfig` with default styling.
     ///
     /// This calls the superclass's initializer and applies the default styling for the button's variant.
     public init() {

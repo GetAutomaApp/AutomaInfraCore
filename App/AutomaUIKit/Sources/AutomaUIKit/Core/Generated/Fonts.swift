@@ -59,7 +59,22 @@ enum FontFamily {
         static let all: [FontConvertible] = [bold, boldItalic, italic, regular, semiBold, semiBoldItalic]
     }
 
-    static let allCustomFonts: [FontConvertible] = [CrimsonText.all].flatMap(\.self)
+    enum SFProText {
+        static let bold = FontConvertible(name: "SFProText-Bold", family: "SF Pro Text", path: "SF-Pro-Text-Bold.otf")
+        static let regular = FontConvertible(
+            name: "SFProText-Regular",
+            family: "SF Pro Text",
+            path: "SF-Pro-Text-Regular.otf"
+        )
+        static let semibold = FontConvertible(
+            name: "SFProText-Semibold",
+            family: "SF Pro Text",
+            path: "SF-Pro-Text-Semibold.otf"
+        )
+        static let all: [FontConvertible] = [bold, regular, semibold]
+    }
+
+    static let allCustomFonts: [FontConvertible] = [CrimsonText.all, SFProText.all].flatMap(\.self)
     static func registerAllCustomFonts() {
         allCustomFonts.forEach { $0.register() }
     }

@@ -6,11 +6,16 @@
 import SwiftUI
 
 @main
-struct MACOSApp: App {
+struct MyApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .preferredColorScheme(.dark)
-        }
+                .frame(
+                    minWidth: 700,
+                    maxWidth: 700,
+                    minHeight: 400,
+                    maxHeight: 400
+                )
+        }.windowResizability(.contentSize)
     }
 }

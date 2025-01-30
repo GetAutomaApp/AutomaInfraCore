@@ -1,0 +1,14 @@
+import AutomaUIKit
+import SwiftUI
+
+public struct __CAPNAME__Screen: View {
+    public init() {}
+
+    public var body: some View {
+        Text("Hello, World!")
+    }
+}
+
+#Preview {
+    __CAPNAME__Screen()
+}
