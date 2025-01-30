@@ -9,9 +9,12 @@ enum TextInputFrameComponentVariants {
     case variant1, variant2
 }
 
-/// Add a short description here about the config
 class TextInputFrameComponentConfig: ObservableObject {
-    @State var text: String = "default-value" // Default value
+    @Published var text: String = ""
+    @Published var ghostText: String = "Hello There!"
+    @Published var icon: DesignIcons = .arrowRight
+    @Published var hasIcon: Bool = true
+
     var variant: TextInputFrameComponentVariants = .variant1
 
     let textColor: Color = .black

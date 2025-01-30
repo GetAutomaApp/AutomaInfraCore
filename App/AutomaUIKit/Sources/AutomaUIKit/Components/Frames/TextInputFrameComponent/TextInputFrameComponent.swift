@@ -17,13 +17,15 @@ import SwiftUI
  To see usage examples & visuals, check out `TextInputFrameModifierDocumentation.md`
  */
 struct TextInputFrameComponent: View {
-    var config: TextInputFrameComponentConfig = .init()
+    @ObservedObject var config: TextInputFrameComponentConfig = .init()
 
     var body: some View {
         HStack {
-            DesignIcons.arrowRight.image
-                .foregroundStyle(DesignTokens.colors.primaryText)
-            TextField("Hello There!", text: config.$text)
+            if config.hasIcon {
+                config.icon.image
+                    .foregroundStyle(DesignTokens.colors.primaryText)
+            }
+            TextField(config.ghostText, text: $config.text)
         }
         .padding(DesignTokens.padding.smallPaddingVar)
         .background(DesignTokens.colors.primaryWhitespace2)
