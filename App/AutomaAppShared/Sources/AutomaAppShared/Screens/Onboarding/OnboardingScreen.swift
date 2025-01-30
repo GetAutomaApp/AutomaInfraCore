@@ -17,6 +17,7 @@ public struct OnboardingScreen: View {
     @ObservedObject var progressIndicatorConfig: ProgressIndicatorComponentConfig = .init()
     @ObservedObject var iconButtonConfig: IconButtonComponentConfig = .init()
     @State var shouldShowApplyScreen: Bool = false
+    @State private var shouldShowRegisterScreen: Bool = false
 
     let onboardingScreenContent: [OnboardingScreenContent] = [
         .init(
@@ -40,10 +41,12 @@ public struct OnboardingScreen: View {
     public init() {}
 
     public var body: some View {
-        if !shouldShowApplyScreen {
-            generateOnboardingView()
-        } else {
+        if shouldShowRegisterScreen {
+            RegisterScreen()
+        } else if shouldShowApplyScreen {
             generateApplyView()
+        } else {
+            generateOnboardingView()
         }
     }
 
@@ -93,7 +96,8 @@ public struct OnboardingScreen: View {
                 IconButtonComponent(
                     defaultIcon: .arrowRight
                 ) { _ in
-                    print("handle apply status")
+                    shouldShowApplyScreen = false
+                    shouldShowRegisterScreen = true
                 }
             }
         ).animation(.bouncy, value: progressIndicatorConfig.currentStep)
@@ -113,4 +117,5 @@ public struct OnboardingScreen: View {
 
 #Preview {
     OnboardingScreen()
+        .preferredColorScheme(.dark)
 }

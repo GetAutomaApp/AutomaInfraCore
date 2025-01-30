@@ -5,17 +5,29 @@
 
 import SwiftUI
 
-enum TextInputFrameComponentVariants {
-    case variant1, variant2
+public enum TextInputFrameComponentVariants {
+    case generic
 }
 
-class TextInputFrameComponentConfig: ObservableObject {
-    @Published var text: String = ""
-    @Published var ghostText: String = "Hello There!"
-    @Published var icon: DesignIcons = .arrowRight
-    @Published var hasIcon: Bool = true
+public class TextInputFrameComponentConfig: ObservableObject {
+    @Published public var text: String
+    @Published public var ghostText: String
+    @Published public var icon: DesignIcons
+    @Published public var hasIcon: Bool
 
-    var variant: TextInputFrameComponentVariants = .variant1
+    public var variant: TextInputFrameComponentVariants
 
-    let textColor: Color = .black
+    public init(
+        text: String = "",
+        ghostText: String = "Hello There!",
+        icon: DesignIcons = .arrowRight,
+        hasIcon: Bool = true,
+        variant: TextInputFrameComponentVariants = .generic
+    ) {
+        self.text = text
+        self.ghostText = ghostText
+        self.icon = icon
+        self.hasIcon = hasIcon
+        self.variant = variant
+    }
 }

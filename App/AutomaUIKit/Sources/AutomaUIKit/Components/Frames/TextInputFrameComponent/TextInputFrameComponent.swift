@@ -16,10 +16,14 @@ import SwiftUI
 
  To see usage examples & visuals, check out `TextInputFrameModifierDocumentation.md`
  */
-struct TextInputFrameComponent: View {
-    @ObservedObject var config: TextInputFrameComponentConfig = .init()
+public struct TextInputFrameComponent: View {
+    @ObservedObject public var config: TextInputFrameComponentConfig
 
-    var body: some View {
+    public init(config: TextInputFrameComponentConfig = .init()) {
+        self.config = config
+    }
+
+    public var body: some View {
         HStack {
             if config.hasIcon {
                 config.icon.image

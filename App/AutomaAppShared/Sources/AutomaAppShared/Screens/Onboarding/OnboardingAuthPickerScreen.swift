@@ -29,6 +29,7 @@ public struct OnboardingAuthPickerScreen: View {
                         .navigationBarBackButtonHidden(true)
                 case .login:
                     LoginScreen()
+                        .navigationBarBackButtonHidden(true)
                 }
             }
         }
@@ -46,14 +47,14 @@ public struct OnboardingAuthPickerScreen: View {
     private func makeFooter() -> some View {
         VStack {
             TextButtonComponent(defaultText: "Register", action: {
-                path.append(
-                    .register
-                )
+                path = [
+                    .register,
+                ]
             })
             TextButtonComponent(defaultText: "Login", action: {
-                path.append(
-                    .login
-                )
+                path = [
+                    .login,
+                ]
             })
         }
     }

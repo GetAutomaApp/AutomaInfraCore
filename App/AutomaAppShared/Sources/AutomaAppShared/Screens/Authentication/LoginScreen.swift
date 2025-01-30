@@ -10,10 +10,12 @@ public struct LoginScreen: View {
     public init() {}
 
     public var body: some View {
-        Text("Hello, World!")
+        TextInputFrameComponent()
+            .padding()
     }
 }
 
 #Preview {
     LoginScreen()
+        .preferredColorScheme(.dark)
 }
