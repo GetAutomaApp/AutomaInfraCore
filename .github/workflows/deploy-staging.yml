@@ -15,6 +15,6 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
           npm run deploy:backend:staging
-          npm run deploy:worker:staging
+          npm run deploy:worker:production
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_PROD_API_KEY }}
