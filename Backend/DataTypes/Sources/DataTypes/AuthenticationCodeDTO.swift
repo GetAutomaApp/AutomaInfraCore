@@ -13,10 +13,19 @@ public struct AuthenticationCodeDTO: Content {
     public var updatedAt: Date?
     public var deletedAt: Date?
 
-    public init(id: UUID?, phoneNumber: String, code: String, createdAt: Date?, updatedAt: Date?, deletedAt: Date?) {
+    public init(
+        id: UUID?,
+        phoneNumber: String,
+        code: String,
+        createdAt: Date?,
+        updatedAt: Date?,
+        deletedAt: Date?
+    ) throws {
         self.id = id
         self.code = code
-        self.phoneNumber = phoneNumber
+        self.phoneNumber = try PhoneNumberPayloadDTO(
+            phoneNumber: phoneNumber
+        ).phoneNumber
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt

@@ -9,8 +9,10 @@ public struct AuthPhoneCodePayloadDTO: Content {
     public let phoneNumber: String
     public let code: String
 
-    public init(phoneNumber: String, code: String) {
-        self.phoneNumber = phoneNumber
+    public init(phoneNumber: String, code: String) throws {
+        self.phoneNumber = try PhoneNumberPayloadDTO(
+            phoneNumber: phoneNumber
+        ).phoneNumber
         self.code = code
     }
 }

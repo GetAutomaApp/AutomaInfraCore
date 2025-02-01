@@ -23,6 +23,7 @@ public enum GenericErrors: String, Error, Decodable, Encodable {
     case abortError
     case s3PathTooShort
     case invalidUrl
+    case invalidPhoneNumber
 }
 
 public struct ResponseError: Content {

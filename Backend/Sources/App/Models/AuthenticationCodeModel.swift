@@ -37,17 +37,19 @@ final class AuthenticationCodeModel: Model, @unchecked Sendable {
         createdAt: Date? = nil,
         updatedAt: Date? = nil,
         deletedAt: Date? = nil
-    ) {
+    ) throws {
         self.id = id
         self.code = code
-        self.phoneNumber = phoneNumber
+        self.phoneNumber = try PhoneNumberPayloadDTO(
+            phoneNumber: phoneNumber
+        ).phoneNumber
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
     }
 
-    func toDTO() -> AuthenticationCodeDTO {
-        .init(
+    func toDTO() throws -> AuthenticationCodeDTO {
+        try AuthenticationCodeDTO(
             id: id,
             phoneNumber: phoneNumber,
             code: code,
@@ -57,8 +59,8 @@ final class AuthenticationCodeModel: Model, @unchecked Sendable {
         )
     }
 
-    static func fromDTO(dto: AuthenticationCodeDTO) -> AuthenticationCodeModel {
-        let model = AuthenticationCodeModel(
+    static func fromDTO(dto: AuthenticationCodeDTO) throws -> AuthenticationCodeModel {
+        let model = try AuthenticationCodeModel(
             id: dto.id, code: dto.code, phoneNumber: dto.phoneNumber, createdAt: dto.createdAt,
             updatedAt: dto.updatedAt,
             deletedAt: dto.deletedAt
