@@ -1,14 +1,14 @@
 import SwiftUI
 
-enum __CAPNAME__ComponentVariants {
-    case variant1, variant2
+public enum __CAPNAME__ComponentVariants {
+    case generic
 
 }
 
 /// Add a short description here about the config
-class __CAPNAME__ComponentConfig: ObservableObject {
-    var someProperty: String = "Default Value"  // Default value
-    var variant: __CAPNAME__ComponentVariants = .variant1
+public class __CAPNAME__ComponentConfig: ObservableObject {
+    @Publish public var someProperty: String = "Default Value"  // Default value
+    @Publish public var variant: __CAPNAME__ComponentVariants = .generic
 
-    let textColor: Color = .black
+    public let textColor: Color = .black
 }
