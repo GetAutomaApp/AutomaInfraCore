@@ -3,7 +3,7 @@ name: Fly Deploy To Staging
 on:
   push:
     branches:
-      - develop
+      - release/staging
 
 jobs:
   deploy:
