@@ -25,5 +25,5 @@ jobs:
       - run: |
           npm run deploy:backend:sandbox
           npm run deploy:worker:sandbox
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_PROD_API_KEY }}
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_PROD_API_KEY }}
