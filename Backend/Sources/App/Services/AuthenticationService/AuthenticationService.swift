@@ -169,7 +169,7 @@ struct AuthenticationService: Sendable {
 
             let codeModelId = UUID()
 
-            let codeModel = AuthenticationCodeModel(
+            let codeModel = try AuthenticationCodeModel(
                 id: codeModelId,
                 code: code,
                 phoneNumber: phoneNumber,
