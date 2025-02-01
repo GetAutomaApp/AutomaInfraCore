@@ -3,7 +3,7 @@ name: Fly Deploy To Staging
 on:
   push:
     branches:
-      - release/staging
+      - develop
 
 jobs:
   deploy:
@@ -11,7 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: deploy-group-staging
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Get Cache
+        uses: actions/cache@v3
+        id: backend-build
+        with:
+          key: deploy-cache-${{ hashFiles('Backend/Package.resolved') }}
+          path: Backend/.build
+
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
           npm run deploy:backend:staging

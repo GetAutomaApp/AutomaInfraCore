@@ -11,11 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: deploy-group-production
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Get Cache
+        uses: actions/cache@v3
+        id: backend-build
+        with:
+          key: deploy-cache-${{ hashFiles('Backend/Package.resolved') }}
+          path: Backend/.build
+
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
           npm run deploy:backend:production
           npm run deploy:worker:production
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_PROD_API_KEY }}
-
