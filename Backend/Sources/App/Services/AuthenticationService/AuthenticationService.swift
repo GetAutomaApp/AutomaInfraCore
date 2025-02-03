@@ -146,16 +146,20 @@ struct AuthenticationService: Sendable {
             return .init(success: timeout == 0, timeout: timeout)
         }
 
-        Task.detachedLogOnError(
-            to: "AuthenticationService.sendAuthCode",
-            logger: logger,
-            onError: { _ in
-                BackendMetric.totalFailedVerificationCodesSent.increment()
-            },
-            onSuccess: {
-                BackendMetric.totalSuccessfulVerificationCodesSent.increment()
-            }
-        ) {
+//        Task.detachedLogOnError(
+//            to: "AuthenticationService.sendAuthCode",
+//            logger: logger,
+//            onError: { _ in
+//                BackendMetric.totalFailedVerificationCodesSent.increment()
+//            },
+//            onSuccess: {
+//                BackendMetric.totalSuccessfulVerificationCodesSent.increment()
+//            }
+//        ) {
+
+        let codeModelId = UUID()
+
+        do {
             try await queue.dispatch(
                 TransactionalMessageAsyncJob.self,
                 .init(
@@ -166,8 +170,6 @@ struct AuthenticationService: Sendable {
                     toPhoneNumber: phoneNumber
                 )
             )
-
-            let codeModelId = UUID()
 
             let codeModel = try AuthenticationCodeModel(
                 id: codeModelId,
@@ -187,9 +189,37 @@ struct AuthenticationService: Sendable {
                     "codeId": .string(codeModelId.uuidString),
                 ]
             )
-        }
 
-        return .init(success: true, timeout: 0)
+            BackendMetric.totalSuccessfulVerificationCodesSent.increment()
+
+            return .init(success: true, timeout: 0)
+        } catch let error as GenericErrors {
+            BackendMetric.totalFailedVerificationCodesSent.increment()
+            logger.error(
+                "Couldn't Sent verification code to user",
+                metadata: [
+                    "to": .string("AuthenticationService.sendAuthCode"),
+                    "phoneNumber": .string(phoneNumber),
+                    "code": .string(code),
+                    "codeId": .string(codeModelId.uuidString),
+                    "error": .string(error.rawValue),
+                ]
+            )
+            throw error
+        } catch {
+            BackendMetric.totalFailedVerificationCodesSent.increment()
+            logger.error(
+                "Couldn't Sent verification code to user",
+                metadata: [
+                    "to": .string("AuthenticationService.sendAuthCode"),
+                    "phoneNumber": .string(phoneNumber),
+                    "code": .string(code),
+                    "codeId": .string(codeModelId.uuidString),
+                    "error": .string(error.localizedDescription),
+                ]
+            )
+            throw GenericErrors.unknownError
+        }
     }
 
     // 3. Login
