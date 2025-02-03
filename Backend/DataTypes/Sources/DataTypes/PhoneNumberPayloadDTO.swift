@@ -19,4 +19,10 @@ public struct PhoneNumberPayloadDTO: Content {
             throw GenericErrors.invalidPhoneNumber
         }
     }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let phoneNumber = try container.decode(String.self, forKey: .phoneNumber)
+        try self.init(phoneNumber: phoneNumber)
+    }
 }
