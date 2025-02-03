@@ -146,17 +146,6 @@ struct AuthenticationService: Sendable {
             return .init(success: timeout == 0, timeout: timeout)
         }
 
-//        Task.detachedLogOnError(
-//            to: "AuthenticationService.sendAuthCode",
-//            logger: logger,
-//            onError: { _ in
-//                BackendMetric.totalFailedVerificationCodesSent.increment()
-//            },
-//            onSuccess: {
-//                BackendMetric.totalSuccessfulVerificationCodesSent.increment()
-//            }
-//        ) {
-
         let codeModelId = UUID()
 
         do {
