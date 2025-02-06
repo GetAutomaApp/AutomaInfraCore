@@ -2,10 +2,10 @@
 version: '3.8'
 
 services:
-  app_dev:
+  api_dev:
     volumes:
       - ./:/app/
-      - /app/.build
+      - api_build:/app/.build
     build:
       context: .
       dockerfile: ./DevDockerfile
@@ -15,9 +15,23 @@ services:
       localstack:
         condition: service_healthy
     environment:
-      RUN_COMMAND: "serve  --env local"
-    ports:
-      - 8080:8080
+      RUN_COMMAND: "serve"
+    network_mode: host
+
+  worker_dev:
+    volumes:
+      - ./:/app/
+      - worker_build:/app/.build
+    build:
+      context: .
+      dockerfile: ./DevDockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+    environment:
+      RUN_COMMAND: "queues"
     network_mode: host
 
   postgres:
@@ -27,8 +41,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -41,9 +53,6 @@ services:
   localstack:
     image: localstack/localstack:latest
     container_name: localstack
-    ports:
-      - "4566-4597:4566-4597"
-      - 8999:8080
     environment:
       - SERVICES=s3
       - DEBUG=${DEBUG- }
@@ -57,4 +66,8 @@ services:
 
 volumes:
   postgres_data:
+    driver: local
+  api_build:
+    driver: local
+  worker_build:
     driver: local

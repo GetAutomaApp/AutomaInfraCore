@@ -12,4 +12,4 @@ WORKDIR /app
 
 EXPOSE 8080
 
-CMD bash -c "swift build && nodemon -w ./ -w .env -e '.' --ignore ./.build --exec 'swift run App $RUN_COMMAND'"
+CMD bash -c "nodemon -w ./ -w .env -e '.' --ignore ./.build --exec 'swift run App --env local $RUN_COMMAND'"
