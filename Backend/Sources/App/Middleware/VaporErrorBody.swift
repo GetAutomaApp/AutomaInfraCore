@@ -11,14 +11,27 @@ struct ErrorStringMiddleware: Middleware {
         next.respond(to: request).flatMapErrorThrowing { error in
             let response = Response()
             response.status = .internalServerError
-            response.headers.replaceOrAdd(name: .contentType, value: "application/json; charset=utf-8")
+            response.headers.replaceOrAdd(
+                name: .contentType, value: "application/json; charset=utf-8"
+            )
 
-            let reason: DataTypes.GenericErrors = if let genericError = error as? DataTypes.GenericErrors {
-                genericError
-            } else if let error = error as? AbortError {
-                GenericErrors.abortError
-            } else {
-                GenericErrors.unknownError
+            let reason: DataTypes.GenericErrors =
+                if let genericError = error as? DataTypes.GenericErrors {
+                    genericError
+                } else if error as? AbortError != nil {
+                    GenericErrors.abortError
+                } else {
+                    GenericErrors.unknownError
+                }
+
+            if reason == .abortError {
+                request.logger.error(
+                    "Unknown Error (Abort) occurred",
+                    metadata: [
+                        "to": .string("ErrorStringMiddleware.respond"),
+                        "localizedDescription": .string(error.localizedDescription),
+                    ]
+                )
             }
 
             if reason == .unknownError, let localizedError = error as? LocalizedError {

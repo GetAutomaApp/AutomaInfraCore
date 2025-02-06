@@ -2,6 +2,24 @@
 version: '3.8'
 
 services:
+  app_dev:
+    volumes:
+      - ./:/app/
+      - /app/.build
+    build:
+      context: .
+      dockerfile: ./DevDockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+    environment:
+      RUN_COMMAND: "serve  --env local"
+    ports:
+      - 8080:8080
+    network_mode: host
+
   postgres:
     image: postgres:latest
     container_name: postgres-container
@@ -13,6 +31,13 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 10s
+      retries: 120
+    network_mode: host
+
   localstack:
     image: localstack/localstack:latest
     container_name: localstack
@@ -25,10 +50,10 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
       - PERSISTENCE=1
       - PERSISTENCE_DIR=/tmp/localstack_data
-
     volumes:
       - "$PWD/infra/local/localstack/s3.sh:/etc/localstack/init/ready.d/init-aws.sh"
       - "/var/run/docker.sock:/var/run/docker.sock"
+    network_mode: host
 
 volumes:
   postgres_data:
