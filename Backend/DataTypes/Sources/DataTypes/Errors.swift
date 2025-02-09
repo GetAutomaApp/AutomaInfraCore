@@ -24,6 +24,7 @@ public enum GenericErrors: String, Error, Decodable, Encodable {
     case s3PathTooShort
     case invalidUrl
     case invalidPhoneNumber
+    case unexpectedApiStateNoErrorAndNoResponse
 }
 
 public struct ResponseError: Content {

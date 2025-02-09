@@ -54,32 +54,7 @@ public struct BackendControllerResponseOutput<K: Content> {
     }
 }
 
-public struct BackendControllerResponseOutputNoData {
-    public let error: GenericErrors?
-
-    public init(error: GenericErrors?) {
-        self.error = error
-    }
-}
-
 public protocol BackendControllerInteractor: ControllerInteractor {
-    func decodeResponse<K: Content>(
-        _ data: Data?,
-        _ decodeTo: K.Type
-    ) -> BackendControllerResponseOutput<K>
-
-    func getErrorFromResponse(
-        _ data: Data?
-    ) -> GenericErrors?
-
-    func decodeResponse(
-        _ data: Data?
-    ) -> BackendControllerResponseOutputNoData
-
-    func decodeResponse(
-        _ data: DataResponse<Data?, AFError>
-    ) -> BackendControllerResponseOutputNoData
-
     func decodeResponse<K: Content>(
         _ data: DataResponse<Data?, AFError>,
         _ decodeTo: K.Type
@@ -87,7 +62,49 @@ public protocol BackendControllerInteractor: ControllerInteractor {
 }
 
 public extension BackendControllerInteractor {
+    func handleResponse<K: Content>(
+        response: DataResponse<Data?, AFError>,
+        decodeTo: K.Type,
+        rethrow: [GenericErrors]
+    ) async throws -> K {
+        let output = decodeResponse(
+            response,
+            decodeTo.self
+        )
+
+        if let error = output.error {
+            if rethrow.firstIndex(of: error) != nil {
+                throw error
+            }
+            throw GenericErrors.unknownError
+        }
+
+        guard let data = output.data else {
+            throw GenericErrors.unexpectedApiStateNoErrorAndNoResponse
+        }
+
+        return data
+    }
+
     func decodeResponse<K: Content>(
+        _ data: DataResponse<Data?, AFError>,
+        _ decodeTo: K.Type
+    ) -> BackendControllerResponseOutput<K> {
+        if let alamofireError = data.error, getErrorFromResponse(data.data) == nil {
+            // TODO: Get logging into here
+            if isNetworkOrConnectionError(alamofireError) {
+                return .init(data: nil, error: .networkConnectivityError)
+            }
+
+            return .init(data: nil, error: .alamofireError)
+        }
+
+        // If no error, process the data
+        return decodeResponse(data.data, decodeTo)
+    }
+
+    // Private methods for internal use only
+    private func decodeResponse<K: Content>(
         _ data: Data?,
         _: K.Type
     ) -> BackendControllerResponseOutput<K> {
@@ -105,18 +122,6 @@ public extension BackendControllerInteractor {
         }
     }
 
-    func decodeResponse(
-        _ data: Data?
-    ) -> BackendControllerResponseOutputNoData {
-        let error = getErrorFromResponse(data)
-
-        if let error {
-            return .init(error: error)
-        }
-
-        return .init(error: nil)
-    }
-
     private func isNetworkOrConnectionError(_ error: Error?) -> Bool {
         guard let error = error as? URLError else { return false }
 
@@ -132,42 +137,11 @@ public extension BackendControllerInteractor {
         ]
 
         return networkConnectionErrors.first(where: {
-            error.code != $0
+            error.code == $0
         }) != nil
     }
 
-    func decodeResponse(
-        _ data: DataResponse<Data?, AFError>
-    ) -> BackendControllerResponseOutputNoData {
-        if let alamofireError = data.error {
-            // TODO: Get logging into here
-            if isNetworkOrConnectionError(alamofireError) {
-                return .init(error: .networkConnectivityError)
-            }
-
-            return .init(error: .alamofireError)
-        }
-
-        return decodeResponse(data)
-    }
-
-    func decodeResponse<K: Content>(
-        _ data: DataResponse<Data?, AFError>,
-        _ decodeTo: K.Type
-    ) -> BackendControllerResponseOutput<K> {
-        if let alamofireError = data.error {
-            // TODO: Get logging into here
-            if isNetworkOrConnectionError(alamofireError) {
-                return .init(data: nil, error: .networkConnectivityError)
-            }
-
-            return .init(data: nil, error: .alamofireError)
-        }
-
-        return decodeResponse(data, decodeTo)
-    }
-
-    func getErrorFromResponse(
+    private func getErrorFromResponse(
         _ data: Data?
     ) -> GenericErrors? {
         guard let data else { return nil } // Can't have error if response is empty

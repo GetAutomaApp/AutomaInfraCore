@@ -12,9 +12,9 @@ primary_region = 'jnb'
   RUN_COMMAND = "vapor-queues"
 
 [[vm]]
-  memory = '512mb'
+  memory = '1024mb'
   cpu_kind = 'shared'
-  cpus = 1
+  cpus = 2
   min_machines_running = 1
 
 [metrics]
