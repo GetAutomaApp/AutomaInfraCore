@@ -12,7 +12,7 @@ import Foundation
 struct AuthenticationControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
-    func makeRegisterCodeRequest(_ phoneNumber: String) async throws {
+    func makeRegisterCodeRequest(_ phoneNumber: String) async throws -> AuthenticationCodeResponseDTO {
         let params = try PhoneNumberPayloadDTO(phoneNumber: phoneNumber).encodeToDictionary()
 
         let response = await performRequest(
@@ -22,21 +22,14 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
             encoding: JSONEncoding.default
         )
 
-        let output = decodeResponse(response)
-
-        if let error = output.error {
-            switch output.error {
-            case .userAlreadyExists, .networkConnectivityError:
-                throw error
-            default:
-                // TODO: Log what the actual error was here
-                throw GenericErrors.unknownError
-            }
-        } else {
-            guard response.response?.statusCode == 204 else {
-                throw GenericErrors.unknownError
-            }
-        }
+        return try await handleResponse(
+            response: response,
+            decodeTo: AuthenticationCodeResponseDTO.self,
+            rethrow: [
+                .userAlreadyExists,
+                .networkConnectivityError,
+            ]
+        )
     }
 
     func makeRegisterRequest(_ phoneNumber: String, _ code: String) async throws -> String {
@@ -49,29 +42,18 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
             encoding: JSONEncoding.default
         )
 
-        let output = decodeResponse(
-            response,
-            AuthenticationTokensPayloadDTO.self
-        )
-
-        if let error = output.error {
-            switch output.error {
-            case .userAlreadyExists, .invalidCode, .networkConnectivityError:
-                throw error
-            default:
-                // TODO: Log what the actual error was here
-                throw GenericErrors.unknownError
-            }
-        }
-
-        guard let data = output.data else {
-            throw GenericErrors.failedToDecodeResponse
-        }
-
-        return data.accessToken
+        return try await handleResponse(
+            response: response,
+            decodeTo: AuthenticationTokensPayloadDTO.self,
+            rethrow: [
+                .userAlreadyExists,
+                .invalidCode,
+                .networkConnectivityError,
+            ]
+        ).accessToken
     }
 
-    func makeLoginCodeRequest(_ phoneNumber: String) async throws {
+    func makeLoginCodeRequest(_ phoneNumber: String) async throws -> AuthenticationCodeResponseDTO {
         let params = try PhoneNumberPayloadDTO(phoneNumber: phoneNumber).encodeToDictionary()
 
         let response = await performRequest(
@@ -81,21 +63,15 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
             encoding: JSONEncoding.default
         )
 
-        let output = decodeResponse(response)
-
-        if let error = output.error {
-            switch output.error {
-            case .userNotFound, .invalidCode, .networkConnectivityError:
-                throw error
-            default:
-                // TODO: Log what the actual error was here
-                throw GenericErrors.unknownError
-            }
-        } else {
-            guard response.response?.statusCode == 204 else {
-                throw GenericErrors.unknownError
-            }
-        }
+        return try await handleResponse(
+            response: response,
+            decodeTo: AuthenticationCodeResponseDTO.self,
+            rethrow: [
+                .userNotFound,
+                .invalidCode,
+                .networkConnectivityError,
+            ]
+        )
     }
 
     func makeLoginRequest(_ phoneNumber: String, _ code: String) async throws -> String {
@@ -108,26 +84,15 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
             encoding: JSONEncoding.default
         )
 
-        let output = decodeResponse(
-            response,
-            AuthenticationTokensPayloadDTO.self
-        )
-
-        if let error = output.error {
-            switch error {
-            case .userNotFound, .invalidCode, .networkConnectivityError:
-                throw error
-            default:
-                // TODO: Log what the actual error was here
-                throw GenericErrors.unknownError
-            }
-        }
-
-        guard let data = output.data else {
-            throw GenericErrors.failedToDecodeResponse
-        }
-
-        return data.accessToken
+        return try await handleResponse(
+            response: response,
+            decodeTo: AuthenticationTokensPayloadDTO.self,
+            rethrow: [
+                .userNotFound,
+                .invalidCode,
+                .networkConnectivityError,
+            ]
+        ).accessToken
     }
 
     func makeRefreshTokenRequest(_ refreshToken: String,
@@ -142,21 +107,19 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
             parameters: params
         )
 
+        let data = try await handleResponse(
+            response: response,
+            decodeTo: AccessTokenPayloadDTO.self,
+            rethrow: [
+                .invalidUserId,
+                .userNotFound,
+                .networkConnectivityError,
+            ]
+        )
+
         let output = decodeResponse(response, AccessTokenPayloadDTO.self)
-
-        if let error = output.error {
-            switch error {
-            case .invalidUserId, .userNotFound, .networkConnectivityError:
-                throw error
-            case .invalidToken:
-                try await handleInvalidToken()
-            default:
-                throw GenericErrors.unknownError
-            }
-        }
-
-        guard let data = output.data else {
-            throw GenericErrors.failedToDecodeResponse
+        if output.error == .invalidToken {
+            try await handleInvalidToken()
         }
 
         return data

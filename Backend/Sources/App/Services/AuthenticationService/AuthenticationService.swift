@@ -28,7 +28,7 @@ struct AuthenticationService: Sendable {
         let validCode = try await AuthenticationCodeModel
             .query(on: readDb)
             .filter(\.$phoneNumber == phoneNumber)
-            .filter(\.$code == code)
+            .filter(\.$code == code.lowercased())
             .first()
 
         guard let validCode else {
