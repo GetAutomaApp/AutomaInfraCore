@@ -24,7 +24,7 @@ public extension ControllerInteractor {
         method: Alamofire.HTTPMethod,
         headers: Alamofire.HTTPHeaders? = nil,
         parameters: Alamofire.Parameters? = nil,
-        encoding: ParameterEncoding = URLEncoding.default
+        encoding: ParameterEncoding = JSONEncoding.default
     ) async -> DataResponse<Data?, AFError> {
         let url = "\(baseURL)\(endpoint)"
 

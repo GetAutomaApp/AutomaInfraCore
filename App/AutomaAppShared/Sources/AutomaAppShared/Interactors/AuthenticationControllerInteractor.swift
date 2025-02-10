@@ -18,8 +18,7 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
         let response = await performRequest(
             endpoint: "/Authentication/register-code",
             method: .post,
-            parameters: params,
-            encoding: JSONEncoding.default
+            parameters: params
         )
 
         return try await handleResponse(
@@ -38,8 +37,7 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
         let response = await performRequest(
             endpoint: "/Authentication/register",
             method: .post,
-            parameters: params,
-            encoding: JSONEncoding.default
+            parameters: params
         )
 
         return try await handleResponse(
@@ -59,8 +57,7 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
         let response = await performRequest(
             endpoint: "/Authentication/login-code",
             method: .post,
-            parameters: params,
-            encoding: JSONEncoding.default
+            parameters: params
         )
 
         return try await handleResponse(
@@ -80,8 +77,7 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
         let response = await performRequest(
             endpoint: "/Authentication/login",
             method: .post,
-            parameters: params,
-            encoding: JSONEncoding.default
+            parameters: params
         )
 
         return try await handleResponse(
