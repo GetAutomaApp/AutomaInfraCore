@@ -19,7 +19,6 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
             endpoint: "/Authentication/register-code",
             method: .post,
             parameters: params,
-            encoding: JSONEncoding.default
         )
 
         return try await handleResponse(
@@ -39,7 +38,6 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
             endpoint: "/Authentication/register",
             method: .post,
             parameters: params,
-            encoding: JSONEncoding.default
         )
 
         return try await handleResponse(
@@ -60,7 +58,6 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
             endpoint: "/Authentication/login-code",
             method: .post,
             parameters: params,
-            encoding: JSONEncoding.default
         )
 
         return try await handleResponse(
