@@ -8,6 +8,7 @@ import Vapor
 
 public protocol ControllerInteractor {
     var baseURL: String { get }
+    var session: Alamofire.Session { get }
 
     func performRequest(
         endpoint: String,
@@ -19,6 +20,10 @@ public protocol ControllerInteractor {
 }
 
 public extension ControllerInteractor {
+    var session: Alamofire.Session {
+        .default
+    }
+
     func performRequest(
         endpoint: String,
         method: Alamofire.HTTPMethod,
@@ -29,7 +34,7 @@ public extension ControllerInteractor {
         let url = "\(baseURL)\(endpoint)"
 
         return await withCheckedContinuation { continuation in
-            AF.request(
+            self.session.request(
                 url,
                 method: method,
                 parameters: parameters,

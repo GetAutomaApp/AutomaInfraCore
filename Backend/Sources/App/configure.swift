@@ -68,6 +68,9 @@ public func configure(_ app: Application) async throws {
         // Jobs
         app.queues.add(TransactionalMessageAsyncJob())
         app.queues.add(ProfilePictureAsyncJob())
+
+        // Http Server Config
+        app.http.server.configuration.responseCompression = .enabled
     }
 }
 
