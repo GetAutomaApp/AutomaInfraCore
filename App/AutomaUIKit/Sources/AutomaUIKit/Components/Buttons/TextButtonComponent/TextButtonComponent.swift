@@ -88,7 +88,7 @@ public struct TextButtonComponent: View {
         }) {
             Text(config.text)
                 .fontTableFont(
-                    FontTable.SFPro.Headings.head6,
+                    FontTable.SFPro.Body.body1,
                     DesignTokens.colors
                         .textDark
                 )

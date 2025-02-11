@@ -33,7 +33,7 @@ struct ButtonFrameComponent_PreviewsView: View {
                         print("Clicked Me")
                     }) {
                         Text("Hello, World")
-                            .fontTableFont(FontTable.SFPro.Headings.head6)
+                            .fontTableFont(FontTable.SFPro.Body.body4)
                     }
 
                     ButtonFrameComponent(config: buttonConfig, action: {

@@ -28,12 +28,10 @@ struct TextButtonComponent_PreviewsView: View {
             ]
         ) {
             VStack {
-                HStack {
-                    TextButtonComponent(config: sharedConfig, onSelfAppear: { config in
-                        config.text = "0"
-                    }, action: { config in config.text = "\(Int(config.text)! + 1)" })
-                        .contentTransition(.symbolEffect(.replace))
-                }
+                TextButtonComponent(config: sharedConfig, onSelfAppear: { config in
+                    config.text = "0"
+                }, action: { config in config.text = "\(Int(config.text)! + 1)" })
+                    .contentTransition(.symbolEffect(.replace))
 
                 EnumPropertyView(
                     value: $sharedConfig.frameVariant,
