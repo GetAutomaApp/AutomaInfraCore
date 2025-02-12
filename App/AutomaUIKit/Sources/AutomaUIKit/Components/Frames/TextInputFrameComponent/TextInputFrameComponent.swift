@@ -11,7 +11,7 @@ import SwiftUI
  Add a detailed description here of how to use this
 
  - Parameters:
-     - config: The Config Used to manage state & modifications to  `TextInputFrameComponent`
+ - config: The Config Used to manage state & modifications to  `TextInputFrameComponent`
  - Returns: some View
 
  To see usage examples & visuals, check out `TextInputFrameModifierDocumentation.md`
@@ -27,15 +27,18 @@ public struct TextInputFrameComponent: View {
         HStack {
             if config.hasIcon {
                 config.icon.image
-                    .foregroundStyle(DesignTokens.colors.primaryText)
+                    .foregroundStyle(config.textColor)
             }
             TextField(config.ghostText, text: $config.text)
+                .disabled(config.isDisabled)
         }
-        .padding(DesignTokens.padding.smallPaddingVar)
-        .background(DesignTokens.colors.primaryWhitespace2)
+        .padding(config.padding)
+        .background(
+            config.isDisabled ? DesignTokens.colors.primaryWhitespace3 : config.backgroundColor
+        )
         .clipShape(
             RoundedRectangle(
-                cornerSize: DesignTokens.padding.cornerRadiusBase
+                cornerSize: config.cornerRadius
             )
         )
     }

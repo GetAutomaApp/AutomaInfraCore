@@ -86,6 +86,18 @@ struct PaddingEditor: View {
     }
 }
 
+struct CGSizeEdtior: View {
+    @Binding var cgSize: CGSize
+
+    var body: some View {
+        HStack {
+            PaddingSliderInput(value: $cgSize.width, label: "W")
+            Spacer()
+            PaddingSliderInput(value: $cgSize.height, label: "H")
+        }
+    }
+}
+
 /**
  Renders a SwiftUI Segmented Picker allowing you to switch between enum values.
 
@@ -99,9 +111,17 @@ struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View whe
     var body: some View {
         Picker("Select", selection: $value) {
             ForEach(cases, id: \.self) { variant in
-                Text(variant.rawValue)
+                if let variant = variant as? DesignIcons {
+                    variant.image
+                } else {
+                    Text(variant.rawValue)
+                }
             }
         }.pickerStyle(.segmented)
+    }
+
+    func isDesignIcon(_ t: some Any) -> Bool {
+        t is DesignIcons
     }
 }
 
@@ -136,7 +156,7 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
                     }
                 }
             }
-        }
+        }.preferredColorScheme(.dark)
     }
 
     /**
@@ -224,6 +244,15 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
                 var mutableObject = object
                 property.set(&mutableObject, newValue)
             }))
+        } else if property.type == CGSize.self {
+            let value = property.get(object) as! CGSize
+            CGSizeEdtior(cgSize: Binding(
+                get: { value },
+                set: { newValue in
+                    var mutableObject = object
+                    property.set(&mutableObject, newValue)
+                }
+            ))
         } else {
             Text("\(property.label)")
         }

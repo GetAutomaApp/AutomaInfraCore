@@ -52,7 +52,12 @@ public struct DesignPadding: Sendable {
     )
 }
 
-public enum DesignIcons: CaseIterable {
+protocol DesignIcon {
+    associatedtype Content: View
+    var image: Content { get }
+}
+
+public enum DesignIcons: String, CaseIterable, DesignIcon {
     case pause, play, unknown
     case arrowRight
 

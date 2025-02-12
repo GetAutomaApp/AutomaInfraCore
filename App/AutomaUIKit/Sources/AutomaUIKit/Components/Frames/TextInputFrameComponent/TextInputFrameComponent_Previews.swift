@@ -5,18 +5,41 @@
 
 import SwiftUI
 
-// Add a preview per state difference (No need to add all states)
-
 struct TextInputFrameComponent_Previews: PreviewProvider {
     static var previews: some View {
-        TextInputFrameComponentWrapperView()
-            .preferredColorScheme(.dark)
+        TextInputFrameComponentPropertyEditor()
     }
 }
 
-struct TextInputFrameComponentWrapperView: View {
-    @ObservedObject var config = TextInputFrameComponentConfig()
+struct TextInputFrameComponentPropertyEditor: View {
+    @StateObject private var config = TextInputFrameComponentConfig()
+
     var body: some View {
-        TextInputFrameComponent(config: config).padding()
+        PropertyEditor(
+            object: config,
+            properties: [
+                [AnyKeyPath("Text", keyPath: \.text)],
+                [AnyKeyPath("Ghost Text", keyPath: \.ghostText)],
+                [AnyKeyPath("Has Icon", keyPath: \.hasIcon)],
+                [AnyKeyPath("Background Color", keyPath: \.backgroundColor)],
+                [AnyKeyPath("Text Color", keyPath: \.textColor)],
+                [AnyKeyPath("Padding", keyPath: \.padding)],
+                [AnyKeyPath("Corner Radius", keyPath: \.cornerRadius)],
+            ]
+        ) {
+            VStack {
+                TextInputFrameComponent(config: config)
+
+                EnumPropertyView(
+                    value: $config.variant,
+                    cases: TextInputFrameComponentVariants.allCases
+                )
+
+                EnumPropertyView(
+                    value: $config.icon,
+                    cases: DesignIcons.allCases
+                )
+            }
+        }
     }
 }
