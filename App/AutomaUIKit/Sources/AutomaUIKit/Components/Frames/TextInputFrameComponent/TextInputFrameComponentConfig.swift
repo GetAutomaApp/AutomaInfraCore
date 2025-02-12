@@ -16,10 +16,22 @@ public class TextInputFrameComponentConfig: ObservableObject {
     @Published public var icon: DesignIcons
     @Published public var hasIcon: Bool
     @Published public var backgroundColor: Color
+    @Published public var currentBackgroundColor: Color
+    @Published public var disabledBackgroundColor: Color
     @Published public var textColor: Color
     @Published public var padding: EdgeInsets
     @Published public var cornerRadius: CGSize
-    @Published public var variant: TextInputFrameComponentVariants
+
+    @Published public var variant: TextInputFrameComponentVariants {
+        willSet { newValue
+            switch newValue {
+            case .generic:
+                currentBackgroundColor = backgroundColor
+            case .disabled:
+                currentBackgroundColor = disabledBackgroundColor
+            }
+        }
+    }
 
     var isDisabled: Bool {
         variant == .disabled
@@ -32,6 +44,7 @@ public class TextInputFrameComponentConfig: ObservableObject {
         hasIcon: Bool = true,
         variant: TextInputFrameComponentVariants = .generic,
         backgroundColor: Color = DesignTokens.colors.primaryWhitespace2,
+        disabledBackgroundColor: Color = DesignTokens.colors.primaryWhitespace3,
         textColor: Color = DesignTokens.colors.primaryText,
         padding: EdgeInsets = DesignTokens.padding.smallPaddingVar,
         cornerRadius: CGSize = DesignTokens.padding.cornerRadiusBase
@@ -42,6 +55,8 @@ public class TextInputFrameComponentConfig: ObservableObject {
         self.hasIcon = hasIcon
         self.variant = variant
         self.backgroundColor = backgroundColor
+        self.disabledBackgroundColor = disabledBackgroundColor
+        currentBackgroundColor = backgroundColor
         self.textColor = textColor
         self.padding = padding
         self.cornerRadius = cornerRadius

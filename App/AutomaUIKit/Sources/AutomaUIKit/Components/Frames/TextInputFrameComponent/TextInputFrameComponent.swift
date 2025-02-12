@@ -34,7 +34,7 @@ public struct TextInputFrameComponent: View {
         }
         .padding(config.padding)
         .background(
-            config.isDisabled ? DesignTokens.colors.primaryWhitespace3 : config.backgroundColor
+            config.currentBackgroundColor
         )
         .clipShape(
             RoundedRectangle(

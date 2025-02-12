@@ -22,6 +22,8 @@ struct TextInputFrameComponentPropertyEditor: View {
                 [AnyKeyPath("Ghost Text", keyPath: \.ghostText)],
                 [AnyKeyPath("Has Icon", keyPath: \.hasIcon)],
                 [AnyKeyPath("Background Color", keyPath: \.backgroundColor)],
+                [AnyKeyPath("Disabled Background Color", keyPath: \.disabledBackgroundColor)],
+                [AnyKeyPath("Current Background Color", keyPath: \.currentBackgroundColor)],
                 [AnyKeyPath("Text Color", keyPath: \.textColor)],
                 [AnyKeyPath("Padding", keyPath: \.padding)],
                 [AnyKeyPath("Corner Radius", keyPath: \.cornerRadius)],
