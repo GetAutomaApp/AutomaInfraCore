@@ -49,11 +49,10 @@ public func configure(_ app: Application) async throws {
         app.migrations.add(UserProfileAddProfilePictureMigration1735216565())
         app.migrations.add(UserProfileConvertIdToImageKeyMigration1735294202())
         app.migrations.add(JobMetadataMigrate())
+        app.migrations.add(RemoveUserStorageMigration1739456565())
 
         try await app.autoMigrate()
 
-        // Controllers
-        try app.register(collection: UserStorageController())
         try app.register(collection: AuthenticationController())
 
         // Authentication
