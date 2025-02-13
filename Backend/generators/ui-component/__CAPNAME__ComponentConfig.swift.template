@@ -7,8 +7,8 @@ public enum __CAPNAME__ComponentVariants {
 
 /// Add a short description here about the config
 public class __CAPNAME__ComponentConfig: ObservableObject {
-    @Publish public var someProperty: String = "Default Value"  // Default value
-    @Publish public var variant: __CAPNAME__ComponentVariants = .generic
+    @Published public var someProperty: String = "Default Value"  // Default value
+    @Published public var variant: __CAPNAME__ComponentVariants = .generic
 
     public let textColor: Color = .black
 }

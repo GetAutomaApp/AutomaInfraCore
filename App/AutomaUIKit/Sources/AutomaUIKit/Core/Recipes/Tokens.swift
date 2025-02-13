@@ -17,6 +17,9 @@ public struct DesignColors: Sendable {
     public let primaryWhitespace1: Color = .init(hex: "000000")
     public let primaryWhitespace2: Color = .init(hex: "3C3C3C")
     public let primaryWhitespace3: Color = .init(hex: "7C7C7C")
+
+    public let danger: Color = .init(hex: "FD8B83")
+    public let error: Color = .init(hex: "FF3B2F")
 }
 
 public struct DesignPadding: Sendable {
