@@ -22,13 +22,13 @@ struct Shell {
 
         task.standardOutput = stdoutPipe
         task.standardError = stderrPipe
-        task.launchPath = "/bin/zsh"
+        task.executableURL = URL(filePath: "/bin/zsh")
 
         let fullCommand = "\(command)"
         task.arguments = ["-c", fullCommand]
 
         task.standardInput = nil
-        task.launch()
+        try! task.run()
 
         let stdoutData = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
         let stderrData = stderrPipe.fileHandleForReading.readDataToEndOfFile()
