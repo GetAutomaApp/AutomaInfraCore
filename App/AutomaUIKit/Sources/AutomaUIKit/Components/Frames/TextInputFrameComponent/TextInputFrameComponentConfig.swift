@@ -23,7 +23,7 @@ public class TextInputFrameComponentConfig: ObservableObject {
     @Published public var cornerRadius: CGSize
 
     @Published public var variant: TextInputFrameComponentVariants {
-        willSet { newValue
+        willSet {
             switch newValue {
             case .generic:
                 currentBackgroundColor = backgroundColor
