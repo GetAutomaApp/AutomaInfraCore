@@ -19,8 +19,17 @@ import SwiftUI
 public struct TextInputFrameComponent: View {
     @ObservedObject public var config: TextInputFrameComponentConfig
 
-    public init(config: TextInputFrameComponentConfig = .init()) {
+    let onIconTap: () -> Void
+    let onSelfAppear: () -> Void
+
+    public init(
+        config: TextInputFrameComponentConfig = .init(),
+        onIconTap: @escaping () -> Void = {},
+        onSelfAppear: @escaping () -> Void = {}
+    ) {
         self.config = config
+        self.onIconTap = onIconTap
+        self.onSelfAppear = onSelfAppear
     }
 
     public var body: some View {
@@ -28,6 +37,9 @@ public struct TextInputFrameComponent: View {
             if config.hasIcon {
                 config.icon.image
                     .foregroundStyle(config.textColor)
+                    .onTapGesture {
+                        onIconTap()
+                    }
             }
             TextField(config.ghostText, text: $config.text)
                 .disabled(config.isDisabled)
@@ -41,5 +53,6 @@ public struct TextInputFrameComponent: View {
                 cornerSize: config.cornerRadius
             )
         )
+        .onAppear(perform: onSelfAppear)
     }
 }
