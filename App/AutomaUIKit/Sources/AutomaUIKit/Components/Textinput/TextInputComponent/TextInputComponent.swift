@@ -36,13 +36,11 @@ struct TextInputComponentComponent: View {
                 onSelfAppear: { onSelfAppear(config) }
             )
 
-            if !config.errorMessage.isEmpty {
-                Text(config.errorMessage)
-                    .fontTableFont(
-                        config.titleContentFont,
-                        config.errorSegmentColor
-                    )
-            }
+            Text("\(config.errorMessage) ")
+                .fontTableFont(
+                    config.titleContentFont,
+                    config.errorSegmentColor
+                )
         }
     }
 }

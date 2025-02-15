@@ -55,7 +55,12 @@ public struct PhoneNumberTextInputComponent: View {
     @ObservedObject var config = PhoneNumberTextInputComponentConfig()
 
     public var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
+            if !config.title.isEmpty {
+                Text(config.title)
+                    .fontTableFont(config.titleContentFont, config.titleSegmentColor)
+            }
+
             PhoneNumberTextFieldView(
                 phoneNumber: $config.phoneNumber,
                 isValid: $config.isValid
@@ -65,13 +70,11 @@ public struct PhoneNumberTextInputComponent: View {
             .background(config.currentBackgroundColor)
             .clipShape(RoundedRectangle(cornerSize: config.cornerRadius))
 
-            TextInputComponentComponent(config: config)
-
-            Text("Phone Num \(config.phoneNumber)")
-                .fontTableFont(FontTable.SFPro.Body.body1, .white)
-
-            Text("Is Valid \(config.isValid)")
-                .fontTableFont(FontTable.SFPro.Body.body1, .white)
+            Text("\(config.errorMessage) ")
+                .fontTableFont(
+                    config.titleContentFont,
+                    config.errorSegmentColor
+                )
         }
     }
 }
