@@ -7,9 +7,10 @@ import PhoneNumberKit
 import SwiftUI
 
 struct PhoneNumberTextFieldView: UIViewRepresentable {
-    private let textField = PhoneNumberTextField()
     @Binding var phoneNumber: String
     @Binding var isValid: Bool
+
+    private let textField = PhoneNumberTextField()
 
     func makeUIView(context: Context) -> PhoneNumberTextField {
         textField.withExamplePlaceholder = true
@@ -23,10 +24,7 @@ struct PhoneNumberTextFieldView: UIViewRepresentable {
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(
-            phoneNumber: $phoneNumber,
-            isValid: updateIsValid
-        )
+        Coordinator(phoneNumber: $phoneNumber, isValid: $isValid)
     }
 
     func updateUIView(_ uiView: PhoneNumberTextField, context _: Context) {
@@ -35,47 +33,37 @@ struct PhoneNumberTextFieldView: UIViewRepresentable {
         }
     }
 
-    func updateIsValid() {
-        isValid = textField.isValidNumber
-        print("is valid \(phoneNumber) \(textField.isValidNumber)")
-    }
-
     class Coordinator: NSObject, UITextFieldDelegate {
         @Binding var phoneNumber: String
-        let isValid: () -> Void
+        @Binding var isValid: Bool
 
-        init(phoneNumber: Binding<String>, isValid: @escaping () -> Void) {
+        init(phoneNumber: Binding<String>, isValid: Binding<Bool>) {
             _phoneNumber = phoneNumber
-            self.isValid = isValid
+            _isValid = isValid
         }
 
-        func textFieldDidChangeSelection(
-            _ textField: UITextField
-        ) {
-            print("phoneNumber")
+        func textFieldDidChangeSelection(_ textField: UITextField) {
             phoneNumber = textField.text ?? ""
-            isValid()
+            if let phoneTextField = textField as? PhoneNumberTextField {
+                isValid = phoneTextField.isValidNumber
+            }
         }
     }
 }
 
 public struct PhoneNumberTextInputComponent: View {
-    @ObservedObject var config: PhoneNumberTextInputComponentConfig = .init()
-    @State private var phoneField: PhoneNumberTextFieldView?
+    @ObservedObject var config = PhoneNumberTextInputComponentConfig()
 
     public var body: some View {
         VStack {
-            phoneField
-                .frame(height: 23)
-                .padding(config.padding)
-                .background(
-                    config.currentBackgroundColor
-                )
-                .clipShape(
-                    RoundedRectangle(
-                        cornerSize: config.cornerRadius
-                    )
-                )
+            PhoneNumberTextFieldView(
+                phoneNumber: $config.phoneNumber,
+                isValid: $config.isValid
+            )
+            .frame(height: 23)
+            .padding(config.padding)
+            .background(config.currentBackgroundColor)
+            .clipShape(RoundedRectangle(cornerSize: config.cornerRadius))
 
             TextInputComponentComponent(config: config)
 
@@ -84,12 +72,6 @@ public struct PhoneNumberTextInputComponent: View {
 
             Text("Is Valid \(config.isValid)")
                 .fontTableFont(FontTable.SFPro.Body.body1, .white)
-        }
-        .onAppear {
-            phoneField = PhoneNumberTextFieldView(
-                phoneNumber: $config.phoneNumber,
-                isValid: $config.isValid
-            )
         }
     }
 }
