@@ -7,8 +7,7 @@ import PhoneNumberKit
 import SwiftUI
 
 struct PhoneNumberTextFieldView: UIViewRepresentable {
-    @Binding var phoneNumber: String
-    @Binding var isValid: Bool
+    @ObservedObject var config: PhoneNumberTextInputComponentConfig
 
     private let textField = PhoneNumberTextField()
 
@@ -17,35 +16,33 @@ struct PhoneNumberTextFieldView: UIViewRepresentable {
         textField.withFlag = true
         textField.withPrefix = true
         textField.withDefaultPickerUI = true
-        textField.placeholder = "Enter phone number"
-        textField.textColor = UIColor(DesignTokens.colors.primaryText)
+        textField.placeholder = config.title
+        textField.textColor = .init(config.textColor)
         textField.delegate = context.coordinator
         return textField
     }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(phoneNumber: $phoneNumber, isValid: $isValid)
+        Coordinator(config: config)
     }
 
     func updateUIView(_ uiView: PhoneNumberTextField, context _: Context) {
-        if uiView.text != phoneNumber {
-            uiView.text = phoneNumber
+        if uiView.text != config.phoneNumber {
+            uiView.text = config.phoneNumber
         }
     }
 
     class Coordinator: NSObject, UITextFieldDelegate {
-        @Binding var phoneNumber: String
-        @Binding var isValid: Bool
+        @ObservedObject var config: PhoneNumberTextInputComponentConfig
 
-        init(phoneNumber: Binding<String>, isValid: Binding<Bool>) {
-            _phoneNumber = phoneNumber
-            _isValid = isValid
+        init(config: PhoneNumberTextInputComponentConfig) {
+            self.config = config
         }
 
         func textFieldDidChangeSelection(_ textField: UITextField) {
-            phoneNumber = textField.text ?? ""
+            config.phoneNumber = textField.text ?? ""
             if let phoneTextField = textField as? PhoneNumberTextField {
-                isValid = phoneTextField.isValidNumber
+                config.isValid = phoneTextField.isValidNumber
             }
         }
     }
@@ -61,20 +58,19 @@ public struct PhoneNumberTextInputComponent: View {
                     .fontTableFont(config.titleContentFont, config.titleSegmentColor)
             }
 
-            PhoneNumberTextFieldView(
-                phoneNumber: $config.phoneNumber,
-                isValid: $config.isValid
-            )
-            .frame(height: 23)
-            .padding(config.padding)
-            .background(config.currentBackgroundColor)
-            .clipShape(RoundedRectangle(cornerSize: config.cornerRadius))
+            PhoneNumberTextFieldView(config: config)
+                .frame(height: 23)
+                .padding(config.padding)
+                .background(config.currentBackgroundColor)
+                .clipShape(RoundedRectangle(cornerSize: config.cornerRadius))
 
             Text("\(config.errorMessage) ")
                 .fontTableFont(
                     config.titleContentFont,
                     config.errorSegmentColor
                 )
+
+            Text("\(config.phoneNumber)")
         }
     }
 }
