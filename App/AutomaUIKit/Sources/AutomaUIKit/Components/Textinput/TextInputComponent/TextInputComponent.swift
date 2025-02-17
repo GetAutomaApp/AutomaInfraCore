@@ -6,7 +6,22 @@
 import SwiftUI
 
 struct TextInputComponentComponent: View {
-    @ObservedObject var config: TextInputComponentComponentConfig = .init()
+    @ObservedObject var config: TextInputComponentComponentConfig
+
+    let onIconTap: (TextInputComponentComponentConfig) -> Void
+    let onSelfAppear: (TextInputComponentComponentConfig) -> Void
+
+    public init(
+        config: TextInputComponentComponentConfig = .init(),
+        onIconTap: @escaping (TextInputComponentComponentConfig) -> Void = { _ in },
+        onSelfAppear: @escaping (TextInputComponentComponentConfig) -> Void = {
+            _ in
+        }
+    ) {
+        self.config = config
+        self.onIconTap = onIconTap
+        self.onSelfAppear = onSelfAppear
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -15,15 +30,17 @@ struct TextInputComponentComponent: View {
                     .fontTableFont(config.titleContentFont, config.titleSegmentColor)
             }
 
-            TextInputFrameComponent(config: config)
+            TextInputFrameComponent(
+                config: config,
+                onIconTap: { onIconTap(config) },
+                onSelfAppear: { onSelfAppear(config) }
+            )
 
-            if !config.errorMessage.isEmpty {
-                Text(config.errorMessage)
-                    .fontTableFont(
-                        config.titleContentFont,
-                        config.errorSegmentColor
-                    )
-            }
+            Text("\(config.errorMessage) ")
+                .fontTableFont(
+                    config.titleContentFont,
+                    config.errorSegmentColor
+                )
         }
     }
 }
