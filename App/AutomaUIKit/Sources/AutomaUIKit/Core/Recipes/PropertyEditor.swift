@@ -143,16 +143,18 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
     @ObservedObject var object: T
     let properties: [[AnyKeyPath<T, Any>]]
 
-    let viewer: () -> Content
+    @ViewBuilder let viewer: () -> Content
 
     var body: some View {
-        Form {
-            viewer()
+        VStack {
+            viewer().padding()
 
-            ForEach(properties.indices, id: \.self) { index in
-                HStack {
-                    ForEach(properties[index].indices, id: \.self) { item in
-                        propertyRow(for: properties[index][item])
+            Form {
+                ForEach(properties.indices, id: \.self) { index in
+                    HStack {
+                        ForEach(properties[index].indices, id: \.self) { item in
+                            propertyRow(for: properties[index][item])
+                        }
                     }
                 }
             }

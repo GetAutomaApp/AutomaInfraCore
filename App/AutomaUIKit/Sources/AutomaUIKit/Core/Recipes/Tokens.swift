@@ -64,6 +64,9 @@ public enum DesignIcons: String, CaseIterable, DesignIcon {
     case pause, play, unknown
     case arrowRight
 
+    // mathematics
+    case subtraction
+
     var image: some View {
         switch self {
         case .pause:
@@ -74,6 +77,8 @@ public enum DesignIcons: String, CaseIterable, DesignIcon {
             Image(systemName: "questionmark.circle.fill").toIcon()
         case .arrowRight:
             Image(systemName: "arrow.right").toIcon()
+        case .subtraction:
+            Image(systemName: "minus").toIcon()
         }
     }
 }

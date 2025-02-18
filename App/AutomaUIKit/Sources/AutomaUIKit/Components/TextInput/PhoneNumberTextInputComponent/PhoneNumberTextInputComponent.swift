@@ -69,8 +69,6 @@ public struct PhoneNumberTextInputComponent: View {
                     config.titleContentFont,
                     config.errorSegmentColor
                 )
-
-            Text("\(config.phoneNumber)")
         }
     }
 }
