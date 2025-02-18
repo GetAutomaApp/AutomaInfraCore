@@ -24,7 +24,7 @@ public struct VerificationCodeInputComponent: View {
 
     private func createTextBinding(index: Int) -> Binding<String> {
         .init(get: {
-            var splits = config.text.split(separator: "-", omittingEmptySubsequences: false).map(
+            let splits = config.text.split(separator: "-", omittingEmptySubsequences: false).map(
                 { $0
                     .trimmingCharacters(in: .whitespacesAndNewlines)
                     .trimmingCharacters(in: .symbols)
@@ -58,44 +58,57 @@ public struct VerificationCodeInputComponent: View {
     }
 
     public var body: some View {
-        HStack {
-            TextField(config.ghostText, text: createTextBinding(index: 0))
-                .focused($focusedText, equals: .input1)
-                .onSubmit {
-                    if focusedText == .input1 {
-                        focusedText = .input2
-                    }
-                }
-                .disabled(config.isDisabled)
-                .padding(config.padding)
-                .background(
-                    config.currentBackgroundColor
-                )
-                .clipShape(
-                    RoundedRectangle(
-                        cornerSize: config.cornerRadius
-                    )
-                )
+        VStack {
+            if !config.title.isEmpty {
+                Text(config.title)
+                    .fontTableFont(config.titleContentFont, config.titleSegmentColor)
+            }
 
-            TextField(config.ghostText, text: createTextBinding(index: 1))
-                .focused($focusedText, equals: .input2)
-                .onSubmit {
-                    if focusedText == .input1 {
-                        focusedText = .input2
+            HStack {
+                TextField(config.ghostText, text: createTextBinding(index: 0))
+                    .focused($focusedText, equals: .input1)
+                    .onSubmit {
+                        if focusedText == .input1 {
+                            focusedText = .input2
+                        }
                     }
-                }
-                .disabled(config.isDisabled)
-                .padding(config.padding)
-                .background(
-                    config.currentBackgroundColor
-                )
-                .clipShape(
-                    RoundedRectangle(
-                        cornerSize: config.cornerRadius
+                    .disabled(config.isDisabled)
+                    .padding(config.padding)
+                    .background(
+                        config.currentBackgroundColor
                     )
-                )
+                    .clipShape(
+                        RoundedRectangle(
+                            cornerSize: config.cornerRadius
+                        )
+                    )
 
-            Text("\(config.text)")
+                config.separatorIcon.image
+
+                TextField(config.ghostText, text: createTextBinding(index: 1))
+                    .focused($focusedText, equals: .input2)
+                    .onSubmit {
+                        if focusedText == .input1 {
+                            focusedText = .input2
+                        }
+                    }
+                    .disabled(config.isDisabled)
+                    .padding(config.padding)
+                    .background(
+                        config.currentBackgroundColor
+                    )
+                    .clipShape(
+                        RoundedRectangle(
+                            cornerSize: config.cornerRadius
+                        )
+                    )
+
+                Text("\(config.errorMessage) ")
+                    .fontTableFont(
+                        config.titleContentFont,
+                        config.errorSegmentColor
+                    )
+            }
         }
     }
 }

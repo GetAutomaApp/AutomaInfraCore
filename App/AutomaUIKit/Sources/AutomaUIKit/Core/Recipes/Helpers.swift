@@ -36,6 +36,7 @@ enum DesignImages {
     static func iconManipulation(_ image: Image) -> some View {
         image
             .resizable()
+            .aspectRatio(contentMode: .fit)
             .frame(
                 width: DesignTokens.icons.defaultWidth,
                 height: DesignTokens.icons.defaultHeight
@@ -46,6 +47,7 @@ enum DesignImages {
 
 extension Image {
     func toIcon() -> some View {
-        DesignImages.iconManipulation(self)
+        DesignImages
+            .iconManipulation(self)
     }
 }

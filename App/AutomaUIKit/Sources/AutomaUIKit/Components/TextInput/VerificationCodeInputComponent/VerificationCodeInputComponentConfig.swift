@@ -9,10 +9,13 @@ public enum VerificationCodeInputComponentVariants {
     case generic
 }
 
-/// Add a short description here about the config
 public class VerificationCodeInputComponentConfig: TextInputComponentComponentConfig {
+    @Published public var separatorIcon: DesignIcons
+
     public init(
+        separatorIcon: DesignIcons = .subtraction
     ) {
+        self.separatorIcon = separatorIcon
         super.init()
         text = " - "
     }
