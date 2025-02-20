@@ -11,10 +11,11 @@ public enum PhoneNumberTextInputComponentVariants {}
 public class PhoneNumberTextInputComponentConfig: TextInputComponentComponentConfig {
     @Published public var phoneNumber: String
 
-    public var timesUntilShowErrorMessage = 7
+    public var timesUntilShowErrorMessage = 2
 
     @Published public var isValid: Bool {
         didSet {
+            print("is valid changed \(isValid)")
             if timesUntilShowErrorMessage > 0 {
                 timesUntilShowErrorMessage -= 1
                 return
@@ -29,7 +30,7 @@ public class PhoneNumberTextInputComponentConfig: TextInputComponentComponentCon
         }
     }
 
-    init(phoneNumber: String = "+1", isValid: Bool = false) {
+    public init(phoneNumber: String = "+1", isValid: Bool = false) {
         self.phoneNumber = phoneNumber
         self.isValid = isValid
 

@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        ////        OnboardingAuthPickerScreen()
+        OnboardingAuthPickerScreen()
 //        AuthenticationTestView(baseURL: "http://localhost:8080")
-        VerificationCodeInputComponent()
+//        VerificationCodeInputComponent()
     }
 }
 

@@ -93,6 +93,7 @@ public struct TextButtonComponent: View {
                         .textDark
                 )
         } onSelfAppear: { _ in
+            print("calling on self appear button frame comp")
             onSelfAppear(config)
         }
     }

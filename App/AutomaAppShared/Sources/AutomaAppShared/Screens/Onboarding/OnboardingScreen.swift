@@ -74,7 +74,7 @@ public struct OnboardingScreen: View {
                         iconButtonConfig.variant = .circle
                         iconButtonConfig.icon = .arrowRight
                     }
-                ) { _ in
+                ) {
                     handleOnboardingNextScreen()
                 }
             }
@@ -95,7 +95,7 @@ public struct OnboardingScreen: View {
             footerContent: {
                 IconButtonComponent(
                     defaultIcon: .arrowRight
-                ) { _ in
+                ) {
                     shouldShowApplyScreen = false
                     shouldShowRegisterScreen = true
                 }

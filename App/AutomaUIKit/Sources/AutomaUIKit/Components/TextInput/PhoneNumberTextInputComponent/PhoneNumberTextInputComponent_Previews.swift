@@ -52,6 +52,6 @@ struct PhoneNumberTextInputComponentWrapperView: View {
 //                )
 //            }
 
-        PhoneNumberTextInputComponent().padding().preferredColorScheme(.dark)
+        PhoneNumberTextInputComponent(config: .init()).padding().preferredColorScheme(.dark)
     }
 }

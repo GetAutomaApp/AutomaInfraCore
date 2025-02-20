@@ -19,6 +19,11 @@ struct PhoneNumberTextFieldView: UIViewRepresentable {
         textField.placeholder = config.title
         textField.textColor = .init(config.textColor)
         textField.delegate = context.coordinator
+        textField.addTarget(
+            context.coordinator,
+            action: #selector(Coordinator.textFieldDidChange(_:)),
+            for: .editingChanged
+        )
         return textField
     }
 
@@ -39,17 +44,26 @@ struct PhoneNumberTextFieldView: UIViewRepresentable {
             self.config = config
         }
 
-        func textFieldDidChangeSelection(_ textField: UITextField) {
+        @objc func textFieldDidChange(_ textField: UITextField) {
             config.phoneNumber = textField.text ?? ""
+
             if let phoneTextField = textField as? PhoneNumberTextField {
                 config.isValid = phoneTextField.isValidNumber
+            } else {
+                config.isValid = false
             }
         }
     }
 }
 
 public struct PhoneNumberTextInputComponent: View {
-    @ObservedObject var config = PhoneNumberTextInputComponentConfig()
+    @ObservedObject var config: PhoneNumberTextInputComponentConfig
+
+    public init(
+        config: PhoneNumberTextInputComponentConfig
+    ) {
+        self.config = config
+    }
 
     public var body: some View {
         VStack(alignment: .leading) {
@@ -64,7 +78,7 @@ public struct PhoneNumberTextInputComponent: View {
                 .background(config.currentBackgroundColor)
                 .clipShape(RoundedRectangle(cornerSize: config.cornerRadius))
 
-            Text("\(config.errorMessage) ")
+            Text("\(config.errorMessage)")
                 .fontTableFont(
                     config.titleContentFont,
                     config.errorSegmentColor

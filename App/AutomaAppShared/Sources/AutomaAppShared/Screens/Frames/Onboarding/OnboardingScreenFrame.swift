@@ -25,9 +25,7 @@ public struct OnboardingScreenFrame<TitleContent: View, FooterContent: View>: Vi
             VStack {
                 Spacer()
             }
-            #if os(iOS)
             .frame(height: UIScreen.main.bounds.height * 0.6)
-            #endif
             .frame(maxWidth: .infinity)
             .background(DesignTokens.colors.primary)
 
@@ -42,15 +40,10 @@ public struct OnboardingScreenFrame<TitleContent: View, FooterContent: View>: Vi
                     footerContent()
                 }
             }
-            .padding(.horizontal, 30)
-            #if os(iOS)
-                .padding(.vertical, 40)
-                .frame(height: UIScreen.main.bounds.height * 0.4)
-            #else
-                .padding(.vertical, 50)
-            #endif
-                .frame(maxWidth: .infinity)
-                .background(.black)
+            .defaultScreenPadding()
+            .frame(height: UIScreen.main.bounds.height * 0.4)
+            .frame(maxWidth: .infinity)
+            .background(.black)
         }
         .ignoresSafeArea()
     }
