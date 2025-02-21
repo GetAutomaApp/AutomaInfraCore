@@ -14,11 +14,15 @@ public struct VerificationCodeInputComponent: View {
     @ObservedObject var config: VerificationCodeInputComponentConfig
     @FocusState var focusedText: FocusedField?
 
+    let onSelfAppear: (VerificationCodeInputComponentConfig) -> Void
+
     public init(
         config: VerificationCodeInputComponentConfig = .init(),
-        focusedText: FocusedField? = nil
+        focusedText: FocusedField? = nil,
+        onSelfAppear: @escaping (VerificationCodeInputComponentConfig) -> Void = { _ in }
     ) {
         self.config = config
+        self.onSelfAppear = onSelfAppear
         self.focusedText = focusedText
     }
 
@@ -58,7 +62,7 @@ public struct VerificationCodeInputComponent: View {
     }
 
     public var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             if !config.title.isEmpty {
                 Text(config.title)
                     .fontTableFont(config.titleContentFont, config.titleSegmentColor)
@@ -82,6 +86,7 @@ public struct VerificationCodeInputComponent: View {
                             cornerSize: config.cornerRadius
                         )
                     )
+                    .autocapitalization(.none)
 
                 config.separatorIcon.image
 
@@ -102,13 +107,17 @@ public struct VerificationCodeInputComponent: View {
                             cornerSize: config.cornerRadius
                         )
                     )
+                    .autocapitalization(.none)
 
-                Text("\(config.errorMessage) ")
-                    .fontTableFont(
-                        config.titleContentFont,
-                        config.errorSegmentColor
-                    )
+            }.onAppear {
+                onSelfAppear(config)
             }
+
+            Text("\(config.errorMessage) ")
+                .fontTableFont(
+                    config.titleContentFont,
+                    config.errorSegmentColor
+                )
         }
     }
 }

@@ -40,6 +40,7 @@ public struct AuthenticationFormScreenFrame<CenterContent: View>: View {
                 await action()
             })
             .onChange(of: isValid) {
+                print("is changing \(isValid)")
                 buttonConfig.isDisabled = !isValid
             }
         }

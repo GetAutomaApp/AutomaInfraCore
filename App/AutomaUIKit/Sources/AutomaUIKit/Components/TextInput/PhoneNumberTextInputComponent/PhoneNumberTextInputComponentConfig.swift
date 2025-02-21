@@ -14,7 +14,7 @@ public class PhoneNumberTextInputComponentConfig: TextInputComponentComponentCon
     public var timesUntilShowErrorMessage = 2
 
     @Published public var isValid: Bool {
-        didSet {
+        didSet { oldValue
             print("is valid changed \(isValid)")
             if timesUntilShowErrorMessage > 0 {
                 timesUntilShowErrorMessage -= 1
