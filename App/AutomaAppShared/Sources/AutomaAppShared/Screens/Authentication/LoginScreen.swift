@@ -125,12 +125,12 @@ public struct LoginScreen: View {
 
             if response.success {
                 didSendCode = true
+                timeout = 60
+            } else {
+                timeout = response.timeout
             }
 
-            timeout = response.timeout
             wasPreviousErrorTimeout = true
-
-            print("response \(response)")
         } catch {
             print("\(error) HANDLE THESE!!!")
         }
@@ -147,7 +147,13 @@ public struct LoginScreen: View {
             )
 
             // TODO: set the authentication tokens into app storage
-            print("\(response)")
+//            print("\(response)")
+            let success = [
+                KeychainHelper
+                    .set(for: .AuthenticationToken, value: response.accessToken),
+                KeychainHelper
+                    .set(for: .RefreshToken, value: response.refreshToken),
+            ].first(where: { !$0 })
         } catch {
             if let error = error as? GenericErrors {
                 switch error {

@@ -17,7 +17,7 @@ public struct VerificationCodeInputComponent: View {
     let onSelfAppear: (VerificationCodeInputComponentConfig) -> Void
 
     public init(
-        config: VerificationCodeInputComponentConfig = .init(),
+        config: VerificationCodeInputComponentConfig,
         focusedText: FocusedField? = nil,
         onSelfAppear: @escaping (VerificationCodeInputComponentConfig) -> Void = { _ in }
     ) {

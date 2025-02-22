@@ -9,9 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        OnboardingAuthPickerScreen()
-//        AuthenticationTestView(baseURL: "http://localhost:8080")
-//        VerificationCodeInputComponent()
+        VStack {
+            if KeychainHelper.get(for: .AuthenticationToken) != nil {
+                LoginSuccessTemporary()
+            } else {
+                OnboardingAuthPickerScreen()
+            }
+        }.task {
+            let loop = AuthenticationLoop()
+            loop.startAccessTokenLoop()
+        }
     }
 }
 
