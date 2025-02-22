@@ -49,6 +49,9 @@ public struct DesignPadding: Sendable {
         trailing: PaddingSizes.large.value
     )
 
+    public let none: EdgeInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+    public let minimal: EdgeInsets = .init(top: 2, leading: 2, bottom: 2, trailing: 2)
+
     public let cornerRadiusBase: CGSize = .init(
         width: PaddingSizes.base.value,
         height: PaddingSizes.base.value
@@ -67,6 +70,9 @@ public enum DesignIcons: String, CaseIterable, DesignIcon {
     // mathematics
     case subtraction
 
+    // Other
+    case x
+
     var image: some View {
         switch self {
         case .pause:
@@ -79,6 +85,8 @@ public enum DesignIcons: String, CaseIterable, DesignIcon {
             Image(systemName: "arrow.right").toIcon()
         case .subtraction:
             Image(systemName: "minus").toIcon()
+        case .x:
+            Image(systemName: "x.circle.fill").toIcon()
         }
     }
 }

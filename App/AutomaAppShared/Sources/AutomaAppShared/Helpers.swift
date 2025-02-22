@@ -41,4 +41,10 @@ public class KeychainHelper {
     public static func delete(for key: KeyChainKeys) {
         try? keychain.deleteItem(forKey: key.rawValue)
     }
+
+    public static func createReadonlyBinding(for key: KeyChainKeys) -> Binding<String> {
+        .init(get: {
+            KeychainHelper.get(for: key) ?? ""
+        }, set: { _ in })
+    }
 }

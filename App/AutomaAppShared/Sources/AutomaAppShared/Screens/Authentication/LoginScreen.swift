@@ -12,9 +12,13 @@ public struct LoginScreen: View {
     @StateObject var verificationInputConfig: VerificationCodeInputComponentConfig = .init()
     @State var timeout: Double = 0
 
-    var authInteractor: AuthenticationControllerInteractor = .init(
-        baseURL: "https://api-sandbox.getautoma.app"
-    )
+    @EnvironmentObject var baseEnvironmentConfig: BaseAppEnvironmentObject
+
+    var authInteractor: AuthenticationControllerInteractor {
+        .init(
+            baseURL: baseEnvironmentConfig.apiBaseURL
+        )
+    }
 
     @State private var wasPreviousErrorTimeout: Bool = false
     @State private var timer: Timer? // To avoid race conditions
@@ -22,7 +26,7 @@ public struct LoginScreen: View {
     @State private var isValidVerificationScreenState: Bool = false
 
     private var formattedTimeout: String {
-        let error = String(format: "%.2f", timeout)
+        let error = String(format: "%.1f", timeout)
         if !didSendCode {
             return "Please wait \(error)s before trying again!"
         } else {
@@ -125,11 +129,9 @@ public struct LoginScreen: View {
 
             if response.success {
                 didSendCode = true
-                timeout = 60
-            } else {
-                timeout = response.timeout
             }
 
+            timeout = response.timeout
             wasPreviousErrorTimeout = true
         } catch {
             print("\(error) HANDLE THESE!!!")
@@ -146,14 +148,14 @@ public struct LoginScreen: View {
                 code
             )
 
-            // TODO: set the authentication tokens into app storage
-//            print("\(response)")
             let success = [
                 KeychainHelper
                     .set(for: .AuthenticationToken, value: response.accessToken),
                 KeychainHelper
                     .set(for: .RefreshToken, value: response.refreshToken),
             ].first(where: { !$0 })
+
+            baseEnvironmentConfig.isLoggedIn = true
         } catch {
             if let error = error as? GenericErrors {
                 switch error {

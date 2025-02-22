@@ -12,24 +12,31 @@
 import SwiftUI
 
 public struct AuthenticationLoop: Sendable {
-    public init() {}
+    let baseURL: String
 
-    public func getAccessToken() async {
-        let authenticationController = AuthenticationControllerInteractor(
-            baseURL: "https://api-sandbox.getautoma.app"
-        )
+    public init(baseURL: String) {
+        self.baseURL = baseURL
+    }
 
+    public func getAccessToken() async -> Bool {
+        let authenticationController = AuthenticationControllerInteractor(baseURL: baseURL)
         let keychain = KeychainHelper.self
 
         print("Access Token")
+        var shouldReturn = false
         if let refreshToken = await keychain.get(for: .RefreshToken) {
             let newAccessToken = try? await authenticationController.makeRefreshTokenRequest(
                 refreshToken,
                 handleInvalidToken: {
                     await keychain.delete(for: .RefreshToken)
                     await keychain.delete(for: .AuthenticationToken)
+                    shouldReturn = true
                 }
             )
+
+            if shouldReturn {
+                return false
+            }
 
             if let newAccessToken {
                 await keychain
@@ -37,11 +44,13 @@ public struct AuthenticationLoop: Sendable {
                         for: .AuthenticationToken,
                         value: newAccessToken.accessToken
                     )
+                return true
             } else {
                 await keychain.delete(for: .RefreshToken)
                 await keychain.delete(for: .AuthenticationToken)
-                return
+                return false
             }
         }
+        return false
     }
 }

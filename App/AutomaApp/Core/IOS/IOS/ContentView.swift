@@ -14,23 +14,18 @@ import SwiftUI
 // 4. Make sure functionality works if refresh token gets set to null we go back to the onboarding screen
 
 struct ContentView: View {
+    @EnvironmentObject var baseEnvironmentConfig: BaseAppEnvironmentObject
+
     var body: some View {
         VStack {
-            if KeychainHelper.get(for: .AuthenticationToken) != nil {
-                LoginSuccessTemporary()
-            } else {
-                OnboardingAuthPickerScreen()
-            }
-        }.task {
-            let loop = AuthenticationLoop()
-            print("Starting Init first call (we always call here to make sure)")
-            await loop.getAccessToken()
-
-            Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
-                print("Looping")
-                Task {
-                    await loop.getAccessToken()
+            if baseEnvironmentConfig.isAppFinishedLoading {
+                if baseEnvironmentConfig.isLoggedIn {
+                    LoginSuccessTemporary()
+                } else {
+                    OnboardingAuthPickerScreen()
                 }
+            } else {
+                ProgressView()
             }
         }
     }
