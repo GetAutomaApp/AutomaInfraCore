@@ -133,7 +133,7 @@ struct AuthenticationService: Sendable {
             ]
         )
 
-        let distance: Double = 60 // TODO: Create ConfigRoute (configure client remotely, change this to an env var
+        let distance: Double = 60 // TODO: Convert this to a constant ENV var
         let dateToCheck = Date()
         if
             let mostRecentCodeSent = try await AuthenticationCodeModel
@@ -181,7 +181,7 @@ struct AuthenticationService: Sendable {
 
             BackendMetric.totalSuccessfulVerificationCodesSent.increment()
 
-            return .init(success: true, timeout: 0)
+            return .init(success: true, timeout: 60)
         } catch let error as GenericErrors {
             BackendMetric.totalFailedVerificationCodesSent.increment()
             logger.error(

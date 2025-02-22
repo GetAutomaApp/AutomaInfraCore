@@ -11,14 +11,19 @@
 //
 import SwiftUI
 
-struct AuthenticationLoop {
-    func getAccessToken(baseUrl: String = "https://api-sandbox.getautoma.app") async {
-        let authenticationController = AuthenticationControllerInteractor(baseURL: baseUrl)
+public struct AuthenticationLoop: Sendable {
+    public init() {}
+
+    public func getAccessToken() async {
+        let authenticationController = AuthenticationControllerInteractor(
+            baseURL: "https://api-sandbox.getautoma.app"
+        )
+
         let keychain = KeychainHelper.self
 
         print("Access Token")
         if let refreshToken = await keychain.get(for: .RefreshToken) {
-            let newAccessToken = try! await authenticationController.makeRefreshTokenRequest(
+            let newAccessToken = try? await authenticationController.makeRefreshTokenRequest(
                 refreshToken,
                 handleInvalidToken: {
                     await keychain.delete(for: .RefreshToken)
@@ -26,18 +31,16 @@ struct AuthenticationLoop {
                 }
             )
 
-            await keychain
-                .set(
-                    for: .AuthenticationToken,
-                    value: newAccessToken.accessToken
-                )
-        }
-    }
-
-    func startAccessTokenLoop(baseUrl: String = "https://api-sandbox.getautoma.app") async {
-        Timer.scheduledTimer(withTimeInterval: 100, repeats: true) { _ in
-            Task {
-                await getAccessToken(baseUrl: baseUrl)
+            if let newAccessToken {
+                await keychain
+                    .set(
+                        for: .AuthenticationToken,
+                        value: newAccessToken.accessToken
+                    )
+            } else {
+                await keychain.delete(for: .RefreshToken)
+                await keychain.delete(for: .AuthenticationToken)
+                return
             }
         }
     }

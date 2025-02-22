@@ -36,12 +36,10 @@ public struct VerificationCodeInputComponent: View {
                 }
             )
 
-            print("Hello", splits.count >= index + 1)
-
             let splitToUse = splits.count >= index + 1 ? splits[index] : ""
             return splitToUse
         }, set: { new in
-            print("123", config.text)
+            url String "https://api-sandbox.getautoma.app/Authentication/login-code" print("123", config.text)
             var splits = config.text.split(separator: "-", omittingEmptySubsequences: false).map(
                 { $0
                     .trimmingCharacters(in: .whitespacesAndNewlines)

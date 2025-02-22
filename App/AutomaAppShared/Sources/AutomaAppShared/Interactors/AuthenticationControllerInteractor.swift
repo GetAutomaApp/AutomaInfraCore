@@ -100,7 +100,8 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
         let response = await performRequest(
             endpoint: "/Authentication/refresh-token",
             method: .get,
-            parameters: params
+            parameters: params,
+            encoding: URLEncoding.default
         )
 
         let data = try await handleResponse(
