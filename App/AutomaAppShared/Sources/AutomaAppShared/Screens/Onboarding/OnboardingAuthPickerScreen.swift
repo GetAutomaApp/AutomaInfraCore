@@ -37,10 +37,11 @@ public struct OnboardingAuthPickerScreen: View {
 
     @ViewBuilder
     private func makeTitleContent() -> some View {
-        InfoPairComponent(
-            title: "Welcome to Automa!",
-            description: "The most advanced content automation solution known to humanity!"
-        )
+        InfoPairComponent(config:
+            .init(
+                title: "Welcome to Automa!",
+                description: "The most advanced content automation solution known to humanity!"
+            ))
     }
 
     @ViewBuilder

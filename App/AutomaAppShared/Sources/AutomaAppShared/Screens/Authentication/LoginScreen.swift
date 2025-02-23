@@ -21,6 +21,7 @@ public struct LoginScreen: View {
     }
 
     @State private var wasPreviousErrorTimeout: Bool = false
+    @State private var shouldShowTimeoutError: Bool = true
     @State private var timer: Timer? // To avoid race conditions
     @State private var didSendCode: Bool = false
     @State private var isValidVerificationScreenState: Bool = false
@@ -103,14 +104,17 @@ public struct LoginScreen: View {
             DispatchQueue.main.async {
                 if timeout > 0 {
                     timeout -= timeout > 0.1 ? 0.1 : timeout
-                    verificationInputConfig.errorMessage = formattedTimeout
-                    phoneInputConfig.errorMessage = formattedTimeout
+                    if shouldShowTimeoutError {
+                        verificationInputConfig.errorMessage = formattedTimeout
+                        phoneInputConfig.errorMessage = formattedTimeout
+                    }
                 } else {
                     timeout = 0
                     if wasPreviousErrorTimeout {
                         verificationInputConfig.errorMessage = ""
                         phoneInputConfig.errorMessage = ""
                         wasPreviousErrorTimeout = false
+                        shouldShowTimeoutError = true
                     }
                 }
             }
@@ -133,8 +137,15 @@ public struct LoginScreen: View {
 
             timeout = response.timeout
             wasPreviousErrorTimeout = true
+            shouldShowTimeoutError = true
+        } catch let error as GenericErrors {
+            phoneInputConfig.errorMessage = error.message
+            verificationInputConfig.errorMessage = error.message
+            shouldShowTimeoutError = false
         } catch {
-            print("\(error) HANDLE THESE!!!")
+            phoneInputConfig.errorMessage = GenericErrors.unknownError.message
+            verificationInputConfig.errorMessage = GenericErrors.unknownError.message
+            shouldShowTimeoutError = false
         }
     }
 
@@ -156,15 +167,14 @@ public struct LoginScreen: View {
             ].first(where: { !$0 })
 
             baseEnvironmentConfig.isLoggedIn = true
+        } catch let error as GenericErrors {
+            phoneInputConfig.errorMessage = error.message
+            verificationInputConfig.errorMessage = error.message
+            shouldShowTimeoutError = false
         } catch {
-            if let error = error as? GenericErrors {
-                switch error {
-                case .invalidCode:
-                    verificationInputConfig.errorMessage = "Invalid Verification Code!"
-                default:
-                    verificationInputConfig.errorMessage = "Unknown Error \(error)"
-                }
-            }
+            phoneInputConfig.errorMessage = GenericErrors.unknownError.message
+            verificationInputConfig.errorMessage = GenericErrors.unknownError.message
+            shouldShowTimeoutError = false
         }
     }
 

@@ -15,18 +15,23 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var baseEnvironmentConfig: BaseAppEnvironmentObject
+    @EnvironmentObject var networkChecker: NetworkManager
 
     var body: some View {
-        VStack {
-            if baseEnvironmentConfig.isAppFinishedLoading {
-                if baseEnvironmentConfig.isLoggedIn {
-                    LoginSuccessTemporary()
+        if networkChecker.isConnected {
+            VStack {
+                if baseEnvironmentConfig.isAppFinishedLoading {
+                    if baseEnvironmentConfig.isLoggedIn {
+                        LoginSuccessTemporary()
+                    } else {
+                        OnboardingAuthPickerScreen()
+                    }
                 } else {
-                    OnboardingAuthPickerScreen()
+                    ProgressView()
                 }
-            } else {
-                ProgressView()
             }
+        } else {
+            NoNetworkConnectionView()
         }
     }
 }

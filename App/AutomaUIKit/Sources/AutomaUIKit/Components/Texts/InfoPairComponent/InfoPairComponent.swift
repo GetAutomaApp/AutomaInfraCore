@@ -21,18 +21,8 @@ public struct InfoPairComponent: View {
 
     public init(
         config: InfoPairComponentConfig = .init(),
-        title: String? = nil,
-        description: String? = nil,
         onSelfAppear: @escaping (InfoPairComponentConfig) -> Void = { _ in }
     ) {
-        if let title {
-            config.title = title
-        }
-
-        if let description {
-            config.description = description
-        }
-
         _config = .init(initialValue: config)
 
         self.onSelfAppear = onSelfAppear

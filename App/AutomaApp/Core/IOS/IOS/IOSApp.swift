@@ -9,6 +9,7 @@ import SwiftUI
 @main
 struct IOSApp: App {
     @StateObject var baseConfig = BaseAppEnvironmentObject()
+    @StateObject var networkChecker: NetworkManager = .init()
 
     var body: some Scene {
         WindowGroup {
@@ -23,16 +24,21 @@ struct IOSApp: App {
                     let loop = AuthenticationLoop(
                         baseURL: baseConfig.apiBaseURL
                     )
-                    baseConfig.isLoggedIn = await loop.getAccessToken()
+
+                    if networkChecker.isConnected {
+                        baseConfig.isLoggedIn = await loop.getAccessToken()
+                    }
 
                     baseConfig.isAppFinishedLoading = true
 
                     Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
                         print("Looping")
                         Task {
-                            let result = await loop.getAccessToken()
-                            await MainActor.run {
-                                baseConfig.isLoggedIn = result
+                            if await networkChecker.isConnected {
+                                let result = await loop.getAccessToken()
+                                await MainActor.run {
+                                    baseConfig.isLoggedIn = result
+                                }
                             }
                         }
                     }
@@ -40,6 +46,7 @@ struct IOSApp: App {
                     DebugMenu()
                 })
                 .environmentObject(baseConfig)
+                .environmentObject(networkChecker)
         }
     }
 }
