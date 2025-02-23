@@ -69,7 +69,7 @@ public struct LoginScreen: View {
                             }
 
                             Text("Resend Code")
-                                .background(.red)
+                                .fontTableFont(FontTable.SFPro.Body.body1)
                                 .padding()
                                 .onTapGesture {
                                     Task {
