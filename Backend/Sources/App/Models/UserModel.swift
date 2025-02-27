@@ -34,6 +34,9 @@ final class UserModel: Model, @unchecked Sendable {
     @Timestamp(key: "deleted_at", on: .delete)
     var deletedAt: Date?
 
+    @Field(key: "accepted")
+    var accepted: Bool
+
     init() {}
 
     init(
@@ -44,7 +47,8 @@ final class UserModel: Model, @unchecked Sendable {
         profilePictureKey: String? = nil,
         createdAt: Date? = nil,
         updatedAt: Date? = nil,
-        deletedAt: Date? = nil
+        deletedAt: Date? = nil,
+        accepted: Bool
     ) {
         self.id = id
         self.username = username
@@ -54,6 +58,7 @@ final class UserModel: Model, @unchecked Sendable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
+        self.accepted = accepted
     }
 
     func toDTO() -> UserDTO {
@@ -78,7 +83,8 @@ final class UserModel: Model, @unchecked Sendable {
             phoneNumber: phoneNumber,
             instagramHandle: instagramHandle,
             profilePictureKey: profilePictureKey,
-            profilePictureUrl: profilePictureUrl
+            profilePictureUrl: profilePictureUrl,
+            accepted: accepted
         )
     }
 
@@ -88,7 +94,8 @@ final class UserModel: Model, @unchecked Sendable {
             username: dto.username,
             phoneNumber: dto.phoneNumber,
             instagramHandle: dto.instagramHandle,
-            profilePictureKey: dto.profilePictureKey
+            profilePictureKey: dto.profilePictureKey,
+            accepted: dto.accepted
         )
     }
 }

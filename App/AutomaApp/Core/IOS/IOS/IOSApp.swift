@@ -21,21 +21,24 @@ struct IOSApp: App {
                     #endif
                 })
                 .task {
-                    let loop = AuthenticationLoop(
+                    let launchManager = AppLaunch(
                         baseURL: baseConfig.apiBaseURL
                     )
 
                     if networkChecker.isConnected {
-                        baseConfig.isLoggedIn = await loop.getAccessToken()
+                        baseConfig.isLoggedIn = await launchManager.getAccessToken()
+                        if baseConfig.isLoggedIn {
+                            baseConfig.isAccepted = await launchManager
+                                .isUserAccepted()
+                        }
                     }
 
                     baseConfig.isAppFinishedLoading = true
 
                     Timer.scheduledTimer(withTimeInterval: 900, repeats: true) { _ in
-                        print("Looping")
                         Task {
                             if await networkChecker.isConnected {
-                                let result = await loop.getAccessToken()
+                                let result = await launchManager.getAccessToken()
                                 await MainActor.run {
                                     baseConfig.isLoggedIn = result
                                 }

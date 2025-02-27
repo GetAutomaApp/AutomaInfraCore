@@ -1,4 +1,4 @@
-// AuthenticationLoop.swift
+// AppLaunch.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -11,7 +11,7 @@
 //
 import SwiftUI
 
-public struct AuthenticationLoop: Sendable {
+public struct AppLaunch: Sendable {
     let baseURL: String
 
     public init(baseURL: String) {
@@ -52,5 +52,16 @@ public struct AuthenticationLoop: Sendable {
             }
         }
         return false
+    }
+
+    public func isUserAccepted() async -> Bool {
+        let appLaunchInteractor = AppLaunchControllerInteractor(baseURL: baseURL)
+        do {
+            let response = try await appLaunchInteractor.makeIsUserAcceptedRequest()
+            return response
+        } catch {
+            print("Unknown Response Error, Returning False")
+            return false
+        }
     }
 }

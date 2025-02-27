@@ -19,8 +19,8 @@ public struct LoginSuccessTemporary: View {
             titleContent: {
                 InfoPairComponent(
                     config: .init(
-                        title: "We'll get back to you soon!",
-                        description: "We are taking a thorough look at your application. We will notify you via sms & notifications on further updates!"
+                        title: "Thanks for your patience!",
+                        description: "The app is currently being developed. This screen will be removed once the app is open for general use!"
                     )
                 )
             },

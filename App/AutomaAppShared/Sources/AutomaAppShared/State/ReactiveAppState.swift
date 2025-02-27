@@ -8,6 +8,7 @@ import SwiftUI
 
 public class BaseAppEnvironmentObject: ObservableObject {
     @Published public var isLoggedIn: Bool = false
+    @Published public var isAccepted: Bool = false
     @Published public var isAppFinishedLoading: Bool = false
     @Published public var isDebugMenuActive: Bool = false
     @AppStorage("apiBaseURL") public var apiBaseURL: String = "https://api-sandbox.getautoma.app"

@@ -82,7 +82,8 @@ struct AuthenticationService: Sendable {
         let user = UserModel(
             id: userId,
             username: username,
-            phoneNumber: payload.phoneNumber
+            phoneNumber: payload.phoneNumber,
+            accepted: false
         )
 
         let userDTO = user.toDTO()

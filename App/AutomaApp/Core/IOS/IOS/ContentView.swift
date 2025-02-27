@@ -21,8 +21,10 @@ struct ContentView: View {
         if networkChecker.isConnected {
             VStack {
                 if baseEnvironmentConfig.isAppFinishedLoading {
-                    if baseEnvironmentConfig.isLoggedIn {
+                    if baseEnvironmentConfig.isLoggedIn, baseEnvironmentConfig.isAccepted {
                         LoginSuccessTemporary()
+                    } else if baseEnvironmentConfig.isLoggedIn {
+                        PendingApplicationReview()
                     } else {
                         OnboardingAuthPickerScreen()
                     }
