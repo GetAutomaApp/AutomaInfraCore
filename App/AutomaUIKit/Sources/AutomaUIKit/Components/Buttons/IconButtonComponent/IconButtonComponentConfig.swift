@@ -25,7 +25,7 @@ public class IconButtonComponentConfig: ButtonFrameComponentConfig {
     }
 
     /// Whether the button is disabled or not. When disabled, the button appears inactive.
-    @Published var isDisabled: Bool = false {
+    @Published public var isDisabled: Bool = true {
         didSet {
             manageDisabledState()
         }
@@ -34,10 +34,14 @@ public class IconButtonComponentConfig: ButtonFrameComponentConfig {
     /// The icon to display on the button. This defines the visual icon that the button will use.
     @Published public var icon: DesignIcons = .unknown
 
+    // Controls wether we are loading or not
+    @Published public var isLoading: Bool = false
+
     /// Initializes the `IconButtonComponentConfig` with default styling.
     ///
     /// This calls the superclass's initializer and applies the default styling for the button's variant.
     public init() {
+        print("init icon config")
         super.init()
         applyVariantStyling()
     }
@@ -73,6 +77,7 @@ public class IconButtonComponentConfig: ButtonFrameComponentConfig {
     /// When the button is disabled (`isDisabled = true`), the button's frame variant is set to `.disabled`.
     /// If the button is not disabled, it uses the `.generic` frame variant.
     func manageDisabledState() {
+        print("Icon Button Setting Variant to \(isDisabled)")
         frameVariant = isDisabled ? .disabled : .generic
     }
 }

@@ -12,7 +12,12 @@ public enum ButtonFrameVariants: String, CaseIterable {
 }
 
 public class ButtonFrameComponentConfig: ObservableObject {
-    @Published public var frameVariant: ButtonFrameVariants = .generic
+    @Published public var frameVariant: ButtonFrameVariants = .generic {
+        didSet {
+            print("Variant From ButtonFrame is \(frameVariant)")
+        }
+    }
+
     @Published public var fillSpace: Bool = true
     @Published public var isCircular: Bool = false
     @Published public var roundness = DesignTokens.defaultCornerRadius
@@ -29,6 +34,7 @@ public class ButtonFrameComponentConfig: ObservableObject {
         variantDisabledBackground: Color = DesignTokens.colors.primaryWhitespace3,
         defaultPadding: EdgeInsets = DesignTokens.padding.button
     ) {
+        print("calling initializer \(frameVariant)")
         self.frameVariant = frameVariant
         self.fillSpace = fillSpace
         self.isCircular = isCircular

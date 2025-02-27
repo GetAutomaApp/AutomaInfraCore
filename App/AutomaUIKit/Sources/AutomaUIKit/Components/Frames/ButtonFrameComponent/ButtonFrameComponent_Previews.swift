@@ -71,10 +71,10 @@ struct AutoButtonVariationsView: View {
 
             Spacer()
 
-            IconButtonComponent(onSelfAppear: { config in config.variant = .square }, defaultIcon: .pause) { config in
+            IconButtonComponent(onSelfAppear: { config in config.variant = .square }, configAction: { config in
                 isTimerActive ? stopChangingVariant() : startChangingVariant()
                 config.icon = isTimerActive ? .pause : .play
-            }
+            })
         }
     }
 

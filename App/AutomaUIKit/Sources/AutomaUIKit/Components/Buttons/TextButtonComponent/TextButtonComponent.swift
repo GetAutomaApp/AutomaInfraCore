@@ -88,11 +88,10 @@ public struct TextButtonComponent: View {
         }) {
             Text(config.text)
                 .fontTableFont(
-                    FontTable.SFPro.Body.body1,
-                    DesignTokens.colors
-                        .textDark
+                    FontTable.SFPro.Headings.head6, DesignTokens.colors.textDark
                 )
         } onSelfAppear: { _ in
+            print("calling on self appear button frame comp")
             onSelfAppear(config)
         }
     }

@@ -31,7 +31,7 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
         )
     }
 
-    func makeRegisterRequest(_ phoneNumber: String, _ code: String) async throws -> String {
+    func makeRegisterRequest(_ phoneNumber: String, _ code: String) async throws -> AuthenticationTokensPayloadDTO {
         let params = try AuthPhoneCodePayloadDTO(phoneNumber: phoneNumber, code: code).encodeToDictionary()
 
         let response = await performRequest(
@@ -48,7 +48,7 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
                 .invalidCode,
                 .networkConnectivityError,
             ]
-        ).accessToken
+        )
     }
 
     func makeLoginCodeRequest(_ phoneNumber: String) async throws -> AuthenticationCodeResponseDTO {
@@ -71,7 +71,7 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
         )
     }
 
-    func makeLoginRequest(_ phoneNumber: String, _ code: String) async throws -> String {
+    func makeLoginRequest(_ phoneNumber: String, _ code: String) async throws -> AuthenticationTokensPayloadDTO {
         let params = try AuthPhoneCodePayloadDTO(phoneNumber: phoneNumber, code: code).encodeToDictionary()
 
         let response = await performRequest(
@@ -88,7 +88,7 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
                 .invalidCode,
                 .networkConnectivityError,
             ]
-        ).accessToken
+        )
     }
 
     func makeRefreshTokenRequest(_ refreshToken: String,
@@ -100,7 +100,8 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
         let response = await performRequest(
             endpoint: "/Authentication/refresh-token",
             method: .get,
-            parameters: params
+            parameters: params,
+            encoding: URLEncoding.default
         )
 
         let data = try await handleResponse(

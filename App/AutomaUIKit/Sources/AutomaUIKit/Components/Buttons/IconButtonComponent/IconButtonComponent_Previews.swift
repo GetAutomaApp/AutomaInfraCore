@@ -19,6 +19,7 @@ struct IconButtonComponent_PreviewsView: View {
             object: sharedConfig,
             properties: [
                 [AnyKeyPath("Is Disabled", keyPath: \.isDisabled)],
+                [AnyKeyPath("Is Loading", keyPath: \.isLoading)],
                 [AnyKeyPath("Fill Space", keyPath: \.fillSpace)],
                 [AnyKeyPath("Is Circular", keyPath: \.isCircular)],
                 [AnyKeyPath("Padding", keyPath: \.defaultPadding)],
@@ -31,8 +32,7 @@ struct IconButtonComponent_PreviewsView: View {
                 HStack {
                     IconButtonComponent(config: sharedConfig, onSelfAppear: { config in
                         config.icon = .play
-                    },
-                    action: { config in
+                    }, configAction: { config in
                         if config.icon == .play {
                             config.icon = .pause
                         } else {

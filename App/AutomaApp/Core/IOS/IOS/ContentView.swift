@@ -7,11 +7,32 @@ import AutomaAppShared
 import AutomaUIKit
 import SwiftUI
 
+// Tasks:
+// 1. Convert Authentication Token & Access Token to binding
+// 2. Make sure we use this binding everywhere
+// 3. Add `automaAuthCode` to backend-interactor which is true/false (uses the env object)
+// 4. Make sure functionality works if refresh token gets set to null we go back to the onboarding screen
+
 struct ContentView: View {
+    @EnvironmentObject var baseEnvironmentConfig: BaseAppEnvironmentObject
+    @EnvironmentObject var networkChecker: NetworkManager
+
     var body: some View {
-        ////        OnboardingAuthPickerScreen()
-//        AuthenticationTestView(baseURL: "http://localhost:8080")
-        VerificationCodeInputComponent()
+        if networkChecker.isConnected {
+            VStack {
+                if baseEnvironmentConfig.isAppFinishedLoading {
+                    if baseEnvironmentConfig.isLoggedIn {
+                        LoginSuccessTemporary()
+                    } else {
+                        OnboardingAuthPickerScreen()
+                    }
+                } else {
+                    ProgressView()
+                }
+            }
+        } else {
+            NoNetworkConnectionView()
+        }
     }
 }
 

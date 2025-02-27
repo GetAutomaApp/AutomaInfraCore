@@ -17,7 +17,7 @@ import SwiftUI
  */
 struct ButtonFrameComponent<Content: View>: View {
     // Default configuration state for the button. Used when no custom configuration is provided.
-    @StateObject private var config = ButtonFrameComponentConfig()
+    @ObservedObject private var config: ButtonFrameComponentConfig
 
     // Closure that defines the button's action when tapped, using the current configuration.
     let action: (ButtonFrameComponentConfig) -> Void
@@ -38,13 +38,12 @@ struct ButtonFrameComponent<Content: View>: View {
      - Parameter content: A closure returning the content view to be displayed inside the button.
      - Parameter onSelfAppear: A closure called when the button appears on screen.
      */
-    init(config: ButtonFrameComponentConfig? = nil,
+    init(config: ButtonFrameComponentConfig,
          action: @escaping (ButtonFrameComponentConfig) -> Void,
          @ViewBuilder content: @escaping () -> Content,
          onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in })
     {
-        let selfConfigDefault = ButtonFrameComponentConfig()
-        _config = StateObject(wrappedValue: config ?? selfConfigDefault)
+        self.config = config
 
         self.action = action
         self.onSelfAppear = onSelfAppear
@@ -61,13 +60,12 @@ struct ButtonFrameComponent<Content: View>: View {
      - Parameter content: A ViewBuilder closure that exposes the config, Returns `some View`
      - Parameter onSelfAppear: A closure called when the button appears on screen.
      */
-    init(config: ButtonFrameComponentConfig? = nil,
+    init(config: ButtonFrameComponentConfig,
          action: @escaping () -> Void,
          @ViewBuilder content: @escaping (ButtonFrameComponentConfig) -> Content,
          onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in })
     {
-        let selfConfigDefault = ButtonFrameComponentConfig()
-        _config = StateObject(wrappedValue: config ?? selfConfigDefault)
+        self.config = config
 
         self.action = { _ in action() }
         self.onSelfAppear = onSelfAppear
@@ -84,13 +82,12 @@ struct ButtonFrameComponent<Content: View>: View {
      - Parameter content: A closure returning the content view to be displayed inside the button.
      - Parameter onSelfAppear: A closure called when the button appears on screen.
      */
-    init(config: ButtonFrameComponentConfig? = nil,
+    init(config: ButtonFrameComponentConfig,
          action: @escaping () -> Void,
          @ViewBuilder content: @escaping () -> Content,
          onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in })
     {
-        let selfConfigDefault = ButtonFrameComponentConfig()
-        _config = StateObject(wrappedValue: config ?? selfConfigDefault)
+        self.config = config
 
         self.action = { _ in action() }
         self.onSelfAppear = onSelfAppear
@@ -107,13 +104,12 @@ struct ButtonFrameComponent<Content: View>: View {
      - Parameter content: A closure returning the content view to be displayed inside the button.
      - Parameter onSelfAppear: A closure called when the button appears on screen.
      */
-    init(config: ButtonFrameComponentConfig? = nil,
+    init(config: ButtonFrameComponentConfig,
          action: @escaping (ButtonFrameComponentConfig) -> Void,
          @ViewBuilder content: @escaping (ButtonFrameComponentConfig) -> Content,
          onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in })
     {
-        let selfConfigDefault = ButtonFrameComponentConfig()
-        _config = StateObject(wrappedValue: config ?? selfConfigDefault)
+        self.config = config
 
         self.action = action
         self.onSelfAppear = onSelfAppear
@@ -132,7 +128,6 @@ struct ButtonFrameComponent<Content: View>: View {
     var body: some View {
         Button(action: {
             action(config)
-            // Tell swift that it has changed
         }) {
             content(config)
                 .frame(maxWidth: config.fillSpace ? .infinity : nil)
@@ -143,6 +138,7 @@ struct ButtonFrameComponent<Content: View>: View {
         .disabled(config.frameVariant == .disabled) // Disable button via SwiftUI properties if variant is disabled
         .frame(minWidth: 0, minHeight: 0)
         .onAppear {
+            print("calling from bframe")
             onSelfAppear(config) // Trigger onAppear closure when button appears
         }
         .buttonStyle(PlainButtonStyle())

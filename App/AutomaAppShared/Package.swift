@@ -19,6 +19,7 @@ let package = Package(
         .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.10.0")),
         .package(path: "../AutomaUIKit"),
         .package(path: "../../Backend/DataTypes"),
+        .package(url: "https://github.com/auth0/SimpleKeychain.git", from: "1.2.0"),
     ],
     targets: [
         .target(
@@ -27,6 +28,7 @@ let package = Package(
                 .product(name: "Alamofire", package: "Alamofire"),
                 "AutomaUIKit",
                 .product(name: "DataTypes", package: "DataTypes"),
+                .product(name: "SimpleKeychain", package: "SimpleKeychain"),
             ],
             path: "Sources"
         ),

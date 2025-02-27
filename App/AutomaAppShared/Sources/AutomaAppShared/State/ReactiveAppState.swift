@@ -3,8 +3,23 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+import AutomaAppShared
 import SwiftUI
 
-class ReactiveAppState: ObservableObject {
-    // TODO: Implement this
+public class BaseAppEnvironmentObject: ObservableObject {
+    @Published public var isLoggedIn: Bool = false
+    @Published public var isAppFinishedLoading: Bool = false
+    @Published public var isDebugMenuActive: Bool = false
+    @AppStorage("apiBaseURL") public var apiBaseURL: String = "https://api-sandbox.getautoma.app"
+
+    public init() {}
+
+    func logout() {
+        isLoggedIn = false
+        Task {
+            await DispatchQueue.main.async {
+                KeychainHelper.delete(for: .RefreshToken)
+            }
+        }
+    }
 }

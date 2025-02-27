@@ -10,14 +10,13 @@ public struct IconButtonComponent: View {
     /// The external configuration of the button, provided by the parent view.
     @ObservedObject private var externalConfig: IconButtonComponentConfig
 
-    /// The configuration to use for the button. This is either the external or internal config.
-    private var config: IconButtonComponentConfig { externalConfig }
-
     /// A closure that is called when the button appears on screen, passing the current configuration.
     let onSelfAppear: (IconButtonComponentConfig) -> Void
 
     /// A closure to execute when the button is tapped, passing the current configuration.
-    let action: (IconButtonComponentConfig) -> Void
+    let action: () async throws -> Void
+
+    var configAction: (IconButtonComponentConfig) -> Void = { _ in }
 
     // MARK: - 1. Initializer with external config
 
@@ -30,7 +29,7 @@ public struct IconButtonComponent: View {
     public init(
         config: IconButtonComponentConfig,
         onSelfAppear: @escaping (IconButtonComponentConfig) -> Void = { _ in },
-        action: @escaping (IconButtonComponentConfig) -> Void = { _ in }
+        action: @escaping () async throws -> Void = {}
     ) {
         externalConfig = config
         self.onSelfAppear = onSelfAppear
@@ -48,7 +47,7 @@ public struct IconButtonComponent: View {
     public init(
         onSelfAppear: @escaping (IconButtonComponentConfig) -> Void = { _ in },
         defaultIcon: DesignIcons = .unknown,
-        action: @escaping (IconButtonComponentConfig) -> Void = { _ in }
+        action: @escaping () async throws -> Void = {}
     ) {
         self.onSelfAppear = onSelfAppear
         self.action = action
@@ -57,24 +56,24 @@ public struct IconButtonComponent: View {
         externalConfig.icon = defaultIcon
     }
 
-    // MARK: - 3. Initializer with action without config
+    // MARK: - 2. Initializer with default internal config
 
-    /// Initializes the IconButtonComponent with a closure for action, but no external configuration.
+    /// Initializes the IconButtonComponent with a default internal configuration.
     ///
     /// - Parameters:
     ///   - onSelfAppear: A closure called when the button appears on screen (default is no-op).
     ///   - defaultIcon: The default icon to display (default is `.unknown`).
     ///   - action: A closure called when the button is tapped (default is no-op).
     public init(
+        config: IconButtonComponentConfig = .init(),
         onSelfAppear: @escaping (IconButtonComponentConfig) -> Void = { _ in },
-        defaultIcon: DesignIcons = .unknown,
-        action: @escaping () -> Void = {}
+        configAction: @escaping (IconButtonComponentConfig) -> Void = { _ in }
     ) {
-        self.init(
-            onSelfAppear: onSelfAppear,
-            defaultIcon: defaultIcon,
-            action: { _ in action() }
-        )
+        self.onSelfAppear = onSelfAppear
+        self.configAction = configAction
+        action = {}
+
+        externalConfig = config
     }
 
     // MARK: - Body
@@ -83,12 +82,31 @@ public struct IconButtonComponent: View {
     ///
     /// - Returns: A Button view wrapped in a custom frame, displaying the icon and triggering the associated action.
     public var body: some View {
-        ButtonFrameComponent(config: config, action: {
-            action(config)
+        ButtonFrameComponent(config: externalConfig, action: {
+            configAction(externalConfig)
+
+            Task {
+                do {
+                    print("starting action")
+                    externalConfig.isLoading = true
+                    try await action()
+                    print("finished action action")
+                    externalConfig.isLoading = false
+                } catch {
+                    externalConfig.isLoading = false
+                    throw error
+                }
+            }
         }) {
-            config.icon.image.foregroundStyle(DesignTokens.colors.textDark)
+            if externalConfig.isLoading {
+                // TODO: Convert this to a component so we can have consistent sizing
+                ProgressView()
+            } else {
+                externalConfig.icon.image
+                    .foregroundStyle(DesignTokens.colors.textDark)
+            }
         } onSelfAppear: { _ in
-            onSelfAppear(config)
+            onSelfAppear(externalConfig)
         }
     }
 }

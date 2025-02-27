@@ -14,11 +14,15 @@ public struct VerificationCodeInputComponent: View {
     @ObservedObject var config: VerificationCodeInputComponentConfig
     @FocusState var focusedText: FocusedField?
 
+    let onSelfAppear: (VerificationCodeInputComponentConfig) -> Void
+
     public init(
-        config: VerificationCodeInputComponentConfig = .init(),
-        focusedText: FocusedField? = nil
+        config: VerificationCodeInputComponentConfig,
+        focusedText: FocusedField? = nil,
+        onSelfAppear: @escaping (VerificationCodeInputComponentConfig) -> Void = { _ in }
     ) {
         self.config = config
+        self.onSelfAppear = onSelfAppear
         self.focusedText = focusedText
     }
 
@@ -32,12 +36,9 @@ public struct VerificationCodeInputComponent: View {
                 }
             )
 
-            print("Hello", splits.count >= index + 1)
-
             let splitToUse = splits.count >= index + 1 ? splits[index] : ""
             return splitToUse
         }, set: { new in
-            print("123", config.text)
             var splits = config.text.split(separator: "-", omittingEmptySubsequences: false).map(
                 { $0
                     .trimmingCharacters(in: .whitespacesAndNewlines)
@@ -58,7 +59,7 @@ public struct VerificationCodeInputComponent: View {
     }
 
     public var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             if !config.title.isEmpty {
                 Text(config.title)
                     .fontTableFont(config.titleContentFont, config.titleSegmentColor)
@@ -82,6 +83,7 @@ public struct VerificationCodeInputComponent: View {
                             cornerSize: config.cornerRadius
                         )
                     )
+                    .autocapitalization(.none)
 
                 config.separatorIcon.image
 
@@ -102,13 +104,17 @@ public struct VerificationCodeInputComponent: View {
                             cornerSize: config.cornerRadius
                         )
                     )
+                    .autocapitalization(.none)
 
-                Text("\(config.errorMessage) ")
-                    .fontTableFont(
-                        config.titleContentFont,
-                        config.errorSegmentColor
-                    )
+            }.onAppear {
+                onSelfAppear(config)
             }
+
+            Text("\(config.errorMessage) ")
+                .fontTableFont(
+                    config.titleContentFont,
+                    config.errorSegmentColor
+                )
         }
     }
 }

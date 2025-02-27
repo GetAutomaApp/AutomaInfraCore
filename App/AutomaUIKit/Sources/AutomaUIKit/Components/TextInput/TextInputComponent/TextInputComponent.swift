@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-struct TextInputComponentComponent: View {
+public struct TextInputComponentComponent: View {
     @ObservedObject var config: TextInputComponentComponentConfig
 
     let onIconTap: (TextInputComponentComponentConfig) -> Void
@@ -23,7 +23,7 @@ struct TextInputComponentComponent: View {
         self.onSelfAppear = onSelfAppear
     }
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading) {
             if !config.title.isEmpty {
                 Text(config.title)

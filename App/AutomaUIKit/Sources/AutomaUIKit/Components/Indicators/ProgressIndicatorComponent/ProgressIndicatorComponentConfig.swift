@@ -17,7 +17,7 @@ public class ProgressIndicatorComponentConfig: ObservableObject {
     /// The total steps that the component should generate. Defaults to 4
     @Published public var totalSteps: Int
     /// The current step the stepper should be at (represented & managed by the variant)
-    @Published public var currentStep: Int = 1
+    @Published public var currentStep: Int
     /// If the component should have any animation at all (this is for testing purposes, or to extend this component and
     /// add custom animations)
     @Published public var isAnimating: Bool
@@ -39,13 +39,15 @@ public class ProgressIndicatorComponentConfig: ObservableObject {
         isAnimating: Bool = true,
         stepLength: CGFloat = 7,
         stepHeight: CGFloat = 7,
-        stepColor: Color = DesignTokens.colors.primary
+        stepColor: Color = DesignTokens.colors.primary,
+        currentStep: Int = 1
     ) {
         self.variant = variant
         self.totalSteps = totalSteps
         self.isAnimating = isAnimating
         self.stepLength = stepLength
         self.stepHeight = stepHeight
+        self.currentStep = currentStep
         stepColour = stepColor
     }
 
