@@ -31,7 +31,7 @@ struct IOSApp: App {
 
                     baseConfig.isAppFinishedLoading = true
 
-                    Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { _ in
+                    Timer.scheduledTimer(withTimeInterval: 900, repeats: true) { _ in
                         print("Looping")
                         Task {
                             if await networkChecker.isConnected {

@@ -31,7 +31,7 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
         )
     }
 
-    func makeRegisterRequest(_ phoneNumber: String, _ code: String) async throws -> String {
+    func makeRegisterRequest(_ phoneNumber: String, _ code: String) async throws -> AuthenticationTokensPayloadDTO {
         let params = try AuthPhoneCodePayloadDTO(phoneNumber: phoneNumber, code: code).encodeToDictionary()
 
         let response = await performRequest(
@@ -48,7 +48,7 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
                 .invalidCode,
                 .networkConnectivityError,
             ]
-        ).accessToken
+        )
     }
 
     func makeLoginCodeRequest(_ phoneNumber: String) async throws -> AuthenticationCodeResponseDTO {
