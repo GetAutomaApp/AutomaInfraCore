@@ -50,6 +50,7 @@ public func configure(_ app: Application) async throws {
         app.migrations.add(UserProfileConvertIdToImageKeyMigration1735294202())
         app.migrations.add(JobMetadataMigrate())
         app.migrations.add(RemoveUserStorageMigration1739456565())
+        app.migrations.add(AddAcceptedColumnMigration1740658649())
 
         try await app.autoMigrate()
 
