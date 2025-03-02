@@ -9,6 +9,7 @@
 //
 //  Created by Simon Ferns on 2/22/25.
 //
+import DataTypes
 import SwiftUI
 
 public struct AppLaunch: Sendable {
@@ -62,6 +63,17 @@ public struct AppLaunch: Sendable {
         } catch {
             print("Unknown Response Error, Returning False")
             return false
+        }
+    }
+
+    public func getClientConfig() async -> AppLaunchClientConfigDTO {
+        let appLaunchInteractor = AppLaunchControllerInteractor(baseURL: baseURL)
+        do {
+            let response = try await appLaunchInteractor.makeGetClientConfig()
+            return response
+        } catch {
+            print("Unknown Response Error, Returning Default Type")
+            return .init()
         }
     }
 }

@@ -31,4 +31,21 @@ struct AppLaunchControllerInteractor: BackendControllerInteractor {
 
         return parsedResponse.accepted
     }
+
+    func makeGetClientConfig() async throws -> AppLaunchClientConfigDTO {
+        let response = try await performRequest(
+            endpoint: "/App-Launch/get-client-config",
+            method: .get
+        )
+
+        let parsedResponse = try await handleResponse(
+            response: response,
+            decodeTo: AppLaunchClientConfigDTO.self,
+            rethrow: [
+                .networkConnectivityError,
+            ]
+        )
+
+        return parsedResponse
+    }
 }

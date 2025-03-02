@@ -26,6 +26,12 @@ struct IOSApp: App {
                     )
 
                     if networkChecker.isConnected {
+                        let serverRequiredVersion = await launchManager.getClientConfig()
+
+                        if serverRequiredVersion.requiredClientVersion != baseConfig.clientVersion {
+                            baseConfig.shouldUpdateApp = true
+                        }
+
                         baseConfig.isLoggedIn = await launchManager.getAccessToken()
                         if baseConfig.isLoggedIn {
                             baseConfig.isAccepted = await launchManager

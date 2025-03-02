@@ -16,6 +16,7 @@ struct AppLaunchController: RouteCollection {
         )
 
         authenticatedRouteGroup.get("is-user-accepted", use: isUserAccepted)
+        appLaunchRoute.get("get-client-config", use: getClientConfig)
     }
 
     @Sendable
@@ -29,5 +30,10 @@ struct AppLaunchController: RouteCollection {
         } else {
             throw GenericErrors.invalidUserId
         }
+    }
+
+    @Sendable
+    func getClientConfig() async throws -> AppLaunchClientConfigDTO {
+        .init()
     }
 }

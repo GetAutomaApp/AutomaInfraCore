@@ -21,7 +21,9 @@ struct ContentView: View {
         if networkChecker.isConnected {
             VStack {
                 if baseEnvironmentConfig.isAppFinishedLoading {
-                    if baseEnvironmentConfig.isLoggedIn, baseEnvironmentConfig.isAccepted {
+                    if baseEnvironmentConfig.shouldUpdateApp {
+                        ForceUpdate()
+                    } else if baseEnvironmentConfig.isLoggedIn, baseEnvironmentConfig.isAccepted {
                         LoginSuccessTemporary()
                     } else if baseEnvironmentConfig.isLoggedIn {
                         PendingApplicationReview()
