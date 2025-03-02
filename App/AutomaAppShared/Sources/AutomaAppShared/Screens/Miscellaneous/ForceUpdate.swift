@@ -4,6 +4,7 @@
 // All rights reserved.
 
 import AutomaUIKit
+import StoreKit
 import SwiftUI
 
 public struct ForceUpdate: View {
@@ -22,8 +23,16 @@ public struct ForceUpdate: View {
             Spacer()
             TextButtonComponent(config: buttonConfig) { config in
                 config.text = "Update Now"
+            } action: { _ in
+                openUpdateScreen()
             }
         }.defaultScreenPadding()
+    }
+
+    func openUpdateScreen() {
+        if let url = URL(string: "https://apps.apple.com/us/app/places-curated-discovery/id6446208302") {
+            UIApplication.shared.open(url)
+        }
     }
 }
 
