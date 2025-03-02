@@ -15,18 +15,16 @@ public struct PendingApplicationReview: View {
                 InfoPairComponent(
                     config: .init(
                         title: "We'll get back to you soon!",
-                        description: "We are taking a thorough look at your application. We will notify you via sms & notifications on further updates!"
+                        description: "Please message @AdonisCodes on discord in order to continue with the application. We’d like to hear about your usecase!"
                     )
                 )
             },
             footerContent: {
-                Text(
-                    "Please Message @AdonisCodes on discord. We'd like to discuss your usecase for this app in order to aid us in approving your application!"
+                Spacer()
+                ProgressIndicatorComponent(
+                    config: .init(totalSteps: 4, currentStep: 4)
                 )
-                .fontTableFont(
-                    FontTable.SFPro.Body.body3,
-                    DesignTokens.colors.primaryText
-                )
+                Spacer()
             }
         )
     }

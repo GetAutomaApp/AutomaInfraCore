@@ -49,7 +49,7 @@ public enum GenericErrors: String, Error, Decodable, Encodable {
         case .failedToEncodeResponse:
             "Unfortunately we couldn't encode the response on the server side."
         case .unknownError:
-            "An unknown Errors has occured!"
+            "An unknown Error has occured!"
         case .alamofireError:
             "There was an error making the request!"
         case .networkConnectivityError:

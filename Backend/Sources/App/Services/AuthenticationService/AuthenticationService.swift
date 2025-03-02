@@ -314,11 +314,15 @@ struct AuthenticationService: Sendable {
     }
 
     func doesUserExist(phoneNumber: String) async throws -> Bool {
-        let exists = try await UserModel.query(on: readDb).filter(\.$phoneNumber == phoneNumber).first() != nil
+        do {
+            let exists = try await UserModel.query(on: readDb).filter(\.$phoneNumber == phoneNumber).first() != nil
 
-        if exists {
-            BackendMetric.totalUsersAlreadyExists.increment()
-            return true
+            if exists {
+                BackendMetric.totalUsersAlreadyExists.increment()
+                return true
+            }
+        } catch {
+            print("\(error)")
         }
 
         return false

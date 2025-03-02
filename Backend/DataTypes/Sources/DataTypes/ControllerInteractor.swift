@@ -78,6 +78,7 @@ public extension BackendControllerInteractor {
         )
 
         if let error = output.error {
+            print("\(error)")
             if rethrow.firstIndex(of: error) != nil {
                 throw error
             }
