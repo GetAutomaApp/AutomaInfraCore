@@ -11,7 +11,7 @@ public class BaseAppEnvironmentObject: ObservableObject {
     @Published public var isAccepted: Bool = false
     @Published public var isAppFinishedLoading: Bool = false
     @Published public var isDebugMenuActive: Bool = false
-    @Published public var clientVersion: String = "-0.0.0"
+    @Published public var clientVersion: String = "0.0.0"
     @Published public var shouldUpdateApp: Bool = false
 
     @AppStorage("apiBaseURL") public var apiBaseURL: String = "https://api-sandbox.getautoma.app"
