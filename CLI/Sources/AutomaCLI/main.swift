@@ -5,7 +5,9 @@
 
 import Vapor
 
-let app = try Application(.detect())
+var env = try Environment.detect()
+let app = try await Application.make(env)
+
 defer { app.shutdown() }
 
 app.commands.use(GenerateAppComponent(), as: "generate")

@@ -27,10 +27,19 @@ struct AddToFileConfig {
     let addToFile: String
 }
 
-let baseFromDirectory = "../../generators/"
-let baseAppPath = "../../../App/"
-let baseDataTypesPath = "../../../Backend/DataTypes/"
-let baseBackendAppPath = "../../../Backend/Sources/App/"
+let basePath = "../../generators/"
+let baseAppPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+    .deletingLastPathComponent()
+    .appendingPathComponent("App")
+    .standardized.path + "/"
+let baseDataTypesPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+    .deletingLastPathComponent()
+    .appendingPathComponent("Backend/DataTypes")
+    .standardized.path + "/"
+let baseBackendAppPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+    .deletingLastPathComponent()
+    .appendingPathComponent("Backend/Sources/App")
+    .standardized.path + "/"
 
 let fileTypes: [FileType] = [
     FileType(name: "ui-component", configurations: [
@@ -229,17 +238,27 @@ struct GenerateAppComponent: Command {
         let copy = signature.copy
         var output = ""
 
+        print("🚀 Current Working Directory: \(FileManager.default.currentDirectoryPath)")
+
         for fileType in fileTypes {
             guard fileType.name == signature.component else { continue }
 
             for fileConfig in fileType.configurations {
-                let fromDirectory = "\(basePath)\(fileConfig.fromDirectory)"
-                let toDirectory = fileConfig.toDirectory
+                let fromDirectory = URL(fileURLWithPath: "\(basePath)\(fileConfig.fromDirectory)").standardized.path
+                let toDirectory = URL(fileURLWithPath: fileConfig.toDirectory).standardized.path
                 let nestedDir = signature.nestedDir ?? ""
-                let toNestedDir = "\(toDirectory)\(arrayToPascalCase([nestedDir]))/"
-                    .replacingOccurrences(of: "//", with: "/")
+
+                let toNestedDir = URL(fileURLWithPath: "\(toDirectory)\(arrayToPascalCase([nestedDir]))/")
+                    .standardized.path
+
                 let nestToDirectory = rename(text: fileConfig.nestToDirectory, componentName: componentName)
-                let destinationPath = "\(toNestedDir)\(nestToDirectory)".replacingOccurrences(of: "//", with: "/")
+                let destinationPath = URL(fileURLWithPath: "\(toNestedDir)/\(nestToDirectory)").standardized.path
+
+                print("🛠️  Resolving Paths:")
+                print("- From Directory: \(fromDirectory)")
+                print("- To Directory: \(toDirectory)")
+                print("- To Nested Directory: \(toNestedDir)")
+                print("- Final Destination Path: \(destinationPath)")
 
                 if FileManager.default.fileExists(atPath: nestToDirectory) {
                     throw Abort(.badRequest, reason: "Component directory '\(nestToDirectory)' already exists.")
@@ -252,15 +271,13 @@ struct GenerateAppComponent: Command {
                 )
 
                 for template in fileConfig.templates {
-                    let sourceFile = "\(fromDirectory)\(template)"
-                    let fileNameFormatted = rename(text: template, componentName: componentName).replacingOccurrences(
-                        of: ".template",
-                        with: ""
-                    )
-                    let destinationFile =
-                        "\(destinationPath)\(fileNameFormatted)"
+                    let sourceFile = URL(fileURLWithPath: "\(fromDirectory)/\(template)").standardized.path
+                    let fileNameFormatted = rename(text: template, componentName: componentName)
+                        .replacingOccurrences(of: ".template", with: "")
 
-                    // Ignore this check when we are copying by appending !copy
+                    let destinationFile = URL(fileURLWithPath: "\(destinationPath)/\(fileNameFormatted)")
+                        .standardized.path
+
                     if FileManager.default.fileExists(atPath: destinationFile), !copy {
                         throw Abort(
                             .badRequest,
@@ -276,7 +293,7 @@ struct GenerateAppComponent: Command {
                     )
                 }
 
-                print("Successfully created a \(fileType.name) called '\(componentName)' in '\(toNestedDir)'.")
+                print("✅ Successfully created a \(fileType.name) called '\(componentName)' in '\(toNestedDir)'.")
             }
         }
 
@@ -288,20 +305,37 @@ struct GenerateAppComponent: Command {
     func moveAndRenameFile(source: String, destination: String, componentName: String,
                            shouldWrite: Bool = true) throws -> String
     {
+        let absoluteSourcePath = URL(fileURLWithPath: source).standardized.path
+        print("Absolute Source Path: \(absoluteSourcePath)")
+
+        let absoluteDestinationPath = URL(fileURLWithPath: destination).standardized.path
+        print("Absolute Destination Path: \(absoluteDestinationPath)")
+
+        // Ensure the parent directory exists before writing the file
+        let destinationDirectory = (absoluteDestinationPath as NSString).deletingLastPathComponent
+        if !FileManager.default.fileExists(atPath: destinationDirectory) {
+            try FileManager.default.createDirectory(
+                atPath: destinationDirectory,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
+        }
+
         // Check if the source file exists before trying to read it
-        guard FileManager.default.fileExists(atPath: source) else {
-            throw Abort(.notFound, reason: "Template file not found: \(source)")
+        guard FileManager.default.fileExists(atPath: absoluteSourcePath) else {
+            throw Abort(.notFound, reason: "Template file not found: \(absoluteSourcePath)")
         }
 
         // Read the file content
-        var content = try String(contentsOfFile: source, encoding: .utf8)
+        var content = try String(contentsOfFile: absoluteSourcePath, encoding: .utf8)
 
         // Rename occurrences of __CAPNAME__ in the content
         content = rename(text: content, componentName: componentName)
 
         // Write the content to the new file
         if shouldWrite {
-            try content.write(toFile: destination, atomically: true, encoding: .utf8)
+            print("Writing \(absoluteDestinationPath)")
+            try content.write(toFile: absoluteDestinationPath, atomically: true, encoding: .utf8)
         }
 
         return "\(destination)\n\(content)"
