@@ -1,0 +1,13 @@
+// main.swift
+// Copyright (c) 2025 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
+
+import Vapor
+
+let app = try Application(.detect())
+defer { app.shutdown() }
+
+app.commands.use(GenerateAppComponent(), as: "generate")
+
+try app.run()

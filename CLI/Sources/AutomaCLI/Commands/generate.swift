@@ -27,45 +27,32 @@ struct AddToFileConfig {
     let addToFile: String
 }
 
+let baseFromDirectory = "../../generators/"
+let baseAppPath = "../../../App/"
+let baseDataTypesPath = "../../../Backend/DataTypes/"
+let baseBackendAppPath = "../../../Backend/Sources/App/"
+
 let fileTypes: [FileType] = [
     FileType(name: "ui-component", configurations: [
         FileConfig(
-            fromDirectory: "./generators/ui-component/",
-            toDirectory: "../App/AutomaUIKit/Sources/AutomaUIKit/Components/",
+            fromDirectory: "ui-component/",
+            toDirectory: "\(baseAppPath)AutomaUIKit/Sources/AutomaUIKit/Components/",
             nestToDirectory: "__CAPNAME__Component/",
             templates: [
                 "__CAPNAME__Component.swift.template",
                 "__CAPNAME__Component_Previews.swift.template",
                 "__CAPNAME__ComponentConfig.swift.template",
-                "__CAPNAME__ComponentDocumentation.md.template",
-            ]
-        ),
-        FileConfig(
-            fromDirectory: "./generators/ui-component-testing/",
-            toDirectory: "../App/AutomaUIKit/Tests/Components/",
-            nestToDirectory: "__CAPNAME__ComponentTests/",
-            templates: [
-                "__CAPNAME__ComponentTests.swift.template",
             ]
         ),
     ]),
     FileType(name: "ui-modifier", configurations: [
         FileConfig(
-            fromDirectory: "./generators/ui-modifier/",
-            toDirectory: "../App/AutomaUIKit/Sources/AutomaUIKit/Core/Modifiers/",
+            fromDirectory: "ui-modifier/",
+            toDirectory: "\(baseAppPath)AutomaUIKit/Sources/AutomaUIKit/Core/Modifiers/",
             nestToDirectory: "__CAPNAME__Modifier/",
             templates: [
                 "__CAPNAME__Modifier.swift.template",
-                "__CAPNAME__ModifierDocumentation.md.template",
                 "__CAPNAME__Modifier_Previews.swift.template",
-            ]
-        ),
-        FileConfig(
-            fromDirectory: "./generators/ui-modifier-testing/",
-            toDirectory: "../App/AutomaUIKit/Tests/Modifiers/",
-            nestToDirectory: "__CAPNAME__ModifierTests/",
-            templates: [
-                "__CAPNAME__ModifierTests.swift.template",
             ]
         ),
     ]),
@@ -73,7 +60,7 @@ let fileTypes: [FileType] = [
         name: "backend-controller",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/backend-controller/",
+                fromDirectory: "backend-controller/",
                 toDirectory: "Sources/App/Controllers/",
                 nestToDirectory: "__CAPNAME__Controller/",
                 templates: [
@@ -81,29 +68,11 @@ let fileTypes: [FileType] = [
                 ]
             ),
             FileConfig(
-                fromDirectory: "./generators/backend-controller/",
-                toDirectory: "Tests/AppTests/Controllers/",
-                nestToDirectory: "__CAPNAME__ControllerTests/",
-                templates: [
-                    "__CAPNAME__ControllerIntegrationTests.swift.template",
-                    "__CAPNAME__ControllerUnitTests.swift.template",
-                ]
-            ),
-            FileConfig(
-                fromDirectory: "./generators/controller-interactor/",
-                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Interactors/",
+                fromDirectory: "controller-interactor/",
+                toDirectory: "\(baseAppPath)AutomaAppShared/Sources/AutomaAppShared/Interactors/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__ControllerInteractor.swift.template",
-                ]
-            ),
-            FileConfig(
-                fromDirectory: "./generators/controller-interactor/",
-                toDirectory: "../App/AutomaAppShared/Tests/ControllerInteractors/",
-                nestToDirectory: "__CAPNAME__ControllerTests/",
-                templates: [
-                    "__CAPNAME__ControllerInteractorUnitTests.swift.template",
-                    "__CAPNAME__ControllerInteractorIntegrationTests.swift.template",
                 ]
             ),
         ]
@@ -112,7 +81,7 @@ let fileTypes: [FileType] = [
         name: "model",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/model/",
+                fromDirectory: "model/",
                 toDirectory: "./Sources/App/Models/",
                 nestToDirectory: "",
                 templates: [
@@ -120,15 +89,15 @@ let fileTypes: [FileType] = [
                 ]
             ),
             FileConfig(
-                fromDirectory: "./generators/model/",
-                toDirectory: "./DataTypes/Sources/DataTypes/",
+                fromDirectory: "model/",
+                toDirectory: "\(baseDataTypesPath)Sources/DataTypes/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__DTO.swift.template",
                 ]
             ),
             FileConfig(
-                fromDirectory: "./generators/migration/",
+                fromDirectory: "migration/",
                 toDirectory: "./Sources/App/Migrations/",
                 nestToDirectory: "",
                 templates: [
@@ -141,8 +110,8 @@ let fileTypes: [FileType] = [
         name: "dto",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/dto/",
-                toDirectory: "./DataTypes/Sources/DataTypes/",
+                fromDirectory: "dto/",
+                toDirectory: "\(baseDataTypesPath)Sources/DataTypes/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__DTO.swift.template",
@@ -154,7 +123,7 @@ let fileTypes: [FileType] = [
         name: "migration",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/migration/",
+                fromDirectory: "migration/",
                 toDirectory: "./Sources/App/Migrations/",
                 nestToDirectory: "",
                 templates: [
@@ -167,20 +136,11 @@ let fileTypes: [FileType] = [
         name: "backend-service",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/backend-service/",
+                fromDirectory: "backend-service/",
                 toDirectory: "Sources/App/Services/",
                 nestToDirectory: "__CAPNAME__Service/",
                 templates: [
                     "__CAPNAME__Service.swift.template",
-                ]
-            ),
-            FileConfig(
-                fromDirectory: "./generators/backend-service/",
-                toDirectory: "Tests/AppTests/Services/",
-                nestToDirectory: "__CAPNAME__ServiceTests/",
-                templates: [
-                    "__CAPNAME__ServiceIntegrationTests.swift.template",
-                    "__CAPNAME__ServiceUnitTests.swift.template",
                 ]
             ),
         ]
@@ -189,20 +149,11 @@ let fileTypes: [FileType] = [
         name: "backend-interactor",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/controller-interactor/",
-                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Interactors/",
+                fromDirectory: "controller-interactor/",
+                toDirectory: "\(baseAppPath)AutomaAppShared/Sources/AutomaAppShared/Interactors/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__ControllerInteractor.swift.template",
-                ]
-            ),
-            FileConfig(
-                fromDirectory: "./generators/controller-interactor/",
-                toDirectory: "../App/AutomaAppShared/Tests/ControllerInteractors/",
-                nestToDirectory: "__CAPNAME__ControllerTests/",
-                templates: [
-                    "__CAPNAME__ControllerInteractorUnitTests.swift.template",
-                    "__CAPNAME__ControllerInteractorIntegrationTests.swift.template",
                 ]
             ),
         ]
@@ -211,20 +162,11 @@ let fileTypes: [FileType] = [
         name: "async-job",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/backend-async-job/",
+                fromDirectory: "backend-async-job/",
                 toDirectory: "Sources/App/Procs/Jobs/",
                 nestToDirectory: "__CAPNAME__AsyncJob/",
                 templates: [
                     "__CAPNAME__AsyncJob.swift.template",
-                ]
-            ),
-            FileConfig(
-                fromDirectory: "./generators/backend-async-job/",
-                toDirectory: "Tests/Procs/Jobs/",
-                nestToDirectory: "__CAPNAME__AsyncJobTests/",
-                templates: [
-                    "__CAPNAME__AsyncJobUnitTests.swift.template",
-                    "__CAPNAME__AsyncJobIntegrationTests.swift.template",
                 ]
             ),
         ]
@@ -233,7 +175,7 @@ let fileTypes: [FileType] = [
         name: "command",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/command/",
+                fromDirectory: "command/",
                 toDirectory: "Sources/App/Commands/",
                 nestToDirectory: "",
                 templates: [
@@ -246,8 +188,8 @@ let fileTypes: [FileType] = [
         name: "screen",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/screen/",
-                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Screens/",
+                fromDirectory: "screen/",
+                toDirectory: "\(baseAppPath)AutomaAppShared/Sources/AutomaAppShared/Screens/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__Screen.swift.template",
@@ -291,7 +233,7 @@ struct GenerateAppComponent: Command {
             guard fileType.name == signature.component else { continue }
 
             for fileConfig in fileType.configurations {
-                let fromDirectory = fileConfig.fromDirectory
+                let fromDirectory = "\(basePath)\(fileConfig.fromDirectory)"
                 let toDirectory = fileConfig.toDirectory
                 let nestedDir = signature.nestedDir ?? ""
                 let toNestedDir = "\(toDirectory)\(arrayToPascalCase([nestedDir]))/"
