@@ -27,45 +27,41 @@ struct AddToFileConfig {
     let addToFile: String
 }
 
+let basePath = "../../generators/"
+let baseAppPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+    .deletingLastPathComponent()
+    .appendingPathComponent("App")
+    .standardized.path + "/"
+let baseDataTypesPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+    .deletingLastPathComponent()
+    .appendingPathComponent("Backend/DataTypes")
+    .standardized.path + "/"
+let baseBackendAppPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+    .deletingLastPathComponent()
+    .appendingPathComponent("Backend/Sources/App")
+    .standardized.path + "/"
+
 let fileTypes: [FileType] = [
     FileType(name: "ui-component", configurations: [
         FileConfig(
-            fromDirectory: "./generators/ui-component/",
-            toDirectory: "../App/AutomaUIKit/Sources/AutomaUIKit/Components/",
+            fromDirectory: "ui-component/",
+            toDirectory: "\(baseAppPath)AutomaUIKit/Sources/AutomaUIKit/Components/",
             nestToDirectory: "__CAPNAME__Component/",
             templates: [
                 "__CAPNAME__Component.swift.template",
                 "__CAPNAME__Component_Previews.swift.template",
                 "__CAPNAME__ComponentConfig.swift.template",
-                "__CAPNAME__ComponentDocumentation.md.template",
-            ]
-        ),
-        FileConfig(
-            fromDirectory: "./generators/ui-component-testing/",
-            toDirectory: "../App/AutomaUIKit/Tests/Components/",
-            nestToDirectory: "__CAPNAME__ComponentTests/",
-            templates: [
-                "__CAPNAME__ComponentTests.swift.template",
             ]
         ),
     ]),
     FileType(name: "ui-modifier", configurations: [
         FileConfig(
-            fromDirectory: "./generators/ui-modifier/",
-            toDirectory: "../App/AutomaUIKit/Sources/AutomaUIKit/Core/Modifiers/",
+            fromDirectory: "ui-modifier/",
+            toDirectory: "\(baseAppPath)AutomaUIKit/Sources/AutomaUIKit/Core/Modifiers/",
             nestToDirectory: "__CAPNAME__Modifier/",
             templates: [
                 "__CAPNAME__Modifier.swift.template",
-                "__CAPNAME__ModifierDocumentation.md.template",
                 "__CAPNAME__Modifier_Previews.swift.template",
-            ]
-        ),
-        FileConfig(
-            fromDirectory: "./generators/ui-modifier-testing/",
-            toDirectory: "../App/AutomaUIKit/Tests/Modifiers/",
-            nestToDirectory: "__CAPNAME__ModifierTests/",
-            templates: [
-                "__CAPNAME__ModifierTests.swift.template",
             ]
         ),
     ]),
@@ -73,7 +69,7 @@ let fileTypes: [FileType] = [
         name: "backend-controller",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/backend-controller/",
+                fromDirectory: "backend-controller/",
                 toDirectory: "Sources/App/Controllers/",
                 nestToDirectory: "__CAPNAME__Controller/",
                 templates: [
@@ -81,29 +77,11 @@ let fileTypes: [FileType] = [
                 ]
             ),
             FileConfig(
-                fromDirectory: "./generators/backend-controller/",
-                toDirectory: "Tests/AppTests/Controllers/",
-                nestToDirectory: "__CAPNAME__ControllerTests/",
-                templates: [
-                    "__CAPNAME__ControllerIntegrationTests.swift.template",
-                    "__CAPNAME__ControllerUnitTests.swift.template",
-                ]
-            ),
-            FileConfig(
-                fromDirectory: "./generators/controller-interactor/",
-                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Interactors/",
+                fromDirectory: "controller-interactor/",
+                toDirectory: "\(baseAppPath)AutomaAppShared/Sources/AutomaAppShared/Interactors/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__ControllerInteractor.swift.template",
-                ]
-            ),
-            FileConfig(
-                fromDirectory: "./generators/controller-interactor/",
-                toDirectory: "../App/AutomaAppShared/Tests/ControllerInteractors/",
-                nestToDirectory: "__CAPNAME__ControllerTests/",
-                templates: [
-                    "__CAPNAME__ControllerInteractorUnitTests.swift.template",
-                    "__CAPNAME__ControllerInteractorIntegrationTests.swift.template",
                 ]
             ),
         ]
@@ -112,7 +90,7 @@ let fileTypes: [FileType] = [
         name: "model",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/model/",
+                fromDirectory: "model/",
                 toDirectory: "./Sources/App/Models/",
                 nestToDirectory: "",
                 templates: [
@@ -120,15 +98,15 @@ let fileTypes: [FileType] = [
                 ]
             ),
             FileConfig(
-                fromDirectory: "./generators/model/",
-                toDirectory: "./DataTypes/Sources/DataTypes/",
+                fromDirectory: "model/",
+                toDirectory: "\(baseDataTypesPath)Sources/DataTypes/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__DTO.swift.template",
                 ]
             ),
             FileConfig(
-                fromDirectory: "./generators/migration/",
+                fromDirectory: "migration/",
                 toDirectory: "./Sources/App/Migrations/",
                 nestToDirectory: "",
                 templates: [
@@ -141,8 +119,8 @@ let fileTypes: [FileType] = [
         name: "dto",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/dto/",
-                toDirectory: "./DataTypes/Sources/DataTypes/",
+                fromDirectory: "dto/",
+                toDirectory: "\(baseDataTypesPath)Sources/DataTypes/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__DTO.swift.template",
@@ -154,7 +132,7 @@ let fileTypes: [FileType] = [
         name: "migration",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/migration/",
+                fromDirectory: "migration/",
                 toDirectory: "./Sources/App/Migrations/",
                 nestToDirectory: "",
                 templates: [
@@ -167,20 +145,11 @@ let fileTypes: [FileType] = [
         name: "backend-service",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/backend-service/",
+                fromDirectory: "backend-service/",
                 toDirectory: "Sources/App/Services/",
                 nestToDirectory: "__CAPNAME__Service/",
                 templates: [
                     "__CAPNAME__Service.swift.template",
-                ]
-            ),
-            FileConfig(
-                fromDirectory: "./generators/backend-service/",
-                toDirectory: "Tests/AppTests/Services/",
-                nestToDirectory: "__CAPNAME__ServiceTests/",
-                templates: [
-                    "__CAPNAME__ServiceIntegrationTests.swift.template",
-                    "__CAPNAME__ServiceUnitTests.swift.template",
                 ]
             ),
         ]
@@ -189,20 +158,11 @@ let fileTypes: [FileType] = [
         name: "backend-interactor",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/controller-interactor/",
-                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Interactors/",
+                fromDirectory: "controller-interactor/",
+                toDirectory: "\(baseAppPath)AutomaAppShared/Sources/AutomaAppShared/Interactors/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__ControllerInteractor.swift.template",
-                ]
-            ),
-            FileConfig(
-                fromDirectory: "./generators/controller-interactor/",
-                toDirectory: "../App/AutomaAppShared/Tests/ControllerInteractors/",
-                nestToDirectory: "__CAPNAME__ControllerTests/",
-                templates: [
-                    "__CAPNAME__ControllerInteractorUnitTests.swift.template",
-                    "__CAPNAME__ControllerInteractorIntegrationTests.swift.template",
                 ]
             ),
         ]
@@ -211,20 +171,11 @@ let fileTypes: [FileType] = [
         name: "async-job",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/backend-async-job/",
+                fromDirectory: "backend-async-job/",
                 toDirectory: "Sources/App/Procs/Jobs/",
                 nestToDirectory: "__CAPNAME__AsyncJob/",
                 templates: [
                     "__CAPNAME__AsyncJob.swift.template",
-                ]
-            ),
-            FileConfig(
-                fromDirectory: "./generators/backend-async-job/",
-                toDirectory: "Tests/Procs/Jobs/",
-                nestToDirectory: "__CAPNAME__AsyncJobTests/",
-                templates: [
-                    "__CAPNAME__AsyncJobUnitTests.swift.template",
-                    "__CAPNAME__AsyncJobIntegrationTests.swift.template",
                 ]
             ),
         ]
@@ -233,7 +184,7 @@ let fileTypes: [FileType] = [
         name: "command",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/command/",
+                fromDirectory: "command/",
                 toDirectory: "Sources/App/Commands/",
                 nestToDirectory: "",
                 templates: [
@@ -246,8 +197,8 @@ let fileTypes: [FileType] = [
         name: "screen",
         configurations: [
             FileConfig(
-                fromDirectory: "./generators/screen/",
-                toDirectory: "../App/AutomaAppShared/Sources/AutomaAppShared/Screens/",
+                fromDirectory: "screen/",
+                toDirectory: "\(baseAppPath)AutomaAppShared/Sources/AutomaAppShared/Screens/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__Screen.swift.template",
@@ -287,17 +238,27 @@ struct GenerateAppComponent: Command {
         let copy = signature.copy
         var output = ""
 
+        print("🚀 Current Working Directory: \(FileManager.default.currentDirectoryPath)")
+
         for fileType in fileTypes {
             guard fileType.name == signature.component else { continue }
 
             for fileConfig in fileType.configurations {
-                let fromDirectory = fileConfig.fromDirectory
-                let toDirectory = fileConfig.toDirectory
+                let fromDirectory = URL(fileURLWithPath: "\(basePath)\(fileConfig.fromDirectory)").standardized.path
+                let toDirectory = URL(fileURLWithPath: fileConfig.toDirectory).standardized.path
                 let nestedDir = signature.nestedDir ?? ""
-                let toNestedDir = "\(toDirectory)\(arrayToPascalCase([nestedDir]))/"
-                    .replacingOccurrences(of: "//", with: "/")
+
+                let toNestedDir = URL(fileURLWithPath: "\(toDirectory)\(arrayToPascalCase([nestedDir]))/")
+                    .standardized.path
+
                 let nestToDirectory = rename(text: fileConfig.nestToDirectory, componentName: componentName)
-                let destinationPath = "\(toNestedDir)\(nestToDirectory)".replacingOccurrences(of: "//", with: "/")
+                let destinationPath = URL(fileURLWithPath: "\(toNestedDir)/\(nestToDirectory)").standardized.path
+
+                print("🛠️  Resolving Paths:")
+                print("- From Directory: \(fromDirectory)")
+                print("- To Directory: \(toDirectory)")
+                print("- To Nested Directory: \(toNestedDir)")
+                print("- Final Destination Path: \(destinationPath)")
 
                 if FileManager.default.fileExists(atPath: nestToDirectory) {
                     throw Abort(.badRequest, reason: "Component directory '\(nestToDirectory)' already exists.")
@@ -310,15 +271,13 @@ struct GenerateAppComponent: Command {
                 )
 
                 for template in fileConfig.templates {
-                    let sourceFile = "\(fromDirectory)\(template)"
-                    let fileNameFormatted = rename(text: template, componentName: componentName).replacingOccurrences(
-                        of: ".template",
-                        with: ""
-                    )
-                    let destinationFile =
-                        "\(destinationPath)\(fileNameFormatted)"
+                    let sourceFile = URL(fileURLWithPath: "\(fromDirectory)/\(template)").standardized.path
+                    let fileNameFormatted = rename(text: template, componentName: componentName)
+                        .replacingOccurrences(of: ".template", with: "")
 
-                    // Ignore this check when we are copying by appending !copy
+                    let destinationFile = URL(fileURLWithPath: "\(destinationPath)/\(fileNameFormatted)")
+                        .standardized.path
+
                     if FileManager.default.fileExists(atPath: destinationFile), !copy {
                         throw Abort(
                             .badRequest,
@@ -334,7 +293,7 @@ struct GenerateAppComponent: Command {
                     )
                 }
 
-                print("Successfully created a \(fileType.name) called '\(componentName)' in '\(toNestedDir)'.")
+                print("✅ Successfully created a \(fileType.name) called '\(componentName)' in '\(toNestedDir)'.")
             }
         }
 
@@ -346,20 +305,37 @@ struct GenerateAppComponent: Command {
     func moveAndRenameFile(source: String, destination: String, componentName: String,
                            shouldWrite: Bool = true) throws -> String
     {
+        let absoluteSourcePath = URL(fileURLWithPath: source).standardized.path
+        print("Absolute Source Path: \(absoluteSourcePath)")
+
+        let absoluteDestinationPath = URL(fileURLWithPath: destination).standardized.path
+        print("Absolute Destination Path: \(absoluteDestinationPath)")
+
+        // Ensure the parent directory exists before writing the file
+        let destinationDirectory = (absoluteDestinationPath as NSString).deletingLastPathComponent
+        if !FileManager.default.fileExists(atPath: destinationDirectory) {
+            try FileManager.default.createDirectory(
+                atPath: destinationDirectory,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
+        }
+
         // Check if the source file exists before trying to read it
-        guard FileManager.default.fileExists(atPath: source) else {
-            throw Abort(.notFound, reason: "Template file not found: \(source)")
+        guard FileManager.default.fileExists(atPath: absoluteSourcePath) else {
+            throw Abort(.notFound, reason: "Template file not found: \(absoluteSourcePath)")
         }
 
         // Read the file content
-        var content = try String(contentsOfFile: source, encoding: .utf8)
+        var content = try String(contentsOfFile: absoluteSourcePath, encoding: .utf8)
 
         // Rename occurrences of __CAPNAME__ in the content
         content = rename(text: content, componentName: componentName)
 
         // Write the content to the new file
         if shouldWrite {
-            try content.write(toFile: destination, atomically: true, encoding: .utf8)
+            print("Writing \(absoluteDestinationPath)")
+            try content.write(toFile: absoluteDestinationPath, atomically: true, encoding: .utf8)
         }
 
         return "\(destination)\n\(content)"

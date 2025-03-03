@@ -21,6 +21,13 @@ jobs:
           key: deploy-cache-${{ hashFiles('Backend/Package.resolved') }}
           path: Backend/.build
 
+      - name: Get CLI Cache
+        uses: actions/cache@v3
+        id: cli-build
+        with:
+          key: deploy-cache-${{ hashFiles('CLI/Package.resolved') }}
+          path: CLI/.build
+
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
           npm run deploy:backend:sandbox
