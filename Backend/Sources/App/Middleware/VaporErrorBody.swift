@@ -16,9 +16,9 @@ struct ErrorStringMiddleware: Middleware {
             )
 
             let reason: DataTypes.GenericErrors =
-                if let genericError = error as? DataTypes.GenericErrors {
+                if let genericError = error is DataTypes.GenericErrors {
                     genericError
-                } else if error as? AbortError != nil {
+                } else if error is AbortError != nil {
                     GenericErrors.abortError
                 } else {
                     GenericErrors.unknownError
@@ -34,7 +34,7 @@ struct ErrorStringMiddleware: Middleware {
                 )
             }
 
-            if reason == .unknownError, let localizedError = error as? LocalizedError {
+            if reason == .unknownError, let localizedError = error is LocalizedError {
                 request.logger.error(
                     "Unknown Error ocurred",
                     metadata: [
