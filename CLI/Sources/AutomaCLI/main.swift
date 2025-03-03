@@ -5,11 +5,16 @@
 
 import Vapor
 
-var env = try Environment.detect()
-let app = try await Application.make(env)
+@main
+struct AutomaCLI {
+    static func main() async throws {
+        var env = try Environment.detect()
+        let app = try await Application.make(env)
 
-defer { app.shutdown() }
+        defer { Task { try? await app.asyncShutdown() } }
 
-app.commands.use(GenerateAppComponent(), as: "generate")
+        app.commands.use(GenerateAppComponent(), as: "generate")
 
-try app.run()
+        try await app.execute()
+    }
+}

@@ -14,9 +14,7 @@ public struct TextInputComponentComponent: View {
     public init(
         config: TextInputComponentComponentConfig = .init(),
         onIconTap: @escaping (TextInputComponentComponentConfig) -> Void = { _ in },
-        onSelfAppear: @escaping (TextInputComponentComponentConfig) -> Void = {
-            _ in
-        }
+        onSelfAppear: @escaping (TextInputComponentComponentConfig) -> Void = { _ in }
     ) {
         self.config = config
         self.onIconTap = onIconTap
