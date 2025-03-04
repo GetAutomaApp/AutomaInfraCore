@@ -16,9 +16,6 @@ public func configure(_ app: Application) async throws {
     // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
     app.middleware.use(ErrorStringMiddleware())
 
-    app.commands.use(GenerateAppComponent(), as: "generate")
-    app.commands.use(FlyConfigGenerator(), as: "fly-config")
-
     // Errors are getting thrown locally, this prevents run App & ./App execution diffs
     let environment = Environment.get("ENVIRONMENT") ?? "local"
     if environment != "local" {
