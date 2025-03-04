@@ -14,6 +14,7 @@ enum Entrypoint {
         defer { Task { try? await app.asyncShutdown() } }
 
         app.commands.use(GenerateAppComponent(), as: "generate")
+        app.commands.use(FlyConfigGenerator(), as: "fly-config")
 
         try await app.execute()
     }
