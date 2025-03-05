@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "Backend",
     platforms: [
-        .macOS(.v15),
+        .macOS(.v15)
     ],
     dependencies: [
         // 💧 A server-side Swift web framework.
@@ -17,11 +17,14 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         .package(path: "./DataTypes"),
         .package(url: "https://github.com/awslabs/aws-sdk-swift.git", from: "1.0.66"),
+        .package(url: "https://github.com/jamesrochabrun/SwiftAnthropic", branch: "main"),
         .package(url: "https://github.com/vapor/jwt.git", from: "5.0.0"),
         .package(url: "https://github.com/MacPaw/OpenAI.git", branch: "main"),
         .package(url: "https://github.com/soto-project/soto.git", from: "7.3.0"),
         .package(url: "https://github.com/swift-server/swift-prometheus.git", from: "2.0.0"),
-        .package(url: "https://github.com/m-barthelemy/vapor-queues-fluent-driver.git", from: "3.0.0-beta1"),
+        .package(
+            url: "https://github.com/m-barthelemy/vapor-queues-fluent-driver.git",
+            from: "3.0.0-beta1"),
         .package(url: "https://github.com/swhitty/FlyingFox.git", .upToNextMajor(from: "0.20.0")),
     ],
     targets: [
@@ -37,6 +40,7 @@ let package = Package(
                 .product(name: "AWSSNS", package: "aws-sdk-swift"),
                 .product(name: "JWT", package: "jwt"),
                 .product(name: "OpenAI", package: "OpenAI"),
+                .product(name: "SwiftAnthropic", package: "SwiftAnthropic"),
                 .product(name: "SotoS3", package: "soto"),
                 .product(name: "SotoSNS", package: "soto"),
                 .product(name: "Prometheus", package: "swift-prometheus"),
@@ -45,7 +49,7 @@ let package = Package(
                 .product(name: "SotoTextract", package: "soto"),
             ],
             exclude: [
-                "Documentation.md",
+                "Documentation.md"
             ],
             swiftSettings: swiftSettings,
             linkerSettings: [
@@ -68,7 +72,9 @@ let package = Package(
     swiftLanguageModes: [.v5]
 )
 
-var swiftSettings: [SwiftSetting] { [
-    .enableUpcomingFeature("DisableOutwardActorInference"),
-    .enableExperimentalFeature("StrictConcurrency"),
-] }
+var swiftSettings: [SwiftSetting] {
+    [
+        .enableUpcomingFeature("DisableOutwardActorInference"),
+        .enableExperimentalFeature("StrictConcurrency"),
+    ]
+}
