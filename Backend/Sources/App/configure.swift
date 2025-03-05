@@ -52,6 +52,7 @@ public func configure(_ app: Application) async throws {
         try await app.autoMigrate()
 
         try app.register(collection: AuthenticationController())
+        try app.register(collection: AppLaunchController())
 
         // Authentication
         await app.jwt.keys
