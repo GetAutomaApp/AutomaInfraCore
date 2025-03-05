@@ -1,14 +1,16 @@
-// OpenAIService.swift
+// OpenAIChatCompletion.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-import Fluent
 import OpenAI
 import Vapor
 
-struct OpenAIService {
-    let client: OpenAI
+@unchecked Sendable
+extension ChatQuery: Content {}
+
+struct OpenAIChatCompletion {
+    private let client: OpenAI
     private let logger: Logger
 
     init(logger: Logger, timeout: TimeInterval = 180) throws {
@@ -21,8 +23,9 @@ struct OpenAIService {
         self.logger = logger
     }
 
-    func createImage(_ query: ImagesQuery) async throws -> ImagesResult {
-        BackendMetric.openAIImageGenerationRequests.increment()
-        return try await client.images(query: query)
+    func createChat(_ query: ChatQuery) async throws -> ChatResult {
+        BackendMetric.openaiChatGenerationRequests.increment()
+        let result = try await client.chats(query: query)
+        return result
     }
 }

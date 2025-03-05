@@ -3,28 +3,30 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+import Fluent
+import OpenAI
 import Vapor
 
-struct AnthropicController: RouteCollection {
-    let anthropicAPIKey = Environment.get("ANTHROPIC_API_KEY")
-
+struct ChatCompletionController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
-        let chatCompletionRoute = routes.grouped("ChatCompletion")
-        chatCompletionRoute.post("anthropic", use: anthropic)
-        chatCompletionRoute.get("test", use: test)
+        let chatCompletionRoute = routes.grouped("Authentication")
+
+        chatCompletionRoute.post("openai", use: openai)
     }
 
     @Sendable
-    func anthropic(req: Request) async throws -> String {
-        // let client = AnthropicClient(apiKey: anthropicAPIKey)
-        let client = AnthropicClient()
-        let body = try req.content.decode(AnthropicChatCompletionRequest.self)
-        // return client.chatCompletion(prompt: String, model: Model, maxTokensToSample: Int)
-        return try await client.chatCompletion(prompt: body.prompt)
-    }
+    func openai(req: Request) async throws -> String {
+        let openaiClient = try OpenAIChatCompletion(logger: req.logger)
+        let query = try req.content.decode(ChatQuery.self)
+        let result = try await openaiClient.createChat(query)
 
-    @Sendable
-    func test(req _: Request) async throws -> String {
-        "Hello, World!"
+        guard
+            let message = result.choices.first?.message.content?.string
+        else {
+            let errorCodeWhenMessageNotFound = 500
+            throw Abort(.internalServerError)
+        }
+
+        return message
     }
 }

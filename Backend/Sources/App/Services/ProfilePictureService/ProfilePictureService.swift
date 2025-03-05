@@ -118,7 +118,7 @@ struct ProfilePictureService {
                                excludeText: Bool) async throws -> ([ImagesResult.Image], Data)
     {
         let textExtractionService = TextExtractionService()
-        let openaiService = try OpenAiService(logger: logger)
+        let openaiService = try OpenAIService(logger: logger)
 
         var hasText = false
         var image: String?

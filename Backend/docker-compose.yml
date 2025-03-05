@@ -5,7 +5,7 @@ services:
   api_dev:
     volumes:
       - ./:/app/
-      - api_build:/app/.build
+      - /app/.build
     build:
       context: .
       dockerfile: ./DevDockerfile
@@ -21,7 +21,7 @@ services:
   worker_dev:
     volumes:
       - ./:/app/
-      - worker_build:/app/.build
+      - /app/.build
     build:
       context: .
       dockerfile: ./DevDockerfile

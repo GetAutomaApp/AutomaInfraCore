@@ -53,7 +53,6 @@ public func configure(_ app: Application) async throws {
 
         try app.register(collection: AuthenticationController())
         try app.register(collection: AppLaunchController())
-        try app.register(collection: AnthropicController())
 
         // Authentication
         await app.jwt.keys

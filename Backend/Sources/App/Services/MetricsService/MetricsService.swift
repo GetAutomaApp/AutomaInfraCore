@@ -123,8 +123,12 @@ enum BackendMetric {
         ]
     )
 
-    static let openaiImageGenerationRequests = MetricsService.global.makeCounter(
+    static let openAIImageGenerationRequests = MetricsService.global.makeCounter(
         name: "openai_image_generation_requests"
+    )
+
+    static let openaiChatGenerationRequests = MetricsService.global.makeCounter(
+        name: "openai_chat_generation_requests"
     )
 
     static let totalMediaFilesUploadedToTigris = MetricsService.global.makeCounter(
