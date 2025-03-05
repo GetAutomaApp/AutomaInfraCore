@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "Backend",
     platforms: [
-        .macOS(.v15)
+        .macOS(.v15),
     ],
     dependencies: [
         // 💧 A server-side Swift web framework.
@@ -24,7 +24,8 @@ let package = Package(
         .package(url: "https://github.com/swift-server/swift-prometheus.git", from: "2.0.0"),
         .package(
             url: "https://github.com/m-barthelemy/vapor-queues-fluent-driver.git",
-            from: "3.0.0-beta1"),
+            from: "3.0.0-beta1"
+        ),
         .package(url: "https://github.com/swhitty/FlyingFox.git", .upToNextMajor(from: "0.20.0")),
     ],
     targets: [
@@ -49,7 +50,7 @@ let package = Package(
                 .product(name: "SotoTextract", package: "soto"),
             ],
             exclude: [
-                "Documentation.md"
+                "Documentation.md",
             ],
             swiftSettings: swiftSettings,
             linkerSettings: [
