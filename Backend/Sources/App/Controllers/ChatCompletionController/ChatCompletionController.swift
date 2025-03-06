@@ -9,7 +9,7 @@ import Vapor
 
 struct ChatCompletionController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
-        let chatCompletionRoute = routes.grouped("Authentication")
+        let chatCompletionRoute = routes.grouped("ChatCompletion")
 
         chatCompletionRoute.post("openai", use: openai)
     }
@@ -17,7 +17,7 @@ struct ChatCompletionController: RouteCollection {
     @Sendable
     func openai(req: Request) async throws -> String {
         let openaiClient = try OpenAIChatCompletion(logger: req.logger)
-        let query = try req.content.decode(ChatQuery.self)
+        let query = try req.content.decode(ChatCompletionContent.self)
         let result = try await openaiClient.createChat(query)
 
         guard
@@ -28,5 +28,10 @@ struct ChatCompletionController: RouteCollection {
         }
 
         return message
+    }
+
+    @Sendable
+    func test(req _: Request) async throws -> String {
+        "Hello, World!"
     }
 }

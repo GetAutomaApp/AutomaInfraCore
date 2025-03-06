@@ -6,9 +6,6 @@
 import OpenAI
 import Vapor
 
-@unchecked Sendable
-extension ChatQuery: Content {}
-
 struct OpenAIChatCompletion {
     private let client: OpenAI
     private let logger: Logger
@@ -23,9 +20,19 @@ struct OpenAIChatCompletion {
         self.logger = logger
     }
 
-    func createChat(_ query: ChatQuery) async throws -> ChatResult {
+    func createChat(_ query: ChatCompletionContent) async throws -> ChatResult {
         BackendMetric.openaiChatGenerationRequests.increment()
-        let result = try await client.chats(query: query)
+        let result = try await client.chats(
+            query: .init(
+                messages: [
+                    .init(
+                        role: .system,
+                        content: query.prompt
+                    )!,
+                ],
+                model: query.model
+            )
+        )
         return result
     }
 }
