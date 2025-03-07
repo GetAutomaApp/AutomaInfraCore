@@ -1,5 +1,5 @@
 {
-  "originHash" : "d588b5c81320408cf49845189beb0c139ebd2a10d9bf2d03b4194ff80ee65dbe",
+  "originHash" : "e5ae24fc848d354f10b89de4b9fbebb065cc30adb356b1edab570fbc1c368fba",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -53,6 +53,15 @@
       "state" : {
         "revision" : "966d89ae64cd71c652a1e981bc971de59d64f13d",
         "version" : "4.15.1"
+      }
+    },
+    {
+      "identity" : "feedkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nmdias/FeedKit.git",
+      "state" : {
+        "revision" : "ac6d3310b9a6fcf8ccba7b91e91372f8a4e9d8c8",
+        "version" : "10.0.0-rc.3"
       }
     },
     {
