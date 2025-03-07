@@ -3,6 +3,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+import DataTypes
 import Fluent
 import Vapor
 
@@ -14,7 +15,7 @@ struct FeedTesterController: RouteCollection {
     }
 
     @Sendable
-    func request(req _: Request) async throws -> ReadFeedResponse {
+    func request(req _: Request) async throws -> RssFeedResponse {
         let feedService: RSSFeedReaderClient = .init()
         let response = await feedService.read(from: URL(string: "https://news.ycombinator.com/rss")!)
         return response

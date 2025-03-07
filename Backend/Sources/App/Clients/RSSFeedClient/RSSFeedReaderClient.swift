@@ -3,26 +3,15 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+import DataTypes
 import FeedKit
 import Fluent
 import Foundation
 import Retry
 import Vapor
 
-struct GenericFeedItem: Vapor.Content {
-    let title: String
-    let link: String
-    let description: String
-    let publishDate: Date
-}
-
-struct ReadFeedResponse: Vapor.Content {
-    let items: [GenericFeedItem]
-    let isRssFeed: Bool
-}
-
 struct RSSFeedReaderClient {
-    func read(from url: URL) async -> ReadFeedResponse {
+    func read(from url: URL) async -> RssFeedResponse {
         var feed: Feed? = nil
 
         do {
@@ -42,7 +31,7 @@ struct RSSFeedReaderClient {
         }
     }
 
-    func convertRSSToGenericFeedItems(from feedItems: [RSSFeedItem]) -> [GenericFeedItem] {
+    func convertRSSToGenericFeedItems(from feedItems: [RSSFeedItem]) -> [GenericRSSFeedItem] {
         let items = feedItems.compactMap { feedItem -> GenericFeedItem? in
             guard
                 let title = feedItem.title,
@@ -53,7 +42,7 @@ struct RSSFeedReaderClient {
                 return nil
             }
 
-            return GenericFeedItem(
+            return GenericRSSFeedItem(
                 title: title,
                 link: link,
                 description: description,
