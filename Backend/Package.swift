@@ -27,7 +27,7 @@ let package = Package(
         ),
         .package(url: "https://github.com/swhitty/FlyingFox.git", .upToNextMajor(from: "0.20.0")),
         .package(url: "https://github.com/nmdias/FeedKit.git", from: "10.0.0-rc.3"),
-
+        .package(url: "https://github.com/GetAutomaApp/swift-retry.git", branch: "main"),
     ],
     targets: [
         .executableTarget(
@@ -49,6 +49,7 @@ let package = Package(
                 .product(name: "FlyingFox", package: "FlyingFox"),
                 .product(name: "SotoTextract", package: "soto"),
                 .product(name: "FeedKit", package: "FeedKit"),
+                .product(name: "DMRetry", package: "swift-retry"),
             ],
             exclude: [
                 "Documentation.md",
