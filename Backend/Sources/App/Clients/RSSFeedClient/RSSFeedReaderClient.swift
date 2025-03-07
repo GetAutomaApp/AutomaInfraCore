@@ -32,7 +32,7 @@ struct RSSFeedReaderClient {
     }
 
     func convertRSSToGenericFeedItems(from feedItems: [RSSFeedItem]) -> [GenericRSSFeedItem] {
-        let items = feedItems.compactMap { feedItem -> GenericFeedItem? in
+        let items = feedItems.compactMap { feedItem -> GenericRSSFeedItem? in
             guard
                 let title = feedItem.title,
                 let link = feedItem.link,

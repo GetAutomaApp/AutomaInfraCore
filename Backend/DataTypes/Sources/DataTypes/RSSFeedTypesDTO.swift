@@ -5,14 +5,26 @@
 
 import Vapor
 
-struct GenericRSSFeedItem: Content {
-    let title: String
-    let link: String
-    let description: String
-    let publishDate: Date
+public struct GenericRSSFeedItem: Content {
+    public let title: String
+    public let link: String
+    public let description: String
+    public let publishDate: Date
+
+    public init(title: String, link: String, description: String, publishDate: Date) {
+        self.title = title
+        self.link = link
+        self.description = description
+        self.publishDate = publishDate
+    }
 }
 
-struct RssFeedResponse: Content {
-    let items: [GenericRSSFeedItem]
-    let isRssFeed: Bool
+public struct RssFeedResponse: Content {
+    public let items: [GenericRSSFeedItem]
+    public let isRssFeed: Bool
+
+    public init(items: [GenericRSSFeedItem], isRssFeed: Bool) {
+        self.items = items
+        self.isRssFeed = isRssFeed
+    }
 }
