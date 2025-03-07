@@ -91,7 +91,7 @@ let fileTypes: [FileType] = [
         configurations: [
             FileConfig(
                 fromDirectory: "model/",
-                toDirectory: "./Sources/App/Models/",
+                toDirectory: "\(baseBackendAppPath)Models/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__Model.swift.template",
@@ -107,7 +107,7 @@ let fileTypes: [FileType] = [
             ),
             FileConfig(
                 fromDirectory: "migration/",
-                toDirectory: "./Sources/App/Migrations/",
+                toDirectory: "\(baseBackendAppPath)Migrations/",
                 nestToDirectory: "",
                 templates: [
                     "__CAPNAME__Migration__TIMESTAMP__.swift.template",
@@ -146,7 +146,7 @@ let fileTypes: [FileType] = [
         configurations: [
             FileConfig(
                 fromDirectory: "backend-service/",
-                toDirectory: "Sources/App/Services/",
+                toDirectory: "\(baseBackendAppPath)Services/",
                 nestToDirectory: "__CAPNAME__Service/",
                 templates: [
                     "__CAPNAME__Service.swift.template",

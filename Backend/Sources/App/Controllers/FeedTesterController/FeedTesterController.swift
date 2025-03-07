@@ -17,7 +17,7 @@ struct FeedTesterController: RouteCollection {
     @Sendable
     func request(req _: Request) async throws -> RssFeedResponse {
         let feedService: RSSFeedReaderClient = .init()
-        let response = await feedService.read(from: URL(string: "https://news.ycombinator.com/rss")!)
+        let response = try! await feedService.read(from: URL(string: "https://news.ycombinator.com/rss")!)
         return response
     }
 }
