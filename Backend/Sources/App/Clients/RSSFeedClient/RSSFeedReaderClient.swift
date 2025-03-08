@@ -12,7 +12,7 @@ import Vapor
 
 struct RSSFeedReaderClient {
     func read(from url: URL) async -> RssFeedResponse {
-        var feed: Feed? = nil
+        var feed: Feed?
 
         do {
             try await retry(

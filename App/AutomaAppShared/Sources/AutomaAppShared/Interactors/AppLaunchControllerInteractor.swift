@@ -10,10 +10,6 @@ import Foundation
 struct AppLaunchControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
-    init(baseURL: String) {
-        self.baseURL = baseURL
-    }
-
     func makeIsUserAcceptedRequest() async throws -> Bool {
         let response = try await performRequest(
             endpoint: "/App-Launch/is-user-accepted",
