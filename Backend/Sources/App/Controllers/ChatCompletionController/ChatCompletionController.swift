@@ -23,15 +23,9 @@ struct ChatCompletionController: RouteCollection {
         guard
             let message = result.choices.first?.message.content?.string
         else {
-            let errorCodeWhenMessageNotFound = 500
             throw Abort(.internalServerError)
         }
 
         return message
-    }
-
-    @Sendable
-    func test(req _: Request) async throws -> String {
-        "Hello, World!"
     }
 }

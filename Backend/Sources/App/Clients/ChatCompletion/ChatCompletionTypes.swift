@@ -6,6 +6,16 @@
 import Vapor
 
 struct ChatCompletionContent: Content {
-    let model: String
+    let model: ChatCompletionModel
     let prompt: String
+}
+
+enum ChatCompletionModel: String, Codable {
+    case gpt4o = "gpt-4o"
+    case gpt4omini = "gpt-4o-mini"
+    case gpto1 = "o1"
+}
+
+enum ChatCompletionPlatform {
+    case openai
 }

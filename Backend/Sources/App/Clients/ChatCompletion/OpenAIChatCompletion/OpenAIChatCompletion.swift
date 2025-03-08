@@ -6,7 +6,7 @@
 import OpenAI
 import Vapor
 
-struct OpenAIChatCompletion {
+struct OpenAIChatCompletion: ChatCompletion {
     private let client: OpenAI
     private let logger: Logger
 
@@ -30,7 +30,7 @@ struct OpenAIChatCompletion {
                         content: query.prompt
                     )!,
                 ],
-                model: query.model
+                model: query.model.rawValue
             )
         )
         return result

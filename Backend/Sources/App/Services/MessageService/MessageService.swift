@@ -3,10 +3,11 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-import AWSSNS
 import DataTypes
 import Fluent
 import Foundation
+
+import SotoSNS
 import Vapor
 
 #if canImport(FoundationNetworking)
@@ -20,12 +21,17 @@ struct MessageService: Decodable {
         logger: Logger
     ) async throws -> String {
         do {
-            let client = try SNSClient(region: Environment.getOrThrow("AWS_DEFAULT_REGION"))
+            let clientAuth = try AWSClient(
+                credentialProvider: .static(
+                    accessKeyId: Environment.getOrThrow("AWS_ACCESS_KEY_ID"),
+                    secretAccessKey: Environment.getOrThrow("AWS_SECRET_ACCESS_KEY")
+                )
+            )
 
-            let output = try await client.publish(input: .init(
-                message: message,
-                phoneNumber: phoneNumber
-            ))
+            let region = try Environment.getOrThrow("AWS_DEFAULT_REGION")
+            let client = SNS(client: clientAuth, region: .other(region))
+
+            let output = try await client.publish(.init(message: message, phoneNumber: phoneNumber))
 
             try sendDiscordWebhookAppEvent(
                 input: "random -> \(phoneNumber)",
