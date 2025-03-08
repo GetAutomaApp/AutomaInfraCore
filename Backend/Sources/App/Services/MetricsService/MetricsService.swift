@@ -3,12 +3,6 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-//
-//  metrics.swift
-//  Backend
-//
-//  Created by Simon Ferns on 12/30/24.
-//
 import FlyingFox
 import Foundation
 import Metrics
@@ -127,11 +121,11 @@ enum BackendMetric {
         name: "openai_image_generation_requests"
     )
 
-    nonisolated(unsafe) static let chatCompletionServiceCall = { (
+    static func chatCompletionServiceCall(
         platform: ChatCompletionPlatform,
         model: ChatCompletionModel,
         status: MetricStatus
-    ) -> Prometheus.Counter in
+    ) -> Prometheus.Counter {
         MetricsService.global.makeCounter(
             name: "chat_completion_service_call",
             labels: [

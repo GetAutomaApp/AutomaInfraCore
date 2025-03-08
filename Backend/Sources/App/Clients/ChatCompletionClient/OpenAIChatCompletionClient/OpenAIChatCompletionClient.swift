@@ -22,7 +22,8 @@ struct OpenAIChatCompletionClient: ChatCompletion {
     }
 
     func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult {
-        try validateModel(model: query.model)
+        let model = query.model
+        try validateModel(model: model)
 
         let result: ChatResult
         do {
@@ -31,22 +32,22 @@ struct OpenAIChatCompletionClient: ChatCompletion {
                     messages: [
                         .init(role: .system, content: query.prompt)!,
                     ],
-                    model: query.model.rawValue
+                    model: model.rawValue
                 )
             )
         } catch {
-            BackendMetric.chatCompletionServiceCall(.openai, query.model, .fail).increment()
+            BackendMetric.chatCompletionServiceCall(platform: .openai, model: model, status: .fail).increment()
             logger.error("Failed to generate chat completion, error: \(error)")
             throw Abort(.internalServerError)
         }
 
         guard let message = result.choices.first?.message.content?.string else {
             logger.error("Failed to generate chat completion, message empty")
-            BackendMetric.chatCompletionServiceCall(.openai, query.model, .fail).increment()
+            BackendMetric.chatCompletionServiceCall(platform: .openai, model: model, status: .fail).increment()
             throw Abort(.internalServerError)
         }
 
-        BackendMetric.chatCompletionServiceCall(.openai, query.model, .success).increment()
+        BackendMetric.chatCompletionServiceCall(platform: .openai, model: model, status: .success).increment()
         return .init(message: message)
     }
 }
