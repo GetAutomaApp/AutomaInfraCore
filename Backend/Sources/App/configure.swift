@@ -13,7 +13,7 @@ import Vapor
 // Configures your application
 public func configure(_ app: Application) async throws {
     // This is file middleware
-    // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+    app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
     app.middleware.use(ErrorStringMiddleware())
 
     // Errors are getting thrown locally, this prevents run App & ./App execution diffs
@@ -48,6 +48,8 @@ public func configure(_ app: Application) async throws {
         app.migrations.add(JobMetadataMigrate())
         app.migrations.add(RemoveUserStorageMigration1739456565())
         app.migrations.add(AddAcceptedColumnMigration1740658649())
+        app.migrations.add(RSSFeedMigration1741359416())
+        app.migrations.add(UserFeedMappingMigration1741429746())
 
         try await app.autoMigrate()
 
