@@ -9,7 +9,9 @@ import Vapor
 
 struct ChatCompletionController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
-        let chatCompletionRoute = routes.grouped("ChatCompletion")
+        let chatCompletionRoute = routes.grouped("ChatCompletion").grouped(
+            TestControllerMiddleware()
+        )
 
         chatCompletionRoute.post("openai", use: openai)
     }
