@@ -16,16 +16,10 @@ struct ChatCompletionController: RouteCollection {
 
     @Sendable
     func openai(req: Request) async throws -> String {
-        let openaiClient = try OpenAIChatCompletion(logger: req.logger)
+        let openaiClient = try OpenAIChatCompletionClient(logger: req.logger)
         let query = try req.content.decode(ChatCompletionContent.self)
         let result = try await openaiClient.createChat(query)
 
-        guard
-            let message = result.choices.first?.message.content?.string
-        else {
-            throw Abort(.internalServerError)
-        }
-
-        return message
+        return result.message
     }
 }
