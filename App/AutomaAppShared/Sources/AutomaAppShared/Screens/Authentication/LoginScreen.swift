@@ -161,9 +161,9 @@ public struct LoginScreen: View {
 
             let success = [
                 KeychainHelper
-                    .set(for: .AuthenticationToken, value: response.accessToken),
+                    .set(for: .authenticationToken, value: response.accessToken),
                 KeychainHelper
-                    .set(for: .RefreshToken, value: response.refreshToken),
+                    .set(for: .refreshToken, value: response.refreshToken),
             ].first(where: { !$0 })
 
             baseEnvironmentConfig.isLoggedIn = true

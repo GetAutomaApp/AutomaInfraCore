@@ -25,12 +25,12 @@ public struct AppLaunch: Sendable {
 
         print("Access Token")
         var shouldReturn = false
-        if let refreshToken = await keychain.get(for: .RefreshToken) {
+        if let refreshToken = await keychain.get(for: .refreshToken) {
             let newAccessToken = try? await authenticationController.makeRefreshTokenRequest(
                 refreshToken,
                 handleInvalidToken: {
-                    await keychain.delete(for: .RefreshToken)
-                    await keychain.delete(for: .AuthenticationToken)
+                    await keychain.delete(for: .refreshToken)
+                    await keychain.delete(for: .authenticationToken)
                     shouldReturn = true
                 }
             )
@@ -42,13 +42,13 @@ public struct AppLaunch: Sendable {
             if let newAccessToken {
                 await keychain
                     .set(
-                        for: .AuthenticationToken,
+                        for: .authenticationToken,
                         value: newAccessToken.accessToken
                     )
                 return true
             } else {
-                await keychain.delete(for: .RefreshToken)
-                await keychain.delete(for: .AuthenticationToken)
+                await keychain.delete(for: .refreshToken)
+                await keychain.delete(for: .authenticationToken)
                 return false
             }
         }

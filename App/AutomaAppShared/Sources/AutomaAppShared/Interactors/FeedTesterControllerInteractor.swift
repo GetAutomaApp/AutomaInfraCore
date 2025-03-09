@@ -12,10 +12,6 @@ import Foundation
 struct FeedTesterControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
-    init(baseURL: String) {
-        self.baseURL = baseURL
-    }
-
     /// Makes a request to /Feed-Tester/request
     /// Change the return type to your Decodable DTO
     func makeRequest() async throws -> DataResponse<Data?, AFError> {

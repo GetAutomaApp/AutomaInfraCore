@@ -23,6 +23,12 @@ let package = Package(
             ],
             swiftSettings: swiftSettings
         ),
+        .testTarget(
+            name: "CLITests",
+            dependencies: [
+                .target(name: "AutomaCLI"),
+            ]
+        ),
     ],
     swiftLanguageModes: [.v5]
 )
