@@ -4,8 +4,9 @@
 // All rights reserved.
 
 @testable import App
-import Fluent
 import Testing
+import Vapor
+import VaporTesting
 
 @Suite("App Tests with DB", .serialized)
 struct AppTests {
@@ -26,7 +27,7 @@ struct AppTests {
     @Test("Test Hello World Route")
     func helloWorld() async throws {
         try await withApp { app in
-            try await app.testing().test(.GET, "hello") { res async in
+            try await app.testing(method: .running).test(.GET, "hello") { res async in
                 #expect(res.status == .ok)
                 #expect(res.body.string == "Hello, world!")
             }
