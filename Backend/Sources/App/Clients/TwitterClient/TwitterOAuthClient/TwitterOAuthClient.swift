@@ -14,17 +14,12 @@ struct TwitterOAuthClient {
     private let consumerSecret: String
     private let appAPIKey: String
 
-    func getRequestToken() throws {
+    func getRequestToken() async throws -> String {
         let baseURL = "https://api.x.com/oauth/request_token"
         let method = "POST"
 
         let nonce = "\(UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(11))"
         let callbackURL = "http://127.0.0.1:8080/Twitter/redirect"
-
-        var request = URLRequest(
-            url: URL(string: baseURL)!,
-            timeoutInterval: Double.infinity
-        )
 
         var signatureParametersString = ""
         let timestamp = Int(Date().timeIntervalSince1970)
@@ -63,21 +58,20 @@ struct TwitterOAuthClient {
             using: SymmetricKey(data: signingKey.data(using: .utf8)!)
         ).withUnsafeBytes { Data($0) }.base64EncodedString()
 
-        request.addValue(
-            "OAuth oauth_consumer_key=\"\(appAPIKey)\",oauth_signature_method=\"\(signatureMethod)\",oauth_timestamp=\"\(timestamp)\",oauth_nonce=\"\(nonce)\",oauth_version=\"\(oauthVersion)\",oauth_callback=\"\(callbackURL)\",oauth_signature=\"\(signature)\"",
-            forHTTPHeaderField: "Authorization"
-        )
-
-        request.httpMethod = "POST"
-
-        let task = URLSession.shared.dataTask(with: request) { data, _, error in
-            guard let data else {
-                print(String(describing: error))
-                return
-            }
-            print(String(data: data, encoding: .utf8)!)
+        let response = try await client.post(.init(string: baseURL)) { request in
+            request.headers.add(
+                name: "Authorization",
+                value: "OAuth oauth_consumer_key=\"\(consumerKey)\",oauth_signature_method=\"\(signatureMethod)\",oauth_timestamp=\"\(timestamp)\",oauth_nonce=\"\(nonce)\",oauth_version=\"\(oauthVersion)\",oauth_callback=\"\(callbackURL)\",oauth_signature=\"\(signature)\""
+            )
         }
-
-        task.resume()
+        guard
+            let body = response.body
+        else {
+            logger.error("Failed to get request token: response body empty. Response: \(response)")
+            throw Abort(.internalServerError)
+        }
+        let token = String(buffer: body)
+        logger.info("Request token: \(token)")
+        return token
     }
 }
