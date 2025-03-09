@@ -19,7 +19,7 @@ extension BackendControllerInteractor {
         var headers = headers ?? Alamofire.HTTPHeaders()
 
         if jwt {
-            if let token = await KeychainHelper.get(for: .AuthenticationToken) {
+            if let token = await KeychainHelper.get(for: .authenticationToken) {
                 headers.add(.authorization(bearerToken: token))
             } else {
                 print("No authentication token found in Keychain.")
