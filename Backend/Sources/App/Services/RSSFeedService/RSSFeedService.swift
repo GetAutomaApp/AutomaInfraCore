@@ -60,5 +60,8 @@ struct RSSFeedService {
     }
 
     // Scrape Feed Posts + Add to table
+    func scrapeRSSFeedPosts(feedId _: UUID) async throws {
+        let
+    }
     // Scrape Feed Content + Add to table
 }
