@@ -13,20 +13,11 @@ struct TwitterClient {
     private let TWITTER_API_APP_KEY: String
     private let TWITTER_API_APP_SECRET_KEY: String
 
-    init() {
-        guard
-            TWITTER_APP_API_KEY = Environment.get("TWITTER_APP_API_KEY")
-        else {
-            logger.error("TWITTER_APP_API_KEY not found")
-            throw Abort(.internalServerError)
-        }
-
-        guard
-            TWITTER_API_APP_SECRET_KEY = Environment.get("TWITTER_API_APP_SECRET_KEY")
-        else {
-            logger.error("TWITTER_API_APP_SECRET_KEY not found")
-            throw Abort(.internalServerError)
-        }
+    init(logger: Logger, client: Client) throws {
+        self.logger = logger
+        self.client = client
+        TWITTER_API_APP_KEY = try Environment.getOrThrow("TWITTER_API_APP_KEY")
+        TWITTER_API_APP_SECRET_KEY = try Environment.getOrThrow("TWITTER_API_APP_SECRET_KEY")
     }
 
     func requestToken() async throws {

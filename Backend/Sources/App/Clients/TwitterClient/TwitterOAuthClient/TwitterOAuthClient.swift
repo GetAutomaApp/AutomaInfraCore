@@ -8,15 +8,17 @@ import Foundation
 import Vapor
 
 struct TwitterOAuthClient {
-    let client: Client
-    let consumerKey: String
-    let consumerSecret: String
+    private let client: Client
+    private let logger: Logger
+    private let consumerKey: String
+    private let consumerSecret: String
+    private let appAPIKey: String
 
-    func getRequestToken() {
+    func getRequestToken() throws {
         let baseURL = "https://api.x.com/oauth/request_token"
         let method = "POST"
 
-        let nonce = UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(11)
+        let nonce = "\(UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(11))"
         let callbackURL = "http://127.0.0.1:8080/Twitter/redirect"
 
         var request = URLRequest(
@@ -25,12 +27,15 @@ struct TwitterOAuthClient {
         )
 
         var signatureParametersString = ""
+        let timestamp = Int(Date().timeIntervalSince1970)
+        let signatureMethod = "HMAC-SHA1"
+        let oauthVersion = "1.0"
         let authenticationHeaderObjectRaw = [
             "oauth_consumer_key": consumerKey,
-            "oauth_signature_method": "HMAC-SHA1",
-            "oauth_timestamp": Int(Date().timeIntervalSince1970),
+            "oauth_signature_method": signatureMethod,
+            "oauth_timestamp": "\(timestamp)",
             "oauth_nonce": nonce,
-            "oauth_version": "1.0",
+            "oauth_version": oauthVersion,
             "oauth_callback": callbackURL,
         ].sorted { $0.key < $1.key }
 
@@ -40,7 +45,7 @@ struct TwitterOAuthClient {
             let encodedPair = "\(encodedKey)=\(encodedValue)"
 
             signatureParametersString += encodedPair
-            if index != authenticationHeaderObject.count - 1 {
+            if index != authenticationHeaderObjectRaw.count - 1 {
                 signatureParametersString += "&"
             }
         }
@@ -59,7 +64,7 @@ struct TwitterOAuthClient {
         ).withUnsafeBytes { Data($0) }.base64EncodedString()
 
         request.addValue(
-            "OAuth oauth_consumer_key=\"\(appAPIKey)\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"\(timestamp)\",oauth_nonce=\"\(nonce)\",oauth_version=\"1.0\",oauth_callback=\"\(callbackURL)\",oauth_signature=\"mmX8cSVCPBmtLQmpH0RGP6607qA%3D\"",
+            "OAuth oauth_consumer_key=\"\(appAPIKey)\",oauth_signature_method=\"\(signatureMethod)\",oauth_timestamp=\"\(timestamp)\",oauth_nonce=\"\(nonce)\",oauth_version=\"\(oauthVersion)\",oauth_callback=\"\(callbackURL)\",oauth_signature=\"\(signature)\"",
             forHTTPHeaderField: "Authorization"
         )
 
