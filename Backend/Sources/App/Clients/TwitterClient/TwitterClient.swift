@@ -20,32 +20,5 @@ struct TwitterClient {
         TWITTER_API_APP_SECRET_KEY = try Environment.getOrThrow("TWITTER_API_APP_SECRET_KEY")
     }
 
-    func requestToken() async throws {
-//        let response = try await client.post("https://api.x.com/oauth/request_token") { request in
-        var request = URLRequest(
-            url: URL(string: "https://api.x.com/oauth/request_token")!,
-            timeoutInterval: Double.infinity
-        )
-        request.headers.add(
-            name: "Authorization",
-            value: "OAuth oauth_consumer_key=\"tbet3F32lFbIuotP4EnNE2Hct\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"1741277191\",oauth_nonce=\"ERc1ftQDpx5\",oauth_version=\"1.0\",oauth_callback=\"http%3A%2F%2F127.0.0.1%3A8080%2FTwitter%2Fredirect\",oauth_signature=\"DgqzH9x%2BkPl%2BjCYBE69ztntw6bQ%3D\""
-        )
-
-        request.addValue(
-            "OAuth oauth_consumer_key=\"tbet3F32lFbIuotP4EnNE2Hct\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"1741277191\",oauth_nonce=\"ERc1ftQDpx5\",oauth_version=\"1.0\",oauth_callback=\"http%3A%2F%2F127.0.0.1%3A8080%2FTwitter%2Fredirect\",oauth_signature=\"DgqzH9x%2BkPl%2BjCYBE69ztntw6bQ%3D\"",
-            forHTTPHeaderField: "Authorization"
-        )
-
-        request.httpMethod = "POST"
-
-        let task = URLSession.shared.dataTask(with: request) { data, _, error in
-            guard let data else {
-                print(String(describing: error))
-                return
-            }
-            print(String(data: data, encoding: .utf8)!)
-        }
-
-        task.resume()
-    }
+    func requestToken() {}
 }

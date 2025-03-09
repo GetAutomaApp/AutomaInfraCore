@@ -3,7 +3,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-import CryptoKit
+import Crypto
 import Foundation
 import Vapor
 
