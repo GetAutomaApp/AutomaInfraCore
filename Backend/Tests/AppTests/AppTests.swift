@@ -5,7 +5,6 @@
 
 @testable import App
 import Testing
-import Vapor
 import VaporTesting
 
 @Suite("App Tests with DB", .serialized)
