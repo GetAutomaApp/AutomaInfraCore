@@ -22,7 +22,7 @@ struct FirecrawlTestController: RouteCollection {
     func request(req: Request) async throws -> WebsiteResponseItem {
         let firecrawlClient = FirecrawlClient(client: req.client)
         let response = try await firecrawlClient.scrapeMarkdown(
-            from: .init(url: "https://simonferns.com")
+            from: .init(url: "https://firecrawl.dev")
         )
         return response
     }
