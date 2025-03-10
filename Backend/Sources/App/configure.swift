@@ -28,6 +28,11 @@ public func configure(_ app: Application) async throws {
 
     let hasDatabaseUrls = primaryDatabaseURL != nil && regionalDatabaseURL != nil
 
+    // keep this here while `AppTests.swift` is empty
+    app.get("hello") { _ in
+        "Hello, world!"
+    }
+
     if hasDatabaseUrls {
         try app.databases.use(.postgres(
             url: primaryDatabaseURL!
@@ -53,6 +58,7 @@ public func configure(_ app: Application) async throws {
 
         try app.register(collection: AuthenticationController())
         try app.register(collection: AppLaunchController())
+        try app.register(collection: TwitterController())
         try app.register(collection: ChatCompletionController())
         try app.register(collection: FeedTesterController())
         try app.register(collection: FirecrawlTestController())
