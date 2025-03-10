@@ -19,7 +19,8 @@ struct TwitterOAuthClient {
         let method = "POST"
 
         let nonce = "\(UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(11))"
-        let callbackURL = "http://127.0.0.1:8080/Twitter/redirect"
+        let backendURL = try Environment.getOrThrow("BACKEND_URL")
+        let callbackURL = "\(backendURL)/Twitter/redirect"
 
         var signatureParametersString = ""
         let timestamp = Int(Date().timeIntervalSince1970)
@@ -67,11 +68,23 @@ struct TwitterOAuthClient {
         guard
             let body = response.body
         else {
-            logger.error("Failed to get request token: response body empty. Response: \(response)")
+            logger.error(
+                "Failed to get request token: response body empty.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "response": .string("\(response.description)"),
+                ]
+            )
             throw Abort(.internalServerError)
         }
         let token = String(buffer: body)
-        logger.info("Request token: \(token)")
+        logger.info(
+            "Request token found from response.",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "token": .string(token),
+            ]
+        )
         return token
     }
 }
