@@ -21,6 +21,7 @@ struct FirecrawlClient {
 
     func scrapeMarkdown(from input: ScrapeMarkdownInput) async throws -> WebsiteResponseItem {
         let baseUrl = try Environment.getOrThrow("FIRECRAWL_BASE_URL")
+        let apiKey = try Environment.getOrThrow("FIRECRAWL_SELFHOST_API_KEY")
 
         guard let url = URL(string: "\(baseUrl)/v1/scrape") else {
             throw GenericErrors.invalidUrl
@@ -31,6 +32,9 @@ struct FirecrawlClient {
             headers: .init([
                 (
                     "Content-Type", "application/json"
+                ),
+                (
+                    "x-api-key", apiKey
                 ),
             ]),
             content: input
@@ -77,4 +81,9 @@ struct FirecrawlClient {
             return []
         }
     }
+
+    // NOTE: We still have these routes to implement
+    // These might be used in the future and can be implemented then!
+    // startCrawl()
+    // getCrawlResults()
 }
