@@ -2,3 +2,45 @@
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
+
+@testable import App
+import Testing
+import VaporTesting
+import XCTest
+
+@Suite("Twitter Authentication Tests")
+struct TwitterClientTests {
+    private func withApp(_ test: (Application) async throws -> Void) async throws {
+        let app = try await Application.make(.testing)
+        do {
+            try await configure(app)
+            try await app.autoMigrate()
+            try await test(app)
+            try await app.autoRevert()
+        } catch {
+            app.logger.error(
+                ".Failed to create app for suite 'TwitterClientTests'",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "error": .string("\(error.localizedDescription)"),
+                ]
+            )
+            try await app.asyncShutdown()
+            throw error
+        }
+        try await app.asyncShutdown()
+    }
+
+    @Test("Test Request Token")
+    func requestToken() async throws {
+        try await withApp { app in
+            let twitterClient = try TwitterClient(logger: app.logger, client: app.client)
+            let token = try await twitterClient.requestToken()
+            let oauthToken = token.oauthToken
+            let oauthTokenSecret = token.oauthTokenSecret
+
+            XCTAssert(oauthToken != "")
+            XCTAssert(oauthTokenSecret != "")
+        }
+    }
+}

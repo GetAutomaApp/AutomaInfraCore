@@ -18,7 +18,8 @@ public func configure(_ app: Application) async throws {
 
     // Errors are getting thrown locally, this prevents run App & ./App execution diffs
     let environment = Environment.get("ENVIRONMENT") ?? "local"
-    if environment != "local" {
+
+    if environment != "local", environment != "testing" {
         app.asyncCommands.use(QueuesCommand(application: app), as: "vapor-queues")
     }
 

@@ -321,11 +321,18 @@ struct AuthenticationService: Sendable {
                 BackendMetric.totalUsersAlreadyExists.increment()
                 return true
             }
+            return false
         } catch {
-            print("\(error)")
+            logger.error(
+                "Error checking if user exists.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "phoneNumber": .string(phoneNumber),
+                    "error": .string("\(error.localizedDescription)"),
+                ]
+            )
+            throw Abort(.internalServerError)
         }
-
-        return false
     }
 
     func generateAccessToken(

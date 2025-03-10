@@ -35,7 +35,7 @@ struct TwitterClient {
         // 1. POST oauth/request_token (postOAuthRequestToken)
         let response = twitterClient.auth.oauth10a
             .postOAuthRequestToken(.init(
-                oauthCallback: callbackURL,
+                oauthCallback: callbackURL
             )) // Rewrite your oauth callback url or scheme
         guard
             let tokenObject = await response.responseObject.success
