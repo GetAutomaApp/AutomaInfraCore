@@ -11,6 +11,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/vapor.git", from: "4.113.2"),
         // 🗄 An ORM for SQL and NoSQL databases.
         .package(url: "https://github.com/vapor/fluent.git", from: "4.12.0"),
+        .package(url: "https://github.com/mironal/TwitterAPIKit", branch: "linux-support"),
         // 🐘 Fluent driver for Postgres.
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.10.0"),
         // 🍃 An expressive, performant, and extensible templating language built for Swift.
@@ -43,6 +44,7 @@ let package = Package(
                 .product(name: "DataTypes", package: "DataTypes"),
                 .product(name: "JWT", package: "jwt"),
                 .product(name: "OpenAI", package: "OpenAI"),
+                .product(name: "TwitterAPIKit", package: "TwitterAPIKit"),
                 .product(name: "SotoS3", package: "soto"),
                 .product(name: "SotoSNS", package: "soto"),
                 .product(name: "Prometheus", package: "swift-prometheus"),
