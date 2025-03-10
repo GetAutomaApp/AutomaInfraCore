@@ -13,8 +13,21 @@ struct TwitterController: RouteCollection {
         twitterRoute.get("redirect", use: redirect)
     }
 
+    struct TwitterAuthenticateRedirectQueryParameters: Content {
+        let oauthToken: String
+        let oauthVerifier: String
+    }
+
     @Sendable
-    func redirect(req _: Request) async throws -> String {
-        "Hello, World!"
+    func redirect(req: Request) async throws -> TwitterUserTokens {
+        let twitterClient = try TwitterClient(logger: req.logger, client: req.client, database: req.db)
+        let queryParameters = try req.query.decode(TwitterAuthenticateRedirectQueryParameters.self)
+
+        let userTokens = try await twitterClient.getUserTokens(
+            oauthToken: queryParameters.oauthToken,
+            oauthVerifier: queryParameters.oauthVerifier
+        )
+
+        return userTokens
     }
 }

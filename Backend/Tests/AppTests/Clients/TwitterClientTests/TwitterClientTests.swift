@@ -34,13 +34,25 @@ struct TwitterClientTests {
     @Test("Test Request Token")
     func requestToken() async throws {
         try await withApp { app in
-            let twitterClient = try TwitterClient(logger: app.logger, client: app.client)
+            let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
             let token = try await twitterClient.requestToken()
-            let oauthToken = token.oauthToken
-            let oauthTokenSecret = token.oauthTokenSecret
 
-            XCTAssert(oauthToken != "")
-            XCTAssert(oauthTokenSecret != "")
+            XCTAssert(token.oauthToken != "")
+            XCTAssert(token.oauthTokenSecret != "")
+        }
+    }
+
+    @Test("Make Authenticate URL")
+    func makeAuthenticateURL() async throws {
+        try await withApp { app in
+            let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
+            let token = try await twitterClient.requestToken()
+            XCTAssert(token.oauthToken != "")
+            XCTAssert(token.oauthTokenSecret != "")
+
+            let url = try await twitterClient.makeAuthenticateURL(tokenObject: token)
+            let expected = "https://api.x.com/oauth/authenticate?oauth_token=\(token.oauthToken)"
+            XCTAssert(url.absoluteString == expected)
         }
     }
 }

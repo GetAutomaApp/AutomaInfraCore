@@ -3,22 +3,31 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+import Fluent
 import Foundation
 import TwitterAPIKit
 import Vapor
 
+public struct TwitterUserTokens: Content {
+    let accessToken: String
+    let secretAccessToken: String
+}
+
 struct TwitterClient {
     let logger: Logger
     let client: Client
+    let database: Database
 
     private let consumerKey: String
     private let consumerSecret: String
     private let twitterClient: TwitterAPIClient
     private let callbackURL: String
 
-    init(logger: Logger, client: Client) throws {
+    init(logger: Logger, client: Client, database: Database) throws {
         self.logger = logger
         self.client = client
+        self.database = database
+
         consumerKey = try Environment.getOrThrow("TWITTER_API_APP_KEY")
         consumerSecret = try Environment.getOrThrow("TWITTER_API_APP_SECRET_KEY")
         callbackURL = try "\(Environment.getOrThrow("BACKEND_URL"))/Twitter/redirect"
@@ -46,8 +55,77 @@ struct TwitterClient {
         return tokenObject
     }
 
-    // Use selenium to authenticate
-    // 2. GET oauth/authenticate
+    private func saveToken() async throws {}
+
+    // 2. Make authenticate URL (manually go to url and log in)
+    func makeAuthenticateURL(tokenObject: TwitterOAuthTokenV1) async throws -> URL {
+        guard
+            let authenticateURL = twitterClient.auth.oauth10a
+            .makeOAuthAuthenticateURL(.init(oauthToken: tokenObject.oauthToken))
+        else {
+            logger.error(
+                "Failed to make authenticateURL.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "oauthToken": .string("\(tokenObject.oauthToken)"),
+                ]
+            )
+
+            throw Abort(.internalServerError)
+        }
+
+        // TODO: Use selenium to login user
+        logger.info("Go to URL: \(authenticateURL) and authenticate.")
+        return authenticateURL
+    }
+
+    private func getTokenObject(fromOAuthToken oauthToken: String) async throws -> TwitterOAuthTokenV1? {
+        print(oauthToken)
+        return nil
+    }
+
+    func getUserTokens(oauthToken: String, oauthVerifier: String) async throws -> TwitterUserTokens {
+        guard
+            let tokenObject = try await getTokenObject(fromOAuthToken: oauthToken)
+        else {
+            throw Abort(.unauthorized, reason: "Invalid OAuth token")
+        }
+        // convert oauth token to user access token and secret access token
+        let userTokens = try await convertOAuthTokenToUserTokens(tokenObject: tokenObject, oauthVerifier: oauthVerifier)
+        return userTokens
+    }
+
+    private func convertOAuthTokenToUserTokens(tokenObject: TwitterOAuthTokenV1,
+                                               oauthVerifier: String) async throws -> TwitterUserTokens
+    {
+        let response = await twitterClient.auth.oauth10a.postOAuthAccessToken(.init(
+            oauthToken: tokenObject.oauthToken,
+            oauthVerifier: oauthVerifier
+        )).responseObject
+
+        guard
+            let success = response.success
+        else {
+            logger.error(
+                "Failed to convert oauth token to user access token and user secret access token.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "error": .string(response.error.debugDescription),
+                    "oauthToken": .string(tokenObject.oauthToken),
+                    "oauthTokenSecret": .string(tokenObject.oauthTokenSecret),
+                    "oauthVerifier": .string(oauthVerifier),
+                ]
+            )
+
+            throw Abort(
+                .unauthorized,
+                reason: response.error?
+                    .localizedDescription ?? "Failed to obtain user access token and secret access token."
+            )
+        }
+
+        return .init(accessToken: success.oauthToken, secretAccessToken: success.oauthTokenSecret)
+    }
+
     // 3. POST oauth/access_token
-    func authenticate() {}
 }
