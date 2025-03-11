@@ -7,12 +7,6 @@ import DataTypes
 import Fluent
 import Vapor
 
-// public struct TwitterOAuthToken: Model {
-//    public let oauthToken: String
-//    public let oauthTokenSecret: String
-//    public let oauthCallbackConfirmed: Bool?
-// }
-
 final class TwitterOAuthToken: Model, @unchecked Sendable {
     static let schema = "Twitter-O-Auth-Token"
 

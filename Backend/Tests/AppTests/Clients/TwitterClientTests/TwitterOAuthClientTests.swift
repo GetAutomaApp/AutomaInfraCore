@@ -1,4 +1,4 @@
-// TwitterClientTests.swift
+// TwitterOAuthClientTests.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -8,8 +8,8 @@ import Testing
 import VaporTesting
 import XCTest
 
-@Suite("Twitter Authentication Tests")
-struct TwitterClientTests {
+@Suite("Twitter OAuth Tests")
+struct TwitterOAuthClientTests {
     private func withApp(_ test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
@@ -33,7 +33,7 @@ struct TwitterClientTests {
     func requestToken() async throws {
         try await withApp { app in
             let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
-            let token = try await twitterClient.requestToken()
+            let token = try await twitterClient.auth.requestToken()
 
             XCTAssert(token.oauthToken != "")
             XCTAssert(token.oauthTokenSecret != "")
@@ -44,11 +44,11 @@ struct TwitterClientTests {
     func makeAuthenticateURL() async throws {
         try await withApp { app in
             let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
-            let token = try await twitterClient.requestToken()
+            let token = try await twitterClient.auth.requestToken()
             XCTAssert(token.oauthToken != "")
             XCTAssert(token.oauthTokenSecret != "")
 
-            let url = try await twitterClient.makeAuthenticateURL(tokenObject: token)
+            let url = try await twitterClient.auth.makeAuthenticateURL(tokenObject: token)
             let expected = "https://api.x.com/oauth/authenticate?oauth_token=\(token.oauthToken)"
             XCTAssert(url.absoluteString == expected)
         }
