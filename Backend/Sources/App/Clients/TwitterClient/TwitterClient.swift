@@ -14,8 +14,6 @@ struct TwitterClient: TwitterClientBase {
     let database: Database
     let auth: TwitterOAuthClient
 
-    let consumerKey: String
-    let consumerSecret: String
     let callbackURL: String
     let twitterClient: TwitterAPIClient
 
@@ -24,8 +22,8 @@ struct TwitterClient: TwitterClientBase {
         self.client = client
         self.database = database
 
-        consumerKey = try Environment.getOrThrow("TWITTER_API_APP_KEY")
-        consumerSecret = try Environment.getOrThrow("TWITTER_API_APP_SECRET_KEY")
+        let consumerKey = try Environment.getOrThrow("TWITTER_API_APP_KEY")
+        let consumerSecret = try Environment.getOrThrow("TWITTER_API_APP_SECRET_KEY")
         callbackURL = try "\(Environment.getOrThrow("BACKEND_URL"))/Twitter/redirect"
 
         twitterClient = TwitterAPIClient(.oauth10a(.init(
@@ -42,4 +40,6 @@ struct TwitterClient: TwitterClientBase {
             callbackURL: callbackURL
         )
     }
+
+    public func post() {}
 }

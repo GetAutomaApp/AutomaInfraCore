@@ -77,6 +77,8 @@ struct TwitterOAuthClient: TwitterClientBase {
         return userTokens
     }
 
+    private func saveUserTokens(tokenObject _: TwitterUserTokens) async throws {}
+
     private func saveToken(tokenObject: TwitterOAuthTokenV1) async throws -> TwitterOAuthToken {
         let token = TwitterOAuthToken(
             oauthToken: tokenObject.oauthToken,

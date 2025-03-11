@@ -9,8 +9,8 @@ struct TwitterOAuthTokenMigration1741687313: AsyncMigration {
     func prepare(on database: Database) async throws {
         try await database.schema("Twitter-O-Auth-Token")
             .id()
-            .field("updated_at", .datetime)
-            .field("created_at", .datetime)
+            .field("updated_at", .datetime, .required)
+            .field("created_at", .datetime, .required)
             .field("deleted_at", .datetime)
             .field("oauth_token", .string, .required)
             .field("oauth_token_secret", .string, .required)

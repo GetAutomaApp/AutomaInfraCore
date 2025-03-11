@@ -55,6 +55,7 @@ public func configure(_ app: Application) async throws {
         app.migrations.add(RemoveUserStorageMigration1739456565())
         app.migrations.add(AddAcceptedColumnMigration1740658649())
         app.migrations.add(TwitterOAuthTokenMigration1741687313())
+        app.migrations.add(TwitterUserTokenMigration1741708919())
 
         try await app.autoMigrate()
 
