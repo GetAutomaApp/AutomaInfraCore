@@ -23,7 +23,7 @@ struct TwitterClient {
     private let twitterClient: TwitterAPIClient
     private let callbackURL: String
 
-    init(logger: Logger, client: Client, database: Database) throws {
+    public init(logger: Logger, client: Client, database: Database) throws {
         self.logger = logger
         self.client = client
         self.database = database
@@ -55,29 +55,8 @@ struct TwitterClient {
         return savedToken
     }
 
-    private func saveToken(tokenObject: TwitterOAuthTokenV1) async throws -> TwitterOAuthToken {
-        let token = TwitterOAuthToken(
-            oauthToken: tokenObject.oauthToken,
-            oauthTokenSecret: tokenObject.oauthTokenSecret,
-            oauthCallbackConfirmed: tokenObject.oauthCallbackConfirmed
-        )
-        do {
-            try await token.save(on: database)
-        } catch {
-            logger.error(
-                "Failde to save requested Twitter token to database.",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "tokenObject": .string(token.description),
-                ]
-            )
-            throw Abort(.internalServerError)
-        }
-        return token
-    }
-
     // 2. Make authenticate URL (manually go to url and log in)
-    func makeAuthenticateURL(tokenObject: TwitterOAuthTokenV1) async throws -> URL {
+    public func makeAuthenticateURL(tokenObject: TwitterOAuthToken) async throws -> URL {
         guard
             let authenticateURL = twitterClient.auth.oauth10a
             .makeOAuthAuthenticateURL(.init(oauthToken: tokenObject.oauthToken))
@@ -98,14 +77,7 @@ struct TwitterClient {
         return authenticateURL
     }
 
-    private func getTokenObject(fromOAuthToken oauthToken: String) async throws -> TwitterOAuthToken? {
-        try await TwitterOAuthToken
-            .query(on: database)
-            .filter(\.$oauthToken, .equal, oauthToken)
-            .first()
-    }
-
-    func getUserTokens(oauthToken: String, oauthVerifier: String) async throws -> TwitterUserTokens {
+    public func getUserTokens(oauthToken: String, oauthVerifier: String) async throws -> TwitterUserTokens {
         guard
             let tokenObject = try await getTokenObject(fromOAuthToken: oauthToken)
         else {
@@ -114,6 +86,35 @@ struct TwitterClient {
         // convert oauth token to user access token and secret access token
         let userTokens = try await convertOAuthTokenToUserTokens(tokenObject: tokenObject, oauthVerifier: oauthVerifier)
         return userTokens
+    }
+
+    private func saveToken(tokenObject: TwitterOAuthTokenV1) async throws -> TwitterOAuthToken {
+        let token = TwitterOAuthToken(
+            oauthToken: tokenObject.oauthToken,
+            oauthTokenSecret: tokenObject.oauthTokenSecret,
+            oauthCallbackConfirmed: tokenObject.oauthCallbackConfirmed
+        )
+        do {
+            try await token.save(on: database)
+        } catch {
+            logger.error(
+                "Failed to save requested Twitter token to database.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "tokenObject": .string(token.description),
+                    "error": .string(String(reflecting: error)),
+                ]
+            )
+            throw error
+        }
+        return token
+    }
+
+    private func getTokenObject(fromOAuthToken oauthToken: String) async throws -> TwitterOAuthToken? {
+        try await TwitterOAuthToken
+            .query(on: database)
+            .filter(\.$oauthToken, .equal, oauthToken)
+            .first()
     }
 
     private func convertOAuthTokenToUserTokens(tokenObject: TwitterOAuthToken,

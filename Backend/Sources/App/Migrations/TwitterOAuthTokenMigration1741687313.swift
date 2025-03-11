@@ -12,7 +12,9 @@ struct TwitterOAuthTokenMigration1741687313: AsyncMigration {
             .field("updated_at", .datetime)
             .field("created_at", .datetime)
             .field("deleted_at", .datetime)
-            .field("token", .string, .required)
+            .field("oauth_token", .string, .required)
+            .field("oauth_token_secret", .string, .required)
+            .field("oauth_callback_confirmed", .bool)
             .field("user_id", .uuid, .references("User", "id", onDelete: .cascade))
             .create()
     }

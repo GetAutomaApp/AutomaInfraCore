@@ -28,6 +28,9 @@ struct TwitterController: RouteCollection {
             oauthVerifier: queryParameters.oauthVerifier
         )
 
+        req.logger.info("User Access Token: \(userTokens.accessToken)")
+        req.logger.info("User Refresh Token: \(userTokens.accessToken)")
+
         return userTokens
     }
 }
