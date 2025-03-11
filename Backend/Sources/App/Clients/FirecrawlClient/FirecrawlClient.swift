@@ -14,12 +14,12 @@ struct FirecrawlClient {
     private let baseUrl: String
     private let apiKey: String
 
-    public init(client: Client, logger: Logger) {
+    public init(client: Client, logger: Logger) throws {
         self.client = client
         self.logger = logger
 
-        baseUrl = try! Environment.getOrThrow("FIRECRAWL_BASE_URL")
-        apiKey = try! Environment.getOrThrow("FIRECRAWL_SELFHOST_API_KEY")
+        baseUrl = try Environment.getOrThrow("FIRECRAWL_BASE_URL")
+        apiKey = try Environment.getOrThrow("FIRECRAWL_SELFHOST_API_KEY")
     }
 
     func scrapeMarkdown(from input: ScrapeMarkdownInput) async throws -> WebsiteResponseItem {
@@ -37,20 +37,20 @@ struct FirecrawlClient {
                 content: input
             )
 
-            guard let responseBody = response.body, response.status == .ok else {
+            guard let decodedData = try? response.content.decode(FirecrawlScrapeResult.self) else {
                 logger.error(
                     "Invalid response from firecrawl microservice",
                     metadata: [
                         "url": .string(input.url),
                         "response": .string(String(buffer: response.body ?? .init())),
+                        "description": .string(
+                            response.body?.debugDescription ?? response.description
+                        ),
                         "to": .string("FirecrawlClient.scrapeMarkdown"),
                     ]
                 )
                 throw FirecrawlClientErrors.failedToScrape
             }
-
-            let responseData = Data(buffer: responseBody)
-            let decodedData = try responseData.decodeAsJSON(type: FirecrawlScrapeResult.self)
 
             let images = getMarkdownImageUrls(from: decodedData.data.markdown)
 
@@ -78,6 +78,7 @@ struct FirecrawlClient {
                 "Couldn't scrape markdown content via firecrawl",
                 metadata: [
                     "url": .string(input.url),
+                    "error": .string(error.localizedDescription),
                     "to": .string("FirecrawlClient.scrapeMarkdown"),
                 ]
             )

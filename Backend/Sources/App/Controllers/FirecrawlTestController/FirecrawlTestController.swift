@@ -20,7 +20,7 @@ struct FirecrawlTestController: RouteCollection {
 
     @Sendable
     func request(req: Request) async throws -> WebsiteResponseItem {
-        let firecrawlClient = FirecrawlClient(
+        let firecrawlClient = try FirecrawlClient(
             client: req.client,
             logger: req.logger
         )
