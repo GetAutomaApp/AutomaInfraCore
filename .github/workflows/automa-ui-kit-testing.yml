@@ -15,6 +15,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
+      - name: "Switch -> Swift 6"
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6"
+
       - name: Install NodeJS Dependencies
         run: |
           npm run prepare:action
