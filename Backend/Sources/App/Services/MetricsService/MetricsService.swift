@@ -149,4 +149,17 @@ enum BackendMetric {
             "status": MetricStatus.fail.rawValue,
         ]
     )
+
+    static func firecrawlScrapeMarkdown(
+        status: MetricStatus,
+        url: String
+    ) -> Prometheus.Counter {
+        MetricsService.global.makeCounter(
+            name: "firecrawl_markdown_scraping",
+            labels: [
+                "status": status.rawValue,
+                "url": url,
+            ]
+        )
+    }
 }

@@ -7,4 +7,5 @@ enum MetricStatus: String, Codable {
     case success
     case fail
     case alreadyExists
+    case start
 }

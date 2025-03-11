@@ -10,45 +10,79 @@ import Vapor
 // microservice: https://github.com/GetAutomaApp/firecrawl-clone
 struct FirecrawlClient {
     private let client: Client
+    private let logger: Logger
     private let baseUrl: String
     private let apiKey: String
 
-    public init(client: Client) {
+    public init(client: Client, logger: Logger) {
         self.client = client
+        self.logger = logger
+
         baseUrl = try! Environment.getOrThrow("FIRECRAWL_BASE_URL")
         apiKey = try! Environment.getOrThrow("FIRECRAWL_SELFHOST_API_KEY")
     }
 
     func scrapeMarkdown(from input: ScrapeMarkdownInput) async throws -> WebsiteResponseItem {
-        let url = try createScrapeUrl()
-        let headers = try createHeaders()
+        BackendMetric
+            .firecrawlScrapeMarkdown(status: .start, url: input.url)
+            .increment()
 
-        let response = try await client.post(
-            .init(string: url.absoluteString),
-            headers: headers,
-            content: input
-        )
+        do {
+            let url = try createScrapeUrl()
+            let headers = try createHeaders()
 
-        guard let responseBody = response.body, response.status == .ok else {
-            throw FirecrawlClientErrors.failedToScrape
-        }
+            let response = try await client.post(
+                .init(string: url.absoluteString),
+                headers: headers,
+                content: input
+            )
 
-        let responseData = Data(buffer: responseBody)
-        let decodedData = try responseData.decodeAsJSON(type: FirecrawlScrapeResult.self)
-
-        let images = getMarkdownImageUrls(from: decodedData.data.markdown)
-
-        let validUrls = decodedData.data.links.reduce(into: [String]()) { result, link in
-            if URL(string: link) != nil, !link.starts(with: "#") {
-                result.append(link)
+            guard let responseBody = response.body, response.status == .ok else {
+                logger.error(
+                    "Invalid response from firecrawl microservice",
+                    metadata: [
+                        "url": .string(input.url),
+                        "response": .string(String(buffer: response.body ?? .init())),
+                        "to": .string("FirecrawlClient.scrapeMarkdown"),
+                    ]
+                )
+                throw FirecrawlClientErrors.failedToScrape
             }
-        }
 
-        return .init(
-            links: validUrls,
-            markdown: decodedData.data.markdown,
-            imageUrls: images
-        )
+            let responseData = Data(buffer: responseBody)
+            let decodedData = try responseData.decodeAsJSON(type: FirecrawlScrapeResult.self)
+
+            let images = getMarkdownImageUrls(from: decodedData.data.markdown)
+
+            let validUrls = decodedData.data.links.reduce(into: [String]()) { result, link in
+                if URL(string: link) != nil, !link.starts(with: "#") {
+                    result.append(link)
+                }
+            }
+
+            BackendMetric
+                .firecrawlScrapeMarkdown(status: .success, url: input.url)
+                .increment()
+
+            return .init(
+                links: validUrls,
+                markdown: decodedData.data.markdown,
+                imageUrls: images
+            )
+        } catch {
+            BackendMetric
+                .firecrawlScrapeMarkdown(status: .fail, url: input.url)
+                .increment()
+
+            logger.error(
+                "Couldn't scrape markdown content via firecrawl",
+                metadata: [
+                    "url": .string(input.url),
+                    "to": .string("FirecrawlClient.scrapeMarkdown"),
+                ]
+            )
+            throw error
+        }
     }
 
     private func getMarkdownImageUrls(from markdown: String) -> [String] {

@@ -20,7 +20,10 @@ struct FirecrawlTestController: RouteCollection {
 
     @Sendable
     func request(req: Request) async throws -> WebsiteResponseItem {
-        let firecrawlClient = FirecrawlClient(client: req.client)
+        let firecrawlClient = FirecrawlClient(
+            client: req.client,
+            logger: req.logger
+        )
         let response = try await firecrawlClient.scrapeMarkdown(
             from: .init(url: "https://firecrawl.dev")
         )
