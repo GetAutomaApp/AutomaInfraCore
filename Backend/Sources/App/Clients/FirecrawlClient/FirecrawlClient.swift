@@ -42,7 +42,6 @@ struct FirecrawlClient {
                     "Invalid response from firecrawl microservice",
                     metadata: [
                         "url": .string(input.url),
-                        "response": .string(String(buffer: response.body ?? .init())),
                         "description": .string(
                             response.body?.debugDescription ?? response.description
                         ),
