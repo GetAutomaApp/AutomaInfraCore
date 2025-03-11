@@ -99,10 +99,11 @@ struct FirecrawlClient {
                 return nil
             }
         } catch {
-            logger.error("Unexpected error while extracting markdown image urls", [
-                "to": .string("FirecrawlClient.getMarkdownImageUrls"),
-                "error": .string(error.localizedDescription),
-            ])
+            logger.error("Unexpected error while extracting markdown image urls",
+                         metadata: [
+                             "to": .string("FirecrawlClient.getMarkdownImageUrls"),
+                             "error": .string(error.localizedDescription),
+                         ])
             return []
         }
     }
