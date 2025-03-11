@@ -9,7 +9,7 @@ on:
 
 jobs:
   run:
-    runs-on: [macOS]
+    runs-on: [macos-latest]
 
     steps:
       - name: Check out repository
