@@ -7,14 +7,14 @@ import PhoneNumberKit
 import Vapor
 
 public struct PhoneNumberPayloadDTO: Content {
-    public var phoneNumber: String
+    public let phoneNumber: String
 
-    public init(phoneNumber: String) throws {
-        let phoneNumberKit = PhoneNumberKit()
+    public init(number: String) throws {
+        let phoneNumberUtility = PhoneNumberUtility()
+
         do {
-            let phoneNumberParsed = try phoneNumberKit.parse(phoneNumber)
-            self.phoneNumber = phoneNumberKit
-                .format(phoneNumberParsed, toType: .e164)
+            let phoneNumberParsed = try phoneNumberUtility.parse(number)
+            phoneNumber = phoneNumberUtility.format(phoneNumberParsed, toType: .e164)
         } catch {
             throw GenericErrors.invalidPhoneNumber
         }
@@ -23,6 +23,6 @@ public struct PhoneNumberPayloadDTO: Content {
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let phoneNumber = try container.decode(String.self, forKey: .phoneNumber)
-        try self.init(phoneNumber: phoneNumber)
+        try self.init(number: phoneNumber)
     }
 }

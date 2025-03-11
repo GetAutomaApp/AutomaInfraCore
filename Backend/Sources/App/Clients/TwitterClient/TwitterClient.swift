@@ -40,7 +40,7 @@ struct TwitterClient {
         )))
     }
 
-    func requestToken() async throws -> TwitterOAuthTokenV1 {
+    public func requestToken() async throws -> TwitterOAuthToken {
         // 1. POST oauth/request_token (postOAuthRequestToken)
         let response = twitterClient.auth.oauth10a
             .postOAuthRequestToken(.init(
@@ -51,11 +51,30 @@ struct TwitterClient {
         else {
             throw Abort(.internalServerError)
         }
-
-        return tokenObject
+        let savedToken = try await saveToken(tokenObject: tokenObject)
+        return savedToken
     }
 
-    private func saveToken() async throws {}
+    private func saveToken(tokenObject: TwitterOAuthTokenV1) async throws -> TwitterOAuthToken {
+        let token = TwitterOAuthToken(
+            oauthToken: tokenObject.oauthToken,
+            oauthTokenSecret: tokenObject.oauthTokenSecret,
+            oauthCallbackConfirmed: tokenObject.oauthCallbackConfirmed
+        )
+        do {
+            try await token.save(on: database)
+        } catch {
+            logger.error(
+                "Failde to save requested Twitter token to database.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "tokenObject": .string(token.description),
+                ]
+            )
+            throw Abort(.internalServerError)
+        }
+        return token
+    }
 
     // 2. Make authenticate URL (manually go to url and log in)
     func makeAuthenticateURL(tokenObject: TwitterOAuthTokenV1) async throws -> URL {
@@ -79,9 +98,11 @@ struct TwitterClient {
         return authenticateURL
     }
 
-    private func getTokenObject(fromOAuthToken oauthToken: String) async throws -> TwitterOAuthTokenV1? {
-        print(oauthToken)
-        return nil
+    private func getTokenObject(fromOAuthToken oauthToken: String) async throws -> TwitterOAuthToken? {
+        try await TwitterOAuthToken
+            .query(on: database)
+            .filter(\.$oauthToken, .equal, oauthToken)
+            .first()
     }
 
     func getUserTokens(oauthToken: String, oauthVerifier: String) async throws -> TwitterUserTokens {
@@ -95,7 +116,7 @@ struct TwitterClient {
         return userTokens
     }
 
-    private func convertOAuthTokenToUserTokens(tokenObject: TwitterOAuthTokenV1,
+    private func convertOAuthTokenToUserTokens(tokenObject: TwitterOAuthToken,
                                                oauthVerifier: String) async throws -> TwitterUserTokens
     {
         let response = await twitterClient.auth.oauth10a.postOAuthAccessToken(.init(
@@ -126,6 +147,4 @@ struct TwitterClient {
 
         return .init(accessToken: success.oauthToken, secretAccessToken: success.oauthTokenSecret)
     }
-
-    // 3. POST oauth/access_token
 }
