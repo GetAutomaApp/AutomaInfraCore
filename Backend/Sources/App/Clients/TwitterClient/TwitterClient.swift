@@ -95,6 +95,13 @@ struct TwitterClient {
             oauthCallbackConfirmed: tokenObject.oauthCallbackConfirmed
         )
         do {
+            logger.info(
+                "Saving Twitter token to database.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "tokenObject": .string(token.description),
+                ]
+            )
             try await token.save(on: database)
         } catch {
             logger.error(

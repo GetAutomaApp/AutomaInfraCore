@@ -15,6 +15,7 @@ struct UserProfileConvertIdToImageKeyMigration1735294202: AsyncMigration {
 
     func revert(on database: Database) async throws {
         try await database.schema("User")
+            .deleteField("profile_picture_key")
             .field("profile_picture_id", .uuid)
             .update()
     }

@@ -14,15 +14,13 @@ struct TwitterClientTests {
         let app = try await Application.make(.testing)
         do {
             try await configure(app)
-            try await app.autoMigrate()
             try await test(app)
-            try await app.autoRevert()
         } catch {
             app.logger.error(
-                ".Failed to create app for suite 'TwitterClientTests'",
+                "Failed to create app for suite 'TwitterClientTests'",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "error": .string("\(error.localizedDescription)"),
+                    "error": .string(String(String(reflecting: error))),
                 ]
             )
             try await app.asyncShutdown()

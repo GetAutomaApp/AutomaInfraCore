@@ -16,6 +16,11 @@ struct TwitterController: RouteCollection {
     struct TwitterAuthenticateRedirectQueryParameters: Content {
         let oauthToken: String
         let oauthVerifier: String
+
+        enum CodingKeys: String, CodingKey {
+            case oauthToken = "oauth_token"
+            case oauthVerifier = "oauth_verifier"
+        }
     }
 
     @Sendable
