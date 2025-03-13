@@ -11,6 +11,5 @@ protocol TwitterClientBase {
     var logger: Logger { get }
     var client: Client { get }
     var database: Database { get }
-
     var twitterClient: TwitterAPIClient { get }
 }

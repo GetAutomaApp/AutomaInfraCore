@@ -15,15 +15,18 @@ struct TwitterClient: TwitterClientBase {
     let auth: TwitterOAuthClient
 
     let callbackURL: String
-    let twitterClient: TwitterAPIClient
+    var twitterClient: TwitterAPIClient
+
+    let consumerKey: String
+    let consumerSecret: String
 
     public init(logger: Logger, client: Client, database: Database) throws {
         self.logger = logger
         self.client = client
         self.database = database
 
-        let consumerKey = try Environment.getOrThrow("TWITTER_API_APP_KEY")
-        let consumerSecret = try Environment.getOrThrow("TWITTER_API_APP_SECRET_KEY")
+        consumerKey = try Environment.getOrThrow("TWITTER_API_APP_KEY")
+        consumerSecret = try Environment.getOrThrow("TWITTER_API_APP_SECRET_KEY")
         callbackURL = try "\(Environment.getOrThrow("BACKEND_URL"))/Twitter/redirect"
 
         twitterClient = TwitterAPIClient(.oauth10a(.init(
@@ -41,5 +44,21 @@ struct TwitterClient: TwitterClientBase {
         )
     }
 
-    public func post() {}
+    public func authenticated(token: TwitterUserTokenDTO) -> TwitterAuthenticatedClient {
+        .init(
+            logger: logger,
+            client: client,
+            database: database,
+            twitterClient: .init(
+                .oauth10a(
+                    .init(
+                        consumerKey: consumerKey,
+                        consumerSecret: consumerSecret,
+                        oauthToken: token.accessToken,
+                        oauthTokenSecret: token.secretAccessToken
+                    )
+                )
+            )
+        )
+    }
 }
