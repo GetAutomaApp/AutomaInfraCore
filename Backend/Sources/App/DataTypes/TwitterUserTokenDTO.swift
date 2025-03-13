@@ -13,7 +13,7 @@ public struct TwitterUserTokenDTO: Content {
     public var accessToken: String
     public var secretAccessToken: String
     public var oauthVerifier: String
-    public var authTokenID: UUID?
+    public var oauthTokenID: UUID?
 
     public init(
         id: UUID? = nil,
@@ -23,7 +23,7 @@ public struct TwitterUserTokenDTO: Content {
         accessToken: String,
         secretAccessToken: String,
         oauthVerifier: String,
-        authTokenID: UUID? = nil,
+        oauthTokenID: UUID? = nil,
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -32,6 +32,6 @@ public struct TwitterUserTokenDTO: Content {
         self.accessToken = accessToken
         self.secretAccessToken = secretAccessToken
         self.oauthVerifier = oauthVerifier
-        self.authTokenID = authTokenID
+        self.oauthTokenID = oauthTokenID
     }
 }

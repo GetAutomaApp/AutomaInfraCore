@@ -19,3 +19,7 @@ struct TwitterOAuthRedirectQueryParameters: Content {
         case oauthVerifier = "oauth_verifier"
     }
 }
+
+struct PostTweetContent: Content {
+    let message: String
+}

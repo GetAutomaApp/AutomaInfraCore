@@ -72,7 +72,7 @@ struct TwitterOAuthClient: TwitterClientBase {
         else {
             throw Abort(.unauthorized, reason: "Invalid OAuth token")
         }
-        // convert oauth token to user access token and secret access token
+
         let userTokens =
             try await convertOAuthTokenToUserTokens(tokenObject: oauthTokenObject, oauthVerifier: oauthVerifier)
         let userTokenModel = try await saveUserTokens(
@@ -83,14 +83,16 @@ struct TwitterOAuthClient: TwitterClientBase {
         return userTokenModel
     }
 
-    private func saveUserTokens(userTokens: TwitterUserTokens, oauthTokenObject _: TwitterOAuthToken,
+    private func saveUserTokens(userTokens: TwitterUserTokens, oauthTokenObject: TwitterOAuthToken,
                                 oauthVerifier: String) async throws -> TwitterUserToken
     {
         let userTokenModel = TwitterUserToken(
             accessToken: userTokens.accessToken,
             secretAccessToken: userTokens.secretAccessToken,
-            oauthVerifier: oauthVerifier
+            oauthVerifier: oauthVerifier,
+            oauthTokenID: oauthTokenObject.id,
         )
+
         do {
             logger.info(
                 "Saving Twitter user tokens to database.",

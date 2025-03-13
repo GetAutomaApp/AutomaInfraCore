@@ -6,20 +6,17 @@
 import Fluent
 import Vapor
 
-struct PostTweetContent: Content {
-    let message: String
-}
-
 struct TwitterController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let twitterRoute = routes.grouped("Twitter")
 
         twitterRoute.get("redirect", use: redirect)
-        twitterRoute.get("post", use: post)
+        twitterRoute.post("post", use: post)
     }
 
     @Sendable
-    func redirect(req: Request) async throws -> TwitterUserTokenDTO {
+    // func redirect(req: Request) async throws -> TwitterUserTokenDTO {
+    func redirect(req: Request) async throws -> String {
         let twitterClient = try TwitterClient(logger: req.logger, client: req.client, database: req.db)
         let queryParameters = try req.query.decode(TwitterOAuthRedirectQueryParameters.self)
 
@@ -31,19 +28,25 @@ struct TwitterController: RouteCollection {
         req.logger.info("User Access Token: \(userTokens.accessToken)")
         req.logger.info("User Refresh Token: \(userTokens.accessToken)")
 
-        return userTokens.toDTO()
+        let dto = userTokens.toDTO()
+        let base64Encoded = try dto.encodeToData().base64EncodedString()
+        return base64Encoded
+
+        // return userTokens.toDTO()
     }
 
     @Sendable
     func post(req: Request) async throws -> HTTPStatus {
+        let token = try getUserToken(req: req)
+
         let authenticatedClient = try TwitterClient(
             logger: req.logger,
             client: req.client,
             database: req.db
-        ).authenticated(token: req.content.decode(TwitterUserTokenDTO.self))
+        ).authenticated(token: token)
 
-        let tweetContent = try req.query.decode(PostTweetContent.self)
-        let response = try await authenticatedClient.postTweet(message: tweetContent.message)
+        let content = try req.content.decode(PostTweetContent.self)
+        let response = try await authenticatedClient.postTweet(message: content.message)
         req.logger.info(
             "Tweet response",
             metadata: [
@@ -53,5 +56,28 @@ struct TwitterController: RouteCollection {
         )
 
         return .ok
+    }
+
+    private func getUserToken(req: Request) throws -> TwitterUserTokenDTO {
+        guard
+            let tokenBase64String = req.headers.first(name: "Authorization")
+        else {
+            throw Abort(.unauthorized)
+        }
+        let data = Data(base64Encoded: tokenBase64String)
+
+        do {
+            let token = try TwitterUserTokenDTO.decodeJSONFromData(data: data)
+            return token
+        } catch {
+            req.logger.error(
+                "Failed to decode token from authorization header.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "error": .string(error.localizedDescription),
+                ]
+            )
+            throw Abort(.unauthorized)
+        }
     }
 }

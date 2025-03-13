@@ -22,8 +22,8 @@ final class TwitterUserToken: Model, @unchecked Sendable {
     @Field(key: "secret_access_token")
     var secretAccessToken: String
 
-    @OptionalParent(key: "auth_token_id")
-    var authToken: TwitterOAuthToken?
+    @OptionalParent(key: "oauth_token_id")
+    var oauthToken: TwitterOAuthToken?
 
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
@@ -41,7 +41,7 @@ final class TwitterUserToken: Model, @unchecked Sendable {
         accessToken: String,
         secretAccessToken: String,
         oauthVerifier: String,
-        authTokenID: UUID? = nil,
+        oauthTokenID: UUID? = nil,
         createdAt: Date? = nil,
         updatedAt: Date? = nil,
         deletedAt: Date? = nil
@@ -53,7 +53,7 @@ final class TwitterUserToken: Model, @unchecked Sendable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
-        $authToken.id = authTokenID
+        $oauthToken.id = oauthTokenID
     }
 
     func toDTO() -> TwitterUserTokenDTO {
@@ -65,7 +65,7 @@ final class TwitterUserToken: Model, @unchecked Sendable {
             accessToken: accessToken,
             secretAccessToken: secretAccessToken,
             oauthVerifier: oauthVerifier,
-            authTokenID: $authToken.id
+            oauthTokenID: $oauthToken.id
         )
     }
 }
