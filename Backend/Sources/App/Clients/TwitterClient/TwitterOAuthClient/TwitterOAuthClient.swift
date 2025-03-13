@@ -40,7 +40,7 @@ struct TwitterOAuthClient: TwitterClientBase {
         else {
             throw Abort(.internalServerError)
         }
-        let savedToken = try await saveToken(tokenObject: tokenObject)
+        let savedToken = try await saveOAuthToken(tokenObject: tokenObject)
         return savedToken
     }
 
@@ -66,20 +66,55 @@ struct TwitterOAuthClient: TwitterClientBase {
         return authenticateURL
     }
 
-    public func getUserTokens(oauthToken: String, oauthVerifier: String) async throws -> TwitterUserTokens {
+    public func getUserTokens(oauthToken: String, oauthVerifier: String) async throws -> TwitterUserToken {
         guard
-            let tokenObject = try await getTokenObject(fromOAuthToken: oauthToken)
+            let oauthTokenObject = try await getOAuthTokenObject(fromOAuthToken: oauthToken)
         else {
             throw Abort(.unauthorized, reason: "Invalid OAuth token")
         }
         // convert oauth token to user access token and secret access token
-        let userTokens = try await convertOAuthTokenToUserTokens(tokenObject: tokenObject, oauthVerifier: oauthVerifier)
-        return userTokens
+        let userTokens =
+            try await convertOAuthTokenToUserTokens(tokenObject: oauthTokenObject, oauthVerifier: oauthVerifier)
+        let userTokenModel = try await saveUserTokens(
+            userTokens: userTokens,
+            oauthTokenObject: oauthTokenObject,
+            oauthVerifier: oauthVerifier
+        )
+        return userTokenModel
     }
 
-    private func saveUserTokens(tokenObject _: TwitterUserTokens) async throws {}
+    private func saveUserTokens(userTokens: TwitterUserTokens, oauthTokenObject _: TwitterOAuthToken,
+                                oauthVerifier: String) async throws -> TwitterUserToken
+    {
+        let userTokenModel = TwitterUserToken(
+            accessToken: userTokens.accessToken,
+            secretAccessToken: userTokens.secretAccessToken,
+            oauthVerifier: oauthVerifier
+        )
+        do {
+            logger.info(
+                "Saving Twitter user tokens to database.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "userTokenModel": .string(userTokenModel.description),
+                ]
+            )
+            try await userTokenModel.save(on: database)
+            return userTokenModel
+        } catch {
+            logger.error(
+                "Failed to save requested Twitter user tokens to database.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "userTokens": .string(userTokenModel.description),
+                    "error": .string(String(reflecting: error)),
+                ]
+            )
+            throw error
+        }
+    }
 
-    private func saveToken(tokenObject: TwitterOAuthTokenV1) async throws -> TwitterOAuthToken {
+    private func saveOAuthToken(tokenObject: TwitterOAuthTokenV1) async throws -> TwitterOAuthToken {
         let token = TwitterOAuthToken(
             oauthToken: tokenObject.oauthToken,
             oauthTokenSecret: tokenObject.oauthTokenSecret,
@@ -108,7 +143,7 @@ struct TwitterOAuthClient: TwitterClientBase {
         return token
     }
 
-    private func getTokenObject(fromOAuthToken oauthToken: String) async throws -> TwitterOAuthToken? {
+    private func getOAuthTokenObject(fromOAuthToken oauthToken: String) async throws -> TwitterOAuthToken? {
         try await TwitterOAuthToken
             .query(on: database)
             .filter(\.$oauthToken, .equal, oauthToken)

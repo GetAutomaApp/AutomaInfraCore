@@ -14,7 +14,7 @@ struct TwitterController: RouteCollection {
     }
 
     @Sendable
-    func redirect(req: Request) async throws -> TwitterUserTokens {
+    func redirect(req: Request) async throws -> TwitterUserTokenDTO {
         let twitterClient = try TwitterClient(logger: req.logger, client: req.client, database: req.db)
         let queryParameters = try req.query.decode(TwitterOAuthRedirectQueryParameters.self)
 
@@ -23,6 +23,9 @@ struct TwitterController: RouteCollection {
             oauthVerifier: queryParameters.oauthVerifier
         )
 
-        return userTokens
+        req.logger.info("User Access Token: \(userTokens.accessToken)")
+        req.logger.info("User Refresh Token: \(userTokens.accessToken)")
+
+        return userTokens.toDTO()
     }
 }

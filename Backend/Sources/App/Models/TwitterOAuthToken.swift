@@ -55,30 +55,4 @@ final class TwitterOAuthToken: Model, @unchecked Sendable {
         self.deletedAt = deletedAt
         $user.id = userID
     }
-
-    func toDTO() -> TwitterOAuthTokenDTO {
-        .init(
-            id: id,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            deletedAt: deletedAt,
-            oauthToken: oauthToken,
-            oauthTokenSecret: oauthTokenSecret,
-            oauthCallbackConfirmed: oauthCallbackConfirmed,
-            userID: $user.id
-        )
-    }
-
-    static func fromDTO(_ dto: TwitterOAuthTokenDTO) -> TwitterOAuthToken {
-        .init(
-            id: dto.id,
-            oauthToken: dto.oauthToken,
-            oauthTokenSecret: dto.oauthTokenSecret,
-            oauthCallbackConfirmed: dto.oauthCallbackConfirmed,
-            userID: dto.userID,
-            createdAt: dto.createdAt,
-            updatedAt: dto.updatedAt,
-            deletedAt: dto.deletedAt
-        )
-    }
 }
