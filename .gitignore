@@ -4,6 +4,8 @@
 
 ## User settings
 xcuserdata/
+build/
+App/AutomaApp/.nvim/xcodebuild/
 
 ## Obj-C/Swift specific
 *.hmap

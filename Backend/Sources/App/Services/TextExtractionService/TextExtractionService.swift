@@ -30,7 +30,7 @@ struct TextExtractionService: ~Copyable {
             .map { $0.text ?? "" }
             .filter(\.isEmpty)
             .joined(separator: " ")
-            .trim()
+            .trimmingCharacters(in: .init(charactersIn: " "))
     }
 
     deinit {

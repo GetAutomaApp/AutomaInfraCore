@@ -21,7 +21,7 @@ public extension UIApplication {
 @MainActor
 public class KeychainHelper {
     public enum KeyChainKeys: String {
-        case AuthenticationToken, RefreshToken
+        case authenticationToken, refreshToken
     }
 
     static var keychain = SimpleKeychain(

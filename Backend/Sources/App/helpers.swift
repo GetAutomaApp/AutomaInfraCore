@@ -44,3 +44,9 @@ extension Task where Success == Void, Failure == any Error {
         }
     }
 }
+
+extension Data {
+    func decodeAsJSON<T: Content>(type: T.Type) throws -> T {
+        try JSONDecoder().decode(type.self, from: self)
+    }
+}

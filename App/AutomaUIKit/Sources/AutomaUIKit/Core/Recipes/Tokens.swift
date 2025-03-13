@@ -71,7 +71,7 @@ public enum DesignIcons: String, CaseIterable, DesignIcon {
     case subtraction
 
     // Other
-    case x
+    case other
 
     var image: some View {
         switch self {

@@ -118,7 +118,7 @@ struct ProfilePictureService {
                                excludeText: Bool) async throws -> ([ImagesResult.Image], Data)
     {
         let textExtractionService = TextExtractionService()
-        let openaiService = try OpenAiService(logger: logger)
+        let imageClient = try OpenAIImageGenerationClient(logger: logger)
 
         var hasText = false
         var image: String?
@@ -129,7 +129,7 @@ struct ProfilePictureService {
         // If there is still text on the image after 3 attempts, we will ignore the text and continue generating the
         // image
         repeat {
-            images = try await openaiService.createImage(prompt).data
+            images = try await imageClient.createImage(prompt).data
             image = images[0].b64Json
 
             guard let image else { throw GenericErrors.missingImage }
