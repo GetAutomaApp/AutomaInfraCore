@@ -61,6 +61,7 @@ public func configure(_ app: Application) async throws {
         try app.register(collection: TwitterController())
         try app.register(collection: ChatCompletionController())
         try app.register(collection: FeedTesterController())
+        try app.register(collection: FirecrawlTestController())
 
         // Authentication
         await app.jwt.keys

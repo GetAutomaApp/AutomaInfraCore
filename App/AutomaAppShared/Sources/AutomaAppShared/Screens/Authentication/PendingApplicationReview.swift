@@ -15,7 +15,10 @@ public struct PendingApplicationReview: View {
                 InfoPairComponent(
                     config: .init(
                         title: "We'll get back to you soon!",
-                        description: "Please message @AdonisCodes on discord in order to continue with the application. We’d like to hear about your usecase!"
+                        description: """
+                        Please message @AdonisCodes on discord in order to continue with the application. \
+                        We’d like to hear about your usecase!
+                        """
                     )
                 )
             },
