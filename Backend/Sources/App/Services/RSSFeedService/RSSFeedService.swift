@@ -9,9 +9,17 @@ import Vapor
 
 struct RSSFeedService {
     let database: Database
+    let rssFeedClient = RSSFeedReaderClient()
+    let client: Client
+    let logger: Logger
 
     func addFeedToUser(userId: UUID, feedUrl: URL) async throws -> Bool {
         do {
+            if try await !rssFeedClient.read(from: feedUrl).isRssFeed {
+                print("isn't rss feed")
+                return false
+            }
+
             let (feed, _) = try await createFeedInDBIfNotExist(feedUrl: feedUrl)
             try await addUserFeedMapping(feedId: feed.id, userId: userId)
             return true
@@ -59,9 +67,62 @@ struct RSSFeedService {
         return newMapping.toDTO()
     }
 
-    // Scrape Feed Posts + Add to table
-    func scrapeRSSFeedPosts(feedId _: UUID) async throws {
-        let
+    func scrapeAndInsertLatestForAllFeeds() async throws {
+        let feeds = try await RSSFeedModel.query(on: database).all()
+
+        for feed in feeds {
+            do {
+                try await scrapeAndInsertLatestRSSFeedItems(feedDTO: feed.toDTO())
+            } catch {
+                // Fix log
+                logger.error("Failed to process feed \(feed.link): \(error.localizedDescription)")
+            }
+        }
     }
-    // Scrape Feed Content + Add to table
+
+    func scrapeAndInsertLatestRSSFeedItems(feedDTO: RSSFeedDTO) async throws {
+        let firecrawlClient = try FirecrawlClient(client: client, logger: logger)
+
+        let url = URL(string: feedDTO.link.absoluteString)
+
+        guard let url else {
+            return
+        }
+
+        let latestFeedItems = try await rssFeedClient.read(from: url).items
+        let latestFeedItemLinks = latestFeedItems.map(\.link)
+
+        let existingFeedItems = try await RSSFeedItemModel.query(on: database)
+            .filter(\.$link ~~ latestFeedItemLinks)
+            .all()
+
+        let existingFeedItemLinks = Set(existingFeedItems.map(\.link))
+
+        let unprocessedLinks = Set(latestFeedItemLinks).subtracting(existingFeedItemLinks)
+
+        var feedItems: [RssFeedItemDTO] = []
+
+        for link in unprocessedLinks {
+            do {
+                let content = try await firecrawlClient.scrapeMarkdown(
+                    from: .init(url: link)
+                )
+
+                let article = RSSFeedItemModel(
+                    rssFeedId: feedDTO.id,
+                    content: content.markdown,
+                    link: link
+                )
+
+                try await article.save(on: database)
+
+                feedItems.append(article.toDTO())
+            } catch {
+                // Log the error if scraping fails
+                logger.error("Failed to scrape content for link \(link): \(error.localizedDescription)")
+            }
+        }
+
+        // TODO: Log feedItems if necessary
+    }
 }
