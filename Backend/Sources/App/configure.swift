@@ -13,7 +13,7 @@ import Vapor
 // Configures your application
 public func configure(_ app: Application) async throws {
     // This is file middleware
-    // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+    app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
     app.middleware.use(ErrorStringMiddleware())
 
     // Errors are getting thrown locally, this prevents run App & ./App execution diffs
@@ -53,6 +53,9 @@ public func configure(_ app: Application) async throws {
         app.migrations.add(JobMetadataMigrate())
         app.migrations.add(RemoveUserStorageMigration1739456565())
         app.migrations.add(AddAcceptedColumnMigration1740658649())
+        app.migrations.add(RSSFeedMigration1741359416())
+        app.migrations.add(UserFeedMappingMigration1741429746())
+        app.migrations.add(RssFeedItemMigration1741876963())
 
         try await app.autoMigrate()
 
@@ -75,6 +78,7 @@ public func configure(_ app: Application) async throws {
         // Jobs
         app.queues.add(TransactionalMessageAsyncJob())
         app.queues.add(ProfilePictureAsyncJob())
+        app.queues.scheduleEvery(ScrapeRSSFeedCronJob(), minutes: 5)
 
         // Http Server Config
         app.http.server.configuration.responseCompression = .enabled
@@ -93,5 +97,23 @@ extension Request {
 
     var dbReadOnly: Database {
         db(.readOnly)
+    }
+}
+
+extension QueueContext {
+    var dbWrite: Database {
+        application.db(.readOnly)
+    }
+
+    var dbReadOnly: Database {
+        application.db(.readOnly)
+    }
+}
+
+extension Application.Queues {
+    func scheduleEvery(_ job: ScheduledJob, minutes: Int) {
+        for minuteOffset in stride(from: 0, to: 60, by: minutes) {
+            schedule(job).hourly().at(.init(integerLiteral: minuteOffset))
+        }
     }
 }

@@ -11,16 +11,14 @@ import Retry
 import Vapor
 
 struct RSSFeedReaderClient {
-    func read(from url: URL) async -> RssFeedResponse {
-        var feed: Feed?
+    func read(from url: URL) async throws -> RssFeedResponse {
+        var feed: Feed? = nil
 
-        do {
-            try await retry(
-                maxAttempts: 3
-            ) {
-                feed = try! await Feed(url: url)
-            }
-        } catch {}
+        try await retry(
+            maxAttempts: 3
+        ) {
+            feed = try! await Feed(url: url)
+        }
 
         switch feed {
         case let .rss(rSSFeed):
@@ -31,7 +29,7 @@ struct RSSFeedReaderClient {
         }
     }
 
-    func convertRSSToGenericFeedItems(from feedItems: [RSSFeedItem]) -> [GenericRSSFeedItem] {
+    private func convertRSSToGenericFeedItems(from feedItems: [RSSFeedItem]) -> [GenericRSSFeedItem] {
         let items = feedItems.compactMap { feedItem -> GenericRSSFeedItem? in
             guard
                 let title = feedItem.title,
