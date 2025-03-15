@@ -3,75 +3,188 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-import Crypto
+import Fluent
 import Foundation
+import TwitterAPIKit
 import Vapor
 
-struct TwitterOAuthClient {
-    private let client: Client
-    private let logger: Logger
-    private let consumerKey: String
-    private let consumerSecret: String
-    private let appAPIKey: String
+struct TwitterOAuthClient: TwitterClientBase {
+    let logger: Logger
+    let client: Client
+    let database: Database
+    let twitterClient: TwitterAPIClient
+    var callbackURL: String
 
-    func getRequestToken() async throws -> String {
-        let baseURL = "https://api.x.com/oauth/request_token"
-        let method = "POST"
+    public init(
+        logger: Logger,
+        client: Client,
+        database: Database,
+        twitterClient: TwitterAPIClient,
+        callbackURL: String
+    ) {
+        self.logger = logger
+        self.client = client
+        self.database = database
+        self.twitterClient = twitterClient
+        self.callbackURL = callbackURL
+    }
 
-        let nonce = "\(UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(11))"
-        let callbackURL = "http://127.0.0.1:8080/Twitter/redirect"
-
-        var signatureParametersString = ""
-        let timestamp = Int(Date().timeIntervalSince1970)
-        let signatureMethod = "HMAC-SHA1"
-        let oauthVersion = "1.0"
-        let authenticationHeaderObjectRaw = [
-            "oauth_consumer_key": consumerKey,
-            "oauth_signature_method": signatureMethod,
-            "oauth_timestamp": "\(timestamp)",
-            "oauth_nonce": nonce,
-            "oauth_version": oauthVersion,
-            "oauth_callback": callbackURL,
-        ].sorted { $0.key < $1.key }
-
-        for (index, (key, value)) in authenticationHeaderObjectRaw.enumerated() {
-            let encodedKey = key.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-            let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-            let encodedPair = "\(encodedKey)=\(encodedValue)"
-
-            signatureParametersString += encodedPair
-            if index != authenticationHeaderObjectRaw.count - 1 {
-                signatureParametersString += "&"
-            }
-        }
-
-        let baseURLPercentEncoded = baseURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let signatureParametersStringEncoded = signatureParametersString
-            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-
-        let signatureBaseString = "\(method.uppercased())&\(baseURLPercentEncoded)&\(signatureParametersStringEncoded)"
-        let signingKey = "\(consumerSecret)&"
-
-        // use HMAC-SHA1 hashing algorithm
-        let signature = HMAC<Insecure.SHA1>.authenticationCode(
-            for: signatureBaseString.data(using: .utf8)!,
-            using: SymmetricKey(data: signingKey.data(using: .utf8)!)
-        ).withUnsafeBytes { Data($0) }.base64EncodedString()
-
-        let response = try await client.post(.init(string: baseURL)) { request in
-            request.headers.add(
-                name: "Authorization",
-                value: "OAuth oauth_consumer_key=\"\(consumerKey)\",oauth_signature_method=\"\(signatureMethod)\",oauth_timestamp=\"\(timestamp)\",oauth_nonce=\"\(nonce)\",oauth_version=\"\(oauthVersion)\",oauth_callback=\"\(callbackURL)\",oauth_signature=\"\(signature)\""
-            )
-        }
+    public func requestToken() async throws -> TwitterOAuthToken {
+        let response = twitterClient.auth.oauth10a
+            .postOAuthRequestToken(.init(
+                oauthCallback: callbackURL
+            ))
         guard
-            let body = response.body
+            let tokenObject = await response.responseObject.success
         else {
-            logger.error("Failed to get request token: response body empty. Response: \(response)")
             throw Abort(.internalServerError)
         }
-        let token = String(buffer: body)
-        logger.info("Request token: \(token)")
+        let savedToken = try await saveOAuthToken(tokenObject: tokenObject)
+
+        BackendMetric.totalTwitterOAuthRequests.increment()
+
+        return savedToken
+    }
+
+    public func makeAuthenticateURL(tokenObject: TwitterOAuthToken) async throws -> URL {
+        guard
+            let authenticateURL = twitterClient.auth.oauth10a
+            .makeOAuthAuthenticateURL(.init(oauthToken: tokenObject.oauthToken))
+        else {
+            logger.error(
+                "Failed to make authenticateURL.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "oauthToken": .string("\(tokenObject.oauthToken)"),
+                ]
+            )
+
+            throw Abort(.internalServerError)
+        }
+
+        // TODO: Use selenium to login user
+        logger.info("Go to URL: \(authenticateURL) and authenticate.")
+        return authenticateURL
+    }
+
+    public func getUserTokens(oauthToken: String, oauthVerifier: String) async throws -> TwitterUserToken {
+        guard
+            let oauthTokenObject = try await getOAuthTokenObject(fromOAuthToken: oauthToken)
+        else {
+            throw Abort(.unauthorized, reason: "Invalid OAuth token")
+        }
+
+        let userTokens =
+            try await convertOAuthTokenToUserTokens(tokenObject: oauthTokenObject, oauthVerifier: oauthVerifier)
+        let userTokenModel = try await saveUserTokens(
+            userTokens: userTokens,
+            oauthTokenObject: oauthTokenObject,
+            oauthVerifier: oauthVerifier
+        )
+
+        return userTokenModel
+    }
+
+    private func saveUserTokens(userTokens: TwitterUserTokens, oauthTokenObject: TwitterOAuthToken,
+                                oauthVerifier: String) async throws -> TwitterUserToken
+    {
+        let userTokenModel = TwitterUserToken(
+            accessToken: userTokens.accessToken,
+            secretAccessToken: userTokens.secretAccessToken,
+            oauthVerifier: oauthVerifier,
+            oauthTokenID: oauthTokenObject.id
+        )
+
+        do {
+            logger.info(
+                "Saving Twitter user tokens to database.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "userTokenModel": .string(userTokenModel.description),
+                ]
+            )
+            try await userTokenModel.save(on: database)
+            return userTokenModel
+        } catch {
+            logger.error(
+                "Failed to save requested Twitter user tokens to database.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "userTokens": .string(userTokenModel.description),
+                    "error": .string(String(reflecting: error)),
+                ]
+            )
+            throw error
+        }
+    }
+
+    private func saveOAuthToken(tokenObject: TwitterOAuthTokenV1) async throws -> TwitterOAuthToken {
+        let token = TwitterOAuthToken(
+            oauthToken: tokenObject.oauthToken,
+            oauthTokenSecret: tokenObject.oauthTokenSecret,
+            oauthCallbackConfirmed: tokenObject.oauthCallbackConfirmed
+        )
+        do {
+            logger.info(
+                "Saving Twitter token to database.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "tokenObject": .string(token.description),
+                ]
+            )
+            try await token.save(on: database)
+        } catch {
+            logger.error(
+                "Failed to save requested Twitter token to database.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "tokenObject": .string(token.description),
+                    "error": .string(String(reflecting: error)),
+                ]
+            )
+            throw error
+        }
         return token
+    }
+
+    private func getOAuthTokenObject(fromOAuthToken oauthToken: String) async throws -> TwitterOAuthToken? {
+        try await TwitterOAuthToken
+            .query(on: database)
+            .filter(\.$oauthToken, .equal, oauthToken)
+            .first()
+    }
+
+    private func convertOAuthTokenToUserTokens(tokenObject: TwitterOAuthToken,
+                                               oauthVerifier: String) async throws -> TwitterUserTokens
+    {
+        let response = await twitterClient.auth.oauth10a.postOAuthAccessToken(.init(
+            oauthToken: tokenObject.oauthToken,
+            oauthVerifier: oauthVerifier
+        )).responseObject
+
+        guard
+            let success = response.success
+        else {
+            logger.error(
+                "Failed to convert oauth token to user access token and user secret access token.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "error": .string(response.error.debugDescription),
+                    "oauthToken": .string(tokenObject.oauthToken),
+                    "oauthTokenSecret": .string(tokenObject.oauthTokenSecret),
+                    "oauthVerifier": .string(oauthVerifier),
+                ]
+            )
+
+            throw Abort(
+                .unauthorized,
+                reason: response.error?
+                    .localizedDescription ?? "Failed to obtain user access token and secret access token."
+            )
+        }
+
+        BackendMetric.totalTwitterUserTokensConverted.increment()
+
+        return .init(accessToken: success.oauthToken, secretAccessToken: success.oauthTokenSecret)
     }
 }

@@ -78,7 +78,7 @@ public extension BackendControllerInteractor {
         )
 
         if let error = output.error {
-            print("\(error)")
+            print("Error checking if user exists: \(error.localizedDescription)")
             if rethrow.firstIndex(of: error) != nil {
                 throw error
             }

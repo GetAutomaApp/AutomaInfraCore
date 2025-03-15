@@ -1,5 +1,5 @@
 {
-  "originHash" : "a0e2c8784596524e4b97ee2c3db2ca28d706a43bb1fb0701fd059368769eace0",
+  "originHash" : "16b596689f0722af73c69d26b4d472cb49643e99ee62f3ac4e4be06507f652db",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -150,8 +150,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/marmelroy/PhoneNumberKit",
       "state" : {
-        "revision" : "c107075aa8d394be7aced273a46e944afe8b321b",
-        "version" : "3.8.0"
+        "revision" : "288b99e9e99926bc8be41220802df83c059fac9b",
+        "version" : "4.0.2"
       }
     },
     {
@@ -422,6 +422,15 @@
       "state" : {
         "revision" : "a34201439c74b53f0fd71ef11741af7e7caf01e1",
         "version" : "1.4.2"
+      }
+    },
+    {
+      "identity" : "twitterapikit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mironal/TwitterAPIKit",
+      "state" : {
+        "branch" : "linux-support",
+        "revision" : "63533d790677ecec63c478ef6cada6fde0f88c2c"
       }
     },
     {

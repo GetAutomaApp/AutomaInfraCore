@@ -53,7 +53,13 @@ struct ErrorStringMiddleware: Middleware {
                     data: jsonResponse.encodeToData()
                 )
             } catch {
-                print(error)
+                request.logger.error(
+                    "Failed to encode response",
+                    metadata: [
+                        "to": .string("ErrorStringMiddleware.respond"),
+                        "localizedDescription": .string(error.localizedDescription),
+                    ]
+                )
                 response.body = .init(
                     stringLiteral: "{\"error\":\"\(GenericErrors.failedToEncodeResponse)\"}"
                 )

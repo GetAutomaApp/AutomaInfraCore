@@ -41,7 +41,7 @@ final class AuthenticationCodeModel: Model, @unchecked Sendable {
         self.id = id
         self.code = code
         self.phoneNumber = try PhoneNumberPayloadDTO(
-            phoneNumber: phoneNumber
+            number: phoneNumber
         ).phoneNumber
         self.createdAt = createdAt
         self.updatedAt = updatedAt

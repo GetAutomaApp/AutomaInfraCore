@@ -11,7 +11,7 @@ public struct AuthPhoneCodePayloadDTO: Content {
 
     public init(phoneNumber: String, code: String) throws {
         self.phoneNumber = try PhoneNumberPayloadDTO(
-            phoneNumber: phoneNumber
+            number: phoneNumber
         ).phoneNumber
         self.code = code
     }
