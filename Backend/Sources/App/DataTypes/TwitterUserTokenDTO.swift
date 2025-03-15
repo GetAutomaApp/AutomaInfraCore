@@ -23,7 +23,7 @@ public struct TwitterUserTokenDTO: Content {
         accessToken: String,
         secretAccessToken: String,
         oauthVerifier: String,
-        oauthTokenID: UUID? = nil,
+        oauthTokenID: UUID? = nil
     ) {
         self.id = id
         self.createdAt = createdAt

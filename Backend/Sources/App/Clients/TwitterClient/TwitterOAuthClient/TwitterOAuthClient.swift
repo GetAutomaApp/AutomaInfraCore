@@ -90,7 +90,7 @@ struct TwitterOAuthClient: TwitterClientBase {
             accessToken: userTokens.accessToken,
             secretAccessToken: userTokens.secretAccessToken,
             oauthVerifier: oauthVerifier,
-            oauthTokenID: oauthTokenObject.id,
+            oauthTokenID: oauthTokenObject.id
         )
 
         do {

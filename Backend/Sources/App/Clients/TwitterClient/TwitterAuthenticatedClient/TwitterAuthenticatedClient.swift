@@ -8,10 +8,10 @@ import TwitterAPIKit
 import Vapor
 
 struct TwitterAuthenticatedClient: TwitterClientBase {
-    var logger: Logger
-    var client: Client
-    var database: Database
-    var twitterClient: TwitterAPIClient
+    let logger: Logger
+    let client: Client
+    let database: Database
+    let twitterClient: TwitterAPIClient
 
     public func postTweet(message: String) async throws -> TwitterPostResponse {
         let result = twitterClient.v2.postTweet(

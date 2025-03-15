@@ -15,7 +15,7 @@ struct TwitterClient: TwitterClientBase {
     let auth: TwitterOAuthClient
 
     let callbackURL: String
-    var twitterClient: TwitterAPIClient
+    let twitterClient: TwitterAPIClient
 
     let consumerKey: String
     let consumerSecret: String
@@ -60,5 +60,28 @@ struct TwitterClient: TwitterClientBase {
                 )
             )
         )
+    }
+
+    public static func getUserToken(req: Request) throws -> TwitterUserTokenDTO {
+        guard
+            let tokenBase64String = req.headers.first(name: "Authorization")
+        else {
+            throw Abort(.unauthorized)
+        }
+        let data = Data(base64Encoded: tokenBase64String)
+
+        do {
+            let token = try TwitterUserTokenDTO.decodeJSONFromData(data: data)
+            return token
+        } catch {
+            req.logger.error(
+                "Failed to decode token from authorization header.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "error": .string(error.localizedDescription),
+                ]
+            )
+            throw Abort(.unauthorized)
+        }
     }
 }
