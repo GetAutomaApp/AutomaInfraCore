@@ -30,21 +30,22 @@ struct TwitterOAuthClient: TwitterClientBase {
     }
 
     public func requestToken() async throws -> TwitterOAuthToken {
-        // 1. POST oauth/request_token (postOAuthRequestToken)
         let response = twitterClient.auth.oauth10a
             .postOAuthRequestToken(.init(
                 oauthCallback: callbackURL
-            )) // Rewrite your oauth callback url or scheme
+            ))
         guard
             let tokenObject = await response.responseObject.success
         else {
             throw Abort(.internalServerError)
         }
         let savedToken = try await saveOAuthToken(tokenObject: tokenObject)
+
+        BackendMetric.totalTwitterOAuthRequests.increment()
+
         return savedToken
     }
 
-    // 2. Make authenticate URL (manually go to url and log in)
     public func makeAuthenticateURL(tokenObject: TwitterOAuthToken) async throws -> URL {
         guard
             let authenticateURL = twitterClient.auth.oauth10a
@@ -80,6 +81,7 @@ struct TwitterOAuthClient: TwitterClientBase {
             oauthTokenObject: oauthTokenObject,
             oauthVerifier: oauthVerifier
         )
+
         return userTokenModel
     }
 
@@ -180,6 +182,8 @@ struct TwitterOAuthClient: TwitterClientBase {
                     .localizedDescription ?? "Failed to obtain user access token and secret access token."
             )
         }
+
+        BackendMetric.totalTwitterUserTokensConverted.increment()
 
         return .init(accessToken: success.oauthToken, secretAccessToken: success.oauthTokenSecret)
     }

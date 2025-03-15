@@ -44,6 +44,8 @@ struct TwitterAuthenticatedClient: TwitterClientBase {
             throw Abort(.internalServerError)
         }
 
+        BackendMetric.totalTweetPostsSent.increment()
+
         return tweetResponse
     }
 }
