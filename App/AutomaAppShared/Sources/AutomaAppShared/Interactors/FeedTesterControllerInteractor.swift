@@ -17,7 +17,7 @@ struct FeedTesterControllerInteractor: BackendControllerInteractor {
     func makeRequest() async throws -> DataResponse<Data?, AFError> {
         try await performRequest(
             endpoint: "/Feed-Tester/request",
-            method: .GET
+            method: .get
         )
     }
 }

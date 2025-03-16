@@ -17,7 +17,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/nalexn/ViewInspector", from: "0.9.0"),
         .package(url: "https://github.com/GetAutomaApp/ViewExtractor", from: "1.0.0"),
-        .package(url: "https://github.com/marmelroy/PhoneNumberKit", from: "3.7.0"),
+        .package(url: "https://github.com/marmelroy/PhoneNumberKit", from: "4.0.2"),
+        // .package(url: "https://github.com/marmelroy/PhoneNumberKit", from: "3.7.0"),
     ],
     targets: [
         .target(

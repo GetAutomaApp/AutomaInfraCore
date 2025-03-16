@@ -12,7 +12,7 @@ struct __CAPNAME__ControllerInteractor: BackendControllerInteractor {
     func makeRequest() async throws -> DataResponse<Data?, AFError> {
         return try await performRequest(
             endpoint: "/__CAPNAME_DASHED__/request",
-            method: .GET
+            method: .get
         )
     }
 }

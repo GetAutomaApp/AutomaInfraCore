@@ -85,7 +85,7 @@ public enum DesignIcons: String, CaseIterable, DesignIcon {
             Image(systemName: "arrow.right").toIcon()
         case .subtraction:
             Image(systemName: "minus").toIcon()
-        case .x:
+        case .other:
             Image(systemName: "x.circle.fill").toIcon()
         }
     }

@@ -46,7 +46,7 @@ public struct DebugMenu: View {
                     IconButtonComponent(
                         config: closeButtonConfig,
                         onSelfAppear: { config in
-                            config.icon = .x
+                            config.icon = .other
                             config.defaultPadding = DesignTokens.padding.minimal
                             config.isCircular = true
                             config.fillSpace = false

@@ -13,7 +13,7 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
     func makeRegisterCodeRequest(_ phoneNumber: String) async throws -> AuthenticationCodeResponseDTO {
-        let params = try PhoneNumberPayloadDTO(phoneNumber: phoneNumber).encodeToDictionary()
+        let params = try PhoneNumberPayloadDTO(number: phoneNumber).encodeToDictionary()
 
         let response = await performRequest(
             endpoint: "/Authentication/register-code",
@@ -52,7 +52,7 @@ struct AuthenticationControllerInteractor: BackendControllerInteractor {
     }
 
     func makeLoginCodeRequest(_ phoneNumber: String) async throws -> AuthenticationCodeResponseDTO {
-        let params = try PhoneNumberPayloadDTO(phoneNumber: phoneNumber).encodeToDictionary()
+        let params = try PhoneNumberPayloadDTO(number: phoneNumber).encodeToDictionary()
 
         let response = await performRequest(
             endpoint: "/Authentication/login-code",

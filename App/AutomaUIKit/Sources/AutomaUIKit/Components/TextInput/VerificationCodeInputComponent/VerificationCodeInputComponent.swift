@@ -83,7 +83,7 @@ public struct VerificationCodeInputComponent: View {
                             cornerSize: config.cornerRadius
                         )
                     )
-                    .autocapitalization(.none)
+                    .textCase(.lowercase)
 
                 config.separatorIcon.image
 
@@ -104,7 +104,7 @@ public struct VerificationCodeInputComponent: View {
                             cornerSize: config.cornerRadius
                         )
                     )
-                    .autocapitalization(.none)
+                    .textCase(.lowercase)
 
             }.onAppear {
                 onSelfAppear(config)

@@ -22,7 +22,7 @@ public class BaseAppEnvironmentObject: ObservableObject {
         isLoggedIn = false
         Task {
             await DispatchQueue.main.async {
-                KeychainHelper.delete(for: .RefreshToken)
+                KeychainHelper.delete(for: .refreshToken)
             }
         }
     }
