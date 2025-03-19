@@ -38,13 +38,13 @@ struct OpenAIChatCompletionClient: ChatCompletion {
         } catch {
             BackendMetric.chatCompletionServiceCall(platform: .openai, model: model, status: .fail).increment()
             logger.error("Failed to generate chat completion, error: \(error)")
-            throw Abort(.internalServerError)
+            throw ChatCompletionClientError.completionError
         }
 
         guard let message = result.choices.first?.message.content?.string else {
-            logger.error("Failed to generate chat completion, message empty")
             BackendMetric.chatCompletionServiceCall(platform: .openai, model: model, status: .fail).increment()
-            throw Abort(.internalServerError)
+            logger.error("Failed to generate chat completion, message empty")
+            throw ChatCompletionClientError.completionMessageEmpty
         }
 
         BackendMetric.chatCompletionServiceCall(platform: .openai, model: model, status: .success).increment()
