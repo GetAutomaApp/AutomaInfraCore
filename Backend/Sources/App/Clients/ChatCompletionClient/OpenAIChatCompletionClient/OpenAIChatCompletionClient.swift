@@ -10,11 +10,13 @@ struct OpenAIChatCompletionClient: ChatCompletion {
     private let client: OpenAI
     let logger: Logger
     let supportedModels: [String] = ["gpt-4o", "gpt-4o-mini", "o1"]
+    private let apiKey: String
 
-    init(logger: Logger, timeout: TimeInterval = 180) throws {
-        client = try .init(
+    init(logger: Logger, timeout: TimeInterval = 180, apiKey: String? = nil) throws {
+        self.apiKey = try apiKey ?? Environment.getOrThrow("OPENAI_API_KEY")
+        client = .init(
             configuration: .init(
-                token: Environment.getOrThrow("OPENAI_API_KEY"),
+                token: self.apiKey,
                 timeoutInterval: timeout
             )
         )

@@ -9,4 +9,5 @@ enum ChatCompletionClientError: Error {
     case invalidPrompt
     case completionError
     case invalidMessage
+    case completionMessageEmpty
 }

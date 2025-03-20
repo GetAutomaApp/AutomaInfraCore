@@ -42,4 +42,22 @@ struct OpenAIChatCompletionClientTests {
             }
         }
     }
+
+    @Test("Generate Chat Completion Result successfully") func generateChatCompletionResultSuccess() async throws {
+        try await withApp { app in
+            let client = try OpenAIChatCompletionClient(logger: app.logger)
+            let result = try await client.createChat(.init(model: .gpt4o, prompt: "Hello, how are you?"))
+            let message = result.message
+
+            app.logger.info(
+                "Generated chat completion message success.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "message": .string(message),
+                ]
+            )
+
+            #expect(message.count > 5, "Generated message should have more than 5 characters")
+        }
+    }
 }
