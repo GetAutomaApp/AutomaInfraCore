@@ -30,8 +30,6 @@ struct OpenAIChatCompletionClientTests {
         try await app.asyncShutdown()
     }
 
-    // TODO: Create a test to check if it throws no API key found in environment
-
     @Test("Handle unsupported model in chat completion") func handleUnsupportedModel() async throws {
         try await withApp { app in
             let model = ChatCompletionModel.llama3
