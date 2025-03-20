@@ -38,13 +38,15 @@ struct FirecrawlClient {
             )
 
             guard let decodedData = try? response.content.decode(FirecrawlScrapeResult.self) else {
+                let bodyData = response.body?.getData(at: 0, length: response.body?.readableBytes ?? 0)
+                let bodyString = bodyData
+                    .flatMap { String(data: $0, encoding: .utf8) } ?? "Unable to convert body to string"
+
                 logger.error(
                     "Invalid response from firecrawl microservice",
                     metadata: [
                         "url": .string(input.url),
-                        "description": .string(
-                            response.body?.debugDescription ?? response.description
-                        ),
+                        "response": .string(bodyString),
                         "to": .string("FirecrawlClient.scrapeMarkdown"),
                     ]
                 )

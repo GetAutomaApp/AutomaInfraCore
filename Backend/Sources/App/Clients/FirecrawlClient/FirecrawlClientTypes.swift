@@ -11,6 +11,7 @@ enum FirecrawlFormats: String, Content {
 
 struct ScrapeMarkdownInput: Content {
     let url: String
+    let timeout: Int = 60000
 }
 
 struct FirecrawlDataResult: Content {

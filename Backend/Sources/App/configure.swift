@@ -78,10 +78,13 @@ public func configure(_ app: Application) async throws {
         // Jobs
         app.queues.add(TransactionalMessageAsyncJob())
         app.queues.add(ProfilePictureAsyncJob())
-        app.queues.scheduleEvery(ScrapeRSSFeedCronJob(), minutes: 5)
+//        app.queues.scheduleEvery(ScrapeRSSFeedCronJob(), minutes: 5)
 
         // Http Server Config
         app.http.server.configuration.responseCompression = .enabled
+
+        let response = try await Crawl4AIClient(apiKey: "your_secret_token").crawl(urls: ["https://simonferns.com"])
+        print("\(response)")
     }
 }
 
