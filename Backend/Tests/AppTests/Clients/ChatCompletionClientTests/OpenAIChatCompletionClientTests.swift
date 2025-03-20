@@ -30,17 +30,6 @@ struct OpenAIChatCompletionClientTests {
         try await app.asyncShutdown()
     }
 
-    @Test("Handle unsupported model in chat completion") func handleUnsupportedModel() async throws {
-        try await withApp { app in
-            let model = ChatCompletionModel.llama3
-
-            let client = try OpenAIChatCompletionClient(logger: app.logger)
-            #expect(throws: ChatCompletionClientError.invalidModel, "Unsupported model should throw an error") {
-                try client.validateModel(model: model)
-            }
-        }
-    }
-
     @Test("Generate Chat Completion Result successfully") func generateChatCompletionResultSuccess() async throws {
         try await withApp { app in
             let client = try OpenAIChatCompletionClient(logger: app.logger)

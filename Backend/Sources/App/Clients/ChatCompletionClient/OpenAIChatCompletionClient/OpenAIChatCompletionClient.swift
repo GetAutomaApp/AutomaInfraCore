@@ -9,7 +9,6 @@ import Vapor
 struct OpenAIChatCompletionClient: ChatCompletion {
     private let client: OpenAI
     let logger: Logger
-    let supportedModels: [String] = ["gpt-4o", "gpt-4o-mini", "o1"]
     private let apiKey: String
 
     init(logger: Logger, timeout: TimeInterval = 180, apiKey: String? = nil) throws {
@@ -25,8 +24,6 @@ struct OpenAIChatCompletionClient: ChatCompletion {
 
     func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult {
         let model = query.model
-        try validateModel(model: model)
-
         let result: ChatResult
         do {
             result = try await client.chats(

@@ -4,10 +4,6 @@
 // All rights reserved.
 
 enum ChatCompletionClientError: Error {
-    case invalidModel
-    case invalidPlatform
-    case invalidPrompt
     case completionError
-    case invalidMessage
     case completionMessageEmpty
 }
