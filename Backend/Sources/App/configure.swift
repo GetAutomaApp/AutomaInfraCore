@@ -10,6 +10,36 @@ import Queues
 import QueuesFluentDriver
 import Vapor
 
+public func configureDatabase(
+    app: Application
+) async throws {
+    let primaryDatabaseURL = try Environment.getOrThrow("PRIMARY_POSTGRES_URL")
+    let regionalDatabaseURL = try Environment.getOrThrow("REGIONAL_POSTGRES_URL")
+
+    try app.databases.use(.postgres(
+        url: primaryDatabaseURL
+    ), as: .primary)
+
+    try app.databases.use(.postgres(
+        url: regionalDatabaseURL
+    ), as: .readOnly)
+
+    app.migrations.add(CreateUserStorageItem())
+    app.migrations.add(UserMigration1735067533())
+    app.migrations.add(AuthenticationCodeMigration1735069859())
+    app.migrations.add(JwtTokenMigration1735121142())
+    app.migrations.add(JWTTokenShouldBeBoundToParentUserObjectMigration1735140054())
+    app.migrations.add(UserProfileAddProfilePictureMigration1735216565())
+    app.migrations.add(UserProfileConvertIdToImageKeyMigration1735294202())
+    app.migrations.add(JobMetadataMigrate())
+    app.migrations.add(RemoveUserStorageMigration1739456565())
+    app.migrations.add(AddAcceptedColumnMigration1740658649())
+    app.migrations.add(TwitterOAuthTokenMigration1741687313())
+    app.migrations.add(TwitterUserTokenMigration1741708919())
+
+    try await app.autoMigrate()
+}
+
 // Configures your application
 public func configure(_ app: Application) async throws {
     // This is file middleware
@@ -24,40 +54,15 @@ public func configure(_ app: Application) async throws {
     }
 
     let primaryDatabaseURL = Environment.get("PRIMARY_POSTGRES_URL")
-
     let regionalDatabaseURL = Environment.get("REGIONAL_POSTGRES_URL")
 
     let hasDatabaseUrls = primaryDatabaseURL != nil && regionalDatabaseURL != nil
-
-    // keep this here while `AppTests.swift` is empty
-    app.get("hello") { _ in
-        "Hello, world!"
-    }
+    print("Has Database URLs: \(hasDatabaseUrls)")
 
     if hasDatabaseUrls {
-        try app.databases.use(.postgres(
-            url: primaryDatabaseURL!
-        ), as: .primary)
-
-        try app.databases.use(.postgres(
-            url: regionalDatabaseURL!
-        ), as: .readOnly)
-
-        // Migrations
-        app.migrations.add(CreateUserStorageItem())
-        app.migrations.add(UserMigration1735067533())
-        app.migrations.add(AuthenticationCodeMigration1735069859())
-        app.migrations.add(JwtTokenMigration1735121142())
-        app.migrations.add(JWTTokenShouldBeBoundToParentUserObjectMigration1735140054())
-        app.migrations.add(UserProfileAddProfilePictureMigration1735216565())
-        app.migrations.add(UserProfileConvertIdToImageKeyMigration1735294202())
-        app.migrations.add(JobMetadataMigrate())
-        app.migrations.add(RemoveUserStorageMigration1739456565())
-        app.migrations.add(AddAcceptedColumnMigration1740658649())
-        app.migrations.add(TwitterOAuthTokenMigration1741687313())
-        app.migrations.add(TwitterUserTokenMigration1741708919())
-
-        try await app.autoMigrate()
+        try await configureDatabase(
+            app: app
+        )
 
         try app.register(collection: AuthenticationController())
         try app.register(collection: AppLaunchController())
@@ -81,6 +86,11 @@ public func configure(_ app: Application) async throws {
 
         // Http Server Config
         app.http.server.configuration.responseCompression = .enabled
+    }
+
+    // keep this here while `AppTests.swift` is empty
+    app.get("hello") { _ in
+        "Hello, world!"
     }
 }
 

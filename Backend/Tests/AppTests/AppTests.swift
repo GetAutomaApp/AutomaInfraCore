@@ -15,7 +15,6 @@ struct AppTests {
             try await configure(app)
             try await app.autoMigrate()
             try await test(app)
-            try await app.autoRevert()
         } catch {
             try await app.asyncShutdown()
             throw error

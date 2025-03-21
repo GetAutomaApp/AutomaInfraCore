@@ -7,16 +7,7 @@ import Vapor
 
 protocol ChatCompletion {
     var logger: Logger { get }
-    var supportedModels: [String] { get }
     func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult
-}
-
-extension ChatCompletion {
-    func validateModel(model: ChatCompletionModel) throws {
-        guard supportedModels.contains(model.rawValue) else {
-            throw Abort(.badRequest, reason: "Invalid model for OpenAI platform")
-        }
-    }
 }
 
 struct ChatCompletionContent: Content {
@@ -28,6 +19,13 @@ enum ChatCompletionModel: String, Codable {
     case gpt4o = "gpt-4o"
     case gpt4omini = "gpt-4o-mini"
     case gpto1 = "o1"
+
+    func getPlatformClient(logger: Logger) throws -> any ChatCompletion {
+        switch self {
+        case .gpt4o, .gpt4omini, .gpto1:
+            try OpenAIChatCompletionClient(logger: logger)
+        }
+    }
 }
 
 enum ChatCompletionPlatform: String, Codable {
