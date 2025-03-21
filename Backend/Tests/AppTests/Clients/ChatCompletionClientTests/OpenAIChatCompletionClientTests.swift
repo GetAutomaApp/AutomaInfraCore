@@ -10,8 +10,9 @@ import VaporTesting
 
 @Suite("OpenAI Chat Completion Client Tests")
 struct OpenAIChatCompletionClientTests {
-    private func withApp(_: (Application) async throws -> Void) async throws {
+    private func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
+        try await test(app)
         try await app.asyncShutdown()
     }
 

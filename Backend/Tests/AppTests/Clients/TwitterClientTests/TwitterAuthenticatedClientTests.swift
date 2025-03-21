@@ -6,28 +6,14 @@
 @testable import App
 import Fluent
 import Testing
-import Vapor
 import VaporTesting
-import XCTest
 
 @Suite("Twitter Authenticated Client Tests")
 struct TwitterAuthenticatedClientTests {
-    private func withApp(_ test: (Application) async throws -> Void) async throws {
+    private func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
-        do {
-            try await configure(app)
-            try await test(app)
-        } catch {
-            app.logger.error(
-                "Failed to create app for suite 'TwitterAuthenticatedClientTests'",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "error": .string(String(String(reflecting: error))),
-                ]
-            )
-            try await app.asyncShutdown()
-            throw error
-        }
+        try await configureDatabase(app: app)
+        try await test(app)
         try await app.asyncShutdown()
     }
 
@@ -53,7 +39,7 @@ struct TwitterAuthenticatedClientTests {
                 .filter(\.$id == twitterUserTokenID)
                 .first()
             else {
-                XCTFail("Failed to get Twitter User Token.")
+                #expect(Bool(false), "ailed to find Twitter User Token.")
                 return
             }
 
@@ -65,7 +51,7 @@ struct TwitterAuthenticatedClientTests {
 
             let message = UUID().uuidString
             let response = try await client.postTweet(message: message)
-            XCTAssertEqual(message, response.data.text)
+            #expect(response.data.text == message, "Tweet message should match")
         }
     }
 }

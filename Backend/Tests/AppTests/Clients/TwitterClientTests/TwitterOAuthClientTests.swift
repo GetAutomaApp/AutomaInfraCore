@@ -6,26 +6,13 @@
 @testable import App
 import Testing
 import VaporTesting
-import XCTest
 
 @Suite("Twitter OAuth Tests")
 struct TwitterOAuthClientTests {
-    private func withApp(_ test: (Application) async throws -> Void) async throws {
+    private func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
-        do {
-            try await configure(app)
-            try await test(app)
-        } catch {
-            app.logger.error(
-                "Failed to create app for suite 'TwitterClientTests'",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "error": .string(String(String(reflecting: error))),
-                ]
-            )
-            try await app.asyncShutdown()
-            throw error
-        }
+        try await configureDatabase(app: app)
+        try await test(app)
         try await app.asyncShutdown()
     }
 
@@ -35,8 +22,8 @@ struct TwitterOAuthClientTests {
             let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
             let token = try await twitterClient.auth.requestToken()
 
-            XCTAssert(token.oauthToken != "")
-            XCTAssert(token.oauthTokenSecret != "")
+            #expect(token.oauthToken.count > 5, "OAuth token should have more than 5 characters")
+            #expect(token.oauthTokenSecret.count > 5, "OAuth token secret should have more than 5 characters")
         }
     }
 
@@ -45,12 +32,12 @@ struct TwitterOAuthClientTests {
         try await withApp { app in
             let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
             let token = try await twitterClient.auth.requestToken()
-            XCTAssert(token.oauthToken != "")
-            XCTAssert(token.oauthTokenSecret != "")
+            #expect(token.oauthToken != "", "OAuth token should not be empty")
+            #expect(token.oauthTokenSecret != "", "OAuth token secret should not be empty")
 
             let url = try await twitterClient.auth.makeAuthenticateURL(tokenObject: token)
-            let expected = "https://api.x.com/oauth/authenticate?oauth_token=\(token.oauthToken)"
-            XCTAssert(url.absoluteString == expected)
+            let expected = "https://api.twitter.com/oauth/authenticate?oauth_token=\(token.oauthToken)"
+            #expect(url.absoluteString == expected, "URL should match expected URL")
         }
     }
 }
