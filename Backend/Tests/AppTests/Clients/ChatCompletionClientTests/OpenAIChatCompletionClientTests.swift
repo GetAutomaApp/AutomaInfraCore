@@ -10,26 +10,13 @@ import VaporTesting
 
 @Suite("OpenAI Chat Completion Client Tests")
 struct OpenAIChatCompletionClientTests {
-    private func withApp(_ test: (Application) async throws -> Void) async throws {
+    private func withApp(_: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
-        do {
-            try await configure(app)
-            try await test(app)
-        } catch {
-            app.logger.error(
-                "Failed to create app for suite 'OpenAIChatCompletionClientTests'",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "error": .string(String(String(reflecting: error))),
-                ]
-            )
-            try await app.asyncShutdown()
-            throw error
-        }
         try await app.asyncShutdown()
     }
 
-    @Test("Generate Chat Completion Result Success") func generateChatCompletionResultSuccess() async throws {
+    @Test("Generate Chat Completion Result Success")
+    func generateChatCompletionResultSuccess() async throws {
         try await withApp { app in
             let client = try OpenAIChatCompletionClient(logger: app.logger)
             let result = try await client.createChat(.init(model: .gpt4o, prompt: "Hello, how are you?"))

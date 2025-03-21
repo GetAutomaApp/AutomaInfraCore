@@ -20,10 +20,10 @@ enum ChatCompletionModel: String, Codable {
     case gpt4omini = "gpt-4o-mini"
     case gpto1 = "o1"
 
-    func getPlatform() -> ChatCompletionPlatform {
+    func getPlatformClient(logger: Logger) throws -> any ChatCompletion {
         switch self {
         case .gpt4o, .gpt4omini, .gpto1:
-            .openai
+            try OpenAIChatCompletionClient(logger: logger)
         }
     }
 }
