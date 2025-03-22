@@ -3,7 +3,6 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-import FlyingFox
 import Foundation
 import Metrics
 import Prometheus

@@ -4,7 +4,6 @@
 // All rights reserved.
 
 import Fluent
-import FlyingFox
 import Prometheus
 import Vapor
 
