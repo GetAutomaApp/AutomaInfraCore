@@ -5,7 +5,7 @@
 
 import Vapor
 
-struct PrometheusQuery: Content {
+struct PrometheusRouteQuery: Content {
     let authToken: String
 
     enum CodingKeys: String, CodingKey {

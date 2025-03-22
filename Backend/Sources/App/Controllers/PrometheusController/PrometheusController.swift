@@ -32,8 +32,10 @@ struct PrometheusController: RouteCollection {
     }
 
     private func validate(req: Request) throws {
-        let query = try req.query.decode(PrometheusQuery.self)
-        guard query.authToken == Environment.get("FLY_METRICS_TOKEN") else {
+        let query = try req.query.decode(PrometheusRouteQuery.self)
+        let token = Environment.getOrThrow("FLY_METRICS_TOKEN")
+
+        guard query.authToken == token else {
             throw Abort(.unauthorized)
         }
     }
