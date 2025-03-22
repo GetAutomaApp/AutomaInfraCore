@@ -19,8 +19,7 @@ struct PrometheusControllerUnitTests {
     @Test("Test Prometheus Metrics")
     func testRequest() async throws {
         try await withApp { app in
-            let url = try Environment.getOrThrow("PROMETHEUS_BASE_URL")
-            print("URL: \(url)")
+            let url = try "\(Environment.getOrThrow("PROMETHEUS_BASE_URL"))/Prometheus/metrics"
             let res = try await app.client.get(.init(string: url))
             #expect(res.status == .ok)
         }

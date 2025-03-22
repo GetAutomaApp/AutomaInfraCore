@@ -69,6 +69,6 @@ public func startPrometheusService() async throws {
 
         try await server.run()
     }
-    try await Task.sleep(for: .seconds(10))
+    try await Task.sleep(for: .seconds(2))
     print("Prometheus server started")
 }
