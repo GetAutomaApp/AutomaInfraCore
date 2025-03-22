@@ -16,6 +16,7 @@ struct PrometheusController: RouteCollection {
 
     @Sendable
     func metrics(req: Request) throws -> String {
+        try validate(req: req)
         guard
             let metrics = String(data: MetricsService.global.emit(), encoding: .utf8)
         else {
@@ -28,5 +29,12 @@ struct PrometheusController: RouteCollection {
             throw Abort(.internalServerError)
         }
         return metrics
+    }
+
+    private func validate(req: Request) throws {
+        let query = try req.query.decode(PrometheusQuery.self)
+        guard query.authToken == Environment.get("FLY_METRICS_TOKEN") else {
+            throw Abort(.unauthorized)
+        }
     }
 }
