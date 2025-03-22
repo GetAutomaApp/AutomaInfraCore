@@ -1,0 +1,33 @@
+// PrometheusController.swift
+// Copyright (c) 2025 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
+
+import Fluent
+import FlyingFox
+import Prometheus
+import Vapor
+
+struct PrometheusController: RouteCollection {
+    func boot(routes: RoutesBuilder) throws {
+        let prometheusRoute = routes.grouped("Prometheus")
+
+        prometheusRoute.get("metrics", use: metrics)
+    }
+
+    @Sendable
+    func metrics(req: Request) throws -> String {
+        guard
+            let metrics = String(data: MetricsService.global.emit(), encoding: .utf8)
+        else {
+            req.logger.error(
+                "Could not convert metrics to string.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                ]
+            )
+            throw Abort(.internalServerError)
+        }
+        return metrics
+    }
+}

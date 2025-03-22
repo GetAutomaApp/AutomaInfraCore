@@ -70,6 +70,7 @@ public func configure(_ app: Application) async throws {
         try app.register(collection: ChatCompletionController())
         try app.register(collection: FeedTesterController())
         try app.register(collection: FirecrawlTestController())
+        try app.register(collection: PrometheusController())
 
         // Authentication
         await app.jwt.keys

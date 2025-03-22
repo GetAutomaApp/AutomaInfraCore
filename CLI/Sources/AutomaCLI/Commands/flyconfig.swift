@@ -41,6 +41,12 @@ struct FlyConfigGenerator: Command {
 
         var content = try String(contentsOfFile: configPath, encoding: .utf8)
 
+        guard
+            let metricsToken = Environment.get("FLY_METRICS_TOKEN")
+        else {
+            throw Abort(.notFound, reason: "FLY_METRICS_TOKEN not found in environment")
+        }
+
         content = try content
             .replacingOccurrences(
                 of: "__FLY_ENVIRONMENT__",
@@ -48,7 +54,7 @@ struct FlyConfigGenerator: Command {
             )
             .replacingOccurrences(
                 of: "__FLY_METRICS_TOKEN__",
-                with: Environment.getOrThrow("FLY_METRICS_TOKEN")
+                with: metricsToken
             )
 
         let newFileUUID = UUID().uuidString
