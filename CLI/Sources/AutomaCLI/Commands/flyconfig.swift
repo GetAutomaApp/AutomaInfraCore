@@ -41,10 +41,14 @@ struct FlyConfigGenerator: Command {
 
         var content = try String(contentsOfFile: configPath, encoding: .utf8)
 
-        content = content
+        content = try content
             .replacingOccurrences(
                 of: "__FLY_ENVIRONMENT__",
                 with: environment.rawValue
+            )
+            .replacingOccurrences(
+                of: "__FLY_METRICS_TOKEN__",
+                with: Environment.getOrThrow("FLY_METRICS_TOKEN")
             )
 
         let newFileUUID = UUID().uuidString

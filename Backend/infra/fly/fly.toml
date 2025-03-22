@@ -26,4 +26,4 @@ primary_region = 'jnb'
 
 [metrics]
   port = 9113
-  path = "/Prometheus/metrics"
+  path = "/Prometheus/metrics?auth_token=34c2332e-5396-42a8-b53f-fdc393e02ed2"
