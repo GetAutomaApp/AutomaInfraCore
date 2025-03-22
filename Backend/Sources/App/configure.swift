@@ -89,9 +89,6 @@ public func configure(_ app: Application) async throws {
     }
 
     // keep this here while `AppTests.swift` is empty
-    app.get("hello") { _ in
-        "Hello, world!"
-    }
 }
 
 extension DatabaseID {

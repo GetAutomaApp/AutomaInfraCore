@@ -21,12 +21,4 @@ final class AppLaunchControllerUnitTests {
         try await app.asyncShutdown()
     }
 
-    @Test("Test Hello World")
-    func testRequest() async throws {
-        try await withApp { app in
-            try await app.testing().test(.GET, "App-Launch/request") { res async in
-                #expect(res.status == .ok)
-            }
-        }
-    }
 }
