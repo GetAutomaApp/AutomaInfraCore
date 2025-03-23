@@ -10,7 +10,7 @@ import Vapor
 /// A client for generating images using OpenAI's API.
 struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     private let client: OpenAI
-    private let logger: Logger
+    let logger: Logger
 
     init(logger: Logger, timeout: TimeInterval = 180) throws {
         client = try .init(

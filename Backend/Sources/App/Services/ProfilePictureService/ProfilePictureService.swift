@@ -18,7 +18,7 @@ struct ProfilePictureService {
             let tigrisService = try TigrisService()
             let messageService = MessageService()
 
-            let prompt = AIPromptFormatterService.createOpenAIProfilePicturePrompt(
+            let query = AIPromptFormatterService.createOpenAIProfilePictureQuery(
                 username: user.username
             )
 
@@ -32,20 +32,20 @@ struct ProfilePictureService {
                     "to": .string("ProfilePictureService.createProfilePicture"),
                     "userId": .string(userId),
                     "username": .string(user.username),
-                    "prompt": .string(prompt.prompt),
+                    "prompt": .string(query.prompt),
                 ]
             )
 
             try messageService
                 .sendDiscordWebhookAppEvent(
                     input: "generating profile picture for \(userId) - \(user.username)",
-                    event: "\(prompt.prompt)",
+                    event: "\(query.prompt)",
                     logger: logger
                 )
 
-            let (images, imageData) = try await generateImage(
+            let result = try await generateImage(
                 totalRegenerationAttempts: totalRegenerationAttempts,
-                prompt: prompt,
+                query: query,
                 excludeText: excludeText
             )
 
@@ -60,14 +60,14 @@ struct ProfilePictureService {
                 tigrisService
                     .put(
                         input: s3Url,
-                        content: .init(data: imageData),
+                        content: .init(data: result.images[0]),
                         acl: .publicRead,
                         contentType: "image/jpeg"
                     ),
                 tigrisService.put(
                     input: openaiOutputs3Url,
                     content: .init(
-                        string: jsonEncoder.encode(images).base64EncodedString()
+                        string: jsonEncoder.encode(result.metadataJSON).base64EncodedString()
                     ),
                     acl: .private,
                     contentType: "application/json"
@@ -79,7 +79,7 @@ struct ProfilePictureService {
             try messageService
                 .sendDiscordWebhookAppEvent(
                     input: "generated profile picture for \(userId) - \(user.username)",
-                    event: "\(prompt.prompt)",
+                    event: "\(query.prompt)",
                     imageUrl: url,
                     logger: logger
                 )
@@ -114,37 +114,33 @@ struct ProfilePictureService {
         }
     }
 
-    private func generateImage(totalRegenerationAttempts: Int, prompt: ImagesQuery,
-                               excludeText: Bool) async throws -> ([ImagesResult.Image], Data)
+    private func generateImage(totalRegenerationAttempts: Int, query: GenerateImageQuery,
+                               excludeText: Bool) async throws -> GenerateImageResult
     {
         let textExtractionService = TextExtractionService()
-        let imageClient = try OpenAIImageGenerationClient(logger: logger)
+        let imageClient = ImageGenerationClient(logger: logger)
 
         var hasText = false
-        var image: String?
-        var imageData: Data?
-        var images: [ImagesResult.Image] = []
         var totalAttemptsLeft = totalRegenerationAttempts
 
+        var result: GenerateImageResult?
         // If there is still text on the image after 3 attempts, we will ignore the text and continue generating the
         // image
         repeat {
-            images = try await imageClient.generateImage(prompt).data
-            image = images[0].b64Json
-
-            guard let image else { throw GenericErrors.missingImage }
-
-            imageData = Data(base64Encoded: image)
-
-            guard let imageData else { throw GenericErrors.missingImage }
+            let res = try await imageClient.generateImage(query)
+            result = res
 
             hasText = try await !textExtractionService
                 .getTextToSimpleString(
-                    from: imageData
+                    from: res.images[0]
                 ).isEmpty
 
             totalAttemptsLeft -= 1
         } while excludeText && hasText && totalAttemptsLeft > 0
+
+        guard let result else {
+            throw GenericErrors.missingImage
+        }
 
         logger.info(
             "Attempted to generate an image without text",
@@ -155,11 +151,7 @@ struct ProfilePictureService {
             ]
         )
 
-        guard let imageData else {
-            throw GenericErrors.missingImage
-        }
-
-        return (images, imageData)
+        return result
     }
 
     func generateImageKey(for user: UserDTO) throws -> String {

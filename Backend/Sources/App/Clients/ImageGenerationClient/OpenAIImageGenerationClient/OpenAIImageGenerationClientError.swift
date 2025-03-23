@@ -5,4 +5,5 @@
 
 enum OpenAIImageGenerationClientError: Error {
     case invalidModel
+    case responseError
 }
