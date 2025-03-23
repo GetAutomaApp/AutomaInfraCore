@@ -40,7 +40,6 @@ struct OpenAIImageGenerationClient: ImageGenerationClientBase {
             "Successfully generated response.",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "response": .string("\(result)"),
             ]
         )
 

@@ -12,8 +12,13 @@ import VaporTesting
 struct TwitterAuthenticatedClientTests {
     private func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
-        try await configureDatabase(app: app)
-        try await test(app)
+        do {
+            try await configureDatabase(app: app)
+            try await test(app)
+        } catch {
+            try await app.asyncShutdown()
+            throw error
+        }
         try await app.asyncShutdown()
     }
 
@@ -24,14 +29,11 @@ struct TwitterAuthenticatedClientTests {
             guard
                 let twitterUserTokenID = UUID(uuidString: testTwitterUserTokenID)
             else {
-                app.logger.error(
-                    "Failed to convert test Twitter User Token ID to UUID.",
-                    metadata: [
-                        "to": .string("\(String(describing: Self.self)).\(#function)"),
-                        "testTwitterUserTokenID": .string(testTwitterUserTokenID),
-                    ]
+                try #require(
+                    Bool(false),
+                    "Failed to convert test Twitter User Token ID of value '\(testTwitterUserTokenID)' to UUID."
                 )
-                throw Abort(.internalServerError)
+                return
             }
 
             guard
@@ -39,7 +41,7 @@ struct TwitterAuthenticatedClientTests {
                 .filter(\.$id == twitterUserTokenID)
                 .first()
             else {
-                #expect(Bool(false), "ailed to find Twitter User Token.")
+                try #require(Bool(false), "failed to find Twitter User Token.")
                 return
             }
 

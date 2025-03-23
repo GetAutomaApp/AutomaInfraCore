@@ -7,6 +7,7 @@
 import Fluent
 import OpenAI
 import Testing
+import OpenAI
 import VaporTesting
 
 @Suite("OpenAI Image Generation Client Tests")
@@ -22,14 +23,61 @@ struct OpenAIImageGenerationClientTests {
         try await app.asyncShutdown()
     }
 
-    // TODO: Create tests for the following scenarios
-    // - Generate Image Result Success (dalle3)
-    // - Generate Image Result Success (dalle2)
-    // - Generate Image Result Fail (dalle2 with resolution of dalle3)
+    @Test("Generate Image Result Fail (dalle2 with resolution of dalle3)")
+    func generateImageResultFailDalle2() async throws {
+        try await withApp { app in
+            let client = ImageGenerationClient(logger: app.logger)
+            let query: GenerateImageQuery = .init(
+                model: .dall_e_2,
+                totalImagesToGenerate: 1,
+                prompt: "A fluffy golden retriever puppy playing in a sunny meadow filled with colorful wildflowers.",
+                quality: .hd,
+                imageSize: ._1792_1024,
+                imageStyle: .vivid
+            )
+            await #expect(throws: APIErrorResponse.self, "Should throw APIError when using DALL-E 2 with DALL-E 3 resolution") {
+                try await client.generateImage(query)
+            }
+        }
+    }
 
     // TODO: add input prompts for the following test
-    @Test("Generate Image Result Success")
-    func generateImageResultSuccess() async throws {
+    @Test("Generate Image Result Success (dalle2)")
+    func generateImageResultSuccessDalle2() async throws {
+        try await withApp { app in
+            let client = ImageGenerationClient(logger: app.logger)
+            let query: GenerateImageQuery = .init(
+                model: .dall_e_2,
+                totalImagesToGenerate: 1,
+                prompt: "A fluffy golden retriever puppy playing in a sunny meadow filled with colorful wildflowers.",
+                quality: .hd,
+                imageSize: ._1024,
+                imageStyle: .vivid
+            )
+            let result = try await client.generateImage(query)
+
+            let imagesResult = try JSONDecoder().decode(ImagesResult.self, from: result.metadataJSON)
+            let image = imagesResult.data[0]
+
+            guard
+                let imageB64 = image.b64Json
+            else {
+                try #require(Bool(false), "Generated image base64 string should not be nil")
+                return
+            }
+
+            app.logger.info(
+                "Length of base64 string generated image.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "length": .string(String(imageB64.count)),
+                ]
+            )
+        }
+    }
+
+    @Test("Generate Image Result Success (dalle3)")
+    func generateImageResultSuccessDalle3() async throws {
         try await withApp { app in
             let client = ImageGenerationClient(logger: app.logger)
             let query: GenerateImageQuery = .init(
@@ -52,26 +100,11 @@ struct OpenAIImageGenerationClientTests {
                 return
             }
 
-            guard
-                let revisedPrompt = image.revisedPrompt
-            else {
-                try #require(Bool(false), "Generated image revised prompt should not be nil")
-                return
-            }
-
             app.logger.info(
                 "Length of base64 string generated image.",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "length": .string(String(imageB64.count)),
-                ]
-            )
-
-            app.logger.info(
-                "Revised prompt of generated image.",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "prompt": .string(revisedPrompt),
                 ]
             )
         }

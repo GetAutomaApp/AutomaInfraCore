@@ -11,8 +11,13 @@ import VaporTesting
 struct TwitterOAuthClientTests {
     private func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
-        try await configureDatabase(app: app)
-        try await test(app)
+        do {
+            try await configureDatabase(app: app)
+            try await test(app)
+        } catch {
+            try await app.asyncShutdown()
+            throw error
+        }
         try await app.asyncShutdown()
     }
 
