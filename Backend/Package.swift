@@ -27,7 +27,6 @@ let package = Package(
             url: "https://github.com/m-barthelemy/vapor-queues-fluent-driver.git",
             from: "3.0.0-beta1"
         ),
-        .package(url: "https://github.com/swhitty/FlyingFox.git", .upToNextMajor(from: "0.20.0")),
         .package(url: "https://github.com/nmdias/FeedKit.git", from: "10.0.0-rc.3"),
         .package(url: "https://github.com/GetAutomaApp/swift-retry.git", branch: "main"),
     ],
@@ -49,7 +48,6 @@ let package = Package(
                 .product(name: "SotoSNS", package: "soto"),
                 .product(name: "Prometheus", package: "swift-prometheus"),
                 .product(name: "QueuesFluentDriver", package: "vapor-queues-fluent-driver"),
-                .product(name: "FlyingFox", package: "FlyingFox"),
                 .product(name: "SotoTextract", package: "soto"),
                 .product(name: "FeedKit", package: "FeedKit"),
                 .product(name: "DMRetry", package: "swift-retry"),
