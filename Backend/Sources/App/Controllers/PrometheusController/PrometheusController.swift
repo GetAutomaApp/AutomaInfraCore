@@ -20,13 +20,12 @@ struct PrometheusController: RouteCollection {
         guard
             let metrics = String(data: MetricsService.global.emit(), encoding: .utf8)
         else {
-            req.logger.error(
-                "Could not convert metrics to string.",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                ]
+            try MessageService().sendDiscordAlert(
+                alertTitle: "Could not convert metrics to string.",
+                error: PrometheusControllerError.couldNotConvertMetricsToData,
+                logger: req.logger
             )
-            throw Abort(.internalServerError)
+            throw PrometheusControllerError.couldNotConvertMetricsToData
         }
         return metrics
     }
@@ -36,7 +35,7 @@ struct PrometheusController: RouteCollection {
         let token = try Environment.getOrThrow("FLY_METRICS_TOKEN")
 
         guard query.authToken == token else {
-            throw Abort(.unauthorized)
+            throw PrometheusControllerError.invalidAuthToken
         }
     }
 }
