@@ -38,6 +38,4 @@ enum Entrypoint {
         try await app.execute()
         try await app.asyncShutdown()
     }
-
-    static func startMetricsServer() {}
 }

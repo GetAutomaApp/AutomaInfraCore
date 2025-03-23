@@ -11,8 +11,13 @@ import VaporTesting
 final class PrometheusControllerIntegrationTests {
     private func withApp(_ test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
-        try app.register(collection: PrometheusController())
-        try await test(app)
+        do {
+            try app.register(collection: PrometheusController())
+            try await test(app)
+        } catch {
+            try await app.asyncShutdown()
+            throw error
+        }
         try await app.asyncShutdown()
     }
 

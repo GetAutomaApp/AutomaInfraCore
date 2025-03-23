@@ -12,8 +12,13 @@ import VaporTesting
 struct OpenAIChatCompletionClientTests {
     private func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
-        try await test(app)
-        try await app.asyncShutdown()
+        do {
+            try await test(app)
+            try await app.asyncShutdown()
+        } catch {
+            try await app.asyncShutdown()
+            throw error
+        }
     }
 
     @Test("Generate Chat Completion Result Success")
