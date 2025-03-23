@@ -9,14 +9,14 @@ primary_region = 'jnb'
 [build]
 
 [env]
-  RUN_COMMAND = "vapor-queues"
+RUN_COMMAND = "vapor-queues"
 
 [[vm]]
-  memory = '1024mb'
-  cpu_kind = 'shared'
-  cpus = 2
-  min_machines_running = 1
+memory = '1024mb'
+cpu_kind = 'shared'
+cpus = 2
+min_machines_running = 1
 
 [metrics]
-  port = 9113
-  path = "/Prometheus/metrics"
+port = 8080
+path = "/Prometheus/metrics?auth_token=__FLY_METRICS_TOKEN__"

@@ -74,15 +74,6 @@
       }
     },
     {
-      "identity" : "flyingfox",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/swhitty/FlyingFox.git",
-      "state" : {
-        "revision" : "0285d3e846f48abad71d4cf143afacbc33b19b45",
-        "version" : "0.21.0"
-      }
-    },
-    {
       "identity" : "jmespath.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/adam-fowler/jmespath.swift.git",

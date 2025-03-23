@@ -3,12 +3,10 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-import FlyingFox
 import Logging
 import Metrics
 import NIOCore
 import NIOPosix
-import Prometheus
 import Vapor
 
 @main
@@ -18,8 +16,6 @@ enum Entrypoint {
         try LoggingSystem.bootstrap(from: &env)
 
         let app = try await Application.make(env)
-
-        try await startPrometheusService()
 
         // This attempts to install NIO as the Swift Concurrency global executor.
         // You can enable it if you'd like to reduce the amount of context switching between NIO and Swift Concurrency.
@@ -42,33 +38,4 @@ enum Entrypoint {
         try await app.execute()
         try await app.asyncShutdown()
     }
-
-    static func startMetricsServer() {}
-}
-
-public func startPrometheusService() async throws {
-    Task {
-        let port = try Environment.getOrThrow("PROMETHEUS_PORT")
-        guard
-            let prometheusPort = UInt16(port)
-        else {
-            throw Abort(.custom(
-                code: 500,
-                reasonPhrase: "PROMETHEUS_PORT '\(port)' could not be converted to a UInt16."
-            ))
-        }
-        let server = HTTPServer(port: prometheusPort)
-
-        await server.appendRoute("Prometheus/metrics") { _ in
-            let metrics = MetricsService.global.emit()
-            return HTTPResponse(
-                statusCode: .ok,
-                body: metrics
-            )
-        }
-
-        try await server.run()
-    }
-    try await Task.sleep(for: .seconds(2))
-    print("Prometheus server started")
 }

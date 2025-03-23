@@ -7,11 +7,11 @@ import DataTypes
 struct __CAPNAME__ControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
-    /// Makes a request to /__CAPNAME_DASHED__/request
-    /// Change the return type to your Decodable DTO
+    /// Makes a request to /__CAPNAME_DASHED__/route_name
+    @Test("Make a request to route_name")
     func makeRequest() async throws -> DataResponse<Data?, AFError> {
         return try await performRequest(
-            endpoint: "/__CAPNAME_DASHED__/request",
+            endpoint: "/__CAPNAME_DASHED__/route_name",
             method: .get
         )
     }

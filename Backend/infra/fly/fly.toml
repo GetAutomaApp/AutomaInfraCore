@@ -9,21 +9,21 @@ primary_region = 'jnb'
 [build]
 
 [env]
-  RUN_COMMAND = "serve --env production --hostname 0.0.0.0 --port 8080"
+RUN_COMMAND = "serve --env production --hostname 0.0.0.0 --port 8080"
 
 [http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = 'stop'
-  auto_start_machines = true
-  min_machines_running = 0
-  processes = ['app']
+internal_port = 8080
+force_https = true
+auto_stop_machines = 'stop'
+auto_start_machines = true
+min_machines_running = 0
+processes = ['app']
 
 [[vm]]
-  memory = '2gb'
-  cpu_kind = 'shared'
-  cpus = 4
+memory = '2gb'
+cpu_kind = 'shared'
+cpus = 4
 
 [metrics]
-  port = 9113
-  path = "/Prometheus/metrics"
+port = 8080
+path = "/Prometheus/metrics?auth_token=__FLY_METRICS_TOKEN__"

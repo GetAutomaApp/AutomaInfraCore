@@ -57,7 +57,6 @@ public func configure(_ app: Application) async throws {
     let regionalDatabaseURL = Environment.get("REGIONAL_POSTGRES_URL")
 
     let hasDatabaseUrls = primaryDatabaseURL != nil && regionalDatabaseURL != nil
-    print("Has Database URLs: \(hasDatabaseUrls)")
 
     if hasDatabaseUrls {
         try await configureDatabase(
@@ -70,6 +69,7 @@ public func configure(_ app: Application) async throws {
         try app.register(collection: ChatCompletionController())
         try app.register(collection: FeedTesterController())
         try app.register(collection: FirecrawlTestController())
+        try app.register(collection: PrometheusController())
 
         // Authentication
         await app.jwt.keys
