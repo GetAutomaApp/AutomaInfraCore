@@ -1,4 +1,4 @@
-// OpenAIImageGenerationClient.swift
+// OpenAIImageGenerationClientTests.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -13,7 +13,12 @@ import VaporTesting
 struct OpenAIImageGenerationClientTests {
     private func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
-        try await test(app)
+        do {
+            try await test(app)
+        } catch {
+            try await app.asyncShutdown()
+            throw error
+        }
         try await app.asyncShutdown()
     }
 
@@ -26,7 +31,7 @@ struct OpenAIImageGenerationClientTests {
     @Test("Generate Image Result Success")
     func generateImageResultSuccess() async throws {
         try await withApp { app in
-            let client = try ImageGenerationClient(logger: app.logger)
+            let client = ImageGenerationClient(logger: app.logger)
             let query: GenerateImageQuery = .init(
                 model: .dall_e_3,
                 totalImagesToGenerate: 1,
@@ -41,22 +46,24 @@ struct OpenAIImageGenerationClientTests {
             let image = imagesResult.data[0]
 
             guard
-                let url = image.url
+                let imageB64 = image.b64Json
             else {
-                #require(Bool(false), "Generated image URL should not be nil")
+                try #require(Bool(false), "Generated image base64 string should not be nil")
+                return
             }
 
             guard
                 let revisedPrompt = image.revisedPrompt
             else {
-                #require(Bool(false), "Generated image revised prompt should not be nil")
+                try #require(Bool(false), "Generated image revised prompt should not be nil")
+                return
             }
 
             app.logger.info(
-                "URL of generated image.",
+                "Length of base64 string generated image.",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "url": .string(url),
+                    "length": .string(String(imageB64.count)),
                 ]
             )
 
@@ -64,7 +71,7 @@ struct OpenAIImageGenerationClientTests {
                 "Revised prompt of generated image.",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "url": .string(revisedPrompt),
+                    "prompt": .string(revisedPrompt),
                 ]
             )
         }

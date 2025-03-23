@@ -13,9 +13,10 @@ struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     let logger: Logger
 
     init(logger: Logger, timeout: TimeInterval = 180) throws {
-        client = try .init(
+        let token = try Environment.getOrThrow("OPENAI_API_KEY")
+        client = .init(
             configuration: .init(
-                token: Environment.getOrThrow("OPENAI_API_KEY"),
+                token: token,
                 timeoutInterval: timeout
             )
         )
@@ -24,11 +25,24 @@ struct OpenAIImageGenerationClient: ImageGenerationClientBase {
 
     func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult {
         BackendMetric.openAIImageGenerationRequests.increment()
+
         let result = try await client.images(query: .init(
             prompt: query.prompt,
             model: getModel(from: query.model),
-            n: query.totalImagesToGenerate
+            n: query.totalImagesToGenerate,
+            quality: .init(rawValue: query.quality.rawValue),
+            responseFormat: .b64_json,
+            size: .init(rawValue: query.imageSize.rawValue),
+            style: .init(rawValue: query.imageStyle.rawValue)
         ))
+
+        logger.info(
+            "Successfully generated response.",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "response": .string("\(result)"),
+            ]
+        )
 
         return try .init(
             images: result.data.map { image in
