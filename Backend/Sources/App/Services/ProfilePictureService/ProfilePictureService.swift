@@ -21,6 +21,7 @@ struct ProfilePictureService {
             let query = AIPromptFormatterService.createOpenAIProfilePictureQuery(
                 username: user.username
             )
+            let queryString = String(reflecting: query)
 
             guard let userId = user.id?.uuidString else {
                 throw GenericErrors.invalidUserId
@@ -32,14 +33,14 @@ struct ProfilePictureService {
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "userId": .string(userId),
                     "username": .string(user.username),
-                    "prompt": .string(query.prompt),
+                    "query": .string(queryString),
                 ]
             )
 
             try messageService
                 .sendDiscordWebhookAppEvent(
                     input: "generating profile picture for \(userId) - \(user.username)",
-                    event: "\(query.prompt)",
+                    event: queryString,
                     logger: logger
                 )
 
@@ -79,7 +80,7 @@ struct ProfilePictureService {
             try messageService
                 .sendDiscordWebhookAppEvent(
                     input: "generated profile picture for \(userId) - \(user.username)",
-                    event: "\(query.prompt)",
+                    event: queryString,
                     imageUrl: url,
                     logger: logger
                 )

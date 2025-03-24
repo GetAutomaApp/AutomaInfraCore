@@ -131,13 +131,6 @@ enum BackendMetric {
         )
     }
 
-    // static let totalTweetPostsSent = MetricsService.global.makeCounter(
-    //     name: "total_tweet_posts_sent",
-    //     labels: [
-    //         "status": MetricStatus.success.rawValue,
-    //     ]
-    // )
-
     /// Creates a counter to track Twitter OAuth request metrics
     /// - Parameter status: The status of the OAuth request (success/fail/etc)
     /// - Returns: A Prometheus counter for Twitter OAuth requests with the given status

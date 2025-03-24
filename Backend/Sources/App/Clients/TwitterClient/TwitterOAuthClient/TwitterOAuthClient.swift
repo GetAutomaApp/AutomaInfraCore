@@ -166,7 +166,7 @@ struct TwitterOAuthClient: TwitterClientBase {
                     "error": .string(String(reflecting: error)),
                 ]
             )
-            throw error
+            throw TwitterOAuthClientError.failedToSaveToken(tokenType: .access, error: error)
         }
     }
 
@@ -198,7 +198,7 @@ struct TwitterOAuthClient: TwitterClientBase {
                     "error": .string(String(reflecting: error)),
                 ]
             )
-            throw error
+            throw TwitterOAuthClientError.failedToSaveToken(tokenType: .oauth, error: error)
         }
         return token
     }
@@ -214,7 +214,15 @@ struct TwitterOAuthClient: TwitterClientBase {
                 .filter(\.$oauthToken, .equal, oauthToken)
                 .first()
         } catch {
-            throw TwitterOAuthClientError.failedToSaveToken(tokenType: .oauth, error: .error(error))
+            logger.error(
+                "Failed to retrieve OAuth token from database.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "oauthToken": .string(oauthToken),
+                    "error": .string(String(reflecting: error)),
+                ]
+            )
+            throw TwitterOAuthClientError.failedTogetTokenFromDatabase(tokenType: .oauth, error: error)
         }
     }
 

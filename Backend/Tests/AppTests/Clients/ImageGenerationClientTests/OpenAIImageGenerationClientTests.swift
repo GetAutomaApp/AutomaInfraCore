@@ -9,8 +9,13 @@ import OpenAI
 import Testing
 import VaporTesting
 
+/// Tests for the OpenAI Image Generation Client implementation
+/// These tests verify the functionality of image generation using both DALL-E 2 and DALL-E 3 models
 @Suite("OpenAI Image Generation Client Tests")
 struct OpenAIImageGenerationClientTests {
+    /// Helper function to create and manage a test application instance
+    /// - Parameter test: The test closure to execute with the application instance
+    /// - Throws: Any errors that occur during test execution
     private func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
@@ -22,6 +27,7 @@ struct OpenAIImageGenerationClientTests {
         try await app.asyncShutdown()
     }
 
+    /// Tests that using DALL-E 2 with a DALL-E 3 specific resolution fails appropriately
     @Test("Generate Image Result Fail (dalle2 with resolution of dalle3)")
     func generateImageResultFailDalle2() async throws {
         try await withApp { app in
@@ -43,7 +49,8 @@ struct OpenAIImageGenerationClientTests {
         }
     }
 
-    // TODO: add input prompts for the following test
+    /// Tests successful image generation using DALL-E 2
+    /// Verifies that the client can generate images and return valid base64-encoded results
     @Test("Generate Image Result Success (dalle2)")
     func generateImageResultSuccessDalle2() async throws {
         try await withApp { app in
@@ -78,6 +85,8 @@ struct OpenAIImageGenerationClientTests {
         }
     }
 
+    /// Tests successful image generation using DALL-E 3
+    /// Verifies that the client can generate images with DALL-E 3 specific parameters
     @Test("Generate Image Result Success (dalle3)")
     func generateImageResultSuccessDalle3() async throws {
         try await withApp { app in
