@@ -42,6 +42,13 @@ extension ImageGenerationClientTestSuite {
         try await app.asyncShutdown()
     }
 
+    /// Default implementation of the image generation function
+    /// Uses the ImageGenerationClient to generate an image based on the provided query
+    /// 
+    /// - Parameter app: The Vapor application instance
+    /// - Parameter query: The image generation query parameters
+    /// - Returns: The generated image result
+    /// - Throws: Any errors that occur during the image generation process
     internal func generateImage(app: Application, query: GenerateImageQuery) async throws -> GenerateImageResult {
         let client = ImageGenerationClient(logger: app.logger)
         return try await client.generateImage(query)

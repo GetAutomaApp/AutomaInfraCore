@@ -1,0 +1,44 @@
+// ChatCompletionClientTests.swift
+// Copyright (c) 2025 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
+
+@testable import App
+import Testing
+
+/// Tests for the Chat Completion Client functionality
+/// These tests verify that all chat completion client implementations
+/// can successfully generate chat completions with various models
+@Suite("Chat Completion Client Tests")
+struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
+    /// Tests that each chat completion client can successfully create a chat completion
+    /// This test is parameterized to run with different models, automatically selecting
+    /// the appropriate client implementation based on the model
+    ///
+    /// - Parameter model: The chat completion model to test
+    /// - Throws: Any errors that occur during the test execution, including:
+    ///   - Client initialization errors
+    ///   - Network errors
+    ///   - Invalid response formats
+    @Test(
+        "Each chat completion client should be able to create a chat completion",
+        arguments: [
+            ChatCompletionModel.gpt4o, // will use openai client
+        ]
+    )
+    func createChatCompletionSuccess(model: ChatCompletionModel) async throws {
+        try await withApp { app in
+            // Create a query with the test model and default prompt
+            let query = ChatCompletionContent(model: model, prompt: defaultPrompt)
+            
+            // Attempt to generate a chat completion
+            let result = try await createChat(app: app, query: query)
+            
+            // Verify the result contains a non-empty message
+            #expect(result.message.count > 0, "Message should not be empty")
+            
+            // Verify the result contains metadata
+            #expect(result.metadata.count > 0, "Metadata should not be empty")
+        }
+    }
+}

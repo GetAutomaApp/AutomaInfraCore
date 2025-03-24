@@ -23,7 +23,7 @@ enum TwitterOAuthClientError: Error {
     case failedToSaveToken(tokenType: TwitterOAuthTokenType, error: Error)
 
     /// Failed to get a token (oauth or user access tokens) from database
-    case failedTogetTokenFromDatabase(tokenType: TwitterOAuthTokenType, error: Error)
+    case failedToGetTokenFromDatabase(tokenType: TwitterOAuthTokenType, error: Error)
 }
 
 enum TwitterOAuthTokenType: String, Codable {

@@ -4,8 +4,9 @@
 // All rights reserved.
 
 @testable import App
-import XCTest
+import Testing
 
-final class TextExtractionServiceUnitTests: XCTestCase {
+@Suite("Text Extraction Service Unit Tests")
+struct TextExtractionServiceUnitTests {
     // Add service test methods here
 }

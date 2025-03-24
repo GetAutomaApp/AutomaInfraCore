@@ -6,37 +6,36 @@
 @testable import App
 import Fluent
 import Testing
+import OpenAI
 import VaporTesting
 
+/// Tests for the OpenAI Chat Completion Client implementation
+/// These tests verify the functionality of chat completion generation using OpenAI models
 @Suite("OpenAI Chat Completion Client Tests")
-struct OpenAIChatCompletionClientTests {
-    private func withApp(test: (Application) async throws -> Void) async throws {
-        let app = try await Application.make(.testing)
-        do {
-            try await test(app)
-        } catch {
-            try await app.asyncShutdown()
-            throw error
-        }
-        try await app.asyncShutdown()
-    }
+struct OpenAIChatCompletionClientTests: ChatCompletionClientTestSuite {
 
+    /// Tests successful chat completion generation using OpenAI's GPT-4o model
+    /// Verifies that the client can generate valid chat completions and return proper metadata
+    ///
+    /// This test:
+    /// - Creates a chat completion with the default prompt
+    /// - Validates the response contains a meaningful message
+    /// - Confirms the metadata contains the correct model information
+    ///
+    /// - Throws: Any errors that occur during the test execution, including:
+    ///   - Client initialization errors
+    ///   - Network errors
+    ///   - Invalid response formats
     @Test("Generate Chat Completion Result Success")
     func generateChatCompletionResultSuccess() async throws {
         try await withApp { app in
-            let client = try OpenAIChatCompletionClient(logger: app.logger)
-            let result = try await client.createChat(.init(model: .gpt4o, prompt: "Hello, how are you?"))
-            let message = result.message
+            let model = ChatCompletionModel.gpt4o
 
-            app.logger.info(
-                "Generated chat completion result success.",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "message": .string(message),
-                ]
-            )
+            let result = try await createChat(app: app, query: .init(model: model, prompt: defaultPrompt))
+            let metadata = try JSONDecoder().decode(ChatResult.self, from: result.metadata)
 
-            #expect(message.count > 5, "Generated message should have more than 5 characters")
+            #expect(result.message.count > 5, "Generated message should have more than 5 characters")
+            #expect(metadata.model.contains(model.rawValue), "Model should be \(model.rawValue)")
         }
     }
 }

@@ -8,20 +8,22 @@ import Fluent
 import Testing
 import VaporTesting
 
+/// Test suite for the authenticated Twitter client functionality
+/// These tests verify that operations requiring user authentication work correctly
 @Suite("Twitter Authenticated Client Tests")
-struct TwitterAuthenticatedClientTests {
-    private func withApp(test: (Application) async throws -> Void) async throws {
-        let app = try await Application.make(.testing)
-        do {
-            try await configureDatabase(app: app)
-            try await test(app)
-        } catch {
-            try await app.asyncShutdown()
-            throw error
-        }
-        try await app.asyncShutdown()
-    }
-
+struct TwitterAuthenticatedClientTests : TwitterClientTestSuite {
+    /// Tests the ability to post a tweet using an authenticated Twitter client
+    /// This test verifies that:
+    /// - A valid Twitter user token can be retrieved from the database
+    /// - An authenticated client can be created with the token
+    /// - A tweet can be successfully posted
+    /// - The posted tweet contains the expected message
+    ///
+    /// - Throws: Any errors that occur during test execution, including:
+    ///   - Environment variable retrieval errors
+    ///   - Database query errors
+    ///   - Client initialization errors
+    ///   - API request failures
     @Test("Post Tweet")
     func postTweet() async throws {
         try await withApp { app in
@@ -41,7 +43,7 @@ struct TwitterAuthenticatedClientTests {
                 .filter(\.$id == twitterUserTokenID)
                 .first()
             else {
-                try #require(Bool(false), "failed to find Twitter User Token.")
+                try #require(Bool(false), "Failed to find Twitter User Token.")
                 return
             }
 

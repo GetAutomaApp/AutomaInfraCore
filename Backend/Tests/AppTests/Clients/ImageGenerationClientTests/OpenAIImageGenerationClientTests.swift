@@ -56,20 +56,8 @@ struct OpenAIImageGenerationClientTests: ImageGenerationClientTestSuite {
             let imagesResult = try JSONDecoder().decode(ImagesResult.self, from: result.metadataJSON)
             let image = imagesResult.data[0]
 
-            guard
-                let imageB64 = image.b64Json
-            else {
-                try #require(Bool(false), "Generated image base64 string should not be nil")
-                return
-            }
-
-            app.logger.info(
-                "Length of base64 string generated image.",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "length": .string(String(imageB64.count)),
-                ]
-            )
+            try #require(image.b64Json != nil, "Generated image base64 string should not be nil")
+            return
         }
     }
 
@@ -78,35 +66,22 @@ struct OpenAIImageGenerationClientTests: ImageGenerationClientTestSuite {
     @Test("Generate Image Result Success (dalle3)")
     func generateImageResultSuccessDalle3() async throws {
         try await withApp { app in
-            let result = try await generateImage(
-                app: app,
-                query: .init(
-                    model: .dall_e_3,
-                    prompt: defaultPrompt,
-                    totalImagesToGenerate: 1,
-                    quality: .hd,
-                    imageSize: ._1024_1792,
-                    imageStyle: .vivid
-                )
+            let client = ImageGenerationClient(logger: app.logger)
+            let query: GenerateImageQuery = .init(
+                model: .dall_e_3,
+                prompt: defaultPrompt,
+                totalImagesToGenerate: 1,
+                quality: .hd,
+                imageSize: ._1024_1792,
+                imageStyle: .vivid
             )
+            let result = try await client.generateImage(query)
 
             let imagesResult = try JSONDecoder().decode(ImagesResult.self, from: result.metadataJSON)
             let image = imagesResult.data[0]
 
-            guard
-                let imageB64 = image.b64Json
-            else {
-                try #require(Bool(false), "Generated image base64 string should not be nil")
-                return
-            }
-
-            app.logger.info(
-                "Length of base64 string generated image.",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "length": .string(String(imageB64.count)),
-                ]
-            )
+            try #require(image.b64Json != nil, "Generated image base64 string should not be nil")
+            return
         }
     }
 }

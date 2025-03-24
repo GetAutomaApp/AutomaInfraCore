@@ -222,7 +222,7 @@ struct TwitterOAuthClient: TwitterClientBase {
                     "error": .string(String(reflecting: error)),
                 ]
             )
-            throw TwitterOAuthClientError.failedTogetTokenFromDatabase(tokenType: .oauth, error: error)
+            throw TwitterOAuthClientError.failedToGetTokenFromDatabase(tokenType: .oauth, error: error)
         }
     }
 
