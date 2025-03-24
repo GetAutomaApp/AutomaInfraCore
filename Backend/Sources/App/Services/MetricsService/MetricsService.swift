@@ -120,21 +120,23 @@ enum BackendMetric {
         name: "openai_image_generation_requests"
     )
 
-    static let totalTweetPostsSent = MetricsService.global.makeCounter(
-        name: "total_tweet_posts_sent",
-        labels: [
-            "status": MetricStatus.success.rawValue,
-        ]
-    )
+    static func openAIImageGenerationRequest(
+        status: MetricStatus
+    ) -> Prometheus.Counter {
+        MetricsService.global.makeCounter(
+            name: "openai_image_generation_requests",
+            labels: [
+                "status": status.rawValue,
+            ]
+        )
+    }
 
-    /// Counter for tracking the total number of tweet posts that have been requested
-    /// with a successful status
-    static let totalTweetPostsRequested = MetricsService.global.makeCounter(
-        name: "total_tweet_posts_requested",
-        labels: [
-            "status": MetricStatus.success.rawValue,
-        ]
-    )
+    // static let totalTweetPostsSent = MetricsService.global.makeCounter(
+    //     name: "total_tweet_posts_sent",
+    //     labels: [
+    //         "status": MetricStatus.success.rawValue,
+    //     ]
+    // )
 
     /// Creates a counter to track Twitter OAuth request metrics
     /// - Parameter status: The status of the OAuth request (success/fail/etc)
@@ -143,7 +145,7 @@ enum BackendMetric {
         status: MetricStatus
     ) -> Prometheus.Counter {
         MetricsService.global.makeCounter(
-            name: "total_twitter_oauth_requests",
+            name: "twitter_oauth_requests",
             labels: [
                 "status": status.rawValue,
             ]

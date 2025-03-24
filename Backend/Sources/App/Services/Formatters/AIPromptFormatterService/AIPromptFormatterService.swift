@@ -14,8 +14,8 @@ enum AIPromptFormatterService {
 
         return .init(
             model: .dall_e_3,
-            totalImagesToGenerate: 1,
             prompt: prompt,
+            totalImagesToGenerate: 1,
             quality: .hd,
             imageSize: ._1024,
             imageStyle: .vivid

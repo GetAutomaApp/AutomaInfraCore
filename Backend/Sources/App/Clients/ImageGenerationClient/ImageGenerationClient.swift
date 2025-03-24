@@ -11,8 +11,7 @@ struct ImageGenerationClient: ImageGenerationClientBase {
     let logger: Logger
 
     func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult {
-        let model = query.model
-        let client = try model.getPlatformClient(logger: logger)
+        let client = try query.model.getPlatformClient(logger: logger)
         let res = try await client.generateImage(query)
 
         guard !res.images.isEmpty else {

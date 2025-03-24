@@ -6,4 +6,6 @@
 enum OpenAIImageGenerationClientError: Error {
     case invalidModel
     case responseError
+    case encodeError((any Error)?)
+    case generationError((any Error)?)
 }

@@ -190,7 +190,7 @@ struct TwitterOAuthClient: TwitterClientBase {
                 "Saving Twitter token to database.",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "tokenObject": .string(token.description),
+                    "tokenObject": .string(String(reflecting: tokenObject)),
                 ]
             )
             try await token.save(on: database)

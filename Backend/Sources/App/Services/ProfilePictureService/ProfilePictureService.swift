@@ -29,7 +29,7 @@ struct ProfilePictureService {
             logger.info(
                 "Generating profile picture",
                 metadata: [
-                    "to": .string("ProfilePictureService.createProfilePicture"),
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "userId": .string(userId),
                     "username": .string(user.username),
                     "prompt": .string(query.prompt),
@@ -87,7 +87,7 @@ struct ProfilePictureService {
             logger.info(
                 "Successfully generated profile picture for user",
                 metadata: [
-                    "to": .string("ProfilePictureService.createProfilePicture"),
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "userId": .string(userId),
                     "username": .string(user.username),
                     "imageKey": .string(s3Url),
@@ -102,7 +102,7 @@ struct ProfilePictureService {
             logger.error(
                 "Failed to generate profile picture",
                 metadata: [
-                    "to": .string("ProfilePictureService.createProfilePicture"),
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "user": .string("\(user)"),
                     "error": .string("\(error.localizedDescription)"),
                 ]
@@ -145,7 +145,7 @@ struct ProfilePictureService {
         logger.info(
             "Attempted to generate an image without text",
             metadata: [
-                "to": .string("ProfilePictureService.generateImage"),
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "totalAttempts": .string("\(totalRegenerationAttempts - totalAttemptsLeft)"),
                 "hasText": .string("\(hasText)"),
             ]

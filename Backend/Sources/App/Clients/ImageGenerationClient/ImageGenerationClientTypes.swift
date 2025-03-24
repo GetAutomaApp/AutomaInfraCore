@@ -14,11 +14,11 @@ protocol ImageGenerationClientBase {
 
 struct GenerateImageQuery: Content {
     let model: GenerateImageModel
-    let totalImagesToGenerate: Int?
     let prompt: String
-    let quality: GenerateImageQuality
-    let imageSize: GenerateImageSize
-    let imageStyle: GenerateImageStyle
+    let totalImagesToGenerate: Int?
+    let quality: GenerateImageQuality?
+    let imageSize: GenerateImageSize?
+    let imageStyle: GenerateImageStyle?
 }
 
 enum GenerateImageModel: String, Codable {

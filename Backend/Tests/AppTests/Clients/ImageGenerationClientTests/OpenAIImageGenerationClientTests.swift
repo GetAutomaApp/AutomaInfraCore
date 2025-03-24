@@ -7,7 +7,6 @@
 import Fluent
 import OpenAI
 import Testing
-import OpenAI
 import VaporTesting
 
 @Suite("OpenAI Image Generation Client Tests")
@@ -29,13 +28,16 @@ struct OpenAIImageGenerationClientTests {
             let client = ImageGenerationClient(logger: app.logger)
             let query: GenerateImageQuery = .init(
                 model: .dall_e_2,
-                totalImagesToGenerate: 1,
                 prompt: "A fluffy golden retriever puppy playing in a sunny meadow filled with colorful wildflowers.",
+                totalImagesToGenerate: 1,
                 quality: .hd,
                 imageSize: ._1792_1024,
                 imageStyle: .vivid
             )
-            await #expect(throws: APIErrorResponse.self, "Should throw APIError when using DALL-E 2 with DALL-E 3 resolution") {
+            await #expect(
+                throws: APIErrorResponse.self,
+                "Should throw APIError when using DALL-E 2 with DALL-E 3 resolution"
+            ) {
                 try await client.generateImage(query)
             }
         }
@@ -48,8 +50,8 @@ struct OpenAIImageGenerationClientTests {
             let client = ImageGenerationClient(logger: app.logger)
             let query: GenerateImageQuery = .init(
                 model: .dall_e_2,
-                totalImagesToGenerate: 1,
                 prompt: "A fluffy golden retriever puppy playing in a sunny meadow filled with colorful wildflowers.",
+                totalImagesToGenerate: 1,
                 quality: .hd,
                 imageSize: ._1024,
                 imageStyle: .vivid
@@ -82,8 +84,8 @@ struct OpenAIImageGenerationClientTests {
             let client = ImageGenerationClient(logger: app.logger)
             let query: GenerateImageQuery = .init(
                 model: .dall_e_3,
-                totalImagesToGenerate: 1,
                 prompt: "A fluffy golden retriever puppy playing in a sunny meadow filled with colorful wildflowers.",
+                totalImagesToGenerate: 1,
                 quality: .hd,
                 imageSize: ._1024_1792,
                 imageStyle: .vivid
