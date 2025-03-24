@@ -16,7 +16,7 @@ struct TwitterOAuthClient: TwitterClientBase {
     let client: Client
     let database: Database
     let twitterClient: TwitterAPIClient
-    var callbackURL: String
+    var callbackURL: URL
 
     /// Initializes a new TwitterOAuthClient.
     /// - Parameters:
@@ -30,7 +30,7 @@ struct TwitterOAuthClient: TwitterClientBase {
         client: Client,
         database: Database,
         twitterClient: TwitterAPIClient,
-        callbackURL: String
+        callbackURL: URL
     ) {
         self.logger = logger
         self.client = client
@@ -46,7 +46,7 @@ struct TwitterOAuthClient: TwitterClientBase {
         BackendMetric.twitterOAuthRequest(status: .start).increment()
         let response = twitterClient.auth.oauth10a
             .postOAuthRequestToken(.init(
-                oauthCallback: callbackURL
+                oauthCallback: callbackURL.absoluteString
             ))
         guard
             let tokenObject = await response.responseObject.success
@@ -56,12 +56,7 @@ struct TwitterOAuthClient: TwitterClientBase {
             guard
                 let error = await response.responseObject.error
             else {
-                throw TwitterOAuthClientError.unknown(
-                    error: Abort(.custom(
-                        code: 500,
-                        reasonPhrase: message
-                    ))
-                )
+                throw TwitterOAuthClientError.unknown(error: .message(message))
             }
             logger.error(
                 .init(stringLiteral: message),
@@ -85,26 +80,27 @@ struct TwitterOAuthClient: TwitterClientBase {
     /// - Returns: URL that the user should visit to authorize the application
     /// - Throws: TwitterOAuthClientError if URL generation fails
     public func makeAuthenticateURL(tokenObject: TwitterOAuthToken) async throws -> URL {
+        let oauthToken = tokenObject.oauthToken
+
         guard
             let authenticateURL = twitterClient.auth.oauth10a
-            .makeOAuthAuthenticateURL(.init(oauthToken: tokenObject.oauthToken))
+            .makeOAuthAuthenticateURL(.init(oauthToken: oauthToken))
         else {
             logger.error(
                 "Failed to make authenticateURL.",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "oauthToken": .string("\(tokenObject.oauthToken)"),
+                    "oauthToken": .string("\(oauthToken)"),
                 ]
             )
             throw TwitterOAuthClientError.unableToMakeAuthenticateURL
         }
 
-        // TODO: Use selenium to login user
         logger.info(
-            "Authenticate URL: \(authenticateURL) and authenticate.",
+            "Go to authenticate URL '\(authenticateURL)' and authenticate.",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "oauthToken": .string("\(tokenObject.oauthToken)"),
+                "oauthToken": .string("\(oauthToken)"),
             ]
         )
         return authenticateURL
@@ -120,7 +116,6 @@ struct TwitterOAuthClient: TwitterClientBase {
         guard
             let oauthTokenObject = try await getOAuthTokenObject(fromOAuthToken: oauthToken)
         else {
-            BackendMetric.twitterUserTokensConverted(status: .fail).increment()
             throw TwitterOAuthClientError.invalidOAuthToken
         }
 
@@ -213,10 +208,14 @@ struct TwitterOAuthClient: TwitterClientBase {
     /// - Returns: Optional TwitterOAuthToken if found
     /// - Throws: Database errors if query fails
     private func getOAuthTokenObject(fromOAuthToken oauthToken: String) async throws -> TwitterOAuthToken? {
-        try await TwitterOAuthToken
-            .query(on: database)
-            .filter(\.$oauthToken, .equal, oauthToken)
-            .first()
+        do {
+            return try await TwitterOAuthToken
+                .query(on: database)
+                .filter(\.$oauthToken, .equal, oauthToken)
+                .first()
+        } catch {
+            throw TwitterOAuthClientError.failedToSaveToken(tokenType: .oauth, error: .error(error))
+        }
     }
 
     /// Converts an OAuth token to user access tokens.
@@ -252,10 +251,7 @@ struct TwitterOAuthClient: TwitterClientBase {
                 )
 
                 throw TwitterOAuthClientError.unknown(
-                    error: Abort(.custom(
-                        code: 500,
-                        reasonPhrase: message
-                    ))
+                    error: .message(message)
                 )
             }
 
@@ -275,4 +271,7 @@ struct TwitterOAuthClient: TwitterClientBase {
 
         return .init(accessToken: success.oauthToken, secretAccessToken: success.oauthTokenSecret)
     }
+
+    // TODO: Use selenium to login user
+    private func loginTwitterUser() async throws {}
 }

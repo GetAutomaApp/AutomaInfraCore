@@ -14,7 +14,7 @@ struct TwitterClient: TwitterClientBase {
     let database: Database
     let auth: TwitterOAuthClient
 
-    let callbackURL: String
+    let callbackURL: URL
     let twitterClient: TwitterAPIClient
 
     let consumerKey: String
@@ -27,7 +27,12 @@ struct TwitterClient: TwitterClientBase {
 
         consumerKey = try Environment.getOrThrow("TWITTER_API_APP_KEY")
         consumerSecret = try Environment.getOrThrow("TWITTER_API_APP_SECRET_KEY")
-        callbackURL = try "\(Environment.getOrThrow("BACKEND_URL"))/Twitter/redirect"
+        guard
+            let url = try URL(string: "\(Environment.getOrThrow("BACKEND_URL"))/Twitter/redirect")
+        else {
+            throw Abort(.internalServerError)
+        }
+        callbackURL = url
 
         twitterClient = TwitterAPIClient(.oauth10a(.init(
             consumerKey: consumerKey,

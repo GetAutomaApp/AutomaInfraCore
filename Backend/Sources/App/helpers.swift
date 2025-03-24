@@ -50,3 +50,8 @@ extension Data {
         try JSONDecoder().decode(type.self, from: self)
     }
 }
+
+enum ErrorOrMessage {
+    case error(Error)
+    case message(String)
+}
