@@ -12,7 +12,7 @@ final class PrometheusControllerIntegrationTests {
     private func withApp(_ test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
-            try await configure(app)
+            try app.register(collection: PrometheusController())
             try await test(app)
         } catch {
             try await app.asyncShutdown()
@@ -24,7 +24,8 @@ final class PrometheusControllerIntegrationTests {
     @Test("Test Request")
     func testRequest() async throws {
         try await withApp { app in
-            try await app.testing().test(.GET, "Prometheus/request") { res async in
+            let token = try Environment.getOrThrow("FLY_METRICS_TOKEN")
+            try await app.testing().test(.GET, "Prometheus/metrics?auth_token=\(token)") { res async in
                 #expect(res.status == .ok)
             }
         }
