@@ -113,6 +113,7 @@ struct RSSFeedReaderClient {
                 links: links,
                 description: summary,
                 publishDate: publishDate,
+                content: entry.content?.text,
                 youtube: youtube
             )
         }
