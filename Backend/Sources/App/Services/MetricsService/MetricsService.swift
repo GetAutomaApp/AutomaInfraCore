@@ -141,16 +141,16 @@ enum BackendMetric {
         ]
     )
 
-    static func rssFeedReadCall(
+    static func rssFeedReaderMetric(
         status: MetricStatus,
         url: URL,
-        isRssFeed: Bool? = nil,
+        isRSSFeed: Bool? = nil,
         didThrowOnFeedInitialization: Bool = false
     ) -> Prometheus.Counter {
         let labels = [
             "status": status.rawValue,
             "url": url.absoluteString,
-            "is_rss_feed": isRssFeed.map { $0 ? "true" : "false" } ?? "undefined",
+            "is_rss_feed": isRSSFeed.map { $0 ? "true" : "false" } ?? "undefined",
             "did_throw_on_feed_initialization": didThrowOnFeedInitialization ? "true" : "false",
         ]
 

@@ -9,7 +9,7 @@ import VaporTesting
 
 /// Test suite for the `RSSFeedReaderClient` class.
 /// These tests verify the client's ability to fetch and parse different types of feeds.
-@Suite("RSSFedReaderClientTests")
+@Suite("RSS Feed Reader Client Tests")
 struct RSSFeedReaderClientTests {
     /// Helper method to create a test application instance for each test.
     /// This method handles proper setup and teardown of the application.
@@ -49,16 +49,20 @@ struct RSSFeedReaderClientTests {
     func getFeedItemsWhenFeedExists(url: URL, feedExists: Bool) async throws {
         try await withApp { app in
             let client = RSSFeedReaderClient(logger: app.logger)
-            let result = try await client.read(from: url)
 
             if !feedExists {
-                #expect(result.items.isEmpty, "Feed should not exist")
+                try await #require(throws: RSSFeedReaderClientError.self, "Should throw error when feed does not exist") {
+                    try await client.read(from: url)
+                }
                 return
             }
 
+            let result = try await client.read(from: url)
+
             try #require(result.items.count > 0, "Feed should have items")
+
             for item in result.items {
-                #expect(item.title != "", "Item title should not be empty")
+                #expect(item.title.count > 0, "Item title should not be empty")
             }
         }
     }

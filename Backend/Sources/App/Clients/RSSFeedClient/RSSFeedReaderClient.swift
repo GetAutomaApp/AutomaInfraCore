@@ -22,7 +22,7 @@ struct RSSFeedReaderClient {
     /// - Returns: A `RssFeedResponse` containing parsed feed items and metadata.
     /// - Throws: Any errors encountered during the feed fetching or parsing process.
     func read(from url: URL) async throws -> RssFeedResponse {
-        BackendMetric.rssFeedReadCall(status: .start, url: url).increment()
+        BackendMetric.rssFeedReaderMetric(status: .start, url: url).increment()
 
         var feed: Feed?
         let maxAttempts = 3
@@ -35,21 +35,21 @@ struct RSSFeedReaderClient {
             }
         } catch {
             logger.error(
-                "Failed to convert '\(url)' to Feed after \(maxAttempts) attempts.",
+                "Failed to convert '\(url)' to feed after \(maxAttempts) attempts.",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "error": .string(String(reflecting: error)),
                 ]
             )
 
-            BackendMetric.rssFeedReadCall(
+            BackendMetric.rssFeedReaderMetric(
                 status: .fail,
                 url: url,
-                isRssFeed: false,
+                isRSSFeed: false,
                 didThrowOnFeedInitialization: true
             ).increment()
 
-            return .init(items: [], isRssFeed: false)
+            throw RSSFeedReaderClientError.failedToReadFeed(error)
         }
 
         let isRssFeed: Bool
@@ -69,7 +69,7 @@ struct RSSFeedReaderClient {
             response = .init(items: [], isRssFeed: isRssFeed)
         }
 
-        BackendMetric.rssFeedReadCall(status: .success, url: url, isRssFeed: isRssFeed).increment()
+        BackendMetric.rssFeedReaderMetric(status: .success, url: url, isRSSFeed: isRssFeed).increment()
 
         return response
     }
@@ -113,13 +113,13 @@ struct RSSFeedReaderClient {
                 return nil
             }
 
-            var youtube: GenericRSSFeedItemYoutube?
+            var youTubeVideoInfo: RSSFeedItemYouTubeVideoInfo?
             if
                 let youtubeEntry = entry.youTube,
                 let channelID = youtubeEntry.channelID,
                 let videoID = youtubeEntry.videoID
             {
-                youtube = .init(channelID: channelID, videoID: videoID)
+                youTubeVideoInfo = .init(channelID: channelID, videoID: videoID)
             }
 
             return GenericRSSFeedItem(
@@ -128,7 +128,7 @@ struct RSSFeedReaderClient {
                 description: summary,
                 publishDate: publishDate,
                 content: entry.content?.text,
-                youtube: youtube
+                youTubeVideoInfo: youTubeVideoInfo
             )
         }
         return entries
