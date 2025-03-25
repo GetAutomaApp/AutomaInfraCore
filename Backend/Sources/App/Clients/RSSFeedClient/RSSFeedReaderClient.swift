@@ -23,10 +23,10 @@ struct RSSFeedReaderClient {
             try await retry(
                 maxAttempts: maxAttempts
             ) {
-                feed = try! await Feed(url: url)
+                feed = try await Feed(url: url)
             }
         } catch {
-            logger.info(
+            logger.error(
                 "Failed to convert '\(url)' to Feed after \(maxAttempts) attempts.",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
@@ -35,7 +35,7 @@ struct RSSFeedReaderClient {
             )
 
             BackendMetric.rssFeedReadCall(
-                status: .success,
+                status: .fail,
                 url: url,
                 isRssFeed: false,
                 didThrowOnFeedInitialization: true

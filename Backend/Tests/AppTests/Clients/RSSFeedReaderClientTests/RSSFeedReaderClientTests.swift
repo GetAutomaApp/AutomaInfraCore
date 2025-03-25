@@ -21,20 +21,25 @@ struct RSSFeedReaderClientTests {
     }
 
     @Test(
-        "Test Read Feed Success",
+        "Get feed items when feed exists",
         arguments: [
-            URL(string: "https://news.ycombinator.com/rss")!, // rss format
-            URL(string: "https://sample-feeds.rowanmanning.com/examples/222780a7caac12b938dfe09cd7d138f9/feed.xml")!,
-            // atom feed
+            (URL(string: "https://news.ycombinator.com/rss")!, true), // rss format
+            (URL(string: "https://sample-feeds.rowanmanning.com/examples/222780a7caac12b938dfe09cd7d138f9/feed.xml")!, true), // atom feed
+            (URL(string: "https://example.com")!, false),
+            (URL(string: "https://invalid-feed.com")!, false),
         ]
     )
-    func testReadFeedSuccess(url: URL) async throws {
+    func getFeedItemsWhenFeedExists(url: URL, feedExists: Bool) async throws {
         try await withApp { app in
             let client = RSSFeedReaderClient(logger: app.logger)
             let result = try await client.read(from: url)
-            for item in result.items {
-                app.logger.info("Item: \(String(reflecting: item))")
-                #expect(item.title != "", "Item title should not be empty")
+            if feedExists {
+                try #require(result.items.count > 0, "Feed should have items")
+                for item in result.items {
+                    #expect(item.title != "", "Item title should not be empty")
+                }
+            } else {
+                #expect(result.items.isEmpty, "Feed should not exist")
             }
         }
     }
