@@ -10,9 +10,17 @@ import Foundation
 import Retry
 import Vapor
 
+/// A client for reading and parsing RSS and Atom feeds from URLs.
+/// This client handles fetching feed data, parsing it into appropriate formats,
+/// and converting feed items into a standardized `GenericRSSFeedItem` format.
 struct RSSFeedReaderClient {
+    /// Logger instance used for error reporting and debugging.
     let logger: Logger
 
+    /// Reads and parses a feed from the specified URL.
+    /// - Parameter url: The URL of the RSS or Atom feed to read.
+    /// - Returns: A `RssFeedResponse` containing parsed feed items and metadata.
+    /// - Throws: Any errors encountered during the feed fetching or parsing process.
     func read(from url: URL) async throws -> RssFeedResponse {
         BackendMetric.rssFeedReadCall(status: .start, url: url).increment()
 
@@ -66,6 +74,9 @@ struct RSSFeedReaderClient {
         return response
     }
 
+    /// Converts RSS feed items to the generic feed item format.
+    /// - Parameter feedItems: An array of RSS feed items to convert.
+    /// - Returns: An array of converted `GenericRSSFeedItem` objects.
     private func convertRSSToGenericFeedItems(items feedItems: [RSSFeedItem]) -> [GenericRSSFeedItem] {
         let items = feedItems.compactMap { feedItem -> GenericRSSFeedItem? in
             guard
@@ -88,6 +99,9 @@ struct RSSFeedReaderClient {
         return items
     }
 
+    /// Converts Atom feed entries to the generic feed item format.
+    /// - Parameter feedEntries: An array of Atom feed entries to convert.
+    /// - Returns: An array of converted `GenericRSSFeedItem` objects.
     private func convertAtomToGenericFeedItems(entries feedEntries: [AtomFeedEntry]) -> [GenericRSSFeedItem] {
         let entries = feedEntries.compactMap { entry -> GenericRSSFeedItem? in
             guard
