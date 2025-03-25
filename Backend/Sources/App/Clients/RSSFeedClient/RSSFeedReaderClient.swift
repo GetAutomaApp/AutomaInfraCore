@@ -11,27 +11,62 @@ import Retry
 import Vapor
 
 struct RSSFeedReaderClient {
-    func read(from url: URL) async -> RssFeedResponse {
+    let logger: Logger
+
+    func read(from url: URL) async throws -> RssFeedResponse {
+        BackendMetric.rssFeedReadCall(status: .start, url: url).increment()
+
         var feed: Feed?
+        let maxAttempts = 3
 
         do {
             try await retry(
-                maxAttempts: 3
+                maxAttempts: maxAttempts
             ) {
                 feed = try! await Feed(url: url)
             }
-        } catch {}
+        } catch {
+            logger.info(
+                "Failed to convert '\(url)' to Feed after \(maxAttempts) attempts.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "error": .string(String(reflecting: error)),
+                ]
+            )
+
+            BackendMetric.rssFeedReadCall(
+                status: .success,
+                url: url,
+                isRssFeed: false,
+                didThrowOnFeedInitialization: true
+            ).increment()
+
+            return .init(items: [], isRssFeed: false)
+        }
+
+        let isRssFeed: Bool
+        let response: RssFeedResponse
 
         switch feed {
         case let .rss(rSSFeed):
-            let items = convertRSSToGenericFeedItems(from: rSSFeed.channel?.items ?? [])
-            return .init(items: items, isRssFeed: true)
+            isRssFeed = true
+            let items = convertRSSToGenericFeedItems(items: rSSFeed.channel?.items ?? [])
+            response = .init(items: items, isRssFeed: isRssFeed)
+        case let .atom(atomFeed):
+            isRssFeed = true
+            let items = convertAtomToGenericFeedItems(entries: atomFeed.entries ?? [])
+            response = .init(items: items, isRssFeed: isRssFeed)
         default:
-            return .init(items: [], isRssFeed: false)
+            isRssFeed = false
+            response = .init(items: [], isRssFeed: isRssFeed)
         }
+
+        BackendMetric.rssFeedReadCall(status: .success, url: url, isRssFeed: isRssFeed).increment()
+
+        return response
     }
 
-    func convertRSSToGenericFeedItems(from feedItems: [RSSFeedItem]) -> [GenericRSSFeedItem] {
+    private func convertRSSToGenericFeedItems(items feedItems: [RSSFeedItem]) -> [GenericRSSFeedItem] {
         let items = feedItems.compactMap { feedItem -> GenericRSSFeedItem? in
             guard
                 let title = feedItem.title,
@@ -44,12 +79,43 @@ struct RSSFeedReaderClient {
 
             return GenericRSSFeedItem(
                 title: title,
-                link: link,
+                links: [link],
                 description: description,
                 publishDate: publishDate
             )
         }
 
         return items
+    }
+
+    private func convertAtomToGenericFeedItems(entries feedEntries: [AtomFeedEntry]) -> [GenericRSSFeedItem] {
+        let entries = feedEntries.compactMap { entry -> GenericRSSFeedItem? in
+            guard
+                let title = entry.title,
+                let links = entry.links?.compactMap({ $0.attributes?.href }),
+                let summary = entry.summary?.text,
+                let publishDate = entry.published
+            else {
+                return nil
+            }
+
+            var youtube: GenericRSSFeedItemYoutube?
+            if
+                let youtubeEntry = entry.youTube,
+                let channelID = youtubeEntry.channelID,
+                let videoID = youtubeEntry.videoID
+            {
+                youtube = .init(channelID: channelID, videoID: videoID)
+            }
+
+            return GenericRSSFeedItem(
+                title: title,
+                links: links,
+                description: summary,
+                publishDate: publishDate,
+                youtube: youtube
+            )
+        }
+        return entries
     }
 }
