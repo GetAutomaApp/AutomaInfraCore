@@ -5,6 +5,7 @@
 
 import Foundation
 import OpenAI
+import Retry
 import Vapor
 
 /// A client for generating images using OpenAI's API.
@@ -13,7 +14,7 @@ import Vapor
 struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     /// The underlying OpenAI client used for API communication
     private let client: OpenAI
-    
+
     /// Logger instance for tracking operations and errors
     let logger: Logger
 
@@ -53,9 +54,12 @@ struct OpenAIImageGenerationClient: ImageGenerationClientBase {
             size: imageSize != nil ? .init(rawValue: imageSize!) : nil,
             style: style != nil ? .init(rawValue: style!) : nil
         )
-        let result: ImagesResult
+        var result: ImagesResult?
+
         do {
-            result = try await client.images(query: queryForImageGeneration)
+            try await retry(maxAttempts: 3) {
+                result = try await client.images(query: queryForImageGeneration)
+            }
         } catch {
             BackendMetric.openAIImageGenerationRequest(status: .fail).increment()
             logger.error(
@@ -68,6 +72,12 @@ struct OpenAIImageGenerationClient: ImageGenerationClientBase {
                 ]
             )
             throw OpenAIImageGenerationClientError.generationError(error)
+        }
+
+        guard
+            let result
+        else {
+            throw OpenAIImageGenerationClientError.generationError()
         }
 
         logger.info(

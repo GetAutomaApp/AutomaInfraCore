@@ -28,7 +28,7 @@ struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
     @Test(
         "Each image generation client should be able to generate images",
         arguments: [
-            GenerateImageModel.dall_e_3, // will use openai client
+            GenerateImageModel.dall_e_2, // will use openai client
         ]
     )
     func generateImageResultSuccess(model: GenerateImageModel) async throws {
@@ -40,8 +40,8 @@ struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
                 model: model,
                 prompt: defaultPrompt,
                 totalImagesToGenerate: totalImagesToGenerate,
-                quality: .hd,
-                imageSize: ._1024_1792,
+                quality: .standard,
+                imageSize: ._256,
                 imageStyle: .vivid
             ))
 

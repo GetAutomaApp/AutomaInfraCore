@@ -40,13 +40,13 @@ struct ChatCompletionContent: Content {
 /// Enumeration of supported chat completion models
 /// Each case represents a specific AI model with its raw string value
 enum ChatCompletionModel: String, Codable {
-    /// OpenAI's GPT-4o model
+    /// https: // platform.openai.com/docs/models/gpt-4o
     case gpt4o = "gpt-4o"
 
-    /// OpenAI's GPT-4o-mini model (smaller, faster version)
+    /// https://platform.openai.com/docs/models/gpt-4o-mini
     case gpt4omini = "gpt-4o-mini"
 
-    /// OpenAI's o1 model
+    /// https://platform.openai.com/docs/models/o1
     case gpto1 = "o1"
 
     /// Returns the appropriate platform-specific client for the selected model

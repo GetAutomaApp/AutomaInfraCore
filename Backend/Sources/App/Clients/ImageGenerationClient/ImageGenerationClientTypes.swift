@@ -38,7 +38,10 @@ struct GenerateImageQuery: Content {
 }
 
 enum GenerateImageModel: String, Codable {
+    /// https://platform.openai.com/docs/models/dall-e-2
     case dall_e_2 = "dall-e-2"
+
+    /// https://platform.openai.com/docs/models/dall-e-3
     case dall_e_3 = "dall-e-3"
 
     func getPlatformClient(logger: Logger) throws -> any ImageGenerationClientBase {

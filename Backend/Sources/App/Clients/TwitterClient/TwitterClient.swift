@@ -3,6 +3,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+import DataTypes
 import Fluent
 import Foundation
 import TwitterAPIKit
@@ -30,7 +31,7 @@ struct TwitterClient: TwitterClientBase {
         guard
             let url = try URL(string: "\(Environment.getOrThrow("BACKEND_URL"))/Twitter/redirect")
         else {
-            throw Abort(.internalServerError)
+            throw GenericErrors.invalidUrl
         }
         callbackURL = url
 

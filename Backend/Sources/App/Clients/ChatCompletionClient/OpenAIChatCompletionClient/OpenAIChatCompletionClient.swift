@@ -4,6 +4,7 @@
 // All rights reserved.
 
 import OpenAI
+import Retry
 import Vapor
 
 /// Client for interacting with OpenAI's chat completion API
@@ -41,19 +42,23 @@ struct OpenAIChatCompletionClient: ChatCompletion {
     /// - Throws: ChatCompletionClientError if the request fails or returns invalid data
     func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult {
         let model = query.model
-        let result: ChatResult
+        var result: ChatResult?
         let prompt = query.prompt
 
         do {
-            result = try await client.chats(
-                query: .init(
-                    messages: [
-                        .init(role: .system, content: prompt)!,
-                    ],
-                    model: model.rawValue,
-                    maxTokens: query.maxTokens
+            try await retry(
+                maxAttempts: 3
+            ) {
+                result = try await client.chats(
+                    query: .init(
+                        messages: [
+                            .init(role: .system, content: prompt)!,
+                        ],
+                        model: model.rawValue,
+                        maxTokens: query.maxTokens
+                    )
                 )
-            )
+            }
         } catch {
             BackendMetric.chatCompletionServiceCall(platform: .openai, model: model, status: .fail).increment()
             logger.error(
@@ -64,6 +69,12 @@ struct OpenAIChatCompletionClient: ChatCompletion {
                     "query": .string(prompt),
                 ]
             )
+            throw ChatCompletionClientError.completionError
+        }
+
+        guard
+            let result
+        else {
             throw ChatCompletionClientError.completionError
         }
 

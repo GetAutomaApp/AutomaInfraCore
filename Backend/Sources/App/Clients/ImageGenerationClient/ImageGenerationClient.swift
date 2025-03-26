@@ -15,6 +15,13 @@ struct ImageGenerationClient: ImageGenerationClientBase {
         let res = try await client.generateImage(query)
 
         guard !res.images.isEmpty else {
+            logger.info(
+                "No images generated.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "query": .string(String(reflecting: query)),
+                ]
+            )
             throw GenericErrors.missingImage
         }
         return res
