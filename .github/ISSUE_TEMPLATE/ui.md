@@ -9,7 +9,8 @@ assignees: ''
 
 **Description**
 
-<!-- Describe the ticket, what UI changes are needed, and why. -->
+**Type**: screen OR component
+**Change**: <!-- Describe the ticket, what UI changes are needed, and why. -->
 
 **Images/Screenshots/References**
 
