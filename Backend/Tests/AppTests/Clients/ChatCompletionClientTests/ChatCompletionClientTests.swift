@@ -30,13 +30,14 @@ struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
         try await withApp { app in
             // Create a query with the test model and default prompt
             let query = ChatCompletionContent(model: model, prompt: defaultPrompt)
-            
+
             // Attempt to generate a chat completion
             let result = try await createChat(app: app, query: query)
-            
+
             // Verify the result contains a non-empty message
             #expect(result.message.count > 0, "Message should not be empty")
-            
+            #expect(result.message.count < maxTokens * 4, "Message should not be bigger than max tokens")
+
             // Verify the result contains metadata
             #expect(result.metadata.count > 0, "Metadata should not be empty")
         }

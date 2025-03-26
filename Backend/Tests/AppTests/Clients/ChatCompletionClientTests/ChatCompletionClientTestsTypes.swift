@@ -13,6 +13,9 @@ protocol ChatCompletionClientTestSuite {
     /// The default prompt to use for chat completion tests
     var defaultPrompt: String { get }
 
+    /// The maximum number of tokens allowed in a chat completion
+    var maxTokens: Int { get }
+
     /// Creates a chat completion using the configured client
     /// - Parameter query: The chat completion request parameters
     /// - Returns: The generated chat completion result
@@ -26,15 +29,20 @@ extension ChatCompletionClientTestSuite {
         "Hello, world!"
     }
 
+    /// The maximum number of tokens allowed in a chat completion
+    var maxTokens: Int {
+        100
+    }
+
     /// Helper function to create and manage a test application instance
     /// Creates a test application, runs the provided test closure, and ensures proper cleanup
-    /// 
+    ///
     /// - Parameter test: The test closure to execute with the application instance
     /// - Throws: Any errors that occur during test execution, including:
     ///   - Application initialization errors
     ///   - Test execution errors
     ///   - Shutdown errors
-    internal func withApp(test: (Application) async throws -> Void) async throws {
+    func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
             try await test(app)
@@ -47,7 +55,7 @@ extension ChatCompletionClientTestSuite {
 
     /// Default implementation for creating a chat completion
     /// Note: This implementation requires the 'app' parameter to be in scope
-    /// 
+    ///
     /// - Parameter query: The chat completion request parameters
     /// - Returns: The generated chat completion result
     /// - Throws: Any errors that occur during the chat completion process, including:
@@ -56,6 +64,13 @@ extension ChatCompletionClientTestSuite {
     ///   - Invalid response formats
     func createChat(app: Application, query: ChatCompletionContent) async throws -> ChatCompletionResult {
         let client = ChatCompletionClient(logger: app.logger)
-        return try await client.createChat(query)
+
+        let queryWithMaxTokens: ChatCompletionContent = .init(
+            model: query.model,
+            prompt: query.prompt,
+            maxTokens: maxTokens
+        )
+
+        return try await client.createChat(queryWithMaxTokens)
     }
 }

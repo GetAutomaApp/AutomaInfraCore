@@ -11,10 +11,10 @@ import Vapor
 struct OpenAIChatCompletionClient: ChatCompletion {
     /// The underlying OpenAI API client
     private let client: OpenAI
-    
+
     /// Logger instance for tracking operations and errors
     let logger: Logger
-    
+
     /// API key for authenticating with OpenAI services
     private let apiKey: String
 
@@ -50,7 +50,8 @@ struct OpenAIChatCompletionClient: ChatCompletion {
                     messages: [
                         .init(role: .system, content: prompt)!,
                     ],
-                    model: model.rawValue
+                    model: model.rawValue,
+                    maxTokens: query.maxTokens
                 )
             )
         } catch {

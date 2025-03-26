@@ -10,7 +10,7 @@ import Vapor
 protocol ChatCompletion {
     /// Logger instance for tracking operations and errors
     var logger: Logger { get }
-    
+
     /// Creates a chat completion using the specified query parameters
     /// - Parameter query: The chat completion request parameters
     /// - Returns: The generated chat completion result
@@ -23,9 +23,18 @@ protocol ChatCompletion {
 struct ChatCompletionContent: Content {
     /// The AI model to use for generating the completion
     let model: ChatCompletionModel
-    
+
     /// The prompt text to send to the AI model
     let prompt: String
+
+    /// The maximum number of tokens to generate in the completion
+    let maxTokens: Int?
+
+    init(model: ChatCompletionModel, prompt: String, maxTokens: Int? = nil) {
+        self.model = model
+        self.prompt = prompt
+        self.maxTokens = maxTokens
+    }
 }
 
 /// Enumeration of supported chat completion models
@@ -33,10 +42,10 @@ struct ChatCompletionContent: Content {
 enum ChatCompletionModel: String, Codable {
     /// OpenAI's GPT-4o model
     case gpt4o = "gpt-4o"
-    
+
     /// OpenAI's GPT-4o-mini model (smaller, faster version)
     case gpt4omini = "gpt-4o-mini"
-    
+
     /// OpenAI's o1 model
     case gpto1 = "o1"
 
@@ -68,3 +77,4 @@ struct ChatCompletionResult: Content {
     /// Additional metadata about the completion
     let metadata: Data
 }
+

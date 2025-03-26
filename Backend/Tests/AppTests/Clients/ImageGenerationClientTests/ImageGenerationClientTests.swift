@@ -34,7 +34,7 @@ struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
     func generateImageResultSuccess(model: GenerateImageModel) async throws {
         try await withApp { app in
             let totalImagesToGenerate = 1
-            
+
             // Configure the image generation request with specific parameters
             let result = try await generateImage(app: app, query: .init(
                 model: model,

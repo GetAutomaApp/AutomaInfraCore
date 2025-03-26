@@ -19,6 +19,22 @@ struct GenerateImageQuery: Content {
     let quality: GenerateImageQuality?
     let imageSize: GenerateImageSize?
     let imageStyle: GenerateImageStyle?
+
+    init(
+        model: GenerateImageModel,
+        prompt: String,
+        totalImagesToGenerate: Int? = nil,
+        quality: GenerateImageQuality? = nil,
+        imageSize: GenerateImageSize? = nil,
+        imageStyle: GenerateImageStyle? = nil
+    ) {
+        self.model = model
+        self.prompt = prompt
+        self.totalImagesToGenerate = totalImagesToGenerate
+        self.quality = quality
+        self.imageSize = imageSize
+        self.imageStyle = imageStyle
+    }
 }
 
 enum GenerateImageModel: String, Codable {
