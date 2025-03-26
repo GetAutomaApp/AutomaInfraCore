@@ -28,7 +28,7 @@ struct IOSApp: App {
                     if networkChecker.isConnected {
                         let serverRequiredVersion = await launchManager.getClientConfig()
 
-                        if serverRequiredVersion.requiredClientVersion != baseConfig.clientVersion {
+                        if serverRequiredVersion.requiredClientVersion > baseConfig.clientVersion {
                             baseConfig.shouldUpdateApp = true
                         }
 
