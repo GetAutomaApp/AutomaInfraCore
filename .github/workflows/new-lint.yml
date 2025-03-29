@@ -16,4 +16,4 @@ jobs:
       - name: Run SwiftLint
         uses: GetAutomaApp/opensource-actions/swiftlint@main
         with:
-          extra_args: "--enable force_cast --disable line_length"
+          extra_args: "--config test-conf.yml"
