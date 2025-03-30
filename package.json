@@ -31,7 +31,8 @@
     "compose:down": "npm run compose -- down",
     "compose:ps": "npm run compose -- ps -a",
     "compose": "cd Backend && docker compose",
-    "pull:secrets": ""
+    "pull:secrets": "",
+    "gh:push:testing:secrets": "cd Backend && ./infra/github/push-secrets.sh"
   },
   "keywords": [],
   "author": "",
