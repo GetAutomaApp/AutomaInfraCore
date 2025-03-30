@@ -1,34 +1,13 @@
-name: CLOC Codebase
+name: CLOC
 
 on:
   push:
-    branches-ignore:
-      - develop
-      - release/staging
-      - release/production
+    branches:  "*"
 
 jobs:
   cloc:
-    runs-on: macos-15
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: "6"
-
-      - name: Set up environment
-        run: |
-          echo "Running on branch: $GITHUB_REF"
-          alias swiftlint="/opt/homebrew/bin/swiftlint"
-
-      - name: Run CLOC
-        run: |
-          brew install cloc
-          cloc .
-
-
-
+      - uses: actions/checkout@v4
+      - name: Count Lines of Code
+        uses: GetAutomaApp/opensource-actions/cloc@2-feature---implement-cloc-action-to-count-loc-with-great-defaults
