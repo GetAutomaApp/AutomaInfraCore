@@ -18,9 +18,10 @@ struct ProfilePictureService {
             let tigrisService = try TigrisService()
             let messageService = MessageService()
 
-            let prompt = AIPromptFormatterService.createOpenAIProfilePicturePrompt(
+            let query = AIPromptFormatterService.createOpenAIProfilePictureQuery(
                 username: user.username
             )
+            let queryString = String(reflecting: query)
 
             guard let userId = user.id?.uuidString else {
                 throw GenericErrors.invalidUserId
@@ -29,23 +30,23 @@ struct ProfilePictureService {
             logger.info(
                 "Generating profile picture",
                 metadata: [
-                    "to": .string("ProfilePictureService.createProfilePicture"),
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "userId": .string(userId),
                     "username": .string(user.username),
-                    "prompt": .string(prompt.prompt),
+                    "query": .string(queryString),
                 ]
             )
 
             try messageService
                 .sendDiscordWebhookAppEvent(
                     input: "generating profile picture for \(userId) - \(user.username)",
-                    event: "\(prompt.prompt)",
+                    event: queryString,
                     logger: logger
                 )
 
-            let (images, imageData) = try await generateImage(
+            let result = try await generateImage(
                 totalRegenerationAttempts: totalRegenerationAttempts,
-                prompt: prompt,
+                query: query,
                 excludeText: excludeText
             )
 
@@ -60,14 +61,14 @@ struct ProfilePictureService {
                 tigrisService
                     .put(
                         input: s3Url,
-                        content: .init(data: imageData),
+                        content: .init(data: result.images[0]),
                         acl: .publicRead,
                         contentType: "image/jpeg"
                     ),
                 tigrisService.put(
                     input: openaiOutputs3Url,
                     content: .init(
-                        string: jsonEncoder.encode(images).base64EncodedString()
+                        string: jsonEncoder.encode(result.metadataJSON).base64EncodedString()
                     ),
                     acl: .private,
                     contentType: "application/json"
@@ -79,7 +80,7 @@ struct ProfilePictureService {
             try messageService
                 .sendDiscordWebhookAppEvent(
                     input: "generated profile picture for \(userId) - \(user.username)",
-                    event: "\(prompt.prompt)",
+                    event: queryString,
                     imageUrl: url,
                     logger: logger
                 )
@@ -87,7 +88,7 @@ struct ProfilePictureService {
             logger.info(
                 "Successfully generated profile picture for user",
                 metadata: [
-                    "to": .string("ProfilePictureService.createProfilePicture"),
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "userId": .string(userId),
                     "username": .string(user.username),
                     "imageKey": .string(s3Url),
@@ -102,7 +103,7 @@ struct ProfilePictureService {
             logger.error(
                 "Failed to generate profile picture",
                 metadata: [
-                    "to": .string("ProfilePictureService.createProfilePicture"),
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "user": .string("\(user)"),
                     "error": .string("\(error.localizedDescription)"),
                 ]
@@ -114,52 +115,44 @@ struct ProfilePictureService {
         }
     }
 
-    private func generateImage(totalRegenerationAttempts: Int, prompt: ImagesQuery,
-                               excludeText: Bool) async throws -> ([ImagesResult.Image], Data)
+    private func generateImage(totalRegenerationAttempts: Int, query: GenerateImageQuery,
+                               excludeText: Bool) async throws -> GenerateImageResult
     {
         let textExtractionService = TextExtractionService()
-        let imageClient = try OpenAIImageGenerationClient(logger: logger)
+        let imageClient = ImageGenerationClient(logger: logger)
 
         var hasText = false
-        var image: String?
-        var imageData: Data?
-        var images: [ImagesResult.Image] = []
         var totalAttemptsLeft = totalRegenerationAttempts
 
+        var result: GenerateImageResult?
         // If there is still text on the image after 3 attempts, we will ignore the text and continue generating the
         // image
         repeat {
-            images = try await imageClient.createImage(prompt).data
-            image = images[0].b64Json
-
-            guard let image else { throw GenericErrors.missingImage }
-
-            imageData = Data(base64Encoded: image)
-
-            guard let imageData else { throw GenericErrors.missingImage }
+            let res = try await imageClient.generateImage(query)
+            result = res
 
             hasText = try await !textExtractionService
                 .getTextToSimpleString(
-                    from: imageData
+                    from: res.images[0]
                 ).isEmpty
 
             totalAttemptsLeft -= 1
         } while excludeText && hasText && totalAttemptsLeft > 0
 
+        guard let result else {
+            throw GenericErrors.missingImage
+        }
+
         logger.info(
             "Attempted to generate an image without text",
             metadata: [
-                "to": .string("ProfilePictureService.generateImage"),
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "totalAttempts": .string("\(totalRegenerationAttempts - totalAttemptsLeft)"),
                 "hasText": .string("\(hasText)"),
             ]
         )
 
-        guard let imageData else {
-            throw GenericErrors.missingImage
-        }
-
-        return (images, imageData)
+        return result
     }
 
     func generateImageKey(for user: UserDTO) throws -> String {

@@ -120,26 +120,58 @@ enum BackendMetric {
         name: "openai_image_generation_requests"
     )
 
-    static let totalTweetPostsSent = MetricsService.global.makeCounter(
-        name: "total_tweet_posts_sent",
-        labels: [
-            "status": MetricStatus.success.rawValue,
-        ]
-    )
+    static func openAIImageGenerationRequest(
+        status: MetricStatus
+    ) -> Prometheus.Counter {
+        MetricsService.global.makeCounter(
+            name: "openai_image_generation_requests",
+            labels: [
+                "status": status.rawValue,
+            ]
+        )
+    }
 
-    static let totalTwitterOAuthRequests = MetricsService.global.makeCounter(
-        name: "total_twitter_oauth_requests",
-        labels: [
-            "status": MetricStatus.success.rawValue,
-        ]
-    )
+    /// Creates a counter to track Twitter OAuth request metrics
+    /// - Parameter status: The status of the OAuth request (success/fail/etc)
+    /// - Returns: A Prometheus counter for Twitter OAuth requests with the given status
+    static func twitterOAuthRequest(
+        status: MetricStatus
+    ) -> Prometheus.Counter {
+        MetricsService.global.makeCounter(
+            name: "twitter_oauth_requests",
+            labels: [
+                "status": status.rawValue,
+            ]
+        )
+    }
 
-    static let totalTwitterUserTokensConverted = MetricsService.global.makeCounter(
-        name: "total_twitter_user_tokens_converted",
-        labels: [
-            "status": MetricStatus.success.rawValue,
-        ]
-    )
+    /// Creates a counter to track Twitter user token conversion metrics
+    /// - Parameter status: The status of the token conversion (success/fail/etc)
+    /// - Returns: A Prometheus counter for Twitter token conversions with the given status
+    static func twitterUserTokensConverted(
+        status: MetricStatus
+    ) -> Prometheus.Counter {
+        MetricsService.global.makeCounter(
+            name: "twitter_user_tokens_converted",
+            labels: [
+                "status": status.rawValue,
+            ]
+        )
+    }
+
+    /// Creates a counter to track Twitter post tweet metrics
+    /// - Parameter status: The status of posting the tweet (success/fail/etc)
+    /// - Returns: A Prometheus counter for tweet posts with the given status
+    static func twitterPostTweet(
+        status: MetricStatus
+    ) -> Prometheus.Counter {
+        MetricsService.global.makeCounter(
+            name: "twitter_post_tweet",
+            labels: [
+                "status": status.rawValue,
+            ]
+        )
+    }
 
     static func chatCompletionServiceCall(
         platform: ChatCompletionPlatform,

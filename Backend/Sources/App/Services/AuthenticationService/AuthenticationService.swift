@@ -35,7 +35,7 @@ struct AuthenticationService: Sendable {
             logger.error(
                 "Authentication code is invalid",
                 metadata: [
-                    "to": .string("AuthenticationService.getValidateAndDeleteCode"),
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "code": .string(code),
                     "phoneNumber": .string(phoneNumber),
                     "validCode": .string(String(describing: validCode)),
@@ -47,10 +47,10 @@ struct AuthenticationService: Sendable {
         logger.info(
             "Authentication code is valid",
             metadata: [
-                "to": .string("AuthenticationService.getValidateAndDeleteCode"),
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "code": .string(code),
                 "phoneNumber": .string(phoneNumber),
-                "validCode": .string(String(describing: validCode)),
+                "validCode": .string(String(reflecting: validCode)),
             ]
         )
 
@@ -378,10 +378,10 @@ struct AuthenticationService: Sendable {
         logger.info(
             "Deleting old tokens",
             metadata: [
-                "to": .string("AuthenticationService.deleteOldTokens"),
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "userId": .string(userId.uuidString),
-                "subject": .string(String(describing: subject)),
-                "skip": .string(String(describing: skip)),
+                "subject": .string(String(reflecting: subject)),
+                "skip": .string(String(reflecting: skip)),
             ]
         )
 

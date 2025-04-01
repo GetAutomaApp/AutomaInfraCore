@@ -4,13 +4,27 @@
 // All rights reserved.
 
 import OpenAI
+import Retry
 import Vapor
 
+/// Client for interacting with OpenAI's chat completion API
+/// Handles authentication, request configuration, and response processing for chat completions
 struct OpenAIChatCompletionClient: ChatCompletion {
+    /// The underlying OpenAI API client
     private let client: OpenAI
+
+    /// Logger instance for tracking operations and errors
     let logger: Logger
+
+    /// API key for authenticating with OpenAI services
     private let apiKey: String
 
+    /// Initializes a new OpenAI chat completion client
+    /// - Parameters:
+    ///   - logger: Logger instance for tracking operations
+    ///   - timeout: Maximum time to wait for API responses in seconds (default: 180)
+    ///   - apiKey: Optional API key override. If nil, reads from environment
+    /// - Throws: Environment error if API key cannot be retrieved
     init(logger: Logger, timeout: TimeInterval = 180, apiKey: String? = nil) throws {
         self.apiKey = try apiKey ?? Environment.getOrThrow("OPENAI_API_KEY")
         client = .init(
@@ -22,20 +36,29 @@ struct OpenAIChatCompletionClient: ChatCompletion {
         self.logger = logger
     }
 
+    /// Creates a chat completion using the OpenAI API
+    /// - Parameter query: The chat completion request parameters
+    /// - Returns: The generated chat completion result
+    /// - Throws: ChatCompletionClientError if the request fails or returns invalid data
     func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult {
         let model = query.model
-        let result: ChatResult
+        var result: ChatResult?
         let prompt = query.prompt
 
         do {
-            result = try await client.chats(
-                query: .init(
-                    messages: [
-                        .init(role: .system, content: prompt)!,
-                    ],
-                    model: model.rawValue
+            try await retry(
+                maxAttempts: 3
+            ) {
+                result = try await client.chats(
+                    query: .init(
+                        messages: [
+                            .init(role: .system, content: prompt)!,
+                        ],
+                        model: model.rawValue,
+                        maxTokens: query.maxTokens
+                    )
                 )
-            )
+            }
         } catch {
             BackendMetric.chatCompletionServiceCall(platform: .openai, model: model, status: .fail).increment()
             logger.error(
@@ -46,6 +69,12 @@ struct OpenAIChatCompletionClient: ChatCompletion {
                     "query": .string(prompt),
                 ]
             )
+            throw ChatCompletionClientError.completionError
+        }
+
+        guard
+            let result
+        else {
             throw ChatCompletionClientError.completionError
         }
 
@@ -84,6 +113,15 @@ struct OpenAIChatCompletionClient: ChatCompletion {
         }
 
         BackendMetric.chatCompletionServiceCall(platform: .openai, model: model, status: .success).increment()
-        return .init(message: message)
+        let metadata = try JSONEncoder().encode(result)
+        logger.info(
+            "OpenAI chat completions result metadata",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "metadata": .string(String(describing: metadata)),
+            ]
+        )
+
+        return .init(message: message, metadata: metadata)
     }
 }
