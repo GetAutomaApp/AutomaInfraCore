@@ -8,19 +8,7 @@ import Testing
 import VaporTesting
 
 @Suite("Twitter OAuth Tests")
-struct TwitterOAuthClientTests {
-    private func withApp(test: (Application) async throws -> Void) async throws {
-        let app = try await Application.make(.testing)
-        do {
-            try await configureDatabase(app: app)
-            try await test(app)
-        } catch {
-            try await app.asyncShutdown()
-            throw error
-        }
-        try await app.asyncShutdown()
-    }
-
+struct TwitterOAuthClientTests : TwitterClientTestSuite {
     @Test("Test Request Token")
     func requestToken() async throws {
         try await withApp { app in
@@ -42,6 +30,7 @@ struct TwitterOAuthClientTests {
 
             let url = try await twitterClient.auth.makeAuthenticateURL(tokenObject: token)
             let expected = "https://api.twitter.com/oauth/authenticate?oauth_token=\(token.oauthToken)"
+
             #expect(url.absoluteString == expected, "URL should match expected URL")
         }
     }

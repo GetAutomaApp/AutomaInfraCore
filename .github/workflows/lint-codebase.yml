@@ -1,37 +1,17 @@
-name: Lint Code Base
+name: Lint Codebase
 
 on:
+  pull_request:
+    paths:
+      - '**.swift'
   push:
-    branches-ignore:
-      - develop
-      - release/staging
-      - release/production
+    paths:
+      - '**.swift'
 
 jobs:
-  run-lint:
-    runs-on: macos-15
+  swiftlint:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: "6"
-
-      - name: Set up environment
-        run: |
-          echo "Running on branch: $GITHUB_REF"
-          alias swiftlint="/opt/homebrew/bin/swiftlint"
-
-      - name: Install Linting Tool
-        uses: ./.github/actions/install-lint-tool
-
-      - name: Install NodeJS Dependencies
-        run: |
-          npm run prepare:action
-  
-      - name: Run Linting CLI
-        run: |
-          npm run lint
+      - uses: actions/checkout@v4
+      - name: Run SwiftLint
+        uses: GetAutomaApp/opensource-actions/swiftlint@main
