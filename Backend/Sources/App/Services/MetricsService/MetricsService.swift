@@ -173,6 +173,25 @@ enum BackendMetric {
         )
     }
 
+    static func rssFeedReaderMetric(
+        status: MetricStatus,
+        url: URL,
+        isRSSFeed: Bool? = nil,
+        didThrowOnFeedInitialization: Bool = false
+    ) -> Prometheus.Counter {
+        let labels = [
+            "status": status.rawValue,
+            "url": url.absoluteString,
+            "is_rss_feed": isRSSFeed.map { $0 ? "true" : "false" } ?? "undefined",
+            "did_throw_on_feed_initialization": didThrowOnFeedInitialization ? "true" : "false",
+        ]
+
+        return MetricsService.global.makeCounter(
+            name: "rss_feed_read_call",
+            labels: labels
+        )
+    }
+
     static func chatCompletionServiceCall(
         platform: ChatCompletionPlatform,
         model: ChatCompletionModel,
