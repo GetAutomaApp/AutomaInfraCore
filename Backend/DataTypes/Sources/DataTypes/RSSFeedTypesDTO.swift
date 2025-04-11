@@ -11,19 +11,19 @@ import Vapor
 public struct GenericRSSFeedItem: Content {
     /// The title of the feed item.
     public let title: String
-    
+
     /// URLs associated with this feed item, typically including the permalink.
     public let links: [String]
-    
+
     /// A summary or brief description of the feed item content.
     public let description: String
-    
+
     /// The date when the feed item was published.
     public let publishDate: Date
-    
+
     /// The full content of the feed item, if available.
     public let content: String?
-    
+
     /// YouTube-specific metadata, if this feed item represents a YouTube video.
     public let youTubeVideoInfo: RSSFeedItemYouTubeVideoInfo?
 
@@ -56,7 +56,7 @@ public struct GenericRSSFeedItem: Content {
 public struct RssFeedResponse: Content {
     /// The collection of parsed feed items.
     public let items: [GenericRSSFeedItem]
-    
+
     /// Indicates whether the source was a valid RSS or Atom feed.
     public let isRssFeed: Bool
 
@@ -74,7 +74,7 @@ public struct RssFeedResponse: Content {
 public struct RSSFeedItemYouTubeVideoInfo: Content {
     /// The YouTube channel identifier.
     let channelID: String
-    
+
     /// The YouTube video identifier.
     let videoID: String
 

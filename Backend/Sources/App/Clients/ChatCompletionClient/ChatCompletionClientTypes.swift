@@ -77,4 +77,3 @@ struct ChatCompletionResult: Content {
     /// Additional metadata about the completion
     let metadata: Data
 }
-

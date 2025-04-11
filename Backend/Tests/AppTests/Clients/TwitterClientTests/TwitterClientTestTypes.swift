@@ -14,14 +14,14 @@ protocol TwitterClientTestSuite {}
 extension TwitterClientTestSuite {
     /// Helper function to create and manage a test application instance
     /// Creates a test application, configures the database, runs the provided test closure, and ensures proper cleanup
-    /// 
+    ///
     /// - Parameter test: The test closure to execute with the application instance
     /// - Throws: Any errors that occur during test execution, including:
     ///   - Application initialization errors
     ///   - Database configuration errors
     ///   - Test execution errors
     ///   - Shutdown errors
-    internal func withApp(test: (Application) async throws -> Void) async throws {
+    func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
             try await configureDatabase(app: app)

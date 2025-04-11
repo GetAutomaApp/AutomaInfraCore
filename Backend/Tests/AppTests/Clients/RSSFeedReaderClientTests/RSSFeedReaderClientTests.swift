@@ -41,7 +41,12 @@ struct RSSFeedReaderClientTests {
         "Get feed items when feed exists",
         arguments: [
             (URL(string: "https://news.ycombinator.com/rss")!, true), // rss format
-            (URL(string: "https://sample-feeds.rowanmanning.com/examples/222780a7caac12b938dfe09cd7d138f9/feed.xml")!, true), // atom feed
+            (
+                URL(
+                    string: "https://sample-feeds.rowanmanning.com/examples/222780a7caac12b938dfe09cd7d138f9/feed.xml"
+                )!,
+                true
+            ), // atom feed
             (URL(string: "https://example.com")!, false),
             (URL(string: "https://invalid-feed.com")!, false),
         ]
@@ -51,7 +56,10 @@ struct RSSFeedReaderClientTests {
             let client = RSSFeedReaderClient(logger: app.logger)
 
             if !feedExists {
-                try await #require(throws: RSSFeedReaderClientError.self, "Should throw error when feed does not exist") {
+                try await #require(
+                    throws: RSSFeedReaderClientError.self,
+                    "Should throw error when feed does not exist"
+                ) {
                     try await client.read(from: url)
                 }
                 return

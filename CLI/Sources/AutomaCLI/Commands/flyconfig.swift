@@ -47,7 +47,7 @@ struct FlyConfigGenerator: Command {
             throw Abort(.notFound, reason: "FLY_METRICS_TOKEN not found in environment")
         }
 
-        content = try content
+        content = content
             .replacingOccurrences(
                 of: "__FLY_ENVIRONMENT__",
                 with: environment.rawValue

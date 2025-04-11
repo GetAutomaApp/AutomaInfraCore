@@ -21,7 +21,7 @@ jobs:
 
       - name: Install NodeJS Dependencies
         run: |
-          npm run prepare:action
+          npm install --ignore-scripts
 
       - name: Run Unit / Integration tests for AutomaUIKit
         uses: ./.github/actions/swift-test

@@ -13,13 +13,13 @@ import Vapor
 struct TwitterAuthenticatedClient: TwitterClientBase {
     /// Logger instance for tracking operations
     let logger: Logger
-    
+
     /// HTTP client for making requests
     let client: Client
-    
+
     /// Database instance for data persistence
     let database: Database
-    
+
     /// Twitter API client instance configured with authentication
     let twitterClient: TwitterAPIClient
 
