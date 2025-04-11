@@ -2,7 +2,7 @@ name: CLOC
 
 on:
   push:
-    branches:  "*"
+    branches: ["*"]
 
 jobs:
   cloc:
