@@ -34,3 +34,5 @@ jobs:
         uses: ./.github/actions/swift-test
         with:
           directory: 'CLI'
+    env:
+      FLY_METRICS_TOKEN: ${{ secrets.FLY_METRICS_TOKEN }}
