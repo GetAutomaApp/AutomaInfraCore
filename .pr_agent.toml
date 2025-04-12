@@ -1,4 +1,0 @@
-[pr_reviewer]
-extra_instructions="""
-Ensure to always vet the code for anything the developer forgot to change if the PR is recognized as a feature enhancement / bug fix!
-"""

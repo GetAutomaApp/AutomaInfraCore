@@ -5,10 +5,10 @@ FROM swift:6.0-jammy AS build
 
 # Install OS updates
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
-    && apt-get -q update \
-    && apt-get -q dist-upgrade -y \
-    && apt-get install -y libjemalloc-dev \
-    && apt-get install -y openssl libssl-dev
+  && apt-get -q update \
+  && apt-get -q dist-upgrade -y \
+  && apt-get install -y libjemalloc-dev \
+  && apt-get install -y openssl libssl-dev
 
 # Set up a build area
 WORKDIR /build
@@ -18,17 +18,19 @@ WORKDIR /build
 # as long as your Package.swift/Package.resolved
 # files do not change.
 
-COPY Package.swift Package.resolved ./
+COPY Package.swift .
+COPY Package.resolved .
+
 COPY DataTypes ./DataTypes
-RUN --mount=type=cache,target=/build/.build swift package resolve $([ -f ./Package.resolved ] && echo "--force-resolved-versions" || true)
+RUN --mount=type=cache,target=/build/.build swift package resolve 
 # Copy entire repo into container
 COPY . .
 
 # Build everything, with optimizations, with static linking, and using jemalloc
 # N.B.: The static version of jemalloc is incompatible with the static Swift runtime.
 RUN --mount=type=cache,target=/build/.build swift build -c release \
-                --static-swift-stdlib \
-                -Xlinker -ljemalloc
+  --static-swift-stdlib \
+  -Xlinker -ljemalloc
 
 # Switch to the staging area
 WORKDIR /staging
@@ -54,15 +56,15 @@ FROM ubuntu:jammy
 
 # Make sure all system packages are up to date, and install only essential packages.
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
-    && apt-get -q update \
-    && apt-get -q dist-upgrade -y \
-    && apt-get -q install -y \
-      libjemalloc2 \
-      ca-certificates \
-      tzdata \
-    && apt-get install bash \
-    && apt-get install -y openssl libssl-dev libcurl4 libxml2 \
-    && rm -r /var/lib/apt/lists/*
+  && apt-get -q update \
+  && apt-get -q dist-upgrade -y \
+  && apt-get -q install -y \
+  libjemalloc2 \
+  ca-certificates \
+  tzdata \
+  && apt-get install bash \
+  && apt-get install -y openssl libssl-dev libcurl4 libxml2 \
+  && rm -r /var/lib/apt/lists/*
 
 # Create a vapor user and group with /app as its home directory
 RUN useradd --user-group --create-home --system --skel /dev/null --home-dir /app vapor
