@@ -9,7 +9,7 @@ enum ChatCompletionClientError: Error {
     /// General error during the completion process
     /// This can include network errors, authentication failures, or other API-related issues
     case completionError
-    
+
     /// Error indicating that the completion was successful but returned an empty message
     /// This typically indicates an issue with the model's response formatting or content filtering
     case completionMessageEmpty

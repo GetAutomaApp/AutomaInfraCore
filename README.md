@@ -11,8 +11,5 @@
 
 Having a script that automates setting up all hosted environments on fly.io aren't needed, because we will never migrate to another fly.io account. In the future we might migrate to another platform.
 
-> [!NOTE]
-> All the env files are stored in Zoho vault.
-
 1. Run `fly secrets import < .env.sandbox -a automa-backend-sandbox` (replace app and env file names)
 
