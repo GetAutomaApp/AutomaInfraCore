@@ -1,22 +1,22 @@
-// flyconfig.swift
+// FlyConfigGenerator.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import Vapor
 
-enum FlyEnvironments: String, CaseIterable {
+private enum FlyEnvironments: String, CaseIterable {
     case sandbox
     case staging
     case production
 }
 
-struct FlyConfigGenerator: Command {
-    var help: String {
+public struct FlyConfigGenerator: Command {
+    public var help: String {
         "Generates a fly.io config file from the input config & environment type"
     }
 
-    struct Signature: CommandSignature {
+    public struct Signature: CommandSignature {
         @Argument(name: "config-path", help: "The path of the fly.io config file")
         var configPath: String
 
@@ -27,7 +27,7 @@ struct FlyConfigGenerator: Command {
         var environment: String
     }
 
-    func run(using _: CommandContext, signature: Signature) throws {
+    public func run(using _: CommandContext, signature: Signature) throws {
         let configPath = signature.configPath
         let environment = signature.environment
 

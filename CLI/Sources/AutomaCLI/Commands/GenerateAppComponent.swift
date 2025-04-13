@@ -1,47 +1,47 @@
-// generate.swift
+// GenerateAppComponent.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import Vapor
 
-struct FileType {
+private struct FileType {
     let name: String
     let configurations: [FileConfig]
 }
 
-struct FileConfig {
+private struct FileConfig {
     let fromDirectory: String
     let toDirectory: String
     let nestToDirectory: String
     let templates: [String]
 }
 
-struct AddToFileType {
+private struct AddToFileType {
     let name: String
     let configurations: [AddToFileConfig]
 }
 
-struct AddToFileConfig {
+private struct AddToFileConfig {
     let template: String
     let addToFile: String
 }
 
-let basePath = "../../generators/"
-let baseAppPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+private let basePath = "../../generators/"
+private let baseAppPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
     .deletingLastPathComponent()
     .appendingPathComponent("App")
     .standardized.path + "/"
-let baseDataTypesPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+private let baseDataTypesPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
     .deletingLastPathComponent()
     .appendingPathComponent("Backend/DataTypes")
     .standardized.path + "/"
-let baseBackendAppPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+private let baseBackendAppPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
     .deletingLastPathComponent()
     .appendingPathComponent("Backend/Sources/App")
     .standardized.path + "/"
 
-let fileTypes: [FileType] = [
+private let fileTypes: [FileType] = [
     FileType(name: "ui-component", configurations: [
         FileConfig(
             fromDirectory: "ui-component/",
@@ -208,7 +208,7 @@ let fileTypes: [FileType] = [
     ),
 ]
 
-struct GenerateAppComponent: Command {
+public struct GenerateAppComponent: Command {
     var help: String {
         "Generates an app component based on the given name."
     }
