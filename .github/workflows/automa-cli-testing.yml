@@ -9,7 +9,7 @@ on:
 
 jobs:
   run:
-    runs-on: [macos-15]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository
@@ -19,16 +19,9 @@ jobs:
         with:
           swift-version: "6"
 
-      - name: Get Cache
-        uses: actions/cache@v3
-        id: cli-build
-        with:
-          key: cli-cache-${{ hashFiles('CLI/Package.resolved') }}
-          path: CLI/.build
-
       - name: Install NodeJS Dependencies
         run: |
-          npm run prepare:action
+          npm install --ignore-scripts
 
       - name: Run Unit / Integration tests for AutomaCLI
         uses: ./.github/actions/swift-test

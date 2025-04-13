@@ -297,8 +297,9 @@ struct GenerateAppComponent: Command {
             }
         }
 
+        let shell = try Shell()
         if copy {
-            Shell().run("echo '\(output)' | pbcopy")
+            Shell.run("echo '\(output)' | \(shell.copyCommand)")
         }
     }
 
@@ -387,7 +388,7 @@ struct GenerateAppComponent: Command {
         }
     }
 
-    func arrayToDashed(_ array: [String], capitalized: Bool = false) -> String {
+    private func arrayToDashed(_ array: [String], capitalized: Bool = false) -> String {
         let dashedString = array.joined(separator: "-")
 
         if capitalized, let firstCharacter = dashedString.first {
@@ -398,7 +399,7 @@ struct GenerateAppComponent: Command {
         return dashedString
     }
 
-    func arrayToHaskell(_ array: [String]) -> String {
+    private func arrayToHaskell(_ array: [String]) -> String {
         guard !array.isEmpty else { return "" }
 
         return array.enumerated().map { index, element in
@@ -410,11 +411,11 @@ struct GenerateAppComponent: Command {
         }.joined(separator: "")
     }
 
-    func arrayToSpaceDelimited(_ array: [String]) -> String {
+    private func arrayToSpaceDelimited(_ array: [String]) -> String {
         array.joined(separator: " ")
     }
 
-    func arrayToPascalCase(_ array: [String]) -> String {
+    private func arrayToPascalCase(_ array: [String]) -> String {
         array.enumerated().map(\.element.capitalized).joined()
     }
 }

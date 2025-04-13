@@ -12,16 +12,6 @@ runs:
   steps:
     - name: Check out repository
       uses: actions/checkout@v3
-    - name: Set up Swift
-      shell: bash
-      run: |
-        if ! command -v swift &> /dev/null
-        then
-          echo "Swift not found. Installing Swift..."
-          brew install swift
-        else
-          echo "Swift is already installed."
-        fi
     - name: Install Dependencies
       shell: bash
       run: |
