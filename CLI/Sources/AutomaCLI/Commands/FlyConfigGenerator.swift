@@ -17,6 +17,8 @@ public struct FlyConfigGenerator: Command {
     }
 
     public struct Signature: CommandSignature {
+        public init() {}
+
         @Argument(name: "config-path", help: "The path of the fly.io config file")
         var configPath: String
 
@@ -24,7 +26,7 @@ public struct FlyConfigGenerator: Command {
             name: "environment",
             help: "The environment type to generate the config for. `FlyEnvironments`"
         )
-        var environment: String
+        public var environment: String
     }
 
     public func run(using _: CommandContext, signature: Signature) throws {

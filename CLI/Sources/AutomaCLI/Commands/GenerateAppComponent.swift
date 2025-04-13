@@ -209,11 +209,13 @@ private let fileTypes: [FileType] = [
 ]
 
 public struct GenerateAppComponent: Command {
-    var help: String {
+    public var help: String {
         "Generates an app component based on the given name."
     }
 
-    struct Signature: CommandSignature {
+    public struct Signature: CommandSignature {
+        public init() {}
+
         @Argument(
             name: "name",
             help: "The component to generate. They can be: \(fileTypes.map(\.name).joined(separator: ", "))"
@@ -233,7 +235,7 @@ public struct GenerateAppComponent: Command {
         var copy: Bool
     }
 
-    func run(using _: CommandContext, signature: Signature) throws {
+    public func run(using _: CommandContext, signature: Signature) throws {
         let componentName = signature.filename
         let copy = signature.copy
         var output = ""
@@ -303,8 +305,8 @@ public struct GenerateAppComponent: Command {
         }
     }
 
-    func moveAndRenameFile(source: String, destination: String, componentName: String,
-                           shouldWrite: Bool = true) throws -> String
+    private func moveAndRenameFile(source: String, destination: String, componentName: String,
+                                   shouldWrite: Bool = true) throws -> String
     {
         let absoluteSourcePath = URL(fileURLWithPath: source).standardized.path
         print("Absolute Source Path: \(absoluteSourcePath)")
@@ -342,7 +344,7 @@ public struct GenerateAppComponent: Command {
         return "\(destination)\n\(content)"
     }
 
-    func rename(text: String, componentName: String) -> String {
+    private func rename(text: String, componentName: String) -> String {
         let words = pascalToWordsArray(componentName)
         return text
             // Replace all occurrences of __CAPNAME__ with with the correct format helloComponent -> HelloComponent
@@ -367,7 +369,7 @@ public struct GenerateAppComponent: Command {
             .replacingOccurrences(of: "__TIMESTAMP__", with: "\(Int(Date().timeIntervalSince1970))")
     }
 
-    func pascalToWordsArray(_ pascal: String) -> [String] {
+    private func pascalToWordsArray(_ pascal: String) -> [String] {
         let pattern = "([A-Z])"
 
         do {
