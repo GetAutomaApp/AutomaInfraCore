@@ -1,7 +1,7 @@
 // swift-tools-version:6.1
 import PackageDescription
 
-let package = Package(
+public let package = Package(
     name: "AutomaCLI",
     platforms: [
         .macOS(.v15),
@@ -30,7 +30,9 @@ let package = Package(
     swiftLanguageModes: [.v5]
 )
 
-var swiftSettings: [SwiftSetting] { [
-    .enableUpcomingFeature("DisableOutwardActorInference"),
-    .enableExperimentalFeature("StrictConcurrency"),
-] }
+private var swiftSettings: [SwiftSetting] {
+    [
+        .enableUpcomingFeature("DisableOutwardActorInference"),
+        .enableExperimentalFeature("StrictConcurrency"),
+    ]
+}

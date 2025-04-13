@@ -31,6 +31,15 @@ let package = Package(
             ],
             resources: [
                 .process("Assets/Fonts"), // Add this to process the font files from the Assets folder
+                .process(
+                    "AutomaUIKit/Components/TextInput/VerificationCodeInputComponent/VerificationCodeInputComponentDocumentation.md"
+                ),
+                .process(
+                    "AutomaUIKit/Components/TextInput/PhoneNumberTextInputComponent/PhoneNumberTextInputComponentDocumentation.md"
+                ),
+                .process(
+                    "AutomaUIKit/Components/Frames/TextInputFrameComponent/TextInputFrameComponentDocumentation.md"
+                ),
             ]
         ),
         .testTarget(

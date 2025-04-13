@@ -6,13 +6,15 @@
 import Foundation
 import JWT
 
+/// Token subject, either an access or refresh token
 public enum JWTTokenSubject: String, Codable, Sendable {
     case access
     case refresh
 }
 
+/// Data contained in JWT tokens used for user authentication
 public struct JWTTokenPayload: JWTPayload {
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case subject = "sub"
         case expiration = "exp"
         case userId = "uid"
@@ -27,7 +29,7 @@ public struct JWTTokenPayload: JWTPayload {
 
     public let tokenId: UUID
 
-    public func verify(using _: some JWTAlgorithm) async throws {
+    public func verify(using _: some JWTAlgorithm) throws {
         try expiration.verifyNotExpired()
     }
 

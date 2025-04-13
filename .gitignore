@@ -199,3 +199,6 @@ dist
 
 wireguard-sandbox.conf
 wireguard-prod.conf
+
+# ignore files used only locally for formatting and linting
+.defaultlint.yml
