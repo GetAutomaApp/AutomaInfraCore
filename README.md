@@ -1,12 +1,15 @@
-Remember to run migrate before deploying to envs
-swift run App migrate --env {env}
+# AutomaInfracore
 
-TODO: We will move to Kubernetes after a while, but for we will make use of fly machines to run procs
+## Setup
 
-ensure to docker compose in order to run locally
+**Local**:
 
-also, run `fly secrets import < .env.sandbox -a automa-backend-sandbox` (or similar) to deploy secrets for the correct env.
+1. Create `.env.development`, copy and paste variables from `env.development` note in Automa Obsidian vault
+2. Run `npm run compose:up` to start all the services
 
-All the env files are stored in Zoho vault
+**Cloud environment**:
 
+Having a script that automates setting up all hosted environments on fly.io aren't needed, because we will never migrate to another fly.io account. In the future we might migrate to another platform.
+
+1. Run `fly secrets import < .env.sandbox -a automa-backend-sandbox` (replace app and env file names)
 
