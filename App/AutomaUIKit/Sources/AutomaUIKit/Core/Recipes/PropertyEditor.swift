@@ -6,18 +6,18 @@
 import SwiftUI
 
 /**
- The AnyKeyPath struct represents a type reased keypath whicih both has getter & setter methods.
+ The AnyKeyPath struct represents a type reased keypath which both has getter & setter methods.
  This wrapper aims to simplify the usage of most types by allowing you to if/else over them.
 
  This struct does the following:
  - Has an initiializer to manually initialize all properties
  - Provides an initializer to initialize the code via a KeyPath
  */
-struct AnyKeyPath<TheObservedObject, TheValueType> {
-    let label: String
-    let get: (TheObservedObject) -> TheValueType
-    let set: (inout TheObservedObject, TheValueType) -> Void
-    let type: Any.Type
+public struct AnyKeyPath<TheObservedObject, TheValueType> {
+    public let label: String
+    public let get: (TheObservedObject) -> TheValueType
+    public let set: (inout TheObservedObject, TheValueType) -> Void
+    public let type: Any.Type
 
     // MARK: - 1. First initializer. Initialize this struct by providing a writable keypath
 
@@ -27,7 +27,7 @@ struct AnyKeyPath<TheObservedObject, TheValueType> {
       - Parameter label: The friendly **label** you want to represent to the user in the UI
       - Parameter keyPath: A `WritableKeyPath` reference from an `ObservableObject`
       */
-    init<ObservableWrappedValueType>(
+    public init<ObservableWrappedValueType>(
         _ label: String,
         keyPath: WritableKeyPath<TheObservedObject, ObservableWrappedValueType>
     ) where ObservableWrappedValueType: Any {
@@ -48,12 +48,12 @@ struct AnyKeyPath<TheObservedObject, TheValueType> {
  - Parameter label: The label being renered out on the client.
  - Parameter max: The maximum that the `value` property is allowed to be.
  */
-struct PaddingSliderInput: View {
+private struct PaddingSliderInput: View {
     @Binding var value: CGFloat
-    let label: String
-    let max: CGFloat = 30
+    public let label: String
+    public let max: CGFloat = 30
 
-    var body: some View {
+    public var body: some View {
         HStack {
             Text("\(label):")
             Slider(value: $value, in: 0 ... max, step: 1)
@@ -72,10 +72,10 @@ struct PaddingSliderInput: View {
 /**
  Renders a SwiftUI view to edit edge insets via a binding to that value.
  */
-struct PaddingEditor: View {
-    @Binding var edgeInsets: EdgeInsets
+public struct PaddingEditor: View {
+    @Binding public var edgeInsets: EdgeInsets
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 16) {
             PaddingSliderInput(value: $edgeInsets.top, label: "Top")
             PaddingSliderInput(value: $edgeInsets.leading, label: "Left")
@@ -104,11 +104,11 @@ struct CGSizeEdtior: View {
  - Parameter value: The Enum value you want to keep in sync.
  - Parameter cases: All the cases that you want to allow the editor to switch to.
  */
-struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View where E.RawValue == String {
-    @Binding var value: E
-    let cases: [E]
+public struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View where E.RawValue == String {
+    @Binding public var value: E
+    public let cases: [E]
 
-    var body: some View {
+    public var body: some View {
         Picker("Select", selection: $value) {
             ForEach(cases, id: \.self) { variant in
                 if let variant = variant as? DesignIcons {
@@ -120,7 +120,7 @@ struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View whe
         }.pickerStyle(.segmented)
     }
 
-    func isDesignIcon(_ t: some Any) -> Bool {
+    private func isDesignIcon(_ t: some Any) -> Bool {
         t is DesignIcons
     }
 }
@@ -139,13 +139,13 @@ struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View whe
 
  This method currently isn't perfect but it does reduce the code duplication by 10 fold.
  */
-struct PropertyEditor<T: ObservableObject, Content: View>: View {
+public struct PropertyEditor<T: ObservableObject, Content: View>: View {
     @ObservedObject var object: T
-    let properties: [[AnyKeyPath<T, Any>]]
+    public let properties: [[AnyKeyPath<T, Any>]]
 
-    @ViewBuilder let viewer: () -> Content
+    @ViewBuilder public let viewer: () -> Content
 
-    var body: some View {
+    public var body: some View {
         VStack {
             viewer().padding()
 
@@ -172,7 +172,7 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
      TODO: Add support for specifying modifications in the AnyKeyPath initializer
      */
     @ViewBuilder
-    func propertyRow(for property: AnyKeyPath<T, Any>) -> some View {
+    private func propertyRow(for property: AnyKeyPath<T, Any>) -> some View {
         // TODO: Handle nested Observable Objects
         if property.type == String.self {
             let value = property.get(object) as! String
