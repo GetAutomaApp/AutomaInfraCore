@@ -1,4 +1,4 @@
-// shell.swift
+// Shell.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -6,7 +6,7 @@
 import DataTypes
 import Foundation
 
-struct ShellOutput {
+public struct ShellOutput {
     let stdout: String?
     let stderr: String?
     let exitStatus: Int
@@ -14,15 +14,15 @@ struct ShellOutput {
     let command: String
 }
 
-enum OperatingSystem {
-    case macos
+public enum OperatingSystem {
     case linux
+    case macos
     case unknown(value: String)
 }
 
-struct Shell {
-    let operatingSystem: OperatingSystem
-    let copyCommand: String
+public struct Shell {
+    public let operatingSystem: OperatingSystem
+    public let copyCommand: String
 
     init() throws {
         operatingSystem = try Self.getOperatingSystem()
