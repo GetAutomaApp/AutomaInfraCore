@@ -9,14 +9,12 @@ let package = Package(
     dependencies: [
         // 💧 A server-side Swift web framework.
         .package(url: "https://github.com/vapor/vapor.git", from: "4.99.3"),
-        .package(path: "../Backend/DataTypes"),
     ],
     targets: [
         .executableTarget(
             name: "AutomaCLI",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
-                .product(name: "DataTypes", package: "DataTypes"),
             ],
             swiftSettings: swiftSettings
         ),
