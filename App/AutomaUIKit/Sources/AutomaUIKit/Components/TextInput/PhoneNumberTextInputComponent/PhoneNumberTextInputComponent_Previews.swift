@@ -7,13 +7,13 @@ import SwiftUI
 
 // Add a preview per state difference (No need to add all states)
 
-struct PhoneNumberTextInputComponent_Previews: PreviewProvider {
+internal struct PhoneNumberTextInputComponent_Previews: PreviewProvider {
     static var previews: some View {
         PhoneNumberTextInputComponentWrapperView()
     }
 }
 
-struct PhoneNumberTextInputComponentWrapperView: View {
+internal struct PhoneNumberTextInputComponentWrapperView: View {
     var body: some View {
 //        PropertyEditor(
 //            object: config,

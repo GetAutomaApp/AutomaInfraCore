@@ -5,13 +5,13 @@
 
 import SwiftUI
 
-struct InfoPairComponent_Previews: PreviewProvider {
+internal struct InfoPairComponent_Previews: PreviewProvider {
     static var previews: some View {
         InfoPairWrapperView()
     }
 }
 
-struct InfoPairWrapperView: View {
+internal struct InfoPairWrapperView: View {
     @ObservedObject var config = InfoPairComponentConfig()
 
     var body: some View {

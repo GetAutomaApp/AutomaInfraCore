@@ -5,11 +5,11 @@
 
 import Vapor
 
-struct TwitterPostResponse: Content {
+internal struct TwitterPostResponse: Content {
     let data: TwitterPostResponseData
 }
 
-struct TwitterPostResponseData: Content {
+internal struct TwitterPostResponseData: Content {
     let text: String
     let id: String
 }

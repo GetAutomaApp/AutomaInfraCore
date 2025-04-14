@@ -8,7 +8,7 @@ import Vapor
 
 // Scrapes website content in markdown format. This scraper can bypass captchas / proxies if configured in the
 // microservice: https://github.com/GetAutomaApp/firecrawl-clone
-struct FirecrawlClient {
+internal struct FirecrawlClient {
     private let client: Client
     private let logger: Logger
     private let baseUrl: String

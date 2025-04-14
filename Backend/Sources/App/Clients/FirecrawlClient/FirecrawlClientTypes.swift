@@ -9,21 +9,21 @@ enum FirecrawlFormats: String, Content {
     case markdown, rawHtml
 }
 
-struct ScrapeMarkdownInput: Content {
+internal struct ScrapeMarkdownInput: Content {
     let url: String
 }
 
-struct FirecrawlDataResult: Content {
+internal struct FirecrawlDataResult: Content {
     let markdown: String
     let links: [String]
 }
 
-struct FirecrawlScrapeResult: Content {
+internal struct FirecrawlScrapeResult: Content {
     let success: Bool
     let data: FirecrawlDataResult
 }
 
-struct WebsiteResponseItem: Content {
+internal struct WebsiteResponseItem: Content {
     let links: [String]
     let markdown: String
     let imageUrls: [String]

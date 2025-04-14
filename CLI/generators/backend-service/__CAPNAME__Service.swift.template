@@ -1,7 +1,7 @@
 import Fluent
 import Vapor
 
-struct __CAPNAME__Service {
+internal struct __CAPNAME__Service {
     // Add Service Methods Here
 }
 

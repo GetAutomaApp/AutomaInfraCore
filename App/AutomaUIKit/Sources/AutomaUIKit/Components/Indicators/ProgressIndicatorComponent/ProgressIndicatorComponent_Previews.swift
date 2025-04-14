@@ -5,13 +5,13 @@
 
 import SwiftUI
 
-struct ProgressIndicatorComponent_Previews: PreviewProvider {
+internal struct ProgressIndicatorComponent_Previews: PreviewProvider {
     static var previews: some View {
         TestProgressView()
     }
 }
 
-struct TestProgressView: View {
+internal struct TestProgressView: View {
     @ObservedObject var config = ProgressIndicatorComponentConfig()
 
     var body: some View {

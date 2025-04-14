@@ -10,7 +10,7 @@ import Testing
 // boilerplate code here, not real tests
 
 @Suite("Fake test suite", .serialized)
-struct AppTests {
+internal struct AppTests {
     @Test("Fake test")
     func helloWorld() throws {
         print("Hello, world!")

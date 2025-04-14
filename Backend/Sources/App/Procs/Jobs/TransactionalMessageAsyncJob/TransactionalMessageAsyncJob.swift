@@ -7,12 +7,12 @@ import Foundation
 import Queues
 import Vapor
 
-struct TransactionalMessageJobInput: Codable {
+internal struct TransactionalMessageJobInput: Codable {
     let content: String
     let toPhoneNumber: String
 }
 
-struct TransactionalMessageAsyncJob: AsyncJob {
+internal struct TransactionalMessageAsyncJob: AsyncJob {
     typealias Payload = TransactionalMessageJobInput
 
     func dequeue(_ context: QueueContext, _ payload: TransactionalMessageJobInput) async throws {

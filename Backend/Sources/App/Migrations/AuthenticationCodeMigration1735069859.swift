@@ -5,7 +5,7 @@
 
 import Fluent
 
-struct AuthenticationCodeMigration1735069859: AsyncMigration {
+internal struct AuthenticationCodeMigration1735069859: AsyncMigration {
     func prepare(on database: Database) async throws {
         try await database.schema("Authentication-Code")
             .id()

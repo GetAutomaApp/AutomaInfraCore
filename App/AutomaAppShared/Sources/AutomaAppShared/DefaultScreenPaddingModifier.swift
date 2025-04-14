@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-struct DefaultScreenPaddingModifier: ViewModifier {
+internal struct DefaultScreenPaddingModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding(.horizontal, 30)

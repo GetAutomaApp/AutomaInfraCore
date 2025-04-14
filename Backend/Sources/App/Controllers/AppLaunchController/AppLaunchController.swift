@@ -7,7 +7,7 @@ import DataTypes
 import Fluent
 import Vapor
 
-struct AppLaunchController: RouteCollection {
+internal struct AppLaunchController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let appLaunchRoute = routes.grouped("App-Launch")
 

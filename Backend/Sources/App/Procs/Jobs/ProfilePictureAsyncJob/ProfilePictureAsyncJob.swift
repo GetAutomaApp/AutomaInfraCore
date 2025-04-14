@@ -8,11 +8,11 @@ import Foundation
 import Queues
 import Vapor
 
-struct ProfilePictureJobInput: Codable {
+internal struct ProfilePictureJobInput: Codable {
     let payload: UserDTO
 }
 
-struct ProfilePictureAsyncJob: AsyncJob {
+internal struct ProfilePictureAsyncJob: AsyncJob {
     typealias Payload = ProfilePictureJobInput
 
     func dequeue(_ context: QueueContext, _ payload: ProfilePictureJobInput) async throws {

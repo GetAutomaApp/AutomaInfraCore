@@ -7,7 +7,7 @@ import Fluent
 import SotoTextract
 import Vapor
 
-struct TextExtractionService: ~Copyable {
+internal struct TextExtractionService: ~Copyable {
     let client: Textract
 
     init() {

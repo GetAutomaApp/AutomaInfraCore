@@ -11,7 +11,7 @@ Add a detailed description here of how to use this
 
 To see usage examples & visuals, check out `__CAPNAME__ModifierDocumentation.md`
 */
-struct __CAPNAME__Modifier: ViewModifier {
+internal struct __CAPNAME__Modifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             // Add your custom modifications here

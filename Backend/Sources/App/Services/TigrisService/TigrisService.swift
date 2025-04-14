@@ -8,7 +8,7 @@ import Fluent
 import SotoS3
 import Vapor
 
-struct TigrisService: ~Copyable {
+internal struct TigrisService: ~Copyable {
     let client: S3
 
     init() throws {

@@ -1,6 +1,6 @@
 import Vapor
 
-struct __CAPNAME__Command: Command {
+internal struct __CAPNAME__Command: Command {
     var help: String {
         "Your Help Text Here"
     }

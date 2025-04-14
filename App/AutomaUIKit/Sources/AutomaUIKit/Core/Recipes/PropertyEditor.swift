@@ -86,7 +86,7 @@ public struct PaddingEditor: View {
     }
 }
 
-struct CGSizeEdtior: View {
+internal struct CGSizeEdtior: View {
     @Binding var cgSize: CGSize
 
     var body: some View {

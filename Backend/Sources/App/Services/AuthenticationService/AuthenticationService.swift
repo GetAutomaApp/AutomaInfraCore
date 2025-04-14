@@ -9,7 +9,7 @@ import JWT
 import Queues
 import Vapor
 
-struct AuthenticationService: Sendable {
+internal struct AuthenticationService: Sendable {
     let writeDb: Database
     let readDb: Database
     let logger: Logger

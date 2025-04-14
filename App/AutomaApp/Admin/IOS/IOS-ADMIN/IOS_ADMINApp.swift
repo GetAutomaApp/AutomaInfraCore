@@ -6,7 +6,7 @@
 import SwiftUI
 
 @main
-struct IOS_ADMINApp: App {
+internal struct IOS_ADMINApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

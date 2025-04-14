@@ -7,7 +7,7 @@ import AutomaAppShared
 import SwiftUI
 
 @main
-struct IOSApp: App {
+internal struct IOSApp: App {
     @StateObject var baseConfig = BaseAppEnvironmentObject()
     @StateObject var networkChecker: NetworkManager = .init()
 

@@ -11,7 +11,7 @@
 //
 import Vapor
 
-struct FirecrawlTestController: RouteCollection {
+internal struct FirecrawlTestController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let feedTesterRoute = routes.grouped("Firecrawl-Test")
 

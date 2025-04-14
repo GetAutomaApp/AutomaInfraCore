@@ -6,7 +6,7 @@
 import PhoneNumberKit
 import SwiftUI
 
-struct PhoneNumberTextFieldView: UIViewRepresentable {
+internal struct PhoneNumberTextFieldView: UIViewRepresentable {
     @ObservedObject var config: PhoneNumberTextInputComponentConfig
 
     private let textField = PhoneNumberTextField()

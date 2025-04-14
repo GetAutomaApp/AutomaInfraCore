@@ -19,8 +19,8 @@ import SwiftUI
 public struct TextInputFrameComponent: View {
     @ObservedObject public var config: TextInputFrameComponentConfig
 
-    let onIconTap: () -> Void
-    let onSelfAppear: () -> Void
+    public let onIconTap: () -> Void
+    public let onSelfAppear: () -> Void
 
     public init(
         config: TextInputFrameComponentConfig = .init(),

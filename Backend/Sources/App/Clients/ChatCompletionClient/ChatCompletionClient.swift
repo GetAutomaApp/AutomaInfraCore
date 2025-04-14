@@ -7,7 +7,7 @@ import Vapor
 
 /// Client for handling chat completion requests across different AI platforms
 /// Delegates requests to the appropriate platform-specific client based on the model
-struct ChatCompletionClient: ChatCompletion {
+internal struct ChatCompletionClient: ChatCompletion {
     /// Logger instance for tracking operations and errors
     var logger: Logging.Logger
 

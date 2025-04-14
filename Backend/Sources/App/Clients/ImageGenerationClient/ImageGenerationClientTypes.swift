@@ -12,7 +12,7 @@ protocol ImageGenerationClientBase {
     func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult
 }
 
-struct GenerateImageQuery: Content {
+internal struct GenerateImageQuery: Content {
     let model: GenerateImageModel
     let prompt: String
     let totalImagesToGenerate: Int?
@@ -52,7 +52,7 @@ enum GenerateImageModel: String, Codable {
     }
 }
 
-struct GenerateImageResult: Content {
+internal struct GenerateImageResult: Content {
     let images: [Data]
     let metadataJSON: Data
 }

@@ -6,7 +6,7 @@
 import Fluent
 import PostgresKit
 
-struct UserMigration1735067533: AsyncMigration {
+internal struct UserMigration1735067533: AsyncMigration {
     func prepare(on database: Database) async throws {
         try await database.schema("User")
             .id()

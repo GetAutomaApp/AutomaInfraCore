@@ -5,14 +5,14 @@
 
 import Foundation
 
-struct DiscordWebhookMessage: Codable {
+internal struct DiscordWebhookMessage: Codable {
     var content: String?
     var username: String?
     var avatar_url: String?
     var embeds: [DiscordEmbed]?
 }
 
-struct DiscordEmbed: Codable {
+internal struct DiscordEmbed: Codable {
     var title: String?
     var description: String?
     var url: String?
@@ -27,32 +27,32 @@ struct DiscordEmbed: Codable {
     var video: DiscordEmbedVideo?
 }
 
-struct DiscordEmbedField: Codable {
+internal struct DiscordEmbedField: Codable {
     var name: String
     var value: String
     var inline: Bool
 }
 
-struct DiscordEmbedFooter: Codable {
+internal struct DiscordEmbedFooter: Codable {
     var text: String
     var icon_url: String?
 }
 
-struct DiscordEmbedImage: Codable {
+internal struct DiscordEmbedImage: Codable {
     var url: String?
 }
 
-struct DiscordEmbedAuthor: Codable {
+internal struct DiscordEmbedAuthor: Codable {
     var name: String
     var url: String?
     var icon_url: String?
 }
 
-struct DiscordEmbedProvider: Codable {
+internal struct DiscordEmbedProvider: Codable {
     var name: String
     var url: String
 }
 
-struct DiscordEmbedVideo: Codable {
+internal struct DiscordEmbedVideo: Codable {
     var url: String
 }

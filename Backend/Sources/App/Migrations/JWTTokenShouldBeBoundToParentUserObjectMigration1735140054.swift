@@ -5,7 +5,7 @@
 
 import Fluent
 
-struct JWTTokenShouldBeBoundToParentUserObjectMigration1735140054: AsyncMigration {
+internal struct JWTTokenShouldBeBoundToParentUserObjectMigration1735140054: AsyncMigration {
     func prepare(on database: Database) async throws {
         try await database.schema("Jwt-Token")
             .foreignKey("user_id", references: "User", "id", onDelete: .cascade)

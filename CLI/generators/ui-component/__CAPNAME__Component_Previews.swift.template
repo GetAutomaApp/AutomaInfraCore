@@ -1,13 +1,13 @@
 import SwiftUI
 // Add a preview per state difference (No need to add all states)
 
-struct __CAPNAME__Component_Previews: PreviewProvider {
+internal struct __CAPNAME__Component_Previews: PreviewProvider {
     static var previews: some View {
         __CAPNAME__ComponentWrapperView()
     }
 }
 
-struct __CAPNAME__ComponentWrapperView: View {
+internal struct __CAPNAME__ComponentWrapperView: View {
     @ObservedObject var config = __CAPNAME__ComponentConfig()
     var body: some View {
         __CAPNAME__Component(config: config).padding()

@@ -6,7 +6,7 @@
 import AutomaUIKit
 import SwiftUI
 
-struct OnboardingScreenContent {
+internal struct OnboardingScreenContent {
     let title: String
     let description: String
     let background: Color = DesignTokens.colors.primary

@@ -9,7 +9,7 @@ import Foundation
 import TwitterAPIKit
 import Vapor
 
-struct TwitterClient: TwitterClientBase {
+internal struct TwitterClient: TwitterClientBase {
     let logger: Logger
     let client: Client
     let database: Database

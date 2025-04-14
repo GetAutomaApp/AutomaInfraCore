@@ -5,13 +5,13 @@
 
 import SwiftUI
 
-struct ButtonFrameComponent_Previews: PreviewProvider {
+internal struct ButtonFrameComponent_Previews: PreviewProvider {
     static var previews: some View {
         ButtonFrameComponent_PreviewsView()
     }
 }
 
-struct ButtonFrameComponent_PreviewsView: View {
+internal struct ButtonFrameComponent_PreviewsView: View {
     @StateObject var buttonConfig: ButtonFrameComponentConfig = .init()
 
     var body: some View {
@@ -52,7 +52,7 @@ struct ButtonFrameComponent_PreviewsView: View {
     }
 }
 
-struct AutoButtonVariationsView: View {
+internal struct AutoButtonVariationsView: View {
     @StateObject var buttonController: ButtonFrameComponentConfig = .init()
     @State private var isTimerActive = false
 

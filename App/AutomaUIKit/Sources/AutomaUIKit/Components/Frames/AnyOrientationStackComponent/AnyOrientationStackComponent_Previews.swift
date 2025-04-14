@@ -7,13 +7,13 @@ import SwiftUI
 
 // Add a preview per state difference (No need to add all states)
 
-struct AnyOrientationStackComponent_Previews: PreviewProvider {
+internal struct AnyOrientationStackComponent_Previews: PreviewProvider {
     static var previews: some View {
         AnyOrientationStackComponentWrapperView()
     }
 }
 
-struct AnyOrientationStackComponentWrapperView: View {
+internal struct AnyOrientationStackComponentWrapperView: View {
     @ObservedObject var config = AnyOrientationStackComponentConfig()
     var body: some View {
         AnyOrientationStackComponent(config: config) {

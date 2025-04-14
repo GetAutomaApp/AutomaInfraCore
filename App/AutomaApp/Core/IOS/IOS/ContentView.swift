@@ -13,7 +13,7 @@ import SwiftUI
 // 3. Add `automaAuthCode` to backend-interactor which is true/false (uses the env object)
 // 4. Make sure functionality works if refresh token gets set to null we go back to the onboarding screen
 
-struct ContentView: View {
+internal struct ContentView: View {
     @EnvironmentObject var baseEnvironmentConfig: BaseAppEnvironmentObject
     @EnvironmentObject var networkChecker: NetworkManager
 

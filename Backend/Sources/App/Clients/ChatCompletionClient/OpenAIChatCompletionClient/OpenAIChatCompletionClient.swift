@@ -9,7 +9,7 @@ import Vapor
 
 /// Client for interacting with OpenAI's chat completion API
 /// Handles authentication, request configuration, and response processing for chat completions
-struct OpenAIChatCompletionClient: ChatCompletion {
+internal struct OpenAIChatCompletionClient: ChatCompletion {
     /// The underlying OpenAI API client
     private let client: OpenAI
 

@@ -7,7 +7,7 @@ import DataTypes
 import Fluent
 import Vapor
 
-struct AuthenticationController: RouteCollection {
+internal struct AuthenticationController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let authenticationRoute = routes.grouped("Authentication")
 

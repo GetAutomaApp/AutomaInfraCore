@@ -11,7 +11,7 @@ import Vapor
 /// A client for generating images using OpenAI's API.
 /// This client handles image generation requests by communicating with OpenAI's DALL-E models.
 /// It supports both DALL-E 2 and DALL-E 3, with configurable parameters for image generation.
-struct OpenAIImageGenerationClient: ImageGenerationClientBase {
+internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     /// The underlying OpenAI client used for API communication
     private let client: OpenAI
 

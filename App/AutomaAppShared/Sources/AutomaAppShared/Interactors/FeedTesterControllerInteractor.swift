@@ -9,7 +9,7 @@ import Foundation
 
 // NOTE: This ControllerInteractor can be used for 3rd party apis on both the frontend + backend
 // A ControllerInteractor automatically gets generated when creating a backend-controller (on client)
-struct FeedTesterControllerInteractor: BackendControllerInteractor {
+internal struct FeedTesterControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
     /// Makes a request to /Feed-Tester/request

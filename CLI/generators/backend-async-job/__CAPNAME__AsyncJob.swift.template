@@ -2,11 +2,11 @@ import Vapor
 import Foundation
 import Queues
 
-struct __CAPNAME__JobInput: Codable {
+internal struct __CAPNAME__JobInput: Codable {
 
 }
 
-struct __CAPNAME__AsyncJob: AsyncJob {
+internal struct __CAPNAME__AsyncJob: AsyncJob {
     typealias Payload = __CAPNAME__JobInput
 
     func dequeue(_ context: QueueContext, _ payload: __CAPNAME__JobInput) async throws {

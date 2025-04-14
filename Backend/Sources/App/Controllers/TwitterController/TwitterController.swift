@@ -6,7 +6,7 @@
 import Fluent
 import Vapor
 
-struct TwitterController: RouteCollection {
+internal struct TwitterController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let twitterRoute = routes.grouped("Twitter")
 

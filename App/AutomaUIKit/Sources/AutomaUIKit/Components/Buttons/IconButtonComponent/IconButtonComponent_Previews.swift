@@ -5,13 +5,13 @@
 
 import SwiftUI
 
-struct IconButtonComponent_Previews: PreviewProvider {
+internal struct IconButtonComponent_Previews: PreviewProvider {
     static var previews: some View {
         IconButtonComponent_PreviewsView()
     }
 }
 
-struct IconButtonComponent_PreviewsView: View {
+internal struct IconButtonComponent_PreviewsView: View {
     @StateObject private var sharedConfig = IconButtonComponentConfig()
 
     var body: some View {

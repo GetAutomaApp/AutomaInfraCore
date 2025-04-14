@@ -7,7 +7,7 @@ import Fluent
 import OpenAI
 import Vapor
 
-struct ChatCompletionController: RouteCollection {
+internal struct ChatCompletionController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let chatCompletionRoute = routes.grouped("ChatCompletion").grouped(
             TestControllerMiddleware()

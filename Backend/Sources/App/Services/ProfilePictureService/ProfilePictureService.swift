@@ -8,7 +8,7 @@ import Fluent
 import OpenAI
 import Vapor
 
-struct ProfilePictureService {
+internal struct ProfilePictureService {
     let logger: Logger
 
     func createProfilePicture(for user: UserDTO, totalRegenerationAttempts: Int = 3,

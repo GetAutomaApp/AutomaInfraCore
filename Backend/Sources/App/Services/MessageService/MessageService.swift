@@ -14,7 +14,7 @@ import Vapor
     import FoundationNetworking
 #endif
 
-struct MessageService: Decodable {
+internal struct MessageService: Decodable {
     func sendSmS(
         to phoneNumber: String,
         message: String,

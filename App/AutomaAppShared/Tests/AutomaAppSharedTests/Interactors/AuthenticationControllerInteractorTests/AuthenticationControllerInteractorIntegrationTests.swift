@@ -8,6 +8,6 @@ import Testing
 
 // TODO: Proper testing for this (and rename struct)
 // TODO: Test bad scenarios / failures (ensure we throw typesafe errors)
-struct Test {
+internal struct Test {
     // TODO: Write tests for all kinds of scenarios
 }

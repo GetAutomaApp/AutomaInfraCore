@@ -91,7 +91,7 @@ public enum DesignIcons: String, CaseIterable, DesignIcon {
     }
 }
 
-struct DesignIconsConfig: Sendable {
+internal struct DesignIconsConfig: Sendable {
     let defaultWidth: CGFloat = 17.5
     let defaultHeight: CGFloat = 17.5
 }

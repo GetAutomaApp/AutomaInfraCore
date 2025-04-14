@@ -15,7 +15,7 @@ import SwiftUI
 
  For more information, refer to the documentation in `ButtonFrameComponentDocumentation.md`.
  */
-struct ButtonFrameComponent<Content: View>: View {
+internal struct ButtonFrameComponent<Content: View>: View {
     // Default configuration state for the button. Used when no custom configuration is provided.
     @ObservedObject private var config: ButtonFrameComponentConfig
 

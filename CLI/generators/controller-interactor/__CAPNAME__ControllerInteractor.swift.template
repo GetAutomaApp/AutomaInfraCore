@@ -4,7 +4,7 @@ import DataTypes
 
 // NOTE: This ControllerInteractor can be used for 3rd party apis on both the frontend + backend
 // A ControllerInteractor automatically gets generated when creating a backend-controller (on client)
-struct __CAPNAME__ControllerInteractor: BackendControllerInteractor {
+internal struct __CAPNAME__ControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
     /// Makes a request to /__CAPNAME_DASHED__/route_name

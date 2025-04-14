@@ -6,7 +6,7 @@
 import DataTypes
 import Vapor
 
-struct TestControllerMiddleware: AsyncMiddleware {
+internal struct TestControllerMiddleware: AsyncMiddleware {
     func respond(to request: Request, chainingTo next: AsyncResponder) async throws -> Response {
         let testsControllerKey = try Environment.getOrThrow("TEST_CONTROLLERS_KEY")
         guard

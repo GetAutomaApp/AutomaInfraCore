@@ -7,13 +7,13 @@ import SwiftUI
 
 // Add a preview per state difference (No need to add all states)
 
-struct TextInputComponentComponent_Previews: PreviewProvider {
+internal struct TextInputComponentComponent_Previews: PreviewProvider {
     static var previews: some View {
         TextInputComponentComponentWrapperView()
     }
 }
 
-struct TextInputComponentComponentWrapperView: View {
+internal struct TextInputComponentComponentWrapperView: View {
     @ObservedObject var config = TextInputComponentComponentConfig()
 
     var body: some View {

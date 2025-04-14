@@ -5,7 +5,7 @@
 
 import Fluent
 
-struct UserProfileConvertIdToImageKeyMigration1735294202: AsyncMigration {
+internal struct UserProfileConvertIdToImageKeyMigration1735294202: AsyncMigration {
     func prepare(on database: Database) async throws {
         try await database.schema("User")
             .deleteField("profile_picture_id")

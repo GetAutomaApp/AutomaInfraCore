@@ -1,7 +1,7 @@
 import Fluent
 import Vapor
 
-struct __CAPNAME__Controller: RouteCollection {
+internal struct __CAPNAME__Controller: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let __CAPNAME_HASKELL__Route = routes.grouped("__CAPNAME_DASHED__")
 

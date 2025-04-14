@@ -5,7 +5,7 @@
 
 import Fluent
 
-struct TwitterOAuthTokenMigration1741687313: AsyncMigration {
+internal struct TwitterOAuthTokenMigration1741687313: AsyncMigration {
     func prepare(on database: Database) async throws {
         try await database.schema("Twitter-O-Auth-Token")
             .id()

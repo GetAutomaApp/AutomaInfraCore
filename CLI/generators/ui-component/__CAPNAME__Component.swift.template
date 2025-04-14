@@ -11,7 +11,7 @@ Add a detailed description here of how to use this
 
 To see usage examples & visuals, check out `__CAPNAME__ModifierDocumentation.md`
 */
-struct __CAPNAME__Component: View {
+internal struct __CAPNAME__Component: View {
     @ObservedObject var config: __CAPNAME__ComponentConfig = __CAPNAME__ComponentConfig()
 
     var body: some View {

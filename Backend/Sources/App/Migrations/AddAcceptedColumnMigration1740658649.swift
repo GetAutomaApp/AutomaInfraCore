@@ -5,7 +5,7 @@
 
 import Fluent
 
-struct AddAcceptedColumnMigration1740658649: AsyncMigration {
+internal struct AddAcceptedColumnMigration1740658649: AsyncMigration {
     func prepare(on database: Database) async throws {
         try await database.schema("User")
             .field("accepted", .bool)

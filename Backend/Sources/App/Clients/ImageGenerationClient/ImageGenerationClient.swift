@@ -7,7 +7,7 @@ import DataTypes
 import OpenAI
 import Vapor
 
-struct ImageGenerationClient: ImageGenerationClientBase {
+internal struct ImageGenerationClient: ImageGenerationClientBase {
     let logger: Logger
 
     func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult {

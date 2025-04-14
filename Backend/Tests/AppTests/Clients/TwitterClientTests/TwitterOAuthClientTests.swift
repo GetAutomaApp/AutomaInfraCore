@@ -8,7 +8,7 @@ import Testing
 import VaporTesting
 
 @Suite("Twitter OAuth Tests")
-struct TwitterOAuthClientTests: TwitterClientTestSuite {
+internal struct TwitterOAuthClientTests: TwitterClientTestSuite {
     @Test("Test Request Token")
     func requestToken() async throws {
         try await withApp { app in

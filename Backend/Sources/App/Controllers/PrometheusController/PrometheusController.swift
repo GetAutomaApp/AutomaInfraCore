@@ -7,7 +7,7 @@ import Fluent
 import Prometheus
 import Vapor
 
-struct PrometheusController: RouteCollection {
+internal struct PrometheusController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let prometheusRoute = routes.grouped("Prometheus")
 

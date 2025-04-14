@@ -6,7 +6,7 @@
 @testable import IOS
 import Testing
 
-struct IOSTests {
+internal struct IOSTests {
     @Test func example() throws {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
     }

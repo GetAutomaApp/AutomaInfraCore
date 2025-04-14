@@ -5,19 +5,19 @@
 
 import SwiftUI
 
-struct FontTableFontModifier_Previews: PreviewProvider {
+internal struct FontTableFontModifier_Previews: PreviewProvider {
     static var previews: some View {
         TestView()
     }
 }
 
-struct TestView: View {
+internal struct TestView: View {
     var body: some View {
         ContentView()
     }
 }
 
-struct ContentView: View {
+internal struct ContentView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("This is bold Crimson Text!")

@@ -5,12 +5,12 @@
 
 import Vapor
 
-struct TwitterUserTokens: Content {
+internal struct TwitterUserTokens: Content {
     let accessToken: String
     let secretAccessToken: String
 }
 
-struct TwitterOAuthRedirectQueryParameters: Content {
+internal struct TwitterOAuthRedirectQueryParameters: Content {
     let oauthToken: String
     let oauthVerifier: String
 
@@ -20,6 +20,6 @@ struct TwitterOAuthRedirectQueryParameters: Content {
     }
 }
 
-struct PostTweetContent: Content {
+internal struct PostTweetContent: Content {
     let message: String
 }

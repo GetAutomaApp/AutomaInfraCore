@@ -20,7 +20,7 @@ protocol ChatCompletion {
 
 /// Structure representing the content of a chat completion request
 /// Contains all necessary parameters to generate a chat completion
-struct ChatCompletionContent: Content {
+internal struct ChatCompletionContent: Content {
     /// The AI model to use for generating the completion
     let model: ChatCompletionModel
 
@@ -70,7 +70,7 @@ enum ChatCompletionPlatform: String, Codable {
 
 /// Structure representing the result of a chat completion
 /// Contains the generated message and any additional metadata
-struct ChatCompletionResult: Content {
+internal struct ChatCompletionResult: Content {
     /// The generated text response from the AI model
     let message: String
 

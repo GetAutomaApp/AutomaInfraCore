@@ -11,7 +11,7 @@ import Vapor
 /// A client for handling Twitter OAuth 1.0a authentication flow.
 /// This client manages the OAuth token request, authentication URL generation,
 /// and conversion of OAuth tokens to user access tokens.
-struct TwitterOAuthClient: TwitterClientBase {
+internal struct TwitterOAuthClient: TwitterClientBase {
     let logger: Logger
     let client: Client
     let database: Database

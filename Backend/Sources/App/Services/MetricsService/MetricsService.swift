@@ -7,7 +7,7 @@ import Foundation
 import Metrics
 import Prometheus
 
-struct MetricsService {
+internal struct MetricsService {
     static let global = Self()
 
     private var prometheus: PrometheusCollectorRegistry

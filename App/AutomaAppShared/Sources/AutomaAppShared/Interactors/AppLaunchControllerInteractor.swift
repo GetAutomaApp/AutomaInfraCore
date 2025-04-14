@@ -7,7 +7,7 @@ import Alamofire
 import DataTypes
 import Foundation
 
-struct AppLaunchControllerInteractor: BackendControllerInteractor {
+internal struct AppLaunchControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
     func makeIsUserAcceptedRequest() async throws -> Bool {
