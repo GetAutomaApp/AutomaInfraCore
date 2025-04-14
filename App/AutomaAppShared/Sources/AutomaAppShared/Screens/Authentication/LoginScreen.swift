@@ -61,11 +61,10 @@ public struct LoginScreen: View {
                     centerContent: {
                         VStack {
                             VerificationCodeInputComponent(
-                                config: verificationInputConfig,
-                                onSelfAppear: { config in
-                                    config.title = "Verification Code"
-                                }
-                            ).onChange(of: verificationInputConfig.text) {
+                                config: verificationInputConfig
+                            ) { config in
+                                config.title = "Verification Code"
+                            }.onChange(of: verificationInputConfig.text) {
                                 isValidVerificationScreenState = verificationInputConfig.text.count > 3
                             }
 
@@ -164,7 +163,7 @@ public struct LoginScreen: View {
                     .set(for: .authenticationToken, value: response.accessToken),
                 KeychainHelper
                     .set(for: .refreshToken, value: response.refreshToken),
-            ].first(where: { !$0 })
+            ].first { !$0 }
 
             baseEnvironmentConfig.isLoggedIn = true
         } catch let error as GenericErrors {

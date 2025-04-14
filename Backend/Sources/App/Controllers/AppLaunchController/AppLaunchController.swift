@@ -33,7 +33,7 @@ struct AppLaunchController: RouteCollection {
     }
 
     @Sendable
-    func getClientConfig(req _: Request) async throws -> AppLaunchClientConfigDTO {
+    func getClientConfig(req _: Request) throws -> AppLaunchClientConfigDTO {
         .init()
     }
 }

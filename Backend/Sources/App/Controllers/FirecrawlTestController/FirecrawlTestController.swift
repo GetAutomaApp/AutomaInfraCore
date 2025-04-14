@@ -24,9 +24,8 @@ struct FirecrawlTestController: RouteCollection {
             client: req.client,
             logger: req.logger
         )
-        let response = try await firecrawlClient.scrapeMarkdown(
+        return try await firecrawlClient.scrapeMarkdown(
             from: .init(url: "https://firecrawl.dev")
         )
-        return response
     }
 }

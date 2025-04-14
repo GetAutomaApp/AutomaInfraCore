@@ -60,11 +60,10 @@ final class AuthenticationCodeModel: Model, @unchecked Sendable {
     }
 
     static func fromDTO(dto: AuthenticationCodeDTO) throws -> AuthenticationCodeModel {
-        let model = try AuthenticationCodeModel(
+        try AuthenticationCodeModel(
             id: dto.id, code: dto.code, phoneNumber: dto.phoneNumber, createdAt: dto.createdAt,
             updatedAt: dto.updatedAt,
             deletedAt: dto.deletedAt
         )
-        return model
     }
 }

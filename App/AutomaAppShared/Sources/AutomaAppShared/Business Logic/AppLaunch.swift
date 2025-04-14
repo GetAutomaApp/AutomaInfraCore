@@ -27,13 +27,12 @@ public struct AppLaunch: Sendable {
         var shouldReturn = false
         if let refreshToken = await keychain.get(for: .refreshToken) {
             let newAccessToken = try? await authenticationController.makeRefreshTokenRequest(
-                refreshToken,
-                handleInvalidToken: {
-                    await keychain.delete(for: .refreshToken)
-                    await keychain.delete(for: .authenticationToken)
-                    shouldReturn = true
-                }
-            )
+                refreshToken
+            ) {
+                await keychain.delete(for: .refreshToken)
+                await keychain.delete(for: .authenticationToken)
+                shouldReturn = true
+            }
 
             if shouldReturn {
                 return false
@@ -58,8 +57,7 @@ public struct AppLaunch: Sendable {
     public func isUserAccepted() async -> Bool {
         let appLaunchInteractor = AppLaunchControllerInteractor(baseURL: baseURL)
         do {
-            let response = try await appLaunchInteractor.makeIsUserAcceptedRequest()
-            return response
+            return try await appLaunchInteractor.makeIsUserAcceptedRequest()
         } catch {
             print("Unknown Response Error, Returning False")
             return false
@@ -69,8 +67,7 @@ public struct AppLaunch: Sendable {
     public func getClientConfig() async -> AppLaunchClientConfigDTO {
         let appLaunchInteractor = AppLaunchControllerInteractor(baseURL: baseURL)
         do {
-            let response = try await appLaunchInteractor.makeGetClientConfig()
-            return response
+            return try await appLaunchInteractor.makeGetClientConfig()
         } catch {
             print("Unknown Response Error, Returning Default Type")
             return .init()

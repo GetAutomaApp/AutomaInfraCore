@@ -26,7 +26,7 @@ struct TransactionalMessageAsyncJob: AsyncJob {
             )
     }
 
-    func error(_ context: QueueContext, _ error: Error, _ payload: TransactionalMessageJobInput) async throws {
+    func error(_ context: QueueContext, _ error: Error, _ payload: TransactionalMessageJobInput) throws {
         context.logger.info(
             "Error occurred while processing job",
             metadata: [

@@ -54,10 +54,10 @@ public struct OnboardingScreen: View {
     private func generateOnboardingView() -> some View {
         OnboardingScreenFrame(
             titleContent: {
-                InfoPairComponent(config: titleConfig, onSelfAppear: { config in
+                InfoPairComponent(config: titleConfig) { config in
                     config.title = onboardingScreenContent[0].title
                     config.description = onboardingScreenContent[0].description
-                })
+                }
                 .animation(
                     .bouncy,
                     value: progressIndicatorConfig.currentStep

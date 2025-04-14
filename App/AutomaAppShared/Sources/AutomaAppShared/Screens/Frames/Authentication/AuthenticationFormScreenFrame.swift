@@ -21,10 +21,10 @@ public struct AuthenticationFormScreenFrame<CenterContent: View>: View {
 
     public var body: some View {
         VStack(alignment: .leading) {
-            InfoPairComponent(config: titleConfig, onSelfAppear: { config in
+            InfoPairComponent(config: titleConfig) { config in
                 config.title = title
                 config.description = description
-            })
+            }
 
             Spacer()
 

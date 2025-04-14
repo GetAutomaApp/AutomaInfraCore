@@ -35,7 +35,7 @@ struct ProfilePictureAsyncJob: AsyncJob {
         )
     }
 
-    func error(_ context: QueueContext, _ error: any Error, _ payload: ProfilePictureJobInput) async throws {
+    func error(_ context: QueueContext, _ error: any Error, _ payload: ProfilePictureJobInput) throws {
         let logger = context.logger
 
         let stackTrace = Thread.callStackSymbols.joined(separator: "\n") // Captures the current stack trace

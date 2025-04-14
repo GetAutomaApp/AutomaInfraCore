@@ -80,11 +80,10 @@ public struct DebugMenu: View {
                     }
 
                     TextInputFrameComponent(
-                        config: environmentPickerConfig,
-                        onSelfAppear: {
-                            environmentPickerConfig.text = baseEnvironmentConfig.apiBaseURL
-                        }
-                    )
+                        config: environmentPickerConfig
+                    ) {
+                        environmentPickerConfig.text = baseEnvironmentConfig.apiBaseURL
+                    }
 
                     TextButtonComponent(
                         config: environmentPicketButtonConfig,

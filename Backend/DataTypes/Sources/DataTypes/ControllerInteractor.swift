@@ -113,7 +113,7 @@ public extension BackendControllerInteractor {
         response: DataResponse<Data?, AFError>,
         decodeTo: K.Type,
         rethrow: [GenericErrors]
-    ) async throws -> K {
+    ) throws -> K {
         let output = decodeResponse(
             response,
             decodeTo.self
@@ -198,9 +198,9 @@ public extension BackendControllerInteractor {
             URLError.resourceUnavailable,
         ]
 
-        return networkConnectionErrors.first(where: {
+        return networkConnectionErrors.first {
             error.code == $0
-        }) != nil
+        }! = nil
     }
 
     /// Get error from a network request response data

@@ -28,8 +28,7 @@ struct TwitterController: RouteCollection {
         req.logger.info("User Refresh Token: \(userTokens.accessToken)")
 
         let dto = userTokens.toDTO()
-        let base64Encoded = try dto.encodeToData().base64EncodedString()
-        return base64Encoded
+        return try dto.encodeToData().base64EncodedString()
     }
 
     @Sendable

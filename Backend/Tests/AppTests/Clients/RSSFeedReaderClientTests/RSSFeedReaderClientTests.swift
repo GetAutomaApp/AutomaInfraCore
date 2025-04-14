@@ -67,10 +67,10 @@ struct RSSFeedReaderClientTests {
 
             let result = try await client.read(from: url)
 
-            try #require(result.items.count > 0, "Feed should have items")
+            try #require(!result.items.isEmpty, "Feed should have items")
 
             for item in result.items {
-                #expect(item.title.count > 0, "Item title should not be empty")
+                #expect(!item.title.isEmpty, "Item title should not be empty")
             }
         }
     }

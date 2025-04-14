@@ -35,11 +35,11 @@ struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
             let result = try await createChat(app: app, query: query)
 
             // Verify the result contains a non-empty message
-            #expect(result.message.count > 0, "Message should not be empty")
+            #expect(!result.message.isEmpty, "Message should not be empty")
             #expect(result.message.count < maxTokens * 4, "Message should not be bigger than max tokens")
 
             // Verify the result contains metadata
-            #expect(result.metadata.count > 0, "Metadata should not be empty")
+            #expect(!result.metadata.isEmpty, "Metadata should not be empty")
         }
     }
 }

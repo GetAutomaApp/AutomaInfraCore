@@ -86,16 +86,13 @@ enum RandomService {
 
         let randomAppend = UUID().uuidString.split(separator: "-").first!.prefix(4)
 
-        let username = "\(mood)\(adjective)\(object)\(randomAppend)"
-
-        return username
+        return "\(mood)\(adjective)\(object)\(randomAppend)"
     }
 
     static func randomCode() -> String {
         let first = allWords.randomElement()!.lowercased()
         let second = allWords.randomElement()!.lowercased()
 
-        let code = "\(first)-\(second)"
-        return code
+        return "\(first)-\(second)"
     }
 }

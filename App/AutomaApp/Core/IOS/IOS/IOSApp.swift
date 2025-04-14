@@ -15,11 +15,11 @@ struct IOSApp: App {
         WindowGroup {
             ContentView()
                 .preferredColorScheme(.dark)
-                .onTapGesture(count: 5, perform: {
+                .onTapGesture(count: 5) {
                     #if DEBUG
                         baseConfig.isDebugMenuActive = true
                     #endif
-                })
+                }
                 .task {
                     let launchManager = AppLaunch(
                         baseURL: baseConfig.apiBaseURL
@@ -51,9 +51,9 @@ struct IOSApp: App {
                             }
                         }
                     }
-                }.fullScreenCover(isPresented: $baseConfig.isDebugMenuActive, content: {
+                }.fullScreenCover(isPresented: $baseConfig.isDebugMenuActive) {
                     DebugMenu()
-                })
+                }
                 .environmentObject(baseConfig)
                 .environmentObject(networkChecker)
         }

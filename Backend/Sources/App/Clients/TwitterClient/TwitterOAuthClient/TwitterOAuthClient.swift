@@ -79,7 +79,7 @@ struct TwitterOAuthClient: TwitterClientBase {
     /// - Parameter tokenObject: The OAuth token object obtained from requestToken()
     /// - Returns: URL that the user should visit to authorize the application
     /// - Throws: TwitterOAuthClientError if URL generation fails
-    public func makeAuthenticateURL(tokenObject: TwitterOAuthToken) async throws -> URL {
+    public func makeAuthenticateURL(tokenObject: TwitterOAuthToken) throws -> URL {
         let oauthToken = tokenObject.oauthToken
 
         guard
@@ -121,13 +121,11 @@ struct TwitterOAuthClient: TwitterClientBase {
 
         let userTokens =
             try await convertOAuthTokenToUserTokens(tokenObject: oauthTokenObject, oauthVerifier: oauthVerifier)
-        let userTokenModel = try await saveUserTokens(
+        return try await saveUserTokens(
             userTokens: userTokens,
             oauthTokenObject: oauthTokenObject,
             oauthVerifier: oauthVerifier
         )
-
-        return userTokenModel
     }
 
     /// Saves the user tokens to the database.
@@ -281,5 +279,5 @@ struct TwitterOAuthClient: TwitterClientBase {
     }
 
     // TODO: Use selenium to login user
-    private func loginTwitterUser() async throws {}
+    private func loginTwitterUser() throws {}
 }

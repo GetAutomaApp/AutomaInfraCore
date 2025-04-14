@@ -47,16 +47,16 @@ public struct OnboardingAuthPickerScreen: View {
     @ViewBuilder
     private func makeFooter() -> some View {
         VStack {
-            TextButtonComponent(defaultText: "Register", action: {
+            TextButtonComponent(defaultText: "Register") {
                 path = [
                     .register,
                 ]
-            })
-            TextButtonComponent(defaultText: "Login", action: {
+            }
+            TextButtonComponent(defaultText: "Login") {
                 path = [
                     .login,
                 ]
-            })
+            }
         }
     }
 }

@@ -29,12 +29,12 @@ public class KeychainHelper {
     )
 
     public static func get(for key: KeyChainKeys) -> String? {
-        try? KeychainHelper.keychain.string(forKey: key.rawValue)
+        try? keychain.string(forKey: key.rawValue)
     }
 
     public static func set(for key: KeyChainKeys, value: String) -> Bool {
         (
-            try? KeychainHelper.keychain.set(value, forKey: key.rawValue)
+            try? keychain.set(value, forKey: key.rawValue)
         ) != nil
     }
 

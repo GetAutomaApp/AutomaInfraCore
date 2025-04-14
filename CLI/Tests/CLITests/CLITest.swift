@@ -12,7 +12,7 @@ import Testing
 @Suite("Fake test suite", .serialized)
 struct AppTests {
     @Test("Fake test")
-    func helloWorld() async throws {
+    func helloWorld() throws {
         print("Hello, world!")
     }
 }

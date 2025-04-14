@@ -10,5 +10,5 @@ struct RemoveUserStorageMigration1739456565: AsyncMigration {
         try await database.schema("user-storage").delete()
     }
 
-    func revert(on _: any FluentKit.Database) async throws {}
+    func revert(on _: any FluentKit.Database) throws {}
 }

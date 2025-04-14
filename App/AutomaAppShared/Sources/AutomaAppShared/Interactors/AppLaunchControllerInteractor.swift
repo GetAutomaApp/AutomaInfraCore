@@ -34,14 +34,12 @@ struct AppLaunchControllerInteractor: BackendControllerInteractor {
             method: .get
         )
 
-        let parsedResponse = try await handleResponse(
+        return try await handleResponse(
             response: response,
             decodeTo: AppLaunchClientConfigDTO.self,
             rethrow: [
                 .networkConnectivityError,
             ]
         )
-
-        return parsedResponse
     }
 }

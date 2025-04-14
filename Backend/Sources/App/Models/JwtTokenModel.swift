@@ -64,10 +64,9 @@ final class JwtTokenModel: Model, @unchecked Sendable {
     }
 
     static func fromDTO(dto: JwtTokenDTO) -> JwtTokenModel {
-        let model = JwtTokenModel(
+        JwtTokenModel(
             id: dto.id, token: dto.token, userId: dto.userId, subject: dto.subject, createdAt: dto.createdAt,
             updatedAt: dto.updatedAt, deletedAt: dto.deletedAt
         )
-        return model
     }
 }

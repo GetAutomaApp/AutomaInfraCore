@@ -3,6 +3,8 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+// swiftlint:disable file_name
+
 import Vapor
 
 extension Environment {

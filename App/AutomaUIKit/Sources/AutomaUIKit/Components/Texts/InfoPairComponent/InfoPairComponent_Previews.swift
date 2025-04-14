@@ -20,16 +20,15 @@ struct InfoPairWrapperView: View {
             properties: [
                 [AnyKeyPath("Title", keyPath: \.title)],
                 [AnyKeyPath("Description", keyPath: \.description)],
-            ],
-            viewer: {
-                VStack {
-                    InfoPairComponent(config: config)
-                    EnumPropertyView(
-                        value: $config.variant,
-                        cases: InfoPairVariants.allCases
-                    )
-                }
+            ]
+        ) {
+            VStack {
+                InfoPairComponent(config: config)
+                EnumPropertyView(
+                    value: $config.variant,
+                    cases: InfoPairVariants.allCases
+                )
             }
-        )
+        }
     }
 }

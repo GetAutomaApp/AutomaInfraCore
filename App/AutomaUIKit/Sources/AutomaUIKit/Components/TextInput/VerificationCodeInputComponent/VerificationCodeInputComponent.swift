@@ -28,24 +28,19 @@ public struct VerificationCodeInputComponent: View {
 
     private func createTextBinding(index: Int) -> Binding<String> {
         .init(get: {
-            let splits = config.text.split(separator: "-", omittingEmptySubsequences: false).map(
-                { $0
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-                    .trimmingCharacters(in: .symbols)
-                    .trimmingCharacters(in: .illegalCharacters)
-                }
-            )
+            let splits = config.text.split(separator: "-", omittingEmptySubsequences: false).map { $0
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .trimmingCharacters(in: .symbols)
+                .trimmingCharacters(in: .illegalCharacters)
+            }
 
-            let splitToUse = splits.count >= index + 1 ? splits[index] : ""
-            return splitToUse
+            return splits.count >= index + 1 ? splits[index] : ""
         }, set: { new in
-            var splits = config.text.split(separator: "-", omittingEmptySubsequences: false).map(
-                { $0
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-                    .trimmingCharacters(in: .symbols)
-                    .trimmingCharacters(in: .illegalCharacters)
-                }
-            )
+            var splits = config.text.split(separator: "-", omittingEmptySubsequences: false).map { $0
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+                .trimmingCharacters(in: .symbols)
+                .trimmingCharacters(in: .illegalCharacters)
+            }
 
             let newCleaned = new
                 .trimmingCharacters(in: .whitespacesAndNewlines)

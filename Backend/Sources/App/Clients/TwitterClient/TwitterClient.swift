@@ -77,8 +77,7 @@ struct TwitterClient: TwitterClientBase {
         let data = Data(base64Encoded: tokenBase64String)
 
         do {
-            let token = try TwitterUserTokenDTO.decodeJSONFromData(data: data)
-            return token
+            return try TwitterUserTokenDTO.decodeJSONFromData(data: data)
         } catch {
             req.logger.error(
                 "Failed to decode token from authorization header.",

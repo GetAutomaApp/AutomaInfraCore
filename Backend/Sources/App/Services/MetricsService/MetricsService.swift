@@ -8,7 +8,7 @@ import Metrics
 import Prometheus
 
 struct MetricsService {
-    static let global = MetricsService()
+    static let global = Self()
 
     private var prometheus: PrometheusCollectorRegistry
 

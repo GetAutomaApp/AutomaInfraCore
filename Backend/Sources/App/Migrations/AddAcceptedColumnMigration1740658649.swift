@@ -12,5 +12,5 @@ struct AddAcceptedColumnMigration1740658649: AsyncMigration {
             .update()
     }
 
-    func revert(on _: Database) async throws {}
+    func revert(on _: Database) throws {}
 }

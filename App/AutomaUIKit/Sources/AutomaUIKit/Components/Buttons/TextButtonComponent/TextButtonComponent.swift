@@ -72,9 +72,8 @@ public struct TextButtonComponent: View {
     ) {
         self.init(
             onSelfAppear: onSelfAppear,
-            defaultText: defaultText,
-            action: { _ in action() }
-        )
+            defaultText: defaultText
+        ) { _ in action() }
     }
 
     // MARK: - Body

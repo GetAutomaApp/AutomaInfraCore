@@ -104,11 +104,20 @@ struct ButtonFrameComponent<Content: View>: View {
      - Parameter content: A closure returning the content view to be displayed inside the button.
      - Parameter onSelfAppear: A closure called when the button appears on screen.
      */
-    init(config: ButtonFrameComponentConfig,
-         action: @escaping (ButtonFrameComponentConfig) -> Void,
-         @ViewBuilder content: @escaping (ButtonFrameComponentConfig) -> Content,
-         onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in })
-    {
+    init(
+        config: ButtonFrameComponentConfig,
+        action: @escaping (
+            ButtonFrameComponentConfig
+        ) -> Void,
+        @ViewBuilder content: @escaping (
+            ButtonFrameComponentConfig
+        ) -> Content,
+        onSelfAppear: @escaping (
+            ButtonFrameComponentConfig
+        ) -> Void = {
+            _ in
+        }
+    ) {
         self.config = config
 
         self.action = action

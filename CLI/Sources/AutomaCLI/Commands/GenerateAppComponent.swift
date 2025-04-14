@@ -394,8 +394,7 @@ public struct GenerateAppComponent: Command {
         let dashedString = array.joined(separator: "-")
 
         if capitalized, let firstCharacter = dashedString.first {
-            let capitalizedString = "\(firstCharacter.uppercased())\(dashedString.dropFirst())"
-            return capitalizedString
+            return "\(firstCharacter.uppercased())\(dashedString.dropFirst())"
         }
 
         return dashedString

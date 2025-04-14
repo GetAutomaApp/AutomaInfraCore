@@ -78,7 +78,7 @@ struct RSSFeedReaderClient {
     /// - Parameter feedItems: An array of RSS feed items to convert.
     /// - Returns: An array of converted `GenericRSSFeedItem` objects.
     private func convertRSSToGenericFeedItems(items feedItems: [RSSFeedItem]) -> [GenericRSSFeedItem] {
-        let items = feedItems.compactMap { feedItem -> GenericRSSFeedItem? in
+        feedItems.compactMap { feedItem -> GenericRSSFeedItem? in
             guard
                 let title = feedItem.title,
                 let link = feedItem.link,
@@ -95,15 +95,13 @@ struct RSSFeedReaderClient {
                 publishDate: publishDate
             )
         }
-
-        return items
     }
 
     /// Converts Atom feed entries to the generic feed item format.
     /// - Parameter feedEntries: An array of Atom feed entries to convert.
     /// - Returns: An array of converted `GenericRSSFeedItem` objects.
     private func convertAtomToGenericFeedItems(entries feedEntries: [AtomFeedEntry]) -> [GenericRSSFeedItem] {
-        let entries = feedEntries.compactMap { entry -> GenericRSSFeedItem? in
+        feedEntries.compactMap { entry -> GenericRSSFeedItem? in
             guard
                 let title = entry.title,
                 let links = entry.links?.compactMap({ $0.attributes?.href }),
@@ -131,6 +129,5 @@ struct RSSFeedReaderClient {
                 youTubeVideoInfo: youTubeVideoInfo
             )
         }
-        return entries
     }
 }
