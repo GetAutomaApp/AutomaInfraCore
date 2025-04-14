@@ -199,3 +199,5 @@ dist
 
 wireguard-sandbox.conf
 wireguard-prod.conf
+
+.swiftlint.yml
