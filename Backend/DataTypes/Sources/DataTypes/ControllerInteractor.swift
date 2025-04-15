@@ -200,7 +200,7 @@ public extension BackendControllerInteractor {
 
         return networkConnectionErrors.first {
             error.code == $0
-        }! = nil
+        } != nil
     }
 
     /// Get error from a network request response data

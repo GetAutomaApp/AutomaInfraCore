@@ -98,7 +98,7 @@ internal struct OpenAIChatCompletionClient: ChatCompletion {
             ]
         )
 
-        guard let message = result.choices.first?.message.content?.string else {
+        guard let message = result.choices.first?.message.content else {
             BackendMetric.chatCompletionServiceCall(platform: .openai, model: model, status: .fail).increment()
             logger.error(
                 "Failed to generate chat completion, message empty",

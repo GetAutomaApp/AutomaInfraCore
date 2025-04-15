@@ -134,7 +134,12 @@ internal struct AuthenticationService: Sendable {
             ]
         )
 
-        let distance: Double = 60 // TODO: Convert this to a constant ENV var
+        guard
+            let distance = try Double(Environment.getOrThrow("AUTHENTICATION_CODE_DISTANCE"))
+        else {
+            throw Abort(.internalServerError) // TODO: Throw generic error here
+        }
+
         let dateToCheck = Date()
         if
             let mostRecentCodeSent = try await AuthenticationCodeModel
