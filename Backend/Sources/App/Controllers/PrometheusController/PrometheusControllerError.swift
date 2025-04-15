@@ -3,7 +3,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-enum PrometheusControllerError: Error {
+internal enum PrometheusControllerError: Error {
     case couldNotConvertMetricsToData
     case invalidAuthToken
 }

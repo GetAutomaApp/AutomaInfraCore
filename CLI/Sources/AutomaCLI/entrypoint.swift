@@ -6,7 +6,7 @@
 import Vapor
 
 @main
-enum Entrypoint {
+internal enum Entrypoint {
     static func main() async throws {
         let env = try Environment.detect()
         let app = try await Application.make(env)

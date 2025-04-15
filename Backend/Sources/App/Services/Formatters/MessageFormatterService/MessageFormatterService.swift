@@ -7,7 +7,7 @@ import DataTypes
 import Fluent
 import Vapor
 
-enum MessageFormatterService {
+internal enum MessageFormatterService {
     static func craftVerificationCodeMessage(
         code: String
     ) -> String {

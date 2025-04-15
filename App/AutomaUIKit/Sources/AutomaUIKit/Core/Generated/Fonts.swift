@@ -24,7 +24,7 @@ typealias Font = FontConvertible.Font
 // MARK: - Fonts
 
 // swiftlint:disable identifier_name line_length type_body_length
-enum FontFamily {
+internal enum FontFamily {
     enum CrimsonText {
         static let bold = FontConvertible(
             name: "CrimsonText-Bold",

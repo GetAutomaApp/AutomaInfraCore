@@ -6,7 +6,7 @@
 import TwitterAPIKit
 
 /// Represents errors that can occur during Twitter OAuth authentication flow
-enum TwitterOAuthClientError: Error {
+internal enum TwitterOAuthClientError: Error {
     /// Error returned from Twitter API request
     case responseError(TwitterAPIKitError)
 
@@ -26,7 +26,7 @@ enum TwitterOAuthClientError: Error {
     case failedToGetTokenFromDatabase(tokenType: TwitterOAuthTokenType, error: Error)
 }
 
-enum TwitterOAuthTokenType: String, Codable {
+internal enum TwitterOAuthTokenType: String, Codable {
     /// The OAuth token, can be retrieved by calling `requestToken` method `TwitterOAuthCLient`
     case oauth
 

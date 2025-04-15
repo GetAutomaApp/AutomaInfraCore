@@ -3,7 +3,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-enum OpenAIImageGenerationClientError: Error {
+internal enum OpenAIImageGenerationClientError: Error {
     case invalidModel
     case responseError
     case encodeError((any Error)?)

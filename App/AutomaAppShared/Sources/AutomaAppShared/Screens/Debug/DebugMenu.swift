@@ -13,7 +13,7 @@
 import AutomaUIKit
 import SwiftUI
 
-enum BaseEnvironmentUrl: String, CaseIterable {
+internal enum BaseEnvironmentUrl: String, CaseIterable {
     case sandbox = "https://api-sandbox.getautoma.app"
     case production = "https://api-production.getautoma.app"
     case staging = "https://api-staging.getautoma.app"

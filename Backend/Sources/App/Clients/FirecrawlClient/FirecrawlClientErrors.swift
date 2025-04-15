@@ -3,6 +3,6 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-enum FirecrawlClientErrors: Error {
+internal enum FirecrawlClientErrors: Error {
     case failedToScrape
 }

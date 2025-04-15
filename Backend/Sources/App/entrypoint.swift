@@ -10,7 +10,7 @@ import NIOPosix
 import Vapor
 
 @main
-enum Entrypoint {
+internal enum Entrypoint {
     static func main() async throws {
         var env = try Environment.detect()
         try LoggingSystem.bootstrap(from: &env)

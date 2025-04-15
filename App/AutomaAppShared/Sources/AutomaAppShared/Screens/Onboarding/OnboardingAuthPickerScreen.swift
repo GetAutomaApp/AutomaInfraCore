@@ -6,7 +6,7 @@
 import AutomaUIKit
 import SwiftUI
 
-enum AuthScreenRoute {
+internal enum AuthScreenRoute {
     case register
     case login
 }

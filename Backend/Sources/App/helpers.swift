@@ -53,7 +53,7 @@ extension Data {
     }
 }
 
-enum ErrorOrMessage {
+internal enum ErrorOrMessage {
     case error(Error)
     case message(String)
 }

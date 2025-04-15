@@ -32,7 +32,7 @@ extension Color {
     }
 }
 
-enum DesignImages {
+internal enum DesignImages {
     static func iconManipulation(_ image: Image) -> some View {
         image
             .resizable()

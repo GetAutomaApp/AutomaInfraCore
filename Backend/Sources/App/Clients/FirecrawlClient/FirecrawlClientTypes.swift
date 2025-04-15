@@ -5,7 +5,7 @@
 
 import Vapor
 
-enum FirecrawlFormats: String, Content {
+internal enum FirecrawlFormats: String, Content {
     case markdown, rawHtml
 }
 

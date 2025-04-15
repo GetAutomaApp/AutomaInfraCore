@@ -3,7 +3,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-enum MetricStatus: String, Codable {
+internal enum MetricStatus: String, Codable {
     case success
     case fail
     case alreadyExists

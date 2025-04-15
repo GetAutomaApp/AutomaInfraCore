@@ -39,7 +39,7 @@ internal struct ChatCompletionContent: Content {
 
 /// Enumeration of supported chat completion models
 /// Each case represents a specific AI model with its raw string value
-enum ChatCompletionModel: String, Codable {
+internal enum ChatCompletionModel: String, Codable {
     /// https: // platform.openai.com/docs/models/gpt-4o
     case gpt4o = "gpt-4o"
 
@@ -63,7 +63,7 @@ enum ChatCompletionModel: String, Codable {
 
 /// Enumeration of supported chat completion platforms
 /// Identifies the AI service provider
-enum ChatCompletionPlatform: String, Codable {
+internal enum ChatCompletionPlatform: String, Codable {
     /// OpenAI platform (includes GPT models)
     case openai
 }

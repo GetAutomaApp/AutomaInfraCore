@@ -37,7 +37,7 @@ internal struct GenerateImageQuery: Content {
     }
 }
 
-enum GenerateImageModel: String, Codable {
+internal enum GenerateImageModel: String, Codable {
     /// https://platform.openai.com/docs/models/dall-e-2
     case dall_e_2 = "dall-e-2"
 
@@ -57,7 +57,7 @@ internal struct GenerateImageResult: Content {
     let metadataJSON: Data
 }
 
-enum GenerateImageQuality: String, Codable {
+internal enum GenerateImageQuality: String, Codable {
     case standard
     case hd
 }
