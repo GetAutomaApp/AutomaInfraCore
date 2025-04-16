@@ -24,7 +24,7 @@ public struct DesignColors: Sendable {
 
 public struct DesignPadding: Sendable {
     public enum PaddingSizes: CGFloat {
-        case base, medium, small, large
+        case base, large, medium, small
 
         var value: CGFloat {
             switch self {
@@ -64,14 +64,10 @@ protocol DesignIcon {
 }
 
 public enum DesignIcons: String, CaseIterable, DesignIcon {
-    case pause, play, unknown
     case arrowRight
-
-    // mathematics
-    case subtraction
-
-    // Other
     case other
+    case pause, play, unknown
+    case subtraction
 
     var image: some View {
         switch self {
@@ -157,7 +153,7 @@ public enum FontTable {
         }
 
         public enum Meta: IsFontTableFont {
-            case label1, label2, caption1
+            case caption1, label1, label2
 
             public var font: SwiftUI.Font {
                 switch self {
@@ -220,7 +216,7 @@ public enum FontTable {
         }
 
         public enum Meta: IsFontTableFont {
-            case label1, label2, caption1
+            case caption1, label1, label2
 
             public var font: SwiftUI.Font {
                 switch self {

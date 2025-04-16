@@ -7,10 +7,10 @@ import SwiftUI
 
 /// Enum defining the different variants of the IconButton component.
 public enum IconButtonVariants: String, CaseIterable {
-    case generic
-    case square
     case circle
+    case generic
     case pill
+    case square
 }
 
 /// Configuration for the IconButtonComponent that extends from `ButtonFrameComponentConfig`.

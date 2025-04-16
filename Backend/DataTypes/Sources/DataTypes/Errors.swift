@@ -6,25 +6,25 @@
 import Vapor
 
 public enum GenericErrors: String, Error, Decodable, Encodable {
-    case invalidCode
-    case userAlreadyExists
-    case userNotFound
-    case invalidToken
-    case invalidUserId
+    case abortError
+    case alamofireError
     case discordWebhookMessageFailed
-    case smsMessageFailed
-    case missingImage
     case failedToDecodeResponse
     case failedToEncodeResponse
-    case unknownError
-    case alamofireError
-    case networkConnectivityError
-    case verificationCodeRateLimit
-    case abortError
-    case s3PathTooShort
-    case invalidUrl
+    case invalidCode
     case invalidPhoneNumber
+    case invalidToken
+    case invalidUrl
+    case invalidUserId
+    case missingImage
+    case networkConnectivityError
+    case s3PathTooShort
+    case smsMessageFailed
     case unexpectedApiStateNoErrorAndNoResponse
+    case unknownError
+    case userAlreadyExists
+    case userNotFound
+    case verificationCodeRateLimit
 
     public var message: String {
         switch self {
