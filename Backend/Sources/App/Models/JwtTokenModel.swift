@@ -51,7 +51,7 @@ final class JwtTokenModel: Model, @unchecked Sendable {
         self.deletedAt = deletedAt
     }
 
-    func toDTO() -> JwtTokenDTO {
+    public func toDTO() -> JwtTokenDTO {
         .init(
             id: id,
             token: token,

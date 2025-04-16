@@ -9,7 +9,7 @@ import Vapor
 
 protocol ImageGenerationClientBase {
     var logger: Logger { get }
-    func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult
+    public func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult
 }
 
 internal struct GenerateImageQuery: Content {
@@ -44,7 +44,7 @@ internal enum GenerateImageModel: String, Codable {
     /// https://platform.openai.com/docs/models/dall-e-3
     case dall_e_3 = "dall-e-3"
 
-    func getPlatformClient(logger: Logger) throws -> any ImageGenerationClientBase {
+    public func getPlatformClient(logger: Logger) throws -> any ImageGenerationClientBase {
         switch self {
         case .dall_e_2, .dall_e_3:
             try OpenAIImageGenerationClient(logger: logger)

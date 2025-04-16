@@ -7,7 +7,7 @@ import Alamofire
 import DataTypes
 import Foundation
 
-extension BackendControllerInteractor {
+public extension BackendControllerInteractor {
     func performRequest(
         endpoint: String,
         method: Alamofire.HTTPMethod,

@@ -74,14 +74,14 @@ public class ProgressIndicatorComponentConfig: ObservableObject {
     }
 
     /// Determines the step length for the `generic` variant
-    func determineStepLength(_ step: Int) -> CGFloat {
+    public func determineStepLength(_ step: Int) -> CGFloat {
         step == 0 ? (
             stepLength + determineSpaceBetweenSteps * 2
         ) : stepLength
     }
 
     /// Determines the step colour for the `generic` variant
-    func determineStepColour(_ step: Int) -> Color {
+    public func determineStepColour(_ step: Int) -> Color {
         (
             currentStep - 1 == step && currentStep - 1 > 0
         ) ? stepColour.opacity(0.5) : stepColour
@@ -93,7 +93,7 @@ public class ProgressIndicatorComponentConfig: ObservableObject {
 
     /// A method to increment the step count by one or `byCount`
     /// This method ensures to clamp the value to the max if you provide an overflow
-    func incrementStep(_ byCount: Int = 1) {
+    public func incrementStep(_ byCount: Int = 1) {
         let setStepTo = currentStep + byCount
         guard setStepTo <= totalSteps else {
             /// Set the step count to the max amount of steps if the user overflows the clamp
@@ -103,7 +103,7 @@ public class ProgressIndicatorComponentConfig: ObservableObject {
         currentStep = setStepTo
     }
 
-    func decrementStep(_ byCount: Int = 1) {
+    public func decrementStep(_ byCount: Int = 1) {
         let setStepTo = currentStep - byCount
         guard setStepTo >= 1 else {
             /// Set the step count to 1 if the user overflows the min clamp
@@ -114,7 +114,7 @@ public class ProgressIndicatorComponentConfig: ObservableObject {
     }
 
     /// Sets the step to a specific one (with a min/max clamp)
-    func setStep(_ step: Int) {
+    public func setStep(_ step: Int) {
         guard currentStep != step, step > 0, step <= totalSteps else { return }
 
         currentStep = step

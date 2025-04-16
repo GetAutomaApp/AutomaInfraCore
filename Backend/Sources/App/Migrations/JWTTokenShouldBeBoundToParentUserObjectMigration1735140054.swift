@@ -6,13 +6,13 @@
 import Fluent
 
 internal struct JWTTokenShouldBeBoundToParentUserObjectMigration1735140054: AsyncMigration {
-    func prepare(on database: Database) async throws {
+    public func prepare(on database: Database) async throws {
         try await database.schema("Jwt-Token")
             .foreignKey("user_id", references: "User", "id", onDelete: .cascade)
             .update()
     }
 
-    func revert(on database: Database) async throws {
+    public func revert(on database: Database) async throws {
         try await database.schema("Jwt-Token")
             .deleteForeignKey(name: "user_id")
             .update()

@@ -6,9 +6,9 @@
 import Fluent
 
 internal struct RemoveUserStorageMigration1739456565: AsyncMigration {
-    func prepare(on database: Database) async throws {
+    public func prepare(on database: Database) async throws {
         try await database.schema("user-storage").delete()
     }
 
-    func revert(on _: any FluentKit.Database) throws {}
+    public func revert(on _: any FluentKit.Database) throws {}
 }

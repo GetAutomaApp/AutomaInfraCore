@@ -160,7 +160,7 @@ internal struct ButtonFrameComponent<Content: View>: View {
 
      - Returns: A view representing the button's background (gradient or solid color).
      */
-    func determineBackgroundColor() -> some View {
+    public func determineBackgroundColor() -> some View {
         Group {
             switch config.frameVariant {
             case .disabled:

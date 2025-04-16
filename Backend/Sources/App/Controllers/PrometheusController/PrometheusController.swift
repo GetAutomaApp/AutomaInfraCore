@@ -8,14 +8,14 @@ import Prometheus
 import Vapor
 
 internal struct PrometheusController: RouteCollection {
-    func boot(routes: RoutesBuilder) throws {
+    public func boot(routes: RoutesBuilder) throws {
         let prometheusRoute = routes.grouped("Prometheus")
 
         prometheusRoute.get("metrics", use: metrics)
     }
 
     @Sendable
-    func metrics(req: Request) throws -> String {
+    public func metrics(req: Request) throws -> String {
         try validate(req: req)
         guard
             let metrics = String(data: MetricsService.global.emit(), encoding: .utf8)

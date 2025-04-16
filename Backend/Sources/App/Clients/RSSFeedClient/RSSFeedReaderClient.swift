@@ -21,7 +21,7 @@ internal struct RSSFeedReaderClient {
     /// - Parameter url: The URL of the RSS or Atom feed to read.
     /// - Returns: A `RssFeedResponse` containing parsed feed items and metadata.
     /// - Throws: Any errors encountered during the feed fetching or parsing process.
-    func read(from url: URL) async throws -> RssFeedResponse {
+    public func read(from url: URL) async throws -> RssFeedResponse {
         BackendMetric.rssFeedReaderMetric(status: .start, url: url).increment()
 
         var feed: Feed?

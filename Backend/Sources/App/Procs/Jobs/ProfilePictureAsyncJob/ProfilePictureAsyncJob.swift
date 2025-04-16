@@ -15,7 +15,7 @@ internal struct ProfilePictureJobInput: Codable {
 internal struct ProfilePictureAsyncJob: AsyncJob {
     typealias Payload = ProfilePictureJobInput
 
-    func dequeue(_ context: QueueContext, _ payload: ProfilePictureJobInput) async throws {
+    public func dequeue(_ context: QueueContext, _ payload: ProfilePictureJobInput) async throws {
         // This is where you would run code for the job
         let logger = context.logger
         let profilePictureService = ProfilePictureService(logger: context.logger)
@@ -35,7 +35,7 @@ internal struct ProfilePictureAsyncJob: AsyncJob {
         )
     }
 
-    func error(_ context: QueueContext, _ error: any Error, _ payload: ProfilePictureJobInput) throws {
+    public func error(_ context: QueueContext, _ error: any Error, _ payload: ProfilePictureJobInput) throws {
         let logger = context.logger
 
         let stackTrace = Thread.callStackSymbols.joined(separator: "\n") // Captures the current stack trace

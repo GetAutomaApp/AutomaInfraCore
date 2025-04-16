@@ -20,14 +20,14 @@ internal struct MetricsService {
         prometheus = prometheusRegistry
     }
 
-    func emit() -> Data {
+    public func emit() -> Data {
         var buffer = [UInt8]()
         prometheus.emit(into: &buffer)
         let data = String(decoding: buffer, as: Unicode.UTF8.self)
         return Data(data.utf8)
     }
 
-    func makeCounter(name: String, labels: [String: String] = [:]) -> Prometheus.Counter {
+    public func makeCounter(name: String, labels: [String: String] = [:]) -> Prometheus.Counter {
         prometheus
             .makeCounter(
                 name: name,

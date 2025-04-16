@@ -40,7 +40,7 @@ internal struct OpenAIChatCompletionClient: ChatCompletion {
     /// - Parameter query: The chat completion request parameters
     /// - Returns: The generated chat completion result
     /// - Throws: ChatCompletionClientError if the request fails or returns invalid data
-    func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult {
+    public func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult {
         let model = query.model
         var result: ChatResult?
         let prompt = query.prompt

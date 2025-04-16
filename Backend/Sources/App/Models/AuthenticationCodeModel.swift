@@ -48,7 +48,7 @@ final class AuthenticationCodeModel: Model, @unchecked Sendable {
         self.deletedAt = deletedAt
     }
 
-    func toDTO() throws -> AuthenticationCodeDTO {
+    public func toDTO() throws -> AuthenticationCodeDTO {
         try AuthenticationCodeDTO(
             id: id,
             phoneNumber: phoneNumber,

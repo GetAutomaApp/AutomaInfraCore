@@ -10,7 +10,7 @@ import VaporTesting
 @Suite("Twitter OAuth Tests")
 internal struct TwitterOAuthClientTests: TwitterClientTestSuite {
     @Test("Test Request Token")
-    func requestToken() async throws {
+    public func requestToken() async throws {
         try await withApp { app in
             let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
             let token = try await twitterClient.auth.requestToken()
@@ -21,7 +21,7 @@ internal struct TwitterOAuthClientTests: TwitterClientTestSuite {
     }
 
     @Test("Make Authenticate URL")
-    func makeAuthenticateURL() async throws {
+    public func makeAuthenticateURL() async throws {
         try await withApp { app in
             let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
             let token = try await twitterClient.auth.requestToken()

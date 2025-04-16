@@ -7,7 +7,7 @@ import DataTypes
 import Vapor
 
 internal struct TestControllerMiddleware: AsyncMiddleware {
-    func respond(to request: Request, chainingTo next: AsyncResponder) async throws -> Response {
+    public func respond(to request: Request, chainingTo next: AsyncResponder) async throws -> Response {
         let testsControllerKey = try Environment.getOrThrow("TEST_CONTROLLERS_KEY")
         guard
             let headerValue = request.headers.first(name: "X-Tests-Controller-Key")

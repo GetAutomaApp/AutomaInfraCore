@@ -20,7 +20,7 @@ protocol ChatCompletionClientTestSuite {
     /// - Parameter query: The chat completion request parameters
     /// - Returns: The generated chat completion result
     /// - Throws: Any errors that occur during the chat completion process
-    func createChat(app: Application, query: ChatCompletionContent) async throws -> ChatCompletionResult
+    public func createChat(app: Application, query: ChatCompletionContent) async throws -> ChatCompletionResult
 }
 
 extension ChatCompletionClientTestSuite {
@@ -42,7 +42,7 @@ extension ChatCompletionClientTestSuite {
     ///   - Application initialization errors
     ///   - Test execution errors
     ///   - Shutdown errors
-    func withApp(test: (Application) async throws -> Void) async throws {
+    public func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
             try await test(app)
@@ -62,7 +62,7 @@ extension ChatCompletionClientTestSuite {
     ///   - Client initialization errors
     ///   - Network errors
     ///   - Invalid response formats
-    func createChat(app: Application, query: ChatCompletionContent) async throws -> ChatCompletionResult {
+    public func createChat(app: Application, query: ChatCompletionContent) async throws -> ChatCompletionResult {
         let client = ChatCompletionClient(logger: app.logger)
 
         let queryWithMaxTokens: ChatCompletionContent = .init(

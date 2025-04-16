@@ -7,7 +7,7 @@ import DataTypes
 import Vapor
 
 internal struct ErrorStringMiddleware: Middleware {
-    func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
+    public func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
         next.respond(to: request).flatMapErrorThrowing { error in
             let response = Response()
             response.status = .internalServerError

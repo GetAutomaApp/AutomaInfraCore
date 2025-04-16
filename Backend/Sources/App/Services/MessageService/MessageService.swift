@@ -15,7 +15,7 @@ import Vapor
 #endif
 
 internal struct MessageService: Decodable {
-    func sendSmS(
+    public func sendSmS(
         to phoneNumber: String,
         message: String,
         logger: Logger
@@ -78,7 +78,7 @@ internal struct MessageService: Decodable {
         }
     }
 
-    func sendWebhookMessage(webhookURL: URL, message: DiscordWebhookMessage, logger: Logger) async throws {
+    public func sendWebhookMessage(webhookURL: URL, message: DiscordWebhookMessage, logger: Logger) async throws {
         BackendMetric.totalDiscordWebhookMessagesSent.increment()
 
         if try Environment.getOrThrow("ENVIRONMENT") == "local" {
@@ -122,7 +122,7 @@ internal struct MessageService: Decodable {
         }
     }
 
-    func sendDiscordWebhookAppEvent(
+    public func sendDiscordWebhookAppEvent(
         input: String,
         event: String,
         imageUrl: String? = nil,
@@ -145,7 +145,7 @@ internal struct MessageService: Decodable {
         }
     }
 
-    func sendDiscordAlert(
+    public func sendDiscordAlert(
         alertTitle: String,
         error: Error,
         logger: Logger

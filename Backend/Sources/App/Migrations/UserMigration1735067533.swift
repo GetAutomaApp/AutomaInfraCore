@@ -7,7 +7,7 @@ import Fluent
 import PostgresKit
 
 internal struct UserMigration1735067533: AsyncMigration {
-    func prepare(on database: Database) async throws {
+    public func prepare(on database: Database) async throws {
         try await database.schema("User")
             .id()
             .field("username", .string, .required)
@@ -27,7 +27,7 @@ internal struct UserMigration1735067533: AsyncMigration {
             .run()
     }
 
-    func revert(on database: Database) async throws {
+    public func revert(on database: Database) async throws {
         try await database.schema("User").delete()
         try await (database as! SQLDatabase).drop(index: "idx_user_by_username").run()
     }

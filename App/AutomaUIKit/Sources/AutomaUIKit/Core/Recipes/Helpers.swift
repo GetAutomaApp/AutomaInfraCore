@@ -45,7 +45,7 @@ internal enum DesignImages {
     }
 }
 
-extension Image {
+public extension Image {
     func toIcon() -> some View {
         DesignImages
             .iconManipulation(self)

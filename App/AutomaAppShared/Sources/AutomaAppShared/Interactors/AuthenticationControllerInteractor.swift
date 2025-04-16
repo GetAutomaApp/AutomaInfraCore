@@ -12,7 +12,7 @@ import Foundation
 internal struct AuthenticationControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
-    func makeRegisterCodeRequest(_ phoneNumber: String) async throws -> AuthenticationCodeResponseDTO {
+    public func makeRegisterCodeRequest(_ phoneNumber: String) async throws -> AuthenticationCodeResponseDTO {
         let params = try PhoneNumberPayloadDTO(number: phoneNumber).encodeToDictionary()
 
         let response = await performRequest(
@@ -31,7 +31,9 @@ internal struct AuthenticationControllerInteractor: BackendControllerInteractor 
         )
     }
 
-    func makeRegisterRequest(_ phoneNumber: String, _ code: String) async throws -> AuthenticationTokensPayloadDTO {
+    public func makeRegisterRequest(_ phoneNumber: String,
+                                    _ code: String) async throws -> AuthenticationTokensPayloadDTO
+    {
         let params = try AuthPhoneCodePayloadDTO(phoneNumber: phoneNumber, code: code).encodeToDictionary()
 
         let response = await performRequest(
@@ -51,7 +53,7 @@ internal struct AuthenticationControllerInteractor: BackendControllerInteractor 
         )
     }
 
-    func makeLoginCodeRequest(_ phoneNumber: String) async throws -> AuthenticationCodeResponseDTO {
+    public func makeLoginCodeRequest(_ phoneNumber: String) async throws -> AuthenticationCodeResponseDTO {
         let params = try PhoneNumberPayloadDTO(number: phoneNumber).encodeToDictionary()
 
         let response = await performRequest(
@@ -71,7 +73,7 @@ internal struct AuthenticationControllerInteractor: BackendControllerInteractor 
         )
     }
 
-    func makeLoginRequest(_ phoneNumber: String, _ code: String) async throws -> AuthenticationTokensPayloadDTO {
+    public func makeLoginRequest(_ phoneNumber: String, _ code: String) async throws -> AuthenticationTokensPayloadDTO {
         let params = try AuthPhoneCodePayloadDTO(phoneNumber: phoneNumber, code: code).encodeToDictionary()
 
         let response = await performRequest(
@@ -91,8 +93,8 @@ internal struct AuthenticationControllerInteractor: BackendControllerInteractor 
         )
     }
 
-    func makeRefreshTokenRequest(_ refreshToken: String,
-                                 handleInvalidToken: @escaping () async throws -> Void) async throws
+    public func makeRefreshTokenRequest(_ refreshToken: String,
+                                        handleInvalidToken: @escaping () async throws -> Void) async throws
         -> AccessTokenPayloadDTO
     {
         let params = ["xxrt": refreshToken]

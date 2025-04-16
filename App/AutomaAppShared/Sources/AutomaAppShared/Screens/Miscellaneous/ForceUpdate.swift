@@ -29,7 +29,7 @@ public struct ForceUpdate: View {
         }.defaultScreenPadding()
     }
 
-    func openUpdateScreen() {
+    public func openUpdateScreen() {
         if let url = URL(string: "https://apps.apple.com/us/app/places-curated-discovery/id6446208302") {
             UIApplication.shared.open(url)
         }

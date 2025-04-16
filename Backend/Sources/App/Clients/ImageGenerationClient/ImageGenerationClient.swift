@@ -10,7 +10,7 @@ import Vapor
 internal struct ImageGenerationClient: ImageGenerationClientBase {
     let logger: Logger
 
-    func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult {
+    public func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult {
         let client = try query.model.getPlatformClient(logger: logger)
         let res = try await client.generateImage(query)
 

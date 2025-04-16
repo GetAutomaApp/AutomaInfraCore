@@ -6,7 +6,7 @@
 import Fluent
 
 internal struct CreateUserStorageItem: AsyncMigration {
-    func prepare(on database: Database) async throws {
+    public func prepare(on database: Database) async throws {
         try await database.schema("user-storage")
             .id()
             .field("key", .string, .required)
@@ -17,7 +17,7 @@ internal struct CreateUserStorageItem: AsyncMigration {
             .create()
     }
 
-    func revert(on database: Database) async throws {
+    public func revert(on database: Database) async throws {
         try await database.schema("user-storage").delete()
     }
 }

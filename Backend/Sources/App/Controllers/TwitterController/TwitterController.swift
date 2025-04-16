@@ -7,7 +7,7 @@ import Fluent
 import Vapor
 
 internal struct TwitterController: RouteCollection {
-    func boot(routes: RoutesBuilder) throws {
+    public func boot(routes: RoutesBuilder) throws {
         let twitterRoute = routes.grouped("Twitter")
 
         twitterRoute.get("redirect", use: redirect)
@@ -15,7 +15,7 @@ internal struct TwitterController: RouteCollection {
     }
 
     @Sendable
-    func redirect(req: Request) async throws -> String {
+    public func redirect(req: Request) async throws -> String {
         let twitterClient = try TwitterClient(logger: req.logger, client: req.client, database: req.db)
         let queryParameters = try req.query.decode(TwitterOAuthRedirectQueryParameters.self)
 
@@ -32,7 +32,7 @@ internal struct TwitterController: RouteCollection {
     }
 
     @Sendable
-    func post(req: Request) async throws -> HTTPStatus {
+    public func post(req: Request) async throws -> HTTPStatus {
         let token = try TwitterClient.getUserToken(req: req)
 
         let authenticatedClient = try TwitterClient(

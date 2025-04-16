@@ -14,7 +14,7 @@ internal struct FeedTesterControllerInteractor: BackendControllerInteractor {
 
     /// Makes a request to /Feed-Tester/request
     /// Change the return type to your Decodable DTO
-    func makeRequest() async throws -> DataResponse<Data?, AFError> {
+    public func makeRequest() async throws -> DataResponse<Data?, AFError> {
         try await performRequest(
             endpoint: "/Feed-Tester/request",
             method: .get

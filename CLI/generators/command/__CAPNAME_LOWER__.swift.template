@@ -10,7 +10,7 @@ internal struct __CAPNAME__Command: Command {
         var arg: String
     }
 
-    func run(using _: CommandContext, signature: Signature) throws {
+    public func run(using _: CommandContext, signature: Signature) throws {
         let arg = signature.arg
 
         print("\(arg)")

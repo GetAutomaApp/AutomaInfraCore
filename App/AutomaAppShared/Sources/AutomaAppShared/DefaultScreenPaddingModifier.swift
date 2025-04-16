@@ -6,14 +6,14 @@
 import SwiftUI
 
 internal struct DefaultScreenPaddingModifier: ViewModifier {
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .padding(.horizontal, 30)
             .padding(.vertical, 50)
     }
 }
 
-extension View {
+public extension View {
     func defaultScreenPadding() -> some View {
         modifier(DefaultScreenPaddingModifier())
     }

@@ -6,14 +6,14 @@
 import Fluent
 
 internal struct UserProfileConvertIdToImageKeyMigration1735294202: AsyncMigration {
-    func prepare(on database: Database) async throws {
+    public func prepare(on database: Database) async throws {
         try await database.schema("User")
             .deleteField("profile_picture_id")
             .field("profile_picture_key", .string)
             .update()
     }
 
-    func revert(on database: Database) async throws {
+    public func revert(on database: Database) async throws {
         try await database.schema("User")
             .deleteField("profile_picture_key")
             .field("profile_picture_id", .uuid)

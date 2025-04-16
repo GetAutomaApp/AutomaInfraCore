@@ -8,7 +8,7 @@ import Fluent
 import Vapor
 
 internal struct AppLaunchController: RouteCollection {
-    func boot(routes: RoutesBuilder) throws {
+    public func boot(routes: RoutesBuilder) throws {
         let appLaunchRoute = routes.grouped("App-Launch")
 
         let authenticatedRouteGroup = appLaunchRoute.grouped(
@@ -20,7 +20,7 @@ internal struct AppLaunchController: RouteCollection {
     }
 
     @Sendable
-    func isUserAccepted(req: Request) async throws -> UserIsAcceptedDTO {
+    public func isUserAccepted(req: Request) async throws -> UserIsAcceptedDTO {
         let token = try await req.jwt.verify(as: JWTTokenPayload.self)
         let userId = UUID(uuidString: token.userId)
 
@@ -33,7 +33,7 @@ internal struct AppLaunchController: RouteCollection {
     }
 
     @Sendable
-    func getClientConfig(req _: Request) throws -> AppLaunchClientConfigDTO {
+    public func getClientConfig(req _: Request) throws -> AppLaunchClientConfigDTO {
         .init()
     }
 }

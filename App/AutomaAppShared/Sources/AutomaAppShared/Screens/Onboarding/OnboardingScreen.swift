@@ -103,7 +103,7 @@ public struct OnboardingScreen: View {
         ).animation(.bouncy, value: progressIndicatorConfig.currentStep)
     }
 
-    func handleOnboardingNextScreen() {
+    public func handleOnboardingNextScreen() {
         if progressIndicatorConfig.currentStep == onboardingScreenContent.count {
             shouldShowApplyScreen = true
             return

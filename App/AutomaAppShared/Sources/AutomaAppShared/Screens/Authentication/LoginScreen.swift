@@ -125,7 +125,7 @@ public struct LoginScreen: View {
         timer = nil
     }
 
-    func sendAuthenticationCode() async {
+    public func sendAuthenticationCode() async {
         let phoneNumber = phoneInputConfig.phoneNumber
         do {
             let response = try await authInteractor.makeLoginCodeRequest(phoneNumber)
@@ -148,7 +148,7 @@ public struct LoginScreen: View {
         }
     }
 
-    func verifyAuthenticationCode() async {
+    public func verifyAuthenticationCode() async {
         let phoneNumber = phoneInputConfig.phoneNumber
         let code = verificationInputConfig.text
 

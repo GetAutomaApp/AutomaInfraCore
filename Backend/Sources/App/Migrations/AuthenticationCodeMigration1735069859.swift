@@ -6,7 +6,7 @@
 import Fluent
 
 internal struct AuthenticationCodeMigration1735069859: AsyncMigration {
-    func prepare(on database: Database) async throws {
+    public func prepare(on database: Database) async throws {
         try await database.schema("Authentication-Code")
             .id()
             .field("phone_number", .string, .required)
@@ -17,7 +17,7 @@ internal struct AuthenticationCodeMigration1735069859: AsyncMigration {
             .create()
     }
 
-    func revert(on database: Database) async throws {
+    public func revert(on database: Database) async throws {
         try await database.schema("Authentication-Code").delete()
     }
 }

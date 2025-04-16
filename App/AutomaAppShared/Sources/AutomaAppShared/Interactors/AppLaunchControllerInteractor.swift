@@ -10,7 +10,7 @@ import Foundation
 internal struct AppLaunchControllerInteractor: BackendControllerInteractor {
     let baseURL: String
 
-    func makeIsUserAcceptedRequest() async throws -> Bool {
+    public func makeIsUserAcceptedRequest() async throws -> Bool {
         let response = try await performRequest(
             endpoint: "/App-Launch/is-user-accepted",
             method: .get,
@@ -28,7 +28,7 @@ internal struct AppLaunchControllerInteractor: BackendControllerInteractor {
         return parsedResponse.accepted
     }
 
-    func makeGetClientConfig() async throws -> AppLaunchClientConfigDTO {
+    public func makeGetClientConfig() async throws -> AppLaunchClientConfigDTO {
         let response = try await performRequest(
             endpoint: "/App-Launch/get-client-config",
             method: .get

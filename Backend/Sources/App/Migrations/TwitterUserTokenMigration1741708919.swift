@@ -6,7 +6,7 @@
 import Fluent
 
 internal struct TwitterUserTokenMigration1741708919: AsyncMigration {
-    func prepare(on database: Database) async throws {
+    public func prepare(on database: Database) async throws {
         try await database.schema("Twitter-User-Token")
             .id()
             .field("updated_at", .datetime, .required)
@@ -19,7 +19,7 @@ internal struct TwitterUserTokenMigration1741708919: AsyncMigration {
             .create()
     }
 
-    func revert(on database: Database) async throws {
+    public func revert(on database: Database) async throws {
         try await database.schema("Twitter-User-Token").delete()
     }
 }

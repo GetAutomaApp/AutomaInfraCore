@@ -11,8 +11,8 @@ import Vapor
 internal struct ProfilePictureService {
     let logger: Logger
 
-    func createProfilePicture(for user: UserDTO, totalRegenerationAttempts: Int = 3,
-                              excludeText: Bool = true) async throws -> String
+    public func createProfilePicture(for user: UserDTO, totalRegenerationAttempts: Int = 3,
+                                     excludeText: Bool = true) async throws -> String
     {
         do {
             let tigrisService = try TigrisService()
@@ -155,7 +155,7 @@ internal struct ProfilePictureService {
         return result
     }
 
-    func generateImageKey(for user: UserDTO) throws -> String {
+    public func generateImageKey(for user: UserDTO) throws -> String {
         let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
 
         guard let userId = user.id?.uuidString else {

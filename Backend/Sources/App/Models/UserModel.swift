@@ -61,7 +61,7 @@ final class UserModel: Model, @unchecked Sendable {
         self.accepted = accepted
     }
 
-    func toDTO() -> UserDTO {
+    public func toDTO() -> UserDTO {
         let profilePictureUrl: String?
         do {
             guard let profilePictureKey else {

@@ -12,14 +12,14 @@
 import Vapor
 
 internal struct FirecrawlTestController: RouteCollection {
-    func boot(routes: RoutesBuilder) throws {
+    public func boot(routes: RoutesBuilder) throws {
         let feedTesterRoute = routes.grouped("Firecrawl-Test")
 
         feedTesterRoute.get("request", use: request)
     }
 
     @Sendable
-    func request(req: Request) async throws -> WebsiteResponseItem {
+    public func request(req: Request) async throws -> WebsiteResponseItem {
         let firecrawlClient = try FirecrawlClient(
             client: req.client,
             logger: req.logger

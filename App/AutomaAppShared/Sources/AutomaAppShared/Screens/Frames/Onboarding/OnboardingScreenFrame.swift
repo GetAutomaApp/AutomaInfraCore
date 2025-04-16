@@ -48,7 +48,7 @@ public struct OnboardingScreenFrame<TitleContent: View, FooterContent: View>: Vi
         .ignoresSafeArea()
     }
 
-    func determineStackType() -> AnyOrientationStackComponentVariants {
+    public func determineStackType() -> AnyOrientationStackComponentVariants {
         #if os(iOS)
             return .vstack
         #else

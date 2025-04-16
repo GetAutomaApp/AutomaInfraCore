@@ -17,13 +17,13 @@ internal struct TextExtractionService: ~Copyable {
         ) // We don't have it in the `default-region` we set in the env
     }
 
-    func getText(from image: Data) async throws -> Textract.DetectDocumentTextResponse {
+    public func getText(from image: Data) async throws -> Textract.DetectDocumentTextResponse {
         try await client.detectDocumentText(.init(document: .init(
             bytes: .base64(image.base64EncodedString())
         )))
     }
 
-    func getTextToSimpleString(from image: Data) async throws -> String {
+    public func getTextToSimpleString(from image: Data) async throws -> String {
         let response = try await getText(from: image)
 
         return response.blocks!

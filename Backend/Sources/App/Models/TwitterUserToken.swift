@@ -56,7 +56,7 @@ final class TwitterUserToken: Model, @unchecked Sendable {
         $oauthToken.id = oauthTokenID
     }
 
-    func toDTO() -> TwitterUserTokenDTO {
+    public func toDTO() -> TwitterUserTokenDTO {
         .init(
             id: id,
             createdAt: createdAt,

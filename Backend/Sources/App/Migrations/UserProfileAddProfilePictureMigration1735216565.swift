@@ -6,13 +6,13 @@
 import Fluent
 
 internal struct UserProfileAddProfilePictureMigration1735216565: AsyncMigration {
-    func prepare(on database: Database) async throws {
+    public func prepare(on database: Database) async throws {
         try await database.schema("User")
             .field("profile_picture_id", .uuid)
             .update()
     }
 
-    func revert(on database: Database) async throws {
+    public func revert(on database: Database) async throws {
         try await database.schema("User")
             .deleteField("profile_picture_id")
             .update()

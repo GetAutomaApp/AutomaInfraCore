@@ -15,7 +15,7 @@ protocol ChatCompletion {
     /// - Parameter query: The chat completion request parameters
     /// - Returns: The generated chat completion result
     /// - Throws: Errors that occur during the chat completion process
-    func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult
+    public func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult
 }
 
 /// Structure representing the content of a chat completion request
@@ -53,7 +53,7 @@ internal enum ChatCompletionModel: String, Codable {
     /// - Parameter logger: Logger instance to be passed to the client
     /// - Returns: A client conforming to the ChatCompletion protocol
     /// - Throws: Errors from client initialization
-    func getPlatformClient(logger: Logger) throws -> any ChatCompletion {
+    public func getPlatformClient(logger: Logger) throws -> any ChatCompletion {
         switch self {
         case .gpt4o, .gpt4omini, .gpto1:
             try OpenAIChatCompletionClient(logger: logger)

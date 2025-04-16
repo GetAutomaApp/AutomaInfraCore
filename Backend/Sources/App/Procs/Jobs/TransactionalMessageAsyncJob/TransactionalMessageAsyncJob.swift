@@ -15,7 +15,7 @@ internal struct TransactionalMessageJobInput: Codable {
 internal struct TransactionalMessageAsyncJob: AsyncJob {
     typealias Payload = TransactionalMessageJobInput
 
-    func dequeue(_ context: QueueContext, _ payload: TransactionalMessageJobInput) async throws {
+    public func dequeue(_ context: QueueContext, _ payload: TransactionalMessageJobInput) async throws {
         let messageService = MessageService()
 
         _ = try await messageService
@@ -26,7 +26,7 @@ internal struct TransactionalMessageAsyncJob: AsyncJob {
             )
     }
 
-    func error(_ context: QueueContext, _ error: Error, _ payload: TransactionalMessageJobInput) throws {
+    public func error(_ context: QueueContext, _ error: Error, _ payload: TransactionalMessageJobInput) throws {
         context.logger.info(
             "Error occurred while processing job",
             metadata: [

@@ -6,11 +6,11 @@
 import Fluent
 
 internal struct AddAcceptedColumnMigration1740658649: AsyncMigration {
-    func prepare(on database: Database) async throws {
+    public func prepare(on database: Database) async throws {
         try await database.schema("User")
             .field("accepted", .bool)
             .update()
     }
 
-    func revert(on _: Database) throws {}
+    public func revert(on _: Database) throws {}
 }

@@ -18,7 +18,7 @@ public class BaseAppEnvironmentObject: ObservableObject {
 
     public init() {}
 
-    func logout() {
+    public func logout() {
         isLoggedIn = false
         Task {
             await DispatchQueue.main.async {

@@ -11,7 +11,7 @@ import Testing
 @Suite("Fake test suite", .serialized)
 internal struct AppTests {
     @Test("Fake test")
-    func helloWorld() throws {
+    public func helloWorld() throws {
         print("Hello, world!")
     }
 }

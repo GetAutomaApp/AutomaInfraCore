@@ -7,7 +7,7 @@ import DataTypes
 import Vapor
 
 internal struct RequestIsAuthenticatedMiddleware: AsyncMiddleware {
-    func respond(to request: Request, chainingTo next: AsyncResponder) async throws -> Response {
+    public func respond(to request: Request, chainingTo next: AsyncResponder) async throws -> Response {
         let tokenPayload = try await request.jwt.verify(as: JWTTokenPayload.self)
         let messageService = MessageService()
 

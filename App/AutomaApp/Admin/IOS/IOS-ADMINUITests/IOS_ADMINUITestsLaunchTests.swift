@@ -15,7 +15,7 @@ final class IOS_ADMINUITestsLaunchTests: XCTestCase {
     }
 
     @MainActor
-    func testLaunch() throws {
+    public func testLaunch() throws {
         let app = XCUIApplication()
         app.launch()
 

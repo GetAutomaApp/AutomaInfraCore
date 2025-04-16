@@ -12,7 +12,7 @@ Add a detailed description here of how to use this
 To see usage examples & visuals, check out `__CAPNAME__ModifierDocumentation.md`
 */
 internal struct __CAPNAME__Modifier: ViewModifier {
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             // Add your custom modifications here
     }
@@ -21,7 +21,7 @@ internal struct __CAPNAME__Modifier: ViewModifier {
 typealias __CAPNAME__ModifierViewTypes = View // Use Type Narrowing Please!
 
 extension __CAPNAME__ModifierViewTypes {
-    func __CAPNAME_HASKELL__() -> some View {
+    public func __CAPNAME_HASKELL__() -> some View {
         self.modifier(__CAPNAME__Modifier())
     }
 }

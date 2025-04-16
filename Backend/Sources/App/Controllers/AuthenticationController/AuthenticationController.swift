@@ -8,7 +8,7 @@ import Fluent
 import Vapor
 
 internal struct AuthenticationController: RouteCollection {
-    func boot(routes: RoutesBuilder) throws {
+    public func boot(routes: RoutesBuilder) throws {
         let authenticationRoute = routes.grouped("Authentication")
 
         authenticationRoute.post("register", use: register)
@@ -27,7 +27,7 @@ internal struct AuthenticationController: RouteCollection {
     }
 
     @Sendable
-    func registerCode(req: Request) async throws -> AuthenticationCodeResponseDTO {
+    public func registerCode(req: Request) async throws -> AuthenticationCodeResponseDTO {
         let dto = try req.content.decode(PhoneNumberPayloadDTO.self)
 
         let authService = AuthenticationService(
@@ -46,7 +46,7 @@ internal struct AuthenticationController: RouteCollection {
     }
 
     @Sendable
-    func register(req: Request) async throws -> AuthenticationTokensPayloadDTO {
+    public func register(req: Request) async throws -> AuthenticationTokensPayloadDTO {
         let dto = try req.content.decode(AuthPhoneCodePayloadDTO.self)
 
         let authService = AuthenticationService(
@@ -63,7 +63,7 @@ internal struct AuthenticationController: RouteCollection {
     }
 
     @Sendable
-    func loginCode(req: Request) async throws -> AuthenticationCodeResponseDTO {
+    public func loginCode(req: Request) async throws -> AuthenticationCodeResponseDTO {
         let dto = try req.content.decode(PhoneNumberPayloadDTO.self)
 
         let authService = AuthenticationService(
@@ -82,7 +82,7 @@ internal struct AuthenticationController: RouteCollection {
     }
 
     @Sendable
-    func login(req: Request) async throws -> AuthenticationTokensPayloadDTO {
+    public func login(req: Request) async throws -> AuthenticationTokensPayloadDTO {
         let dto = try req.content.decode(AuthPhoneCodePayloadDTO.self)
 
         let authService = AuthenticationService(
@@ -95,7 +95,7 @@ internal struct AuthenticationController: RouteCollection {
     }
 
     @Sendable
-    func refreshToken(req: Request) async throws -> AccessTokenPayloadDTO {
+    public func refreshToken(req: Request) async throws -> AccessTokenPayloadDTO {
         let tokenString = try req.query.get(String?.self, at: "xxrt")
 
         guard let tokenString else {
@@ -131,7 +131,7 @@ internal struct AuthenticationController: RouteCollection {
     }
 
     @Sendable
-    func logout(req: Request) async throws -> HTTPStatus {
+    public func logout(req: Request) async throws -> HTTPStatus {
         let token = try await req.jwt.verify(as: JWTTokenPayload.self)
 
         let userId = UUID(uuidString: token.userId)

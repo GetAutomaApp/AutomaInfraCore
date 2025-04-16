@@ -38,7 +38,7 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     /// - Parameter query: The query containing generation parameters like prompt, model, size, etc.
     /// - Returns: A GenerateImageResult containing the generated images and metadata
     /// - Throws: OpenAIImageGenerationClientError if generation or encoding fails
-    func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult {
+    public func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult {
         BackendMetric.openAIImageGenerationRequest(status: .start).increment()
 
         let imageSize = query.imageSize?.rawValue

@@ -78,7 +78,7 @@ internal struct AutoButtonVariationsView: View {
         }
     }
 
-    func startChangingVariant() {
+    public func startChangingVariant() {
         if isTimerActive {
             return
         }
@@ -90,7 +90,7 @@ internal struct AutoButtonVariationsView: View {
         }
     }
 
-    func updateVariant() {
+    public func updateVariant() {
         buttonController.frameVariant = .allCases.randomElement()!
         buttonController.isCircular = .random()
         buttonController.fillSpace = .random()
@@ -102,7 +102,7 @@ internal struct AutoButtonVariationsView: View {
         }
     }
 
-    func stopChangingVariant() {
+    public func stopChangingVariant() {
         isTimerActive = false
     }
 }

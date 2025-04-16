@@ -15,7 +15,7 @@ internal struct ChatCompletionClient: ChatCompletion {
     /// - Parameter query: The chat completion request parameters including model, prompt and other settings
     /// - Returns: The generated chat completion result
     /// - Throws: Errors from platform client initialization or chat completion generation
-    func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult {
+    public func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult {
         let client = try query.model.getPlatformClient(logger: logger)
         return try await client.createChat(query)
     }

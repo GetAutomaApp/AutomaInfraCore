@@ -46,7 +46,7 @@ public class TextButtonComponentConfig: ButtonFrameComponentConfig {
     ///
     /// This method adjusts properties like `isCircular`, `roundness`, `fillSpace`, and `defaultPadding`
     /// based on the button's variant (generic, square, circle, or pill).
-    func applyVariantStyling() {
+    public func applyVariantStyling() {
         switch variant {
         case .generic:
             isCircular = false
@@ -72,7 +72,7 @@ public class TextButtonComponentConfig: ButtonFrameComponentConfig {
     ///
     /// When the button is disabled (`isDisabled = true`), the button's frame variant is set to `.disabled`.
     /// If the button is not disabled, it uses the `.generic` frame variant.
-    func manageDisabledState() {
+    public func manageDisabledState() {
         frameVariant = isDisabled ? .disabled : .generic
     }
 }

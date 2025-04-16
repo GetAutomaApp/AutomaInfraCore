@@ -24,7 +24,7 @@ final class AppLaunchControllerIntegrationTests {
 
     // TODO: Implement when fixing issue 135
     @Test("Is User Accepted")
-    func testRequest() {
+    public func testRequest() {
         #expect(Bool(true))
     }
 }

@@ -95,7 +95,7 @@ internal struct FontConvertible {
         typealias Font = UIFont
     #endif
 
-    func font(size: CGFloat) -> Font {
+    public func font(size: CGFloat) -> Font {
         guard let font = Font(font: self, size: size) else {
             fatalError("Unable to initialize font '\(name)' (\(family))")
         }
@@ -104,22 +104,22 @@ internal struct FontConvertible {
 
     #if canImport(SwiftUI)
         @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-        func swiftUIFont(size: CGFloat) -> SwiftUI.Font {
+        public func swiftUIFont(size: CGFloat) -> SwiftUI.Font {
             SwiftUI.Font.custom(self, size: size)
         }
 
         @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
-        func swiftUIFont(fixedSize: CGFloat) -> SwiftUI.Font {
+        public func swiftUIFont(fixedSize: CGFloat) -> SwiftUI.Font {
             SwiftUI.Font.custom(self, fixedSize: fixedSize)
         }
 
         @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
-        func swiftUIFont(size: CGFloat, relativeTo textStyle: SwiftUI.Font.TextStyle) -> SwiftUI.Font {
+        public func swiftUIFont(size: CGFloat, relativeTo textStyle: SwiftUI.Font.TextStyle) -> SwiftUI.Font {
             SwiftUI.Font.custom(self, size: size, relativeTo: textStyle)
         }
     #endif
 
-    func register() {
+    public func register() {
         // swiftlint:disable:next conditional_returns_on_newline
         guard let url else { return }
         CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)

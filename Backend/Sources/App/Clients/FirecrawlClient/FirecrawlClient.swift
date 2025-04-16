@@ -22,7 +22,7 @@ internal struct FirecrawlClient {
         apiKey = try Environment.getOrThrow("FIRECRAWL_SELFHOST_API_KEY")
     }
 
-    func scrapeMarkdown(from input: ScrapeMarkdownInput) async throws -> WebsiteResponseItem {
+    public func scrapeMarkdown(from input: ScrapeMarkdownInput) async throws -> WebsiteResponseItem {
         BackendMetric
             .firecrawlScrapeMarkdown(status: .start, url: input.url)
             .increment()

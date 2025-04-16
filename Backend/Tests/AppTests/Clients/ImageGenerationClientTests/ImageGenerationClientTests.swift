@@ -31,7 +31,7 @@ internal struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
             GenerateImageModel.dall_e_2, // will use openai client
         ]
     )
-    func generateImageResultSuccess(model: GenerateImageModel) async throws {
+    public func generateImageResultSuccess(model: GenerateImageModel) async throws {
         try await withApp { app in
             let totalImagesToGenerate = 1
 

@@ -125,7 +125,7 @@ public struct RegisterScreen: View {
         timer = nil
     }
 
-    func sendAuthenticationCode() async {
+    public func sendAuthenticationCode() async {
         let phoneNumber = phoneInputConfig.phoneNumber
         do {
             let response = try await authInteractor.makeRegisterCodeRequest(
@@ -150,7 +150,7 @@ public struct RegisterScreen: View {
         }
     }
 
-    func verifyAuthenticationCode() async {
+    public func verifyAuthenticationCode() async {
         let phoneNumber = phoneInputConfig.phoneNumber
         let code = verificationInputConfig.text
 

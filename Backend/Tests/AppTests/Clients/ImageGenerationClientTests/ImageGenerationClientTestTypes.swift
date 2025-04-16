@@ -31,7 +31,7 @@ extension ImageGenerationClientTestSuite {
     ///   - Application initialization errors
     ///   - Test execution errors
     ///   - Shutdown errors
-    func withApp(test: (Application) async throws -> Void) async throws {
+    public func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
             try await test(app)
@@ -49,7 +49,7 @@ extension ImageGenerationClientTestSuite {
     /// - Parameter query: The image generation query parameters
     /// - Returns: The generated image result
     /// - Throws: Any errors that occur during the image generation process
-    func generateImage(app: Application, query: GenerateImageQuery) async throws -> GenerateImageResult {
+    public func generateImage(app: Application, query: GenerateImageQuery) async throws -> GenerateImageResult {
         let client = ImageGenerationClient(logger: app.logger)
         return try await client.generateImage(query)
     }

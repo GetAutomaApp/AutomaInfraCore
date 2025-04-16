@@ -32,7 +32,7 @@ final class __CAPNAME__Model: Model, @unchecked Sendable {
     }
 
 
-    func toDTO() -> __CAPNAME__DTO {
+    public func toDTO() -> __CAPNAME__DTO {
         .init(
             id: id,
             createdAt: createdAt,

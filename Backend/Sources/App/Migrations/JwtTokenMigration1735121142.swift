@@ -6,7 +6,7 @@
 import Fluent
 
 internal struct JwtTokenMigration1735121142: AsyncMigration {
-    func prepare(on database: Database) async throws {
+    public func prepare(on database: Database) async throws {
         try await database.schema("Jwt-Token")
             .id()
             .field("token", .string, .required)
@@ -18,7 +18,7 @@ internal struct JwtTokenMigration1735121142: AsyncMigration {
             .create()
     }
 
-    func revert(on database: Database) async throws {
+    public func revert(on database: Database) async throws {
         try await database.schema("Jwt-Token").delete()
     }
 }

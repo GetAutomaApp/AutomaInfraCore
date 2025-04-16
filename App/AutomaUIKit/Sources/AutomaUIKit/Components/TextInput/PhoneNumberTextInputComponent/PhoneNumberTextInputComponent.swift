@@ -10,7 +10,7 @@ internal struct PhoneNumberTextFieldView: UIViewRepresentable {
     @ObservedObject var config: PhoneNumberTextInputComponentConfig
 
     private let textField = PhoneNumberTextField()
-    func makeUIView(context: Context) -> PhoneNumberKit.PhoneNumberTextField {
+    public func makeUIView(context: Context) -> PhoneNumberKit.PhoneNumberTextField {
         textField.withExamplePlaceholder = true
         textField.withFlag = true
         textField.withPrefix = true
@@ -26,7 +26,7 @@ internal struct PhoneNumberTextFieldView: UIViewRepresentable {
         return textField
     }
 
-    func updateUIView(
+    public func updateUIView(
         _ uiView: PhoneNumberKit.PhoneNumberTextField, context _: Context
     ) {
         if uiView.text != config.phoneNumber {
@@ -52,7 +52,7 @@ internal struct PhoneNumberTextFieldView: UIViewRepresentable {
         }
     }
 
-    func makeCoordinator() -> Coordinator {
+    public func makeCoordinator() -> Coordinator {
         Coordinator(config: config)
     }
 }

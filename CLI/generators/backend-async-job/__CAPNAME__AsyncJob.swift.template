@@ -9,11 +9,11 @@ internal struct __CAPNAME__JobInput: Codable {
 internal struct __CAPNAME__AsyncJob: AsyncJob {
     typealias Payload = __CAPNAME__JobInput
 
-    func dequeue(_ context: QueueContext, _ payload: __CAPNAME__JobInput) async throws {
+    public func dequeue(_ context: QueueContext, _ payload: __CAPNAME__JobInput) async throws {
         // This is where you would run code for the job
     }
 
-    func error(_ context: QueueContext, _ error: Error, _ payload: __CAPNAME__JobInput) async throws {
+    public func error(_ context: QueueContext, _ error: Error, _ payload: __CAPNAME__JobInput) async throws {
         // If you don't want to handle errors you can simply return. You can also omit this function entirely.
     }
 }

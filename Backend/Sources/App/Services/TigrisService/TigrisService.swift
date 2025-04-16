@@ -32,15 +32,15 @@ internal struct TigrisService: ~Copyable {
         } catch {}
     }
 
-    func get(_: String) throws -> String {
+    public func get(_: String) throws -> String {
         ""
     }
 
-    func publicUrl(_: String) throws -> String {
+    public func publicUrl(_: String) throws -> String {
         ""
     }
 
-    func sign(input: String, expiresIn: TimeAmount) async throws -> String {
+    public func sign(input: String, expiresIn: TimeAmount) async throws -> String {
         let url = try await client
             .signURL(
                 url: URL(string: getTigrisUrl(input))!,
@@ -51,7 +51,7 @@ internal struct TigrisService: ~Copyable {
         return url.absoluteString
     }
 
-    func put(
+    public func put(
         input: String,
         content: ByteBuffer,
         acl: S3.ObjectCannedACL = .private,
@@ -80,7 +80,7 @@ internal struct TigrisService: ~Copyable {
         }
     }
 
-    func decodeS3Path(_ s3Path: String) throws -> Self.S3Path {
+    public func decodeS3Path(_ s3Path: String) throws -> Self.S3Path {
         var pathComponents = s3Path.pathComponents
 
         if pathComponents.count < 3 {
@@ -95,7 +95,7 @@ internal struct TigrisService: ~Copyable {
         return .init(bucket: bucket, key: key)
     }
 
-    func getTigrisUrl(
+    public func getTigrisUrl(
         _ s3Path: String
     ) throws -> String {
         let path = try decodeS3Path(s3Path)

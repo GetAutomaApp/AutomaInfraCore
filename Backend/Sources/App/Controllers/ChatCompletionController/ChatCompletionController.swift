@@ -8,7 +8,7 @@ import OpenAI
 import Vapor
 
 internal struct ChatCompletionController: RouteCollection {
-    func boot(routes: RoutesBuilder) throws {
+    public func boot(routes: RoutesBuilder) throws {
         let chatCompletionRoute = routes.grouped("ChatCompletion").grouped(
             TestControllerMiddleware()
         )
@@ -17,7 +17,7 @@ internal struct ChatCompletionController: RouteCollection {
     }
 
     @Sendable
-    func openai(req: Request) async throws -> String {
+    public func openai(req: Request) async throws -> String {
         let openaiClient = try OpenAIChatCompletionClient(logger: req.logger)
         let query = try req.content.decode(ChatCompletionContent.self)
         let result = try await openaiClient.createChat(query)

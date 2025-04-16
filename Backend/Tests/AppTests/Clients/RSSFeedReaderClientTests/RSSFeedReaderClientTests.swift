@@ -51,7 +51,7 @@ internal struct RSSFeedReaderClientTests {
             (URL(string: "https://invalid-feed.com")!, false),
         ]
     )
-    func getFeedItemsWhenFeedExists(url: URL, feedExists: Bool) async throws {
+    public func getFeedItemsWhenFeedExists(url: URL, feedExists: Bool) async throws {
         try await withApp { app in
             let client = RSSFeedReaderClient(logger: app.logger)
 
