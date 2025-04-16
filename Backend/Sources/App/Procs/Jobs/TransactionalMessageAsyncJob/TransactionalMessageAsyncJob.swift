@@ -8,8 +8,8 @@ import Queues
 import Vapor
 
 internal struct TransactionalMessageJobInput: Codable {
-    let content: String
-    let toPhoneNumber: String
+    public let content: String
+    public let toPhoneNumber: String
 }
 
 internal struct TransactionalMessageAsyncJob: AsyncJob {

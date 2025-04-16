@@ -9,7 +9,7 @@ import Queues
 import Vapor
 
 internal struct ProfilePictureJobInput: Codable {
-    let payload: UserDTO
+    public let payload: UserDTO
 }
 
 internal struct ProfilePictureAsyncJob: AsyncJob {

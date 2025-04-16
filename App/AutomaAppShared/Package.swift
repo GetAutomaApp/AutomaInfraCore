@@ -2,7 +2,7 @@
 
 import PackageDescription
 
-let package = Package(
+public let package = Package(
     name: "AutomaAppShared",
     platforms: [
         .iOS(.v17),

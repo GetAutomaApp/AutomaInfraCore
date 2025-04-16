@@ -20,7 +20,7 @@ public struct ProgressIndicatorComponent: View {
 
     // Allows you to customise the configuration once this apears, this could also be used as a reset state in more
     // complex cases like scroll views.
-    let onSelfAppear: (ProgressIndicatorComponentConfig) -> Void
+    public let onSelfAppear: (ProgressIndicatorComponentConfig) -> Void
 
     public init(
         config: ProgressIndicatorComponentConfig,

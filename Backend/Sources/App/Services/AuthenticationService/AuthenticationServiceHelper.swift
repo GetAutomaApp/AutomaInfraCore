@@ -10,9 +10,9 @@ import Queues
 import Vapor
 
 internal struct AuthenticationServiceHelper {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
+    public let writeDb: Database
+    public let readDb: Database
+    public let logger: Logger
 
     public func getValidateAndDeleteCode(phoneNumber: String, code: String) async throws {
         logger.info(

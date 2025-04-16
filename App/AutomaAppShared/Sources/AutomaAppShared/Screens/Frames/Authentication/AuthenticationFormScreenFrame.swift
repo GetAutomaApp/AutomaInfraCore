@@ -17,7 +17,7 @@ public struct AuthenticationFormScreenFrame<CenterContent: View>: View {
 
     @ViewBuilder let centerContent: () -> CenterContent
 
-    let action: () async -> Void
+    public let action: () async -> Void
 
     public var body: some View {
         VStack(alignment: .leading) {

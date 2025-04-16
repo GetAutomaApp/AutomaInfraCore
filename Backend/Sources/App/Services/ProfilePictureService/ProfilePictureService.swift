@@ -9,7 +9,7 @@ import OpenAI
 import Vapor
 
 internal struct ProfilePictureService {
-    let logger: Logger
+    public let logger: Logger
 
     public func createProfilePicture(for user: UserDTO, totalRegenerationAttempts: Int = 3,
                                      excludeText: Bool = true) async throws -> String

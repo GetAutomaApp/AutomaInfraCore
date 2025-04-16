@@ -12,10 +12,10 @@ import Vapor
 /// This client manages the OAuth token request, authentication URL generation,
 /// and conversion of OAuth tokens to user access tokens.
 internal struct TwitterOAuthClient: TwitterClientBase {
-    let logger: Logger
-    let client: Client
-    let database: Database
-    let twitterClient: TwitterAPIClient
+    public let logger: Logger
+    public let client: Client
+    public let database: Database
+    public let twitterClient: TwitterAPIClient
     public var callbackURL: URL
 
     /// Initializes a new TwitterOAuthClient.

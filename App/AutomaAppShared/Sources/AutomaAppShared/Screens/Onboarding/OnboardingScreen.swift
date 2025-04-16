@@ -7,9 +7,9 @@ import AutomaUIKit
 import SwiftUI
 
 internal struct OnboardingScreenContent {
-    let title: String
-    let description: String
-    let background: Color = DesignTokens.colors.primary
+    public let title: String
+    public let description: String
+    public let background: Color = DesignTokens.colors.primary
 }
 
 public struct OnboardingScreen: View {
@@ -19,7 +19,7 @@ public struct OnboardingScreen: View {
     @State var shouldShowApplyScreen: Bool = false
     @State private var shouldShowRegisterScreen: Bool = false
 
-    let onboardingScreenContent: [OnboardingScreenContent] = [
+    public let onboardingScreenContent: [OnboardingScreenContent] = [
         .init(
             title: "Create & manage profiles",
             description: "Automa provides a platform to create and manage social media accounts seamlessly with our integrated tools."

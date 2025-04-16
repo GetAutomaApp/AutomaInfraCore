@@ -10,10 +10,10 @@ import Queues
 import Vapor
 
 struct AuthenticationService: Sendable {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
-    let helper: AuthenticationServiceHelper
+    public let writeDb: Database
+    public let readDb: Database
+    public let logger: Logger
+    public let helper: AuthenticationServiceHelper
 
     init(
         writeDb: Database,

@@ -16,7 +16,7 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     private let client: OpenAI
 
     /// Logger instance for tracking operations and errors
-    let logger: Logger
+    public let logger: Logger
 
     /// Initializes a new OpenAI image generation client
     /// - Parameters:

@@ -22,13 +22,13 @@ protocol ChatCompletion {
 /// Contains all necessary parameters to generate a chat completion
 internal struct ChatCompletionContent: Content {
     /// The AI model to use for generating the completion
-    let model: ChatCompletionModel
+    public let model: ChatCompletionModel
 
     /// The prompt text to send to the AI model
-    let prompt: String
+    public let prompt: String
 
     /// The maximum number of tokens to generate in the completion
-    let maxTokens: Int?
+    public let maxTokens: Int?
 
     init(model: ChatCompletionModel, prompt: String, maxTokens: Int? = nil) {
         self.model = model
@@ -72,8 +72,8 @@ internal enum ChatCompletionPlatform: String, Codable {
 /// Contains the generated message and any additional metadata
 internal struct ChatCompletionResult: Content {
     /// The generated text response from the AI model
-    let message: String
+    public let message: String
 
     /// Additional metadata about the completion
-    let metadata: Data
+    public let metadata: Data
 }

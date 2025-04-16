@@ -17,7 +17,7 @@ import SwiftUI
 public struct InfoPairComponent: View {
     @ObservedObject var config: InfoPairComponentConfig
 
-    let onSelfAppear: (InfoPairComponentConfig) -> Void
+    public let onSelfAppear: (InfoPairComponentConfig) -> Void
 
     public init(
         config: InfoPairComponentConfig = .init(),

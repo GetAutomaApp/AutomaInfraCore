@@ -1,7 +1,7 @@
 // swift-tools-version:6.0
 import PackageDescription
 
-let package = Package(
+public let package = Package(
     name: "Backend",
     platforms: [
         .macOS(.v15),

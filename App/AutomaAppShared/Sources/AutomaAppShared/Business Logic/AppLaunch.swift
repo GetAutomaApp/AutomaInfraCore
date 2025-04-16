@@ -13,7 +13,7 @@ import DataTypes
 import SwiftUI
 
 public struct AppLaunch: Sendable {
-    let baseURL: String
+    public let baseURL: String
 
     public init(baseURL: String) {
         self.baseURL = baseURL

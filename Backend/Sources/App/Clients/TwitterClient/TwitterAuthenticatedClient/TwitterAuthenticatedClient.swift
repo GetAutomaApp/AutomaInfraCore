@@ -12,16 +12,16 @@ import Vapor
 /// using a valid Twitter API access token.
 internal struct TwitterAuthenticatedClient: TwitterClientBase {
     /// Logger instance for tracking operations
-    let logger: Logger
+    public let logger: Logger
 
     /// HTTP client for making requests
-    let client: Client
+    public let client: Client
 
     /// Database instance for data persistence
-    let database: Database
+    public let database: Database
 
     /// Twitter API client instance configured with authentication
-    let twitterClient: TwitterAPIClient
+    public let twitterClient: TwitterAPIClient
 
     /// Posts a new tweet to Twitter with the given message.
     /// - Parameter message: The text content of the tweet to post

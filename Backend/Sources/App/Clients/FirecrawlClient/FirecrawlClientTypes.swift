@@ -10,21 +10,21 @@ internal enum FirecrawlFormats: String, Content {
 }
 
 internal struct ScrapeMarkdownInput: Content {
-    let url: String
+    public let url: String
 }
 
 internal struct FirecrawlDataResult: Content {
-    let markdown: String
-    let links: [String]
+    public let markdown: String
+    public let links: [String]
 }
 
 internal struct FirecrawlScrapeResult: Content {
-    let success: Bool
-    let data: FirecrawlDataResult
+    public let success: Bool
+    public let data: FirecrawlDataResult
 }
 
 internal struct WebsiteResponseItem: Content {
-    let links: [String]
-    let markdown: String
-    let imageUrls: [String]
+    public let links: [String]
+    public let markdown: String
+    public let imageUrls: [String]
 }

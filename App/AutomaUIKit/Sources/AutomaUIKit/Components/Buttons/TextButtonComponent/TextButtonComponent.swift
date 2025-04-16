@@ -14,10 +14,10 @@ public struct TextButtonComponent: View {
     private var config: TextButtonComponentConfig { externalConfig }
 
     /// A closure that is called when the button appears on screen, passing the current configuration.
-    let onSelfAppear: ((TextButtonComponentConfig) -> Void)?
+    public let onSelfAppear: ((TextButtonComponentConfig) -> Void)?
 
     /// A closure to execute when the button is tapped, passing the current configuration.
-    let action: ((TextButtonComponentConfig) -> Void)?
+    public let action: ((TextButtonComponentConfig) -> Void)?
 
     // MARK: - 1. Initializer with external config
 

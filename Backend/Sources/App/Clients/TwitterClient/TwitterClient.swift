@@ -10,16 +10,16 @@ import TwitterAPIKit
 import Vapor
 
 internal struct TwitterClient: TwitterClientBase {
-    let logger: Logger
-    let client: Client
-    let database: Database
-    let auth: TwitterOAuthClient
+    public let logger: Logger
+    public let client: Client
+    public let database: Database
+    public let auth: TwitterOAuthClient
 
-    let callbackURL: URL
-    let twitterClient: TwitterAPIClient
+    public let callbackURL: URL
+    public let twitterClient: TwitterAPIClient
 
-    let consumerKey: String
-    let consumerSecret: String
+    public let consumerKey: String
+    public let consumerSecret: String
 
     public init(logger: Logger, client: Client, database: Database) throws {
         self.logger = logger

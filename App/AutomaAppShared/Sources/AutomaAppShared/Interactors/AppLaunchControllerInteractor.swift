@@ -8,7 +8,7 @@ import DataTypes
 import Foundation
 
 internal struct AppLaunchControllerInteractor: BackendControllerInteractor {
-    let baseURL: String
+    public let baseURL: String
 
     public func makeIsUserAcceptedRequest() async throws -> Bool {
         let response = try await performRequest(

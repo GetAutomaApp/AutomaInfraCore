@@ -56,7 +56,7 @@ internal struct AutoButtonVariationsView: View {
     @StateObject var buttonController: ButtonFrameComponentConfig = .init()
     @State private var isTimerActive = false
 
-    let switchDelay: TimeInterval = 0.5
+    public let switchDelay: TimeInterval = 0.5
 
     public var body: some View {
         HStack {

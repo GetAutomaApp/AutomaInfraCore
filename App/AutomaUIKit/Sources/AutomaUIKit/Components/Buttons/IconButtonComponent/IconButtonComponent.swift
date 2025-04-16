@@ -11,10 +11,10 @@ public struct IconButtonComponent: View {
     @ObservedObject private var externalConfig: IconButtonComponentConfig
 
     /// A closure that is called when the button appears on screen, passing the current configuration.
-    let onSelfAppear: (IconButtonComponentConfig) -> Void
+    public let onSelfAppear: (IconButtonComponentConfig) -> Void
 
     /// A closure to execute when the button is tapped, passing the current configuration.
-    let action: () async throws -> Void
+    public let action: () async throws -> Void
 
     public var configAction: (IconButtonComponentConfig) -> Void = { _ in }
 

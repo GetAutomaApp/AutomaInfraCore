@@ -13,8 +13,8 @@ import Vapor
 public func configureDatabase(
     app: Application
 ) async throws {
-    let primaryDatabaseURL = try Environment.getOrThrow("PRIMARY_POSTGRES_URL")
-    let regionalDatabaseURL = try Environment.getOrThrow("REGIONAL_POSTGRES_URL")
+    public let primaryDatabaseURL = try Environment.getOrThrow("PRIMARY_POSTGRES_URL")
+    public let regionalDatabaseURL = try Environment.getOrThrow("REGIONAL_POSTGRES_URL")
 
     try app.databases.use(.postgres(
         url: primaryDatabaseURL

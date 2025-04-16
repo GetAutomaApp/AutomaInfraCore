@@ -6,10 +6,10 @@
 import Vapor
 
 internal struct TwitterPostResponse: Content {
-    let data: TwitterPostResponseData
+    public let data: TwitterPostResponseData
 }
 
 internal struct TwitterPostResponseData: Content {
-    let text: String
-    let id: String
+    public let text: String
+    public let id: String
 }

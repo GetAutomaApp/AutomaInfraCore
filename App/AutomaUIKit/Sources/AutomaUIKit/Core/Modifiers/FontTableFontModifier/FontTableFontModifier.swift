@@ -31,8 +31,8 @@ import SwiftUI
  ```
  */
 public struct FontTableFontModifier: ViewModifier {
-    let fontTableType: IsFontTableFont
-    let colour: Color?
+    public let fontTableType: IsFontTableFont
+    public let colour: Color?
 
     public func body(content: Content) -> some View {
         if let colour {

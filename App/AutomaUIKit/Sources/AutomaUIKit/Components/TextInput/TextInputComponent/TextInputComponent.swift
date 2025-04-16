@@ -8,8 +8,8 @@ import SwiftUI
 public struct TextInputComponentComponent: View {
     @ObservedObject var config: TextInputComponentComponentConfig
 
-    let onIconTap: (TextInputComponentComponentConfig) -> Void
-    let onSelfAppear: (TextInputComponentComponentConfig) -> Void
+    public let onIconTap: (TextInputComponentComponentConfig) -> Void
+    public let onSelfAppear: (TextInputComponentComponentConfig) -> Void
 
     public init(
         config: TextInputComponentComponentConfig = .init(),

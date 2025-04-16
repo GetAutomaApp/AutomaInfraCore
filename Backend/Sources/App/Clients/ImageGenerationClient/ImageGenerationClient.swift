@@ -8,7 +8,7 @@ import OpenAI
 import Vapor
 
 internal struct ImageGenerationClient: ImageGenerationClientBase {
-    let logger: Logger
+    public let logger: Logger
 
     public func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult {
         let client = try query.model.getPlatformClient(logger: logger)

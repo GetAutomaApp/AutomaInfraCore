@@ -7,8 +7,8 @@ import AutomaUIKit
 import SwiftUI
 
 public struct OnboardingScreenFrame<TitleContent: View, FooterContent: View>: View {
-    let titleContent: () -> TitleContent
-    let footerContent: () -> FooterContent
+    public let titleContent: () -> TitleContent
+    public let footerContent: () -> FooterContent
 
     public init(
         @ViewBuilder titleContent: @escaping () -> TitleContent,

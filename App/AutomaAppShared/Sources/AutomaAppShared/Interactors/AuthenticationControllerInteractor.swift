@@ -10,7 +10,7 @@ import Foundation
 // NOTE: This ControllerInteractor can be used for 3rd party apis on both the frontend + backend
 // A ControllerInteractor automatically gets generated when creating a backend-controller (on client)
 internal struct AuthenticationControllerInteractor: BackendControllerInteractor {
-    let baseURL: String
+    public let baseURL: String
 
     public func makeRegisterCodeRequest(_ phoneNumber: String) async throws -> AuthenticationCodeResponseDTO {
         let params = try PhoneNumberPayloadDTO(number: phoneNumber).encodeToDictionary()

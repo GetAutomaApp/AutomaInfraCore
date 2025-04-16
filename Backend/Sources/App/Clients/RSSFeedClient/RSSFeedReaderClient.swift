@@ -15,7 +15,7 @@ import Vapor
 /// and converting feed items into a standardized `GenericRSSFeedItem` format.
 internal struct RSSFeedReaderClient {
     /// Logger instance used for error reporting and debugging.
-    let logger: Logger
+    public let logger: Logger
 
     /// Reads and parses a feed from the specified URL.
     /// - Parameter url: The URL of the RSS or Atom feed to read.

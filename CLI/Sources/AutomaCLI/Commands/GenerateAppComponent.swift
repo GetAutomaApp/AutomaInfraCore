@@ -6,25 +6,25 @@
 import Vapor
 
 private struct FileType {
-    let name: String
-    let configurations: [FileConfig]
+    public let name: String
+    public let configurations: [FileConfig]
 }
 
 private struct FileConfig {
-    let fromDirectory: String
-    let toDirectory: String
-    let nestToDirectory: String
-    let templates: [String]
+    public let fromDirectory: String
+    public let toDirectory: String
+    public let nestToDirectory: String
+    public let templates: [String]
 }
 
 private struct AddToFileType {
-    let name: String
-    let configurations: [AddToFileConfig]
+    public let name: String
+    public let configurations: [AddToFileConfig]
 }
 
 private struct AddToFileConfig {
-    let template: String
-    let addToFile: String
+    public let template: String
+    public let addToFile: String
 }
 
 private let basePath = "../../generators/"

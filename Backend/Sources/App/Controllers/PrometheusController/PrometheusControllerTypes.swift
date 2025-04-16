@@ -6,7 +6,7 @@
 import Vapor
 
 internal struct PrometheusRouteQuery: Content {
-    let authToken: String
+    public let authToken: String
 
     enum CodingKeys: String, CodingKey {
         case authToken = "auth_token"

@@ -14,7 +14,7 @@ internal struct OpenAIChatCompletionClient: ChatCompletion {
     private let client: OpenAI
 
     /// Logger instance for tracking operations and errors
-    let logger: Logger
+    public let logger: Logger
 
     /// API key for authenticating with OpenAI services
     private let apiKey: String

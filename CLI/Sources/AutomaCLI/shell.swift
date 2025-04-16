@@ -7,11 +7,11 @@ import DataTypes
 import Foundation
 
 public struct ShellOutput {
-    let stdout: String?
-    let stderr: String?
-    let exitStatus: Int
-    let isError: Bool
-    let command: String
+    public let stdout: String?
+    public let stderr: String?
+    public let exitStatus: Int
+    public let isError: Bool
+    public let command: String
 }
 
 public enum OperatingSystem {

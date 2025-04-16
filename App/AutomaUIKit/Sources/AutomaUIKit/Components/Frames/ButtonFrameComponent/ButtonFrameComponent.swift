@@ -20,10 +20,10 @@ internal struct ButtonFrameComponent<Content: View>: View {
     @ObservedObject private var config: ButtonFrameComponentConfig
 
     // Closure that defines the button's action when tapped, using the current configuration.
-    let action: (ButtonFrameComponentConfig) -> Void
+    public let action: (ButtonFrameComponentConfig) -> Void
 
     // Closure called when the component appears on the screen, allowing for configuration adjustments.
-    let onSelfAppear: (ButtonFrameComponentConfig) -> Void
+    public let onSelfAppear: (ButtonFrameComponentConfig) -> Void
 
     // Closure that provides the content of the button, using the current configuration.
     public var content: (ButtonFrameComponentConfig) -> Content

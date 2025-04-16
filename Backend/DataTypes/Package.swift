@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-let package = Package(
+public let package = Package(
     name: "DataTypes",
     platforms: [
         .macOS(.v15),

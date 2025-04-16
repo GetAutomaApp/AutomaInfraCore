@@ -9,7 +9,7 @@ import SotoS3
 import Vapor
 
 internal struct TigrisService: ~Copyable {
-    let client: S3
+    public let client: S3
 
     init() throws {
         let clientAuth = try AWSClient(
@@ -126,7 +126,7 @@ internal struct TigrisService: ~Copyable {
     }
 
     struct S3Path {
-        let bucket: String
-        let key: String
+        public let bucket: String
+        public let key: String
     }
 }

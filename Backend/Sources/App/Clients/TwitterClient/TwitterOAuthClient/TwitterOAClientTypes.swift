@@ -6,13 +6,13 @@
 import Vapor
 
 internal struct TwitterUserTokens: Content {
-    let accessToken: String
-    let secretAccessToken: String
+    public let accessToken: String
+    public let secretAccessToken: String
 }
 
 internal struct TwitterOAuthRedirectQueryParameters: Content {
-    let oauthToken: String
-    let oauthVerifier: String
+    public let oauthToken: String
+    public let oauthVerifier: String
 
     enum CodingKeys: String, CodingKey {
         case oauthToken = "oauth_token"
@@ -21,5 +21,5 @@ internal struct TwitterOAuthRedirectQueryParameters: Content {
 }
 
 internal struct PostTweetContent: Content {
-    let message: String
+    public let message: String
 }

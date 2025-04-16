@@ -13,12 +13,12 @@ protocol ImageGenerationClientBase {
 }
 
 internal struct GenerateImageQuery: Content {
-    let model: GenerateImageModel
-    let prompt: String
-    let totalImagesToGenerate: Int?
-    let quality: GenerateImageQuality?
-    let imageSize: GenerateImageSize?
-    let imageStyle: GenerateImageStyle?
+    public let model: GenerateImageModel
+    public let prompt: String
+    public let totalImagesToGenerate: Int?
+    public let quality: GenerateImageQuality?
+    public let imageSize: GenerateImageSize?
+    public let imageStyle: GenerateImageStyle?
 
     init(
         model: GenerateImageModel,
@@ -53,8 +53,8 @@ internal enum GenerateImageModel: String, Codable {
 }
 
 internal struct GenerateImageResult: Content {
-    let images: [Data]
-    let metadataJSON: Data
+    public let images: [Data]
+    public let metadataJSON: Data
 }
 
 internal enum GenerateImageQuality: String, Codable {

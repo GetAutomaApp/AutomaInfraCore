@@ -7,8 +7,8 @@ import Foundation
 import Network
 
 public class NetworkManager: ObservableObject, @unchecked Sendable {
-    let monitor = NWPathMonitor()
-    let queue = DispatchQueue(label: "NetworkManager")
+    public let monitor = NWPathMonitor()
+    public let queue = DispatchQueue(label: "NetworkManager")
     public var isConnected = true
 
     public init() {

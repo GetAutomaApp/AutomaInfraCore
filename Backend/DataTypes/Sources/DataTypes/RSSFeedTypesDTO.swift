@@ -73,10 +73,10 @@ public struct RssFeedResponse: Content {
 /// Contains YouTube-specific metadata for feed items that represent YouTube videos.
 public struct RSSFeedItemYouTubeVideoInfo: Content {
     /// The YouTube channel identifier.
-    let channelID: String
+    public let channelID: String
 
     /// The YouTube video identifier.
-    let videoID: String
+    public let videoID: String
 
     /// Creates a new YouTube video info object.
     /// - Parameters:
