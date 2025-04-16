@@ -89,7 +89,7 @@ struct AuthenticationService: Sendable {
     // 2. Send Login Auth Code
     // This will also be used to send the user a registeration code
     // We don't care if the user exists in this route or not
-    public func sendAuthCode(phoneNumber: String, queue _: Queue) async throws -> AuthenticationCodeResponseDTO {
+    public func sendAuthCode(phoneNumber: String, queue: Queue) async throws -> AuthenticationCodeResponseDTO {
         let code = RandomService.randomCode()
 
         logger.info(
@@ -118,14 +118,18 @@ struct AuthenticationService: Sendable {
         let codeModelId = UUID()
 
         do {
-            try await helper.sendAuthCode(code: code, phoneNumber: phoneNumber, codeModelId: codeModelId)
+            return try await helper.sendAuthCode(
+                queue: queue,
+                code: code,
+                phoneNumber: phoneNumber,
+                codeModelId: codeModelId
+            )
         } catch let error as GenericErrors {
-            helper.handleAuthCodeNotSent(
+            try helper.handleAuthCodeNotSent(
                 code: code,
                 phoneNumber: phoneNumber,
                 codeModelId: codeModelId,
-                error: error,
-                isGenericError: true
+                error: error
             )
         } catch {
             try helper.handleAuthCodeNotSent(
@@ -135,6 +139,7 @@ struct AuthenticationService: Sendable {
                 error: error
             )
         }
+        throw Abort(.internalServerError)
     }
 
     // 3. Login
@@ -143,7 +148,7 @@ struct AuthenticationService: Sendable {
         signer: Request.JWT
     ) async throws -> AuthenticationTokensPayloadDTO {
         let messageService = MessageService()
-        try await getValidateAndDeleteCode(
+        try await helper.getValidateAndDeleteCode(
             phoneNumber: payload.phoneNumber,
             code: payload.code
         )
@@ -166,7 +171,7 @@ struct AuthenticationService: Sendable {
                 ]
             )
 
-            return try await createAuthenticationTokensPayload(
+            return try await helper.createAuthenticationTokensPayload(
                 userId: userId,
                 signer: signer
             )
@@ -202,7 +207,7 @@ struct AuthenticationService: Sendable {
                 ]
             )
 
-            return try await generateAccessToken(
+            return try await helper.generateAccessToken(
                 userId: userId,
                 expiresIn: 86_400,
                 type: .access,
@@ -233,8 +238,16 @@ struct AuthenticationService: Sendable {
             ]
         )
 
-        try await deleteOldTokens(userId: userId, subject: .refresh)
-        try await deleteOldTokens(userId: userId, subject: .access)
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            group.addTask {
+                try await helper.deleteOldTokens(userId: userId, subject: .refresh)
+            }
+            group.addTask {
+                try await helper.deleteOldTokens(userId: userId, subject: .access)
+            }
+
+            try await group.waitForAll()
+        }
     }
 
     public func doesUserExist(phoneNumber: String) async throws -> Bool {
