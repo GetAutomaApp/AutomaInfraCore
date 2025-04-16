@@ -4,7 +4,6 @@
 // All rights reserved.
 
 @testable import AutomaCLI
-import Fluent
 import Testing
 
 // boilerplate code here, not real tests

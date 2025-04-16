@@ -1,3 +1,8 @@
+// AuthenticationServiceHelper.swift
+// Copyright (c) 2025 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
+
 import DataTypes
 import Fluent
 import JWT
@@ -15,7 +20,7 @@ internal struct AuthenticationServiceHelper {
             metadata: [
                 "phoneNumber": .string(phoneNumber),
                 "code": .string(code),
-                "to": .string("AuthenticationService.getValidateAndDeleteCode")
+                "to": .string("AuthenticationService.getValidateAndDeleteCode"),
             ]
         )
 
@@ -203,7 +208,12 @@ internal struct AuthenticationServiceHelper {
         return distance
     }
 
-    public func sendAuthCode(code: String, phoneNumber: String, codeModelId: UUID) async throws {
+    public func sendAuthCode(
+        queue: Queue,
+        code: String,
+        phoneNumber: String,
+        codeModelId: UUID
+    ) async throws -> AuthenticationCodeResponseDTO {
         try await queue.dispatch(
             TransactionalMessageAsyncJob.self,
             .init(
@@ -243,23 +253,8 @@ internal struct AuthenticationServiceHelper {
         code: String,
         phoneNumber: String,
         codeModelId: UUID,
-        error: any Error,
-        isGenericError: Bool = false
-    ) {
-        if isGenericError == false {
-            BackendMetric.totalFailedVerificationCodesSent.increment()
-            logger.error(
-                "Couldn't Sent verification code to user",
-                    "to": .string("AuthenticationService.sendAuthCode"),
-                    "phoneNumber": .string(phoneNumber),
-                    "code": .string(code),
-                    "codeId": .string(codeModelId.uuidString),
-                    "error": .string(error.rawValue),
-                ]
-            )
-            throw error
-        }
-
+        error: GenericErrors
+    ) throws {
         BackendMetric.totalFailedVerificationCodesSent.increment()
         logger.error(
             "Couldn't Sent verification code to user",
@@ -268,10 +263,29 @@ internal struct AuthenticationServiceHelper {
                 "phoneNumber": .string(phoneNumber),
                 "code": .string(code),
                 "codeId": .string(codeModelId.uuidString),
-                "error": .string(error.localizedDescription)
+                "error": .string(error.rawValue),
+            ]
+        )
+        throw error
+    }
+
+    public func handleAuthCodeNotSent(
+        code: String,
+        phoneNumber: String,
+        codeModelId: UUID,
+        error: any Error
+    ) throws {
+        BackendMetric.totalFailedVerificationCodesSent.increment()
+        logger.error(
+            "Couldn't Sent verification code to user",
+            metadata: [
+                "to": .string("AuthenticationService.sendAuthCode"),
+                "phoneNumber": .string(phoneNumber),
+                "code": .string(code),
+                "codeId": .string(codeModelId.uuidString),
+                "error": .string(error.localizedDescription),
             ]
         )
         throw GenericErrors.unknownError
     }
 }
-
