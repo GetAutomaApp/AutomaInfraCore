@@ -58,16 +58,16 @@ internal struct GenerateImageResult: Content {
 }
 
 internal enum GenerateImageQuality: String, Codable {
-    case standard
     case hd
+    case standard
 }
 
 public enum GenerateImageSize: String, Codable, Sendable {
+    case _1024 = "1024x1024"
+    case _1024_1792 = "1024x1792" // for dall-e-3 models
+    case _1792_1024 = "1792x1024" // for dall-e-3 models
     case _256 = "256x256"
     case _512 = "512x512"
-    case _1024 = "1024x1024"
-    case _1792_1024 = "1792x1024" // for dall-e-3 models
-    case _1024_1792 = "1024x1792" // for dall-e-3 models
 }
 
 public enum GenerateImageStyle: String, Codable, Sendable {

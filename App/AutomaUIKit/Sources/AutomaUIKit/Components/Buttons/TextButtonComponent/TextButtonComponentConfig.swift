@@ -7,10 +7,10 @@ import SwiftUI
 
 /// Enum defining the different variants of the TextButton component.
 public enum TextButtonVariants: String, CaseIterable {
-    case generic
-    case square
     case circle
+    case generic
     case pill
+    case square
 }
 
 /// Configuration for the TextButtonComponent that extends from `ButtonFrameComponentConfig`.

@@ -14,10 +14,10 @@ import AutomaUIKit
 import SwiftUI
 
 internal enum BaseEnvironmentUrl: String, CaseIterable {
-    case sandbox = "https://api-sandbox.getautoma.app"
-    case production = "https://api-production.getautoma.app"
-    case staging = "https://api-staging.getautoma.app"
     case localhost = "http://localhost:8080"
+    case production = "https://api-production.getautoma.app"
+    case sandbox = "https://api-sandbox.getautoma.app"
+    case staging = "https://api-staging.getautoma.app"
 }
 
 public struct DebugMenu: View {

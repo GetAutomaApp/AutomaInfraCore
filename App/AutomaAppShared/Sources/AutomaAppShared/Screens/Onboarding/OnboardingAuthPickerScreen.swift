@@ -7,8 +7,8 @@ import AutomaUIKit
 import SwiftUI
 
 internal enum AuthScreenRoute {
-    case register
     case login
+    case register
 }
 
 public struct OnboardingAuthPickerScreen: View {

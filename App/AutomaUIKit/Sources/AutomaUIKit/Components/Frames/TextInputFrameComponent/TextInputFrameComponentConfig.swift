@@ -6,8 +6,8 @@
 import SwiftUI
 
 public enum TextInputFrameComponentVariants: String, CaseIterable {
-    case generic
     case disabled
+    case generic
 }
 
 public class TextInputFrameComponentConfig: ObservableObject {

@@ -6,9 +6,9 @@
 import Vapor
 
 private enum FlyEnvironments: String, CaseIterable {
+    case production
     case sandbox
     case staging
-    case production
 }
 
 public struct FlyConfigGenerator: Command {

@@ -4,8 +4,8 @@
 // All rights reserved.
 
 internal enum MetricStatus: String, Codable {
-    case success
-    case fail
     case alreadyExists
+    case fail
     case start
+    case success
 }

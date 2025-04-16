@@ -14,10 +14,10 @@ public struct TextButtonComponent: View {
     private var config: TextButtonComponentConfig { externalConfig }
 
     /// A closure that is called when the button appears on screen, passing the current configuration.
-    let onSelfAppear: (TextButtonComponentConfig) -> Void
+    let onSelfAppear: ((TextButtonComponentConfig) -> Void)?
 
     /// A closure to execute when the button is tapped, passing the current configuration.
-    let action: (TextButtonComponentConfig) -> Void
+    let action: ((TextButtonComponentConfig) -> Void)?
 
     // MARK: - 1. Initializer with external config
 
@@ -29,8 +29,8 @@ public struct TextButtonComponent: View {
     ///   - action: A closure called when the button is tapped (default is no-op).
     public init(
         config: TextButtonComponentConfig,
-        onSelfAppear: @escaping (TextButtonComponentConfig) -> Void = { _ in },
-        action: @escaping (TextButtonComponentConfig) -> Void = { _ in }
+        onSelfAppear: ((TextButtonComponentConfig) -> Void)?,
+        action: ((TextButtonComponentConfig) -> Void)?
     ) {
         externalConfig = config
         self.onSelfAppear = onSelfAppear
@@ -83,7 +83,9 @@ public struct TextButtonComponent: View {
     /// - Returns: A Button view wrapped in a custom frame, displaying the text and triggering the associated action.
     public var body: some View {
         ButtonFrameComponent(config: config, action: {
-            action(config)
+            if let action {
+                action(config)
+            }
         }) {
             Text(config.text)
                 .fontTableFont(
@@ -91,7 +93,9 @@ public struct TextButtonComponent: View {
                 )
         } onSelfAppear: { _ in
             print("calling on self appear button frame comp")
-            onSelfAppear(config)
+            if let onSelfAppear {
+                onSelfAppear(config)
+            }
         }
     }
 }

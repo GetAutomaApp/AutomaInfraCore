@@ -4,8 +4,8 @@
 // All rights reserved.
 
 internal enum OpenAIImageGenerationClientError: Error {
-    case invalidModel
-    case responseError
     case encodeError((any Error)?)
     case generationError((any Error)? = nil)
+    case invalidModel
+    case responseError
 }

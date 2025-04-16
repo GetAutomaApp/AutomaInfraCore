@@ -6,7 +6,7 @@
 import SwiftUI
 
 public struct TextInputFrameComponent_Previews: PreviewProvider {
-    static var previews: some View {
+    public static var previews: some View {
         TextInputFrameComponentPropertyEditor()
     }
 }
@@ -14,7 +14,7 @@ public struct TextInputFrameComponent_Previews: PreviewProvider {
 public struct TextInputFrameComponentPropertyEditor: View {
     @StateObject private var config = TextInputFrameComponentConfig()
 
-    var body: some View {
+    public var body: some View {
         PropertyEditor(
             object: config,
             properties: [

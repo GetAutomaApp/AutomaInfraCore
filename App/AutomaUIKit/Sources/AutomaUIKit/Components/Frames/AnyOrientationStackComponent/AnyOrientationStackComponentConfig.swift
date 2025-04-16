@@ -6,7 +6,7 @@
 import SwiftUI
 
 public enum AnyOrientationStackComponentVariants {
-    case vstack, hstack, zstack
+    case hstack, vstack, zstack
 }
 
 /// Add a short description here about the config
