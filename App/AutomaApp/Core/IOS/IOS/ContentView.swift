@@ -17,7 +17,7 @@ internal struct ContentView: View {
     @EnvironmentObject var baseEnvironmentConfig: BaseAppEnvironmentObject
     @EnvironmentObject var networkChecker: NetworkManager
 
-    var body: some View {
+    public var body: some View {
         if networkChecker.isConnected {
             VStack {
                 if baseEnvironmentConfig.isAppFinishedLoading {

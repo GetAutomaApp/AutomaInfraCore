@@ -36,7 +36,7 @@ public struct VerificationCodeInputComponent: View {
 
             return splits.count >= index + 1 ? splits[index] : ""
         }, set: { new in
-            var splits = config.text.split(separator: "-", omittingEmptySubsequences: false).map { $0
+            public var splits = config.text.split(separator: "-", omittingEmptySubsequences: false).map { $0
                 .trimmingCharacters(in: .whitespacesAndNewlines)
                 .trimmingCharacters(in: .symbols)
                 .trimmingCharacters(in: .illegalCharacters)

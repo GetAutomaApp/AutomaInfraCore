@@ -33,7 +33,7 @@ public class TextInputFrameComponentConfig: ObservableObject {
         }
     }
 
-    var isDisabled: Bool {
+    public var isDisabled: Bool {
         variant == .disabled
     }
 

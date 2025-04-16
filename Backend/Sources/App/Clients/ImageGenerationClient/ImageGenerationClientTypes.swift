@@ -8,7 +8,7 @@ import OpenAI
 import Vapor
 
 protocol ImageGenerationClientBase {
-    var logger: Logger { get }
+    public var logger: Logger { get }
     public func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult
 }
 

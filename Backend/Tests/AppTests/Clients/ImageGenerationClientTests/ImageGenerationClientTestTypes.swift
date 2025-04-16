@@ -13,13 +13,13 @@ import VaporTesting
 protocol ImageGenerationClientTestSuite {
     /// The default prompt to use for image generation tests
     /// This prompt should generate safe, consistent test images
-    var defaultPrompt: String { get }
+    public var defaultPrompt: String { get }
 }
 
 extension ImageGenerationClientTestSuite {
     /// Default implementation of the prompt used for image generation
     /// Provides a consistent, family-friendly prompt that works well with most image generation models
-    var defaultPrompt: String {
+    public var defaultPrompt: String {
         "A fluffy golden retriever puppy playing in a sunny meadow filled with colorful wildflowers."
     }
 

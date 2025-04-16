@@ -117,7 +117,7 @@ internal struct AuthenticationServiceHelper {
             ]
         )
 
-        var query = JwtTokenModel.query(on: writeDb)
+        public var query = JwtTokenModel.query(on: writeDb)
             .filter(\.$userId == userId)
             .filter(\.$subject == subject)
             .sort(\.$createdAt, .descending)

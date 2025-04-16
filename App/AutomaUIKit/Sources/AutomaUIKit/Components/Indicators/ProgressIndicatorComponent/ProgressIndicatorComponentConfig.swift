@@ -52,7 +52,7 @@ public class ProgressIndicatorComponentConfig: ObservableObject {
     }
 
     /// Determines the step overlay length for the `generic` variant
-    var determineStepLengthGrowSize: CGFloat {
+    public var determineStepLengthGrowSize: CGFloat {
         let growSize = CGFloat(
             stepLength + CGFloat(determineSpaceBetweenSteps)
         )
@@ -69,7 +69,7 @@ public class ProgressIndicatorComponentConfig: ObservableObject {
     }
 
     /// Determines the padding between steps for the `generic` variant
-    var determineSpaceBetweenSteps: CGFloat {
+    public var determineSpaceBetweenSteps: CGFloat {
         stepLength * 1.75
     }
 

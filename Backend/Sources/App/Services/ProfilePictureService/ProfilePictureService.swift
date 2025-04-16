@@ -121,10 +121,10 @@ internal struct ProfilePictureService {
         let textExtractionService = TextExtractionService()
         let imageClient = ImageGenerationClient(logger: logger)
 
-        var hasText = false
-        var totalAttemptsLeft = totalRegenerationAttempts
+        public var hasText = false
+        public var totalAttemptsLeft = totalRegenerationAttempts
 
-        var result: GenerateImageResult?
+        public var result: GenerateImageResult?
         // If there is still text on the image after 3 attempts, we will ignore the text and continue generating the
         // image
         repeat {

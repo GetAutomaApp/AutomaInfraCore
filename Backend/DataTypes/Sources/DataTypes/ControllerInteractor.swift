@@ -10,10 +10,10 @@ import Vapor
 /// (collection of routes)
 public protocol ControllerInteractor {
     /// Server base url
-    var baseURL: String { get }
+    public var baseURL: String { get }
 
     /// Alamofire request session
-    var session: Alamofire.Session { get }
+    public var session: Alamofire.Session { get }
 
     /// Make a request to a specific endpoint and get the Alamofire response object
     /// - Parameters:

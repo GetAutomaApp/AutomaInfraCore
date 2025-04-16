@@ -9,7 +9,7 @@ import Vapor
 /// Implementations handle the specifics of interacting with different AI platforms
 protocol ChatCompletion {
     /// Logger instance for tracking operations and errors
-    var logger: Logger { get }
+    public var logger: Logger { get }
 
     /// Creates a chat completion using the specified query parameters
     /// - Parameter query: The chat completion request parameters

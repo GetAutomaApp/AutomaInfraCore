@@ -7,7 +7,7 @@ import SwiftUI
 
 @main
 internal struct IOS_ADMINApp: App {
-    var body: some Scene {
+    public var body: some Scene {
         WindowGroup {
             ContentView()
                 .preferredColorScheme(.dark)

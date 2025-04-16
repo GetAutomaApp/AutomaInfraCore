@@ -14,7 +14,7 @@ internal struct InfoPairComponent_Previews: PreviewProvider {
 internal struct InfoPairWrapperView: View {
     @ObservedObject var config = InfoPairComponentConfig()
 
-    var body: some View {
+    public var body: some View {
         PropertyEditor(
             object: config,
             properties: [

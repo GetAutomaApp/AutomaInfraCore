@@ -11,28 +11,28 @@ final class TwitterUserToken: Model, @unchecked Sendable {
     static let schema = "Twitter-User-Token"
 
     @ID(key: .id)
-    var id: UUID?
+    public var id: UUID?
 
     @Field(key: "access_token")
-    var accessToken: String
+    public var accessToken: String
 
     @Field(key: "oauth_verifier")
-    var oauthVerifier: String
+    public var oauthVerifier: String
 
     @Field(key: "secret_access_token")
-    var secretAccessToken: String
+    public var secretAccessToken: String
 
     @OptionalParent(key: "oauth_token_id")
-    var oauthToken: TwitterOAuthToken?
+    public var oauthToken: TwitterOAuthToken?
 
     @Timestamp(key: "created_at", on: .create)
-    var createdAt: Date?
+    public var createdAt: Date?
 
     @Timestamp(key: "updated_at", on: .update)
-    var updatedAt: Date?
+    public var updatedAt: Date?
 
     @Timestamp(key: "deleted_at", on: .delete)
-    var deletedAt: Date?
+    public var deletedAt: Date?
 
     init() {}
 

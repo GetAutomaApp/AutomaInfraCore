@@ -89,7 +89,7 @@ internal struct MessageService: Decodable {
             let encoder = JSONEncoder()
             let jsonData = try encoder.encode(message)
 
-            var request = URLRequest(url: webhookURL)
+            public var request = URLRequest(url: webhookURL)
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = jsonData

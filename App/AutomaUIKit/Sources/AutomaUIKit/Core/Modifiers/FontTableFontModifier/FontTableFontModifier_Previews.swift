@@ -12,13 +12,13 @@ internal struct FontTableFontModifier_Previews: PreviewProvider {
 }
 
 internal struct TestView: View {
-    var body: some View {
+    public var body: some View {
         ContentView()
     }
 }
 
 internal struct ContentView: View {
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading) {
             Text("This is bold Crimson Text!")
                 .fontTableFont(FontTable.Crimson.Headings.head1)

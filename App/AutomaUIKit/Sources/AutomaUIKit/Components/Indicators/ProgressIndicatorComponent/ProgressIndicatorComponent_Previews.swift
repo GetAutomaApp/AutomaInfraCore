@@ -14,7 +14,7 @@ internal struct ProgressIndicatorComponent_Previews: PreviewProvider {
 internal struct TestProgressView: View {
     @ObservedObject var config = ProgressIndicatorComponentConfig()
 
-    var body: some View {
+    public var body: some View {
         VStack {
             PropertyEditor(object: config, properties: [
                 [AnyKeyPath("Total Steps", keyPath: \.totalSteps)],

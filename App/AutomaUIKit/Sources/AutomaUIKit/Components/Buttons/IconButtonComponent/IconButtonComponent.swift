@@ -16,7 +16,7 @@ public struct IconButtonComponent: View {
     /// A closure to execute when the button is tapped, passing the current configuration.
     let action: () async throws -> Void
 
-    var configAction: (IconButtonComponentConfig) -> Void = { _ in }
+    public var configAction: (IconButtonComponentConfig) -> Void = { _ in }
 
     // MARK: - 1. Initializer with external config
 

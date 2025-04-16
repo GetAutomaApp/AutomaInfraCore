@@ -6,53 +6,53 @@
 import Foundation
 
 internal struct DiscordWebhookMessage: Codable {
-    var content: String?
-    var username: String?
-    var avatar_url: String?
-    var embeds: [DiscordEmbed]?
+    public var content: String?
+    public var username: String?
+    public var avatar_url: String?
+    public var embeds: [DiscordEmbed]?
 }
 
 internal struct DiscordEmbed: Codable {
-    var title: String?
-    var description: String?
-    var url: String?
-    var timestamp: String?
-    var color: Int?
-    var fields: [DiscordEmbedField]?
-    var footer: DiscordEmbedFooter?
-    var image: DiscordEmbedImage?
-    var thumbnail: DiscordEmbedImage?
-    var author: DiscordEmbedAuthor?
-    var provider: DiscordEmbedProvider?
-    var video: DiscordEmbedVideo?
+    public var title: String?
+    public var description: String?
+    public var url: String?
+    public var timestamp: String?
+    public var color: Int?
+    public var fields: [DiscordEmbedField]?
+    public var footer: DiscordEmbedFooter?
+    public var image: DiscordEmbedImage?
+    public var thumbnail: DiscordEmbedImage?
+    public var author: DiscordEmbedAuthor?
+    public var provider: DiscordEmbedProvider?
+    public var video: DiscordEmbedVideo?
 }
 
 internal struct DiscordEmbedField: Codable {
-    var name: String
-    var value: String
-    var inline: Bool
+    public var name: String
+    public var value: String
+    public var inline: Bool
 }
 
 internal struct DiscordEmbedFooter: Codable {
-    var text: String
-    var icon_url: String?
+    public var text: String
+    public var icon_url: String?
 }
 
 internal struct DiscordEmbedImage: Codable {
-    var url: String?
+    public var url: String?
 }
 
 internal struct DiscordEmbedAuthor: Codable {
-    var name: String
-    var url: String?
-    var icon_url: String?
+    public var name: String
+    public var url: String?
+    public var icon_url: String?
 }
 
 internal struct DiscordEmbedProvider: Codable {
-    var name: String
-    var url: String
+    public var name: String
+    public var url: String
 }
 
 internal struct DiscordEmbedVideo: Codable {
-    var url: String
+    public var url: String
 }

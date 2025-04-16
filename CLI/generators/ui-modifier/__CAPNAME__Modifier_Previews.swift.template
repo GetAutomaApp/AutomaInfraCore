@@ -8,7 +8,7 @@ internal struct __CAPNAME__Modifier_Previews: PreviewProvider {
 }
 
 internal struct __CAPNAME__ModifierWrapperView: View {
-    var body: some View {
+    public var body: some View {
         // TODO: Add the previews here
     }
 }

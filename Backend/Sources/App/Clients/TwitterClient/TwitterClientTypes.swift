@@ -8,8 +8,8 @@ import TwitterAPIKit
 import Vapor
 
 protocol TwitterClientBase {
-    var logger: Logger { get }
-    var client: Client { get }
-    var database: Database { get }
-    var twitterClient: TwitterAPIClient { get }
+    public var logger: Logger { get }
+    public var client: Client { get }
+    public var database: Database { get }
+    public var twitterClient: TwitterAPIClient { get }
 }

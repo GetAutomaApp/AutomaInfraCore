@@ -8,7 +8,7 @@ import SwiftUI
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
+        public var int: UInt64 = 0
         Scanner(string: hex).scanHexInt64(&int)
         let alpha, red, green, blue: UInt64
         switch hex.count {

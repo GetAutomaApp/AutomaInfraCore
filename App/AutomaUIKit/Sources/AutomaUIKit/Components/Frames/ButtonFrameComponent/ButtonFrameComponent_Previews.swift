@@ -14,7 +14,7 @@ internal struct ButtonFrameComponent_Previews: PreviewProvider {
 internal struct ButtonFrameComponent_PreviewsView: View {
     @StateObject var buttonConfig: ButtonFrameComponentConfig = .init()
 
-    var body: some View {
+    public var body: some View {
         PropertyEditor(
             object: buttonConfig,
             properties: [
@@ -58,7 +58,7 @@ internal struct AutoButtonVariationsView: View {
 
     let switchDelay: TimeInterval = 0.5
 
-    var body: some View {
+    public var body: some View {
         HStack {
             ButtonFrameComponent(config: buttonController, action: { config in
                 config.isCircular.toggle()

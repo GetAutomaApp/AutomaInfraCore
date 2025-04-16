@@ -16,7 +16,7 @@ internal struct TextInputComponentComponent_Previews: PreviewProvider {
 internal struct TextInputComponentComponentWrapperView: View {
     @ObservedObject var config = TextInputComponentComponentConfig()
 
-    var body: some View {
+    public var body: some View {
         PropertyEditor(
             object: config,
             properties: [

@@ -24,7 +24,7 @@ internal struct RSSFeedReaderClient {
     public func read(from url: URL) async throws -> RssFeedResponse {
         BackendMetric.rssFeedReaderMetric(status: .start, url: url).increment()
 
-        var feed: Feed?
+        public var feed: Feed?
         let maxAttempts = 3
 
         do {
@@ -111,7 +111,7 @@ internal struct RSSFeedReaderClient {
                 return nil
             }
 
-            var youTubeVideoInfo: RSSFeedItemYouTubeVideoInfo?
+            public var youTubeVideoInfo: RSSFeedItemYouTubeVideoInfo?
             if
                 let youtubeEntry = entry.youTube,
                 let channelID = youtubeEntry.channelID,

@@ -81,7 +81,7 @@ internal struct TigrisService: ~Copyable {
     }
 
     public func decodeS3Path(_ s3Path: String) throws -> Self.S3Path {
-        var pathComponents = s3Path.pathComponents
+        public var pathComponents = s3Path.pathComponents
 
         if pathComponents.count < 3 {
             throw GenericErrors.s3PathTooShort

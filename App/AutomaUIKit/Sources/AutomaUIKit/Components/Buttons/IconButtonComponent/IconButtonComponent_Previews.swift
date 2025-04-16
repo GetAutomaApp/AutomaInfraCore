@@ -14,7 +14,7 @@ internal struct IconButtonComponent_Previews: PreviewProvider {
 internal struct IconButtonComponent_PreviewsView: View {
     @StateObject private var sharedConfig = IconButtonComponentConfig()
 
-    var body: some View {
+    public var body: some View {
         PropertyEditor(
             object: sharedConfig,
             properties: [

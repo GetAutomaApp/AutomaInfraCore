@@ -11,28 +11,28 @@ final class TwitterOAuthToken: Model, @unchecked Sendable {
     static let schema = "Twitter-O-Auth-Token"
 
     @ID(key: .id)
-    var id: UUID?
+    public var id: UUID?
 
     @Field(key: "oauth_token")
-    var oauthToken: String
+    public var oauthToken: String
 
     @Field(key: "oauth_token_secret")
-    var oauthTokenSecret: String
+    public var oauthTokenSecret: String
 
     @OptionalBoolean(key: "oauth_callback_confirmed")
-    var oauthCallbackConfirmed: Bool?
+    public var oauthCallbackConfirmed: Bool?
 
     @OptionalParent(key: "user_id")
-    var user: UserModel?
+    public var user: UserModel?
 
     @Timestamp(key: "created_at", on: .create)
-    var createdAt: Date?
+    public var createdAt: Date?
 
     @Timestamp(key: "updated_at", on: .update)
-    var updatedAt: Date?
+    public var updatedAt: Date?
 
     @Timestamp(key: "deleted_at", on: .delete)
-    var deletedAt: Date?
+    public var deletedAt: Date?
 
     init() {}
 

@@ -14,7 +14,7 @@ internal struct TextButtonComponent_Previews: PreviewProvider {
 internal struct TextButtonComponent_PreviewsView: View {
     @StateObject private var sharedConfig = TextButtonComponentConfig()
 
-    var body: some View {
+    public var body: some View {
         PropertyEditor(
             object: sharedConfig,
             properties: [

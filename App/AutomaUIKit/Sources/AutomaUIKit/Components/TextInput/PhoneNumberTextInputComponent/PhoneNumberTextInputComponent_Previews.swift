@@ -14,7 +14,7 @@ internal struct PhoneNumberTextInputComponent_Previews: PreviewProvider {
 }
 
 internal struct PhoneNumberTextInputComponentWrapperView: View {
-    var body: some View {
+    public var body: some View {
 //        PropertyEditor(
 //            object: config,
 //            properties: [

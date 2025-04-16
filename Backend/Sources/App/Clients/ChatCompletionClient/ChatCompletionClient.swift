@@ -9,7 +9,7 @@ import Vapor
 /// Delegates requests to the appropriate platform-specific client based on the model
 internal struct ChatCompletionClient: ChatCompletion {
     /// Logger instance for tracking operations and errors
-    var logger: Logging.Logger
+    public var logger: Logging.Logger
 
     /// Creates a chat completion using the appropriate platform client
     /// - Parameter query: The chat completion request parameters including model, prompt and other settings

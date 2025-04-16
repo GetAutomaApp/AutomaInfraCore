@@ -11,22 +11,22 @@ final class AuthenticationCodeModel: Model, @unchecked Sendable {
     static let schema = "Authentication-Code"
 
     @ID(key: .id)
-    var id: UUID?
+    public var id: UUID?
 
     @Field(key: "code")
-    var code: String
+    public var code: String
 
     @Field(key: "phone_number")
-    var phoneNumber: String
+    public var phoneNumber: String
 
     @Timestamp(key: "created_at", on: .create)
-    var createdAt: Date?
+    public var createdAt: Date?
 
     @Timestamp(key: "updated_at", on: .update)
-    var updatedAt: Date?
+    public var updatedAt: Date?
 
     @Timestamp(key: "deleted_at", on: .delete)
-    var deletedAt: Date?
+    public var deletedAt: Date?
 
     init() {}
 

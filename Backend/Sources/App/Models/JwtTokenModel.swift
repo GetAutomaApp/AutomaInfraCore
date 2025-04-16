@@ -11,25 +11,25 @@ final class JwtTokenModel: Model, @unchecked Sendable {
     static let schema = "Jwt-Token"
 
     @ID(key: .id)
-    var id: UUID?
+    public var id: UUID?
 
     @Field(key: "token")
-    var token: String
+    public var token: String
 
     @Field(key: "user_id")
-    var userId: UUID
+    public var userId: UUID
 
     @Enum(key: "subject")
-    var subject: JWTTokenSubject
+    public var subject: JWTTokenSubject
 
     @Timestamp(key: "created_at", on: .create)
-    var createdAt: Date?
+    public var createdAt: Date?
 
     @Timestamp(key: "updated_at", on: .update)
-    var updatedAt: Date?
+    public var updatedAt: Date?
 
     @Timestamp(key: "deleted_at", on: .delete)
-    var deletedAt: Date?
+    public var deletedAt: Date?
 
     init() {}
 

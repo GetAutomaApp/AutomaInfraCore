@@ -76,7 +76,7 @@ let package = Package(
     swiftLanguageModes: [.v5]
 )
 
-var swiftSettings: [SwiftSetting] {
+public var swiftSettings: [SwiftSetting] {
     [
         .enableUpcomingFeature("DisableOutwardActorInference"),
         .enableExperimentalFeature("StrictConcurrency"),

@@ -11,10 +11,10 @@ import VaporTesting
 /// chat completion client implementations
 protocol ChatCompletionClientTestSuite {
     /// The default prompt to use for chat completion tests
-    var defaultPrompt: String { get }
+    public var defaultPrompt: String { get }
 
     /// The maximum number of tokens allowed in a chat completion
-    var maxTokens: Int { get }
+    public var maxTokens: Int { get }
 
     /// Creates a chat completion using the configured client
     /// - Parameter query: The chat completion request parameters
@@ -25,12 +25,12 @@ protocol ChatCompletionClientTestSuite {
 
 extension ChatCompletionClientTestSuite {
     /// The default prompt to use for chat completion tests
-    var defaultPrompt: String {
+    public var defaultPrompt: String {
         "Hello, world!"
     }
 
     /// The maximum number of tokens allowed in a chat completion
-    var maxTokens: Int {
+    public var maxTokens: Int {
         100
     }
 

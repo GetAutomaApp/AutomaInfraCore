@@ -26,7 +26,7 @@ public struct DesignPadding: Sendable {
     public enum PaddingSizes: CGFloat {
         case base, large, medium, small
 
-        var value: CGFloat {
+        public var value: CGFloat {
             switch self {
             case .base:
                 12
@@ -60,7 +60,7 @@ public struct DesignPadding: Sendable {
 
 protocol DesignIcon {
     associatedtype Content: View
-    var image: Content { get }
+    public var image: Content { get }
 }
 
 public enum DesignIcons: String, CaseIterable, DesignIcon {
@@ -69,7 +69,7 @@ public enum DesignIcons: String, CaseIterable, DesignIcon {
     case pause, play, unknown
     case subtraction
 
-    var image: some View {
+    public var image: some View {
         switch self {
         case .pause:
             Image(systemName: "pause.circle.fill").toIcon()

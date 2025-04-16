@@ -16,7 +16,7 @@ internal struct TwitterOAuthClient: TwitterClientBase {
     let client: Client
     let database: Database
     let twitterClient: TwitterAPIClient
-    var callbackURL: URL
+    public var callbackURL: URL
 
     /// Initializes a new TwitterOAuthClient.
     /// - Parameters:

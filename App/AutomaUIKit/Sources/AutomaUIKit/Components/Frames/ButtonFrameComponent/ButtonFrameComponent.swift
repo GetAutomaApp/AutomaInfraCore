@@ -26,7 +26,7 @@ internal struct ButtonFrameComponent<Content: View>: View {
     let onSelfAppear: (ButtonFrameComponentConfig) -> Void
 
     // Closure that provides the content of the button, using the current configuration.
-    var content: (ButtonFrameComponentConfig) -> Content
+    public var content: (ButtonFrameComponentConfig) -> Content
 
     // MARK: - Initializer 1: Action with config, content without config
 
@@ -134,7 +134,7 @@ internal struct ButtonFrameComponent<Content: View>: View {
      - The content view is rendered based on the configuration.
      - The button's appearance (padding, background, corner radius, etc.) is adjusted based on the configuration.
      */
-    var body: some View {
+    public var body: some View {
         Button(action: {
             action(config)
         }) {

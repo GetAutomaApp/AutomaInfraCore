@@ -11,7 +11,7 @@ internal struct IOSApp: App {
     @StateObject var baseConfig = BaseAppEnvironmentObject()
     @StateObject var networkChecker: NetworkManager = .init()
 
-    var body: some Scene {
+    public var body: some Scene {
         WindowGroup {
             ContentView()
                 .preferredColorScheme(.dark)

@@ -220,25 +220,25 @@ public struct GenerateAppComponent: Command {
             name: "name",
             help: "The component to generate. They can be: \(fileTypes.map(\.name).joined(separator: ", "))"
         )
-        var component: String
+        public var component: String
 
         @Argument(name: "filename", help: "The name of the component to generate.")
-        var filename: String
+        public var filename: String
 
         @Option(
             name: "nestedDir",
             help: "The directory you want to nest the component into (added to the default path)."
         )
-        var nestedDir: String?
+        public var nestedDir: String?
 
         @Flag(name: "copy", help: "Copy files to the destination directory.")
-        var copy: Bool
+        public var copy: Bool
     }
 
     public func run(using _: CommandContext, signature: Signature) throws {
         let componentName = signature.filename
         let copy = signature.copy
-        var output = ""
+        public var output = ""
 
         print("🚀 Current Working Directory: \(FileManager.default.currentDirectoryPath)")
 
@@ -330,7 +330,7 @@ public struct GenerateAppComponent: Command {
         }
 
         // Read the file content
-        var content = try String(contentsOfFile: absoluteSourcePath, encoding: .utf8)
+        public var content = try String(contentsOfFile: absoluteSourcePath, encoding: .utf8)
 
         // Rename occurrences of __CAPNAME__ in the content
         content = rename(text: content, componentName: componentName)

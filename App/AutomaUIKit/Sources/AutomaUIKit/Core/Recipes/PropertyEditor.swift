@@ -34,7 +34,7 @@ public struct AnyKeyPath<TheObservedObject, TheValueType> {
         self.label = label
         get = { object in object[keyPath: keyPath] as! TheValueType }
         set = { object, value in
-            var mutableObject = object
+            public var mutableObject = object
             mutableObject[keyPath: keyPath] = value as! ObservableWrappedValueType
         }
         type = ObservableWrappedValueType.self
@@ -89,7 +89,7 @@ public struct PaddingEditor: View {
 internal struct CGSizeEdtior: View {
     @Binding var cgSize: CGSize
 
-    var body: some View {
+    public var body: some View {
         HStack {
             PaddingSliderInput(value: $cgSize.width, label: "W")
             Spacer()
@@ -181,7 +181,7 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
                 TextField(property.label, text: Binding(
                     get: { value },
                     set: { newValue in
-                        var mutableObject = object
+                        public var mutableObject = object
                         property.set(&mutableObject, newValue)
                     }
                 ))
@@ -193,7 +193,7 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
                 value: Binding(
                     get: { value },
                     set: { newValue in
-                        var mutableObject = object
+                        public var mutableObject = object
                         property.set(&mutableObject, newValue)
                     }
                 ),
@@ -204,7 +204,7 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
             Toggle("\(property.label): ", isOn: Binding(
                 get: { value },
                 set: { newValue in
-                    var mutableObject = object
+                    public var mutableObject = object
                     property.set(&mutableObject, newValue)
                 }
             ))
@@ -214,7 +214,7 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
                 value: Binding(
                     get: { value },
                     set: { newValue in
-                        var mutableObject = object
+                        public var mutableObject = object
                         property.set(&mutableObject, newValue)
                     }
                 ),
@@ -227,14 +227,14 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
             PaddingEditor(edgeInsets: Binding(
                 get: { value },
                 set: { newValue in
-                    var mutableObject = object
+                    public var mutableObject = object
                     property.set(&mutableObject, newValue)
                 }
             ))
         } else if property.type == CGFloat.self {
             let value = property.get(object) as! CGFloat
             PaddingSliderInput(value: Binding(get: { value }, set: { newValue in
-                var mutableObject = object
+                public var mutableObject = object
                 property.set(&mutableObject, newValue)
             }),
             label: property.label)
@@ -243,7 +243,7 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
             ColorPicker("\(property.label):", selection: Binding(get: {
                 value
             }, set: { newValue in
-                var mutableObject = object
+                public var mutableObject = object
                 property.set(&mutableObject, newValue)
             }))
         } else if property.type == CGSize.self {
@@ -251,7 +251,7 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
             CGSizeEdtior(cgSize: Binding(
                 get: { value },
                 set: { newValue in
-                    var mutableObject = object
+                    public var mutableObject = object
                     property.set(&mutableObject, newValue)
                 }
             ))

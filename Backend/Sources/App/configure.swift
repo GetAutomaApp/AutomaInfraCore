@@ -95,7 +95,7 @@ extension DatabaseID {
     static let readOnly = DatabaseID(string: "readOnly")
 }
 
-extension Request {
+public extension Request {
     var dbWrite: Database {
         db(.readOnly)
     }

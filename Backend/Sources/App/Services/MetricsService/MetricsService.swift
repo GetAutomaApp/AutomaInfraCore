@@ -21,7 +21,7 @@ internal struct MetricsService {
     }
 
     public func emit() -> Data {
-        var buffer = [UInt8]()
+        public var buffer = [UInt8]()
         prometheus.emit(into: &buffer)
         let data = String(decoding: buffer, as: Unicode.UTF8.self)
         return Data(data.utf8)

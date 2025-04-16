@@ -54,7 +54,7 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
             size: imageSize != nil ? .init(rawValue: imageSize!) : nil,
             style: style != nil ? .init(rawValue: style!) : nil
         )
-        var result: ImagesResult?
+        public var result: ImagesResult?
 
         do {
             try await retry(maxAttempts: 3) {

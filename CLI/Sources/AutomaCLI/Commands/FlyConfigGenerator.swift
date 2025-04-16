@@ -20,7 +20,7 @@ public struct FlyConfigGenerator: Command {
         public init() {}
 
         @Argument(name: "config-path", help: "The path of the fly.io config file")
-        var configPath: String
+        public var configPath: String
 
         @Argument(
             name: "environment",
@@ -41,7 +41,7 @@ public struct FlyConfigGenerator: Command {
             throw Abort(.notFound, reason: "Invalid environment: \(environment)")
         }
 
-        var content = try String(contentsOfFile: configPath, encoding: .utf8)
+        public var content = try String(contentsOfFile: configPath, encoding: .utf8)
 
         guard
             let metricsToken = Environment.get("FLY_METRICS_TOKEN")

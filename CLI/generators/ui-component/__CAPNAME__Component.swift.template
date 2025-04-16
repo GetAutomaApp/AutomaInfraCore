@@ -14,7 +14,7 @@ To see usage examples & visuals, check out `__CAPNAME__ModifierDocumentation.md`
 internal struct __CAPNAME__Component: View {
     @ObservedObject var config: __CAPNAME__ComponentConfig = __CAPNAME__ComponentConfig()
 
-    var body: some View {
+    public var body: some View {
         Text("Hello, __CAPNAME__!")
             .foregroundColor(config.textColor)
     }
