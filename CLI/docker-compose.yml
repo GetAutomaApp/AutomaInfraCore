@@ -3,4 +3,4 @@ services:
     image: alpine:latest
     container_name: alpine_box
     command: tail -f /dev/null
-    tty: true       
+    tty: true
