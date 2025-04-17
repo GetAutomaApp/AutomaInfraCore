@@ -3,7 +3,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-@testable import IOS_ADMIN
+@testable import IOSAdmin
 import Testing
 
 internal struct IOSAdminTests {

@@ -48,9 +48,9 @@
 		38F8D37B2CFA3F3700CC1E46 /* IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F8D38B2CFA3F3800CC1E46 /* IOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F8D3952CFA3F3800CC1E46 /* IOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		38F8D4142CFA42D200CC1E46 /* IOS-ADMIN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IOS-ADMIN.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		38F8D4232CFA42D300CC1E46 /* IOS-ADMINTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "IOS-ADMINTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		38F8D42D2CFA42D300CC1E46 /* IOS-ADMINUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "IOS-ADMINUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		38F8D4142CFA42D200CC1E46 /* IOSAdmin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IOSAdmin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		38F8D4232CFA42D300CC1E46 /* IOSAdminTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IOSAdminTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		38F8D42D2CFA42D300CC1E46 /* IOSAdminUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IOSAdminUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -81,40 +81,40 @@
 		38F8D4812CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"IOS/IOS-ADMIN/Assets.xcassets",
-				"IOS/IOS-ADMIN/ContentView.swift",
-				"IOS/IOS-ADMIN/IOSAdminApp.swift",
-				"IOS/IOS-ADMIN/Preview Content/Preview Assets.xcassets",
-				"IOS/IOS-ADMINTests/IOSAdminTests.swift",
-				"IOS/IOS-ADMINUITests/IOSAdminUILaunchTests.swift",
-				"IOS/IOS-ADMINUITests/IOSAdminUITests.swift",
+				IOS/IOSAdmin/Assets.xcassets,
+				IOS/IOSAdmin/ContentView.swift,
+				IOS/IOSAdmin/IOSAdminApp.swift,
+				"IOS/IOSAdmin/Preview Content/Preview Assets.xcassets",
+				IOS/IOSAdminTests/IOSAdminTests.swift,
+				IOS/IOSAdminUITests/IOSAdminUILaunchTests.swift,
+				IOS/IOSAdminUITests/IOSAdminUITests.swift,
 			);
 			target = 38F8D37A2CFA3F3700CC1E46 /* IOS */;
 		};
-		38F8D4832CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOS-ADMIN" target */ = {
+		38F8D4832CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOSAdmin" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"IOS/IOS-ADMIN/Assets.xcassets",
-				"IOS/IOS-ADMIN/ContentView.swift",
-				"IOS/IOS-ADMIN/IOSAdminApp.swift",
-				"IOS/IOS-ADMIN/Preview Content/Preview Assets.xcassets",
+				IOS/IOSAdmin/Assets.xcassets,
+				IOS/IOSAdmin/ContentView.swift,
+				IOS/IOSAdmin/IOSAdminApp.swift,
+				"IOS/IOSAdmin/Preview Content/Preview Assets.xcassets",
 			);
-			target = 38F8D4132CFA42D200CC1E46 /* IOS-ADMIN */;
+			target = 38F8D4132CFA42D200CC1E46 /* IOSAdmin */;
 		};
-		38F8D4842CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOS-ADMINTests" target */ = {
+		38F8D4842CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOSAdminTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"IOS/IOS-ADMINTests/IOSAdminTests.swift",
+				IOS/IOSAdminTests/IOSAdminTests.swift,
 			);
-			target = 38F8D4222CFA42D300CC1E46 /* IOS-ADMINTests */;
+			target = 38F8D4222CFA42D300CC1E46 /* IOSAdminTests */;
 		};
-		38F8D4852CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOS-ADMINUITests" target */ = {
+		38F8D4852CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOSAdminUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"IOS/IOS-ADMINUITests/IOSAdminUILaunchTests.swift",
-				"IOS/IOS-ADMINUITests/IOSAdminUITests.swift",
+				IOS/IOSAdminUITests/IOSAdminUILaunchTests.swift,
+				IOS/IOSAdminUITests/IOSAdminUITests.swift,
 			);
-			target = 38F8D42C2CFA42D300CC1E46 /* IOS-ADMINUITests */;
+			target = 38F8D42C2CFA42D300CC1E46 /* IOSAdminUITests */;
 		};
 		38F973C32CFF39F7003D8308 /* Exceptions for "Shared" folder in "IOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -124,13 +124,13 @@
 			);
 			target = 38F8D37A2CFA3F3700CC1E46 /* IOS */;
 		};
-		38F973C52CFF39F7003D8308 /* Exceptions for "Shared" folder in "IOS-ADMIN" target */ = {
+		38F973C52CFF39F7003D8308 /* Exceptions for "Shared" folder in "IOSAdmin" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"Preview Content/Preview Assets.xcassets",
 				"Preview Content/SplashScreen.storyboard",
 			);
-			target = 38F8D4132CFA42D200CC1E46 /* IOS-ADMIN */;
+			target = 38F8D4132CFA42D200CC1E46 /* IOSAdmin */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -149,9 +149,9 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				38F8D4812CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOS" target */,
-				38F8D4832CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOS-ADMIN" target */,
-				38F8D4842CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOS-ADMINTests" target */,
-				38F8D4852CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOS-ADMINUITests" target */,
+				38F8D4832CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOSAdmin" target */,
+				38F8D4842CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOSAdminTests" target */,
+				38F8D4852CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOSAdminUITests" target */,
 			);
 			path = Admin;
 			sourceTree = "<group>";
@@ -160,7 +160,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				38F973C32CFF39F7003D8308 /* Exceptions for "Shared" folder in "IOS" target */,
-				38F973C52CFF39F7003D8308 /* Exceptions for "Shared" folder in "IOS-ADMIN" target */,
+				38F973C52CFF39F7003D8308 /* Exceptions for "Shared" folder in "IOSAdmin" target */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -234,9 +234,9 @@
 				38F8D37B2CFA3F3700CC1E46 /* IOS.app */,
 				38F8D38B2CFA3F3800CC1E46 /* IOSTests.xctest */,
 				38F8D3952CFA3F3800CC1E46 /* IOSUITests.xctest */,
-				38F8D4142CFA42D200CC1E46 /* IOS-ADMIN.app */,
-				38F8D4232CFA42D300CC1E46 /* IOS-ADMINTests.xctest */,
-				38F8D42D2CFA42D300CC1E46 /* IOS-ADMINUITests.xctest */,
+				38F8D4142CFA42D200CC1E46 /* IOSAdmin.app */,
+				38F8D4232CFA42D300CC1E46 /* IOSAdminTests.xctest */,
+				38F8D42D2CFA42D300CC1E46 /* IOSAdminUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -316,9 +316,9 @@
 			productReference = 38F8D3952CFA3F3800CC1E46 /* IOSUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		38F8D4132CFA42D200CC1E46 /* IOS-ADMIN */ = {
+		38F8D4132CFA42D200CC1E46 /* IOSAdmin */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 38F8D4352CFA42D300CC1E46 /* Build configuration list for PBXNativeTarget "IOS-ADMIN" */;
+			buildConfigurationList = 38F8D4352CFA42D300CC1E46 /* Build configuration list for PBXNativeTarget "IOSAdmin" */;
 			buildPhases = (
 				38F8D4102CFA42D200CC1E46 /* Sources */,
 				38F8D4112CFA42D200CC1E46 /* Frameworks */,
@@ -328,18 +328,18 @@
 			);
 			dependencies = (
 			);
-			name = "IOS-ADMIN";
+			name = IOSAdmin;
 			packageProductDependencies = (
 				38F8D4D72CFA446900CC1E46 /* AutomaUIKit */,
 				38F973D72CFF3D89003D8308 /* AutomaAppShared */,
 			);
 			productName = "IOS-ADMIN";
-			productReference = 38F8D4142CFA42D200CC1E46 /* IOS-ADMIN.app */;
+			productReference = 38F8D4142CFA42D200CC1E46 /* IOSAdmin.app */;
 			productType = "com.apple.product-type.application";
 		};
-		38F8D4222CFA42D300CC1E46 /* IOS-ADMINTests */ = {
+		38F8D4222CFA42D300CC1E46 /* IOSAdminTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 38F8D4382CFA42D300CC1E46 /* Build configuration list for PBXNativeTarget "IOS-ADMINTests" */;
+			buildConfigurationList = 38F8D4382CFA42D300CC1E46 /* Build configuration list for PBXNativeTarget "IOSAdminTests" */;
 			buildPhases = (
 				38F8D41F2CFA42D300CC1E46 /* Sources */,
 				38F8D4202CFA42D300CC1E46 /* Frameworks */,
@@ -350,16 +350,16 @@
 			dependencies = (
 				38F8D4252CFA42D300CC1E46 /* PBXTargetDependency */,
 			);
-			name = "IOS-ADMINTests";
+			name = IOSAdminTests;
 			packageProductDependencies = (
 			);
 			productName = "IOS-ADMINTests";
-			productReference = 38F8D4232CFA42D300CC1E46 /* IOS-ADMINTests.xctest */;
+			productReference = 38F8D4232CFA42D300CC1E46 /* IOSAdminTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		38F8D42C2CFA42D300CC1E46 /* IOS-ADMINUITests */ = {
+		38F8D42C2CFA42D300CC1E46 /* IOSAdminUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 38F8D43B2CFA42D300CC1E46 /* Build configuration list for PBXNativeTarget "IOS-ADMINUITests" */;
+			buildConfigurationList = 38F8D43B2CFA42D300CC1E46 /* Build configuration list for PBXNativeTarget "IOSAdminUITests" */;
 			buildPhases = (
 				38F8D4292CFA42D300CC1E46 /* Sources */,
 				38F8D42A2CFA42D300CC1E46 /* Frameworks */,
@@ -370,11 +370,11 @@
 			dependencies = (
 				38F8D42F2CFA42D300CC1E46 /* PBXTargetDependency */,
 			);
-			name = "IOS-ADMINUITests";
+			name = IOSAdminUITests;
 			packageProductDependencies = (
 			);
 			productName = "IOS-ADMINUITests";
-			productReference = 38F8D42D2CFA42D300CC1E46 /* IOS-ADMINUITests.xctest */;
+			productReference = 38F8D42D2CFA42D300CC1E46 /* IOSAdminUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -403,7 +403,6 @@
 					};
 					38F8D4222CFA42D300CC1E46 = {
 						CreatedOnToolsVersion = 16.0;
-						TestTargetID = 38F8D4132CFA42D200CC1E46;
 					};
 					38F8D42C2CFA42D300CC1E46 = {
 						CreatedOnToolsVersion = 16.0;
@@ -432,9 +431,9 @@
 				38F8D37A2CFA3F3700CC1E46 /* IOS */,
 				38F8D38A2CFA3F3800CC1E46 /* IOSTests */,
 				38F8D3942CFA3F3800CC1E46 /* IOSUITests */,
-				38F8D4132CFA42D200CC1E46 /* IOS-ADMIN */,
-				38F8D4222CFA42D300CC1E46 /* IOS-ADMINTests */,
-				38F8D42C2CFA42D300CC1E46 /* IOS-ADMINUITests */,
+				38F8D4132CFA42D200CC1E46 /* IOSAdmin */,
+				38F8D4222CFA42D300CC1E46 /* IOSAdminTests */,
+				38F8D42C2CFA42D300CC1E46 /* IOSAdminUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -542,12 +541,12 @@
 		};
 		38F8D4252CFA42D300CC1E46 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 38F8D4132CFA42D200CC1E46 /* IOS-ADMIN */;
+			target = 38F8D4132CFA42D200CC1E46 /* IOSAdmin */;
 			targetProxy = 38F8D4242CFA42D300CC1E46 /* PBXContainerItemProxy */;
 		};
 		38F8D42F2CFA42D300CC1E46 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 38F8D4132CFA42D200CC1E46 /* IOS-ADMIN */;
+			target = 38F8D4132CFA42D200CC1E46 /* IOSAdmin */;
 			targetProxy = 38F8D42E2CFA42D300CC1E46 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1131,7 +1130,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_ASSET_PATHS = "Shared/Preview\\ Content Admin/IOS/IOS-ADMIN/Preview\\ Content";
+				DEVELOPMENT_ASSET_PATHS = "Shared/Preview\\ Content \"Admin/IOS/IOSAdmin/Preview Content\"";
 				DEVELOPMENT_TEAM = 6D6QTRW962;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1168,7 +1167,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "app.getautoma.IOS-ADMIN";
+				PRODUCT_BUNDLE_IDENTIFIER = app.getautoma.IOSAdmin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1224,7 +1223,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_ASSET_PATHS = "Shared/Preview\\ Content Admin/IOS/IOS-ADMIN/Preview\\ Content";
+				DEVELOPMENT_ASSET_PATHS = "Shared/Preview\\ Content \"Admin/IOS/IOSAdmin/Preview Content\"";
 				DEVELOPMENT_TEAM = 6D6QTRW962;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_PREVIEWS = YES;
@@ -1254,7 +1253,7 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "app.getautoma.IOS-ADMIN";
+				PRODUCT_BUNDLE_IDENTIFIER = app.getautoma.IOSAdmin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1274,7 +1273,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1332,7 +1330,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "app.getautoma.IOS-ADMINTests";
+				PRODUCT_BUNDLE_IDENTIFIER = app.getautoma.IOSAdminTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -1340,7 +1338,6 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IOS-ADMIN.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/IOS-ADMIN";
 			};
 			name = Debug;
 		};
@@ -1349,7 +1346,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1400,14 +1396,13 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "app.getautoma.IOS-ADMINTests";
+				PRODUCT_BUNDLE_IDENTIFIER = app.getautoma.IOSAdminTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IOS-ADMIN.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/IOS-ADMIN";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1474,15 +1469,16 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "app.getautoma.IOS-ADMINUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = app.getautoma.IOSAdminUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "IOS-ADMIN";
+				TEST_TARGET_NAME = IOSAdmin;
 			};
 			name = Debug;
 		};
@@ -1541,14 +1537,15 @@
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "app.getautoma.IOS-ADMINUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = app.getautoma.IOSAdminUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "IOS-ADMIN";
+				TEST_TARGET_NAME = IOSAdmin;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1592,7 +1589,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		38F8D4352CFA42D300CC1E46 /* Build configuration list for PBXNativeTarget "IOS-ADMIN" */ = {
+		38F8D4352CFA42D300CC1E46 /* Build configuration list for PBXNativeTarget "IOSAdmin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				38F8D4362CFA42D300CC1E46 /* Debug */,
@@ -1601,7 +1598,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		38F8D4382CFA42D300CC1E46 /* Build configuration list for PBXNativeTarget "IOS-ADMINTests" */ = {
+		38F8D4382CFA42D300CC1E46 /* Build configuration list for PBXNativeTarget "IOSAdminTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				38F8D4392CFA42D300CC1E46 /* Debug */,
@@ -1610,7 +1607,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		38F8D43B2CFA42D300CC1E46 /* Build configuration list for PBXNativeTarget "IOS-ADMINUITests" */ = {
+		38F8D43B2CFA42D300CC1E46 /* Build configuration list for PBXNativeTarget "IOSAdminUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				38F8D43C2CFA42D300CC1E46 /* Debug */,
