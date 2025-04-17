@@ -1,4 +1,4 @@
-// IOS_ADMINTests.swift
+// IOSAdminTests.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -6,7 +6,7 @@
 @testable import IOS_ADMIN
 import Testing
 
-internal struct IOS_ADMINTests {
+internal struct IOSAdminTests {
     @Test func example() throws {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
     }

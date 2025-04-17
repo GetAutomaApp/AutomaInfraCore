@@ -1,11 +1,11 @@
-// IOS_ADMINUITestsLaunchTests.swift
+// IOSAdminUILaunchTests.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import XCTest
 
-final class IOS_ADMINUITestsLaunchTests: XCTestCase {
+final class IOSAdminUILaunchTests: XCTestCase {
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }

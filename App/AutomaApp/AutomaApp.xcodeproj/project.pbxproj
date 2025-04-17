@@ -83,11 +83,11 @@
 			membershipExceptions = (
 				"IOS/IOS-ADMIN/Assets.xcassets",
 				"IOS/IOS-ADMIN/ContentView.swift",
-				"IOS/IOS-ADMIN/IOS_ADMINApp.swift",
+				"IOS/IOS-ADMIN/IOSAdminApp.swift",
 				"IOS/IOS-ADMIN/Preview Content/Preview Assets.xcassets",
-				"IOS/IOS-ADMINTests/IOS_ADMINTests.swift",
-				"IOS/IOS-ADMINUITests/IOS_ADMINUITests.swift",
-				"IOS/IOS-ADMINUITests/IOS_ADMINUITestsLaunchTests.swift",
+				"IOS/IOS-ADMINTests/IOSAdminTests.swift",
+				"IOS/IOS-ADMINUITests/IOSAdminUILaunchTests.swift",
+				"IOS/IOS-ADMINUITests/IOSAdminUITests.swift",
 			);
 			target = 38F8D37A2CFA3F3700CC1E46 /* IOS */;
 		};
@@ -96,7 +96,7 @@
 			membershipExceptions = (
 				"IOS/IOS-ADMIN/Assets.xcassets",
 				"IOS/IOS-ADMIN/ContentView.swift",
-				"IOS/IOS-ADMIN/IOS_ADMINApp.swift",
+				"IOS/IOS-ADMIN/IOSAdminApp.swift",
 				"IOS/IOS-ADMIN/Preview Content/Preview Assets.xcassets",
 			);
 			target = 38F8D4132CFA42D200CC1E46 /* IOS-ADMIN */;
@@ -104,15 +104,15 @@
 		38F8D4842CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOS-ADMINTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"IOS/IOS-ADMINTests/IOS_ADMINTests.swift",
+				"IOS/IOS-ADMINTests/IOSAdminTests.swift",
 			);
 			target = 38F8D4222CFA42D300CC1E46 /* IOS-ADMINTests */;
 		};
 		38F8D4852CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOS-ADMINUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"IOS/IOS-ADMINUITests/IOS_ADMINUITests.swift",
-				"IOS/IOS-ADMINUITests/IOS_ADMINUITestsLaunchTests.swift",
+				"IOS/IOS-ADMINUITests/IOSAdminUILaunchTests.swift",
+				"IOS/IOS-ADMINUITests/IOSAdminUITests.swift",
 			);
 			target = 38F8D42C2CFA42D300CC1E46 /* IOS-ADMINUITests */;
 		};

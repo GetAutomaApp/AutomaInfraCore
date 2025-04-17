@@ -1,11 +1,11 @@
-// IOS_ADMINUITests.swift
+// IOSAdminUITests.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import XCTest
 
-final class IOS_ADMINUITests: XCTestCase {
+final class IOSAdminUITests: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 

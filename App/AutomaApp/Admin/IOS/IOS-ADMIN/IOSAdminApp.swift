@@ -1,4 +1,4 @@
-// IOS_ADMINApp.swift
+// IOSAdminApp.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -6,7 +6,7 @@
 import SwiftUI
 
 @main
-internal struct IOS_ADMINApp: App {
+internal struct IOSAdminApp: App {
     public var body: some Scene {
         WindowGroup {
             ContentView()
