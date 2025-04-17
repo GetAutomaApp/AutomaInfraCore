@@ -10,10 +10,10 @@ import Vapor
 /// (collection of routes)
 public protocol ControllerInteractor {
     /// Server base url
-    public var baseURL: String { get }
+    var baseURL: String { get }
 
     /// Alamofire request session
-    public var session: Alamofire.Session { get }
+    var session: Alamofire.Session { get }
 
     /// Make a request to a specific endpoint and get the Alamofire response object
     /// - Parameters:
@@ -25,7 +25,7 @@ public protocol ControllerInteractor {
     ///
     /// - Throws: An error with making the request
     /// - Returns: Alamofire response object, including data and error
-    public func performRequest(
+    func performRequest(
         endpoint: String,
         method: Alamofire.HTTPMethod,
         headers: Alamofire.HTTPHeaders?,
@@ -92,7 +92,7 @@ public protocol BackendControllerInteractor: ControllerInteractor {
     ///   - decodeTo: expected `Content` data type
     ///
     /// - Returns: `BackendControllerResponseOutput`, containing optional error and data
-    public func decodeResponse<K: Content>(
+    func decodeResponse<K: Content>(
         _ data: DataResponse<Data?, AFError>,
         _ decodeTo: K.Type
     ) -> BackendControllerResponseOutput<K>

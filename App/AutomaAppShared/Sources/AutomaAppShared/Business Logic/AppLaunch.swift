@@ -24,7 +24,7 @@ public struct AppLaunch: Sendable {
         let keychain = KeychainHelper.self
 
         print("Access Token")
-        public var shouldReturn = false
+        var shouldReturn = false
         if let refreshToken = await keychain.get(for: .refreshToken) {
             let newAccessToken = try? await authenticationController.makeRefreshTokenRequest(
                 refreshToken

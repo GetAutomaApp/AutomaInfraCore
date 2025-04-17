@@ -19,7 +19,7 @@ public struct OnboardingScreen: View {
     @State var shouldShowApplyScreen: Bool = false
     @State private var shouldShowRegisterScreen: Bool = false
 
-    public let onboardingScreenContent: [OnboardingScreenContent] = [
+    let onboardingScreenContent: [OnboardingScreenContent] = [
         .init(
             title: "Create & manage profiles",
             description: "Automa provides a platform to create and manage social media accounts seamlessly with our integrated tools."

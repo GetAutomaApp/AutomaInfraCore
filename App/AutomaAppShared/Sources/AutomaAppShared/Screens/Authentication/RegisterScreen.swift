@@ -14,7 +14,7 @@ public struct RegisterScreen: View {
 
     @EnvironmentObject var baseEnvironmentConfig: BaseAppEnvironmentObject
 
-    public var authInteractor: AuthenticationControllerInteractor {
+    var authInteractor: AuthenticationControllerInteractor {
         .init(
             baseURL: baseEnvironmentConfig.apiBaseURL
         )

@@ -60,7 +60,7 @@ public struct DesignPadding: Sendable {
 
 protocol DesignIcon {
     associatedtype Content: View
-    public var image: Content { get }
+    var image: Content { get }
 }
 
 public enum DesignIcons: String, CaseIterable, DesignIcon {
