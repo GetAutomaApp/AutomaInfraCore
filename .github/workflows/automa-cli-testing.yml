@@ -9,6 +9,8 @@ jobs:
   swifttest:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - uses: swift-actions/setup-swift@v2
         with:
           swift-version: "6.1"
@@ -20,7 +22,6 @@ jobs:
           key: cli-cache-${{ hashFiles('CLI/Package.resolved') }}
           path: CLI/.build
 
-      - uses: actions/checkout@v4
       - name: Run SwiftTesting
         uses: GetAutomaApp/opensource-actions/swifttesting@5-implement-standardized-swift-test-action
         with:
