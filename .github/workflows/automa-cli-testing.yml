@@ -3,7 +3,7 @@ name: Run `AutomaCLI` tests
 on:
   pull_request:
     paths:
-      - 'AutomaCLI/**'
+      - 'CLI/**'
 
 jobs:
   swifttest:
@@ -13,5 +13,5 @@ jobs:
       - name: Run SwiftTesting
         uses: GetAutomaApp/opensource-actions/swifttesting@5-implement-standardized-swift-test-action
         with:
-          working-directory: './AutomaCLI'
+          working-directory: './CLI'
           compose: 'true'
