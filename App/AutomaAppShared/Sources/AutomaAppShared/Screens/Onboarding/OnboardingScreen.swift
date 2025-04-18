@@ -12,6 +12,7 @@ internal struct OnboardingScreenContent {
     public let background: Color = DesignTokens.colors.primary
 }
 
+/// Onboarding screen, showcasing the application the first time a user opens the App
 public struct OnboardingScreen: View {
     @ObservedObject public var titleConfig: InfoPairComponentConfig = .init()
     @ObservedObject public var progressIndicatorConfig: ProgressIndicatorComponentConfig = .init()

@@ -1,17 +1,17 @@
-// ButtonFrameComponent_Previews.swift
+// ButtonFrameComponentPreviews.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import SwiftUI
 
-internal struct ButtonFrameComponent_Previews: PreviewProvider {
+internal struct ButtonFrameComponentPreviews: PreviewProvider {
     static var previews: some View {
-        ButtonFrameComponent_PreviewsView()
+        ButtonFrameComponentPreviewsView()
     }
 }
 
-internal struct ButtonFrameComponent_PreviewsView: View {
+internal struct ButtonFrameComponentPreviewsView: View {
     @StateObject public var buttonConfig: ButtonFrameComponentConfig = .init()
 
     public var body: some View {

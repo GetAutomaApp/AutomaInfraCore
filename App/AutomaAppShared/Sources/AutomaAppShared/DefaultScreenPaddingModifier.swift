@@ -13,6 +13,7 @@ internal struct DefaultScreenPaddingModifier: ViewModifier {
     }
 }
 
+/// Add method to modify View with default screen padding
 public extension View {
     func defaultScreenPadding() -> some View {
         modifier(DefaultScreenPaddingModifier())

@@ -6,6 +6,7 @@
 import AutomaUIKit
 import SwiftUI
 
+/// View that informs the user that their application is pending
 public struct PendingApplicationReview: View {
     public init() {}
 

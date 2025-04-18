@@ -49,7 +49,7 @@ private let fileTypes: [FileType] = [
             nestToDirectory: "__CAPNAME__Component/",
             templates: [
                 "__CAPNAME__Component.swift.template",
-                "__CAPNAME__Component_Previews.swift.template",
+                "__CAPNAME__ComponentPreviews.swift.template",
                 "__CAPNAME__ComponentConfig.swift.template",
             ]
         ),
@@ -61,7 +61,7 @@ private let fileTypes: [FileType] = [
             nestToDirectory: "__CAPNAME__Modifier/",
             templates: [
                 "__CAPNAME__Modifier.swift.template",
-                "__CAPNAME__Modifier_Previews.swift.template",
+                "__CAPNAME__ModifierPreviews.swift.template",
             ]
         ),
     ]),
@@ -208,11 +208,13 @@ private let fileTypes: [FileType] = [
     ),
 ]
 
+/// Generates an app component based on the given name.
 public struct GenerateAppComponent: Command {
     public var help: String {
         "Generates an app component based on the given name."
     }
 
+    /// All available arguments that can be used to generate an app component
     public struct Signature: CommandSignature {
         public init() {}
 

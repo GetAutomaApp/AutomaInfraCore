@@ -1,11 +1,11 @@
-// ProgressIndicatorComponent_Previews.swift
+// ProgressIndicatorComponentPreviews.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import SwiftUI
 
-internal struct ProgressIndicatorComponent_Previews: PreviewProvider {
+internal struct ProgressIndicatorComponentPreviews: PreviewProvider {
     static var previews: some View {
         TestProgressView()
     }

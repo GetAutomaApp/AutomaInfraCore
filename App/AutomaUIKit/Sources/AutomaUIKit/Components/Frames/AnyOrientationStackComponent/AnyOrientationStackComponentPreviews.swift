@@ -1,4 +1,4 @@
-// AnyOrientationStackComponent_Previews.swift
+// AnyOrientationStackComponentPreviews.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -7,7 +7,7 @@ import SwiftUI
 
 // Add a preview per state difference (No need to add all states)
 
-internal struct AnyOrientationStackComponent_Previews: PreviewProvider {
+internal struct AnyOrientationStackComponentPreviews: PreviewProvider {
     static var previews: some View {
         AnyOrientationStackComponentWrapperView()
     }

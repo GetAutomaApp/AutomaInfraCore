@@ -12,6 +12,7 @@
 import DataTypes
 import SwiftUI
 
+/// Struct used when user opens application
 public struct AppLaunch: Sendable {
     public let baseURL: String
 

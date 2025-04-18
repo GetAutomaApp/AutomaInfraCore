@@ -7,6 +7,7 @@ import AutomaUIKit
 import DataTypes
 import SwiftUI
 
+/// Login screen, where user can login into an account that already exist
 public struct LoginScreen: View {
     @StateObject public var phoneInputConfig: PhoneNumberTextInputComponentConfig = .init()
     @StateObject public var verificationInputConfig: VerificationCodeInputComponentConfig = .init()

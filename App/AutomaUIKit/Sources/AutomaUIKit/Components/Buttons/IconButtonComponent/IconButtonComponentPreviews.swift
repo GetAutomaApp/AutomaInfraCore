@@ -1,24 +1,25 @@
-// TextButtonComponent_Previews.swift
+// IconButtonComponentPreviews.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import SwiftUI
 
-internal struct TextButtonComponent_Previews: PreviewProvider {
+internal struct IconButtonComponentPreviews: PreviewProvider {
     static var previews: some View {
-        TextButtonComponent_PreviewsView()
+        IconButtonComponentPreviewsView()
     }
 }
 
-internal struct TextButtonComponent_PreviewsView: View {
-    @StateObject private var sharedConfig = TextButtonComponentConfig()
+internal struct IconButtonComponentPreviewsView: View {
+    @StateObject private var sharedConfig = IconButtonComponentConfig()
 
     public var body: some View {
         PropertyEditor(
             object: sharedConfig,
             properties: [
                 [AnyKeyPath("Is Disabled", keyPath: \.isDisabled)],
+                [AnyKeyPath("Is Loading", keyPath: \.isLoading)],
                 [AnyKeyPath("Fill Space", keyPath: \.fillSpace)],
                 [AnyKeyPath("Is Circular", keyPath: \.isCircular)],
                 [AnyKeyPath("Padding", keyPath: \.defaultPadding)],
@@ -28,10 +29,17 @@ internal struct TextButtonComponent_PreviewsView: View {
             ]
         ) {
             VStack {
-                TextButtonComponent(config: sharedConfig, onSelfAppear: { config in
-                    config.text = "0"
-                }, action: { config in config.text = "\(Int(config.text)! + 1)" })
-                    .contentTransition(.symbolEffect(.replace))
+                HStack {
+                    IconButtonComponent(config: sharedConfig, onSelfAppear: { config in
+                        config.icon = .play
+                    }, configAction: { config in
+                        if config.icon == .play {
+                            config.icon = .pause
+                        } else {
+                            config.icon = .play
+                        }
+                    }).contentTransition(.symbolEffect(.replace))
+                }
 
                 EnumPropertyView(
                     value: $sharedConfig.frameVariant,
@@ -40,7 +48,7 @@ internal struct TextButtonComponent_PreviewsView: View {
 
                 EnumPropertyView(
                     value: $sharedConfig.variant,
-                    cases: TextButtonVariants.allCases
+                    cases: IconButtonVariants.allCases
                 )
             }
         }

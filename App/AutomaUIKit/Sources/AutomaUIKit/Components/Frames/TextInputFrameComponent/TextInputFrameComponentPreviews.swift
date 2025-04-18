@@ -1,34 +1,23 @@
-// TextInputComponent_Previews.swift
+// TextInputFrameComponentPreviews.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import SwiftUI
 
-// Add a preview per state difference (No need to add all states)
-
-internal struct TextInputComponentComponent_Previews: PreviewProvider {
-    static var previews: some View {
-        TextInputComponentComponentWrapperView()
+public struct TextInputFrameComponentPreviews: PreviewProvider {
+    public static var previews: some View {
+        TextInputFrameComponentPropertyEditor()
     }
 }
 
-internal struct TextInputComponentComponentWrapperView: View {
-    @ObservedObject public var config = TextInputComponentComponentConfig()
+public struct TextInputFrameComponentPropertyEditor: View {
+    @StateObject private var config = TextInputFrameComponentConfig()
 
     public var body: some View {
         PropertyEditor(
             object: config,
             properties: [
-                [AnyKeyPath("Title", keyPath: \.title)],
-                [AnyKeyPath("Error Message", keyPath: \.errorMessage)],
-                [
-                    AnyKeyPath(
-                        "TitleColor",
-                        keyPath: \.titleSegmentColor
-                    ),
-                    AnyKeyPath("ErrorColor", keyPath: \.errorSegmentColor),
-                ],
                 [AnyKeyPath("Text", keyPath: \.text)],
                 [AnyKeyPath("Ghost Text", keyPath: \.ghostText)],
                 [AnyKeyPath("Has Icon", keyPath: \.hasIcon)],
@@ -41,7 +30,7 @@ internal struct TextInputComponentComponentWrapperView: View {
             ]
         ) {
             VStack {
-                TextInputComponentComponent(config: config)
+                TextInputFrameComponent(config: config)
 
                 EnumPropertyView(
                     value: $config.variant,

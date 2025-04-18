@@ -1,6 +1,7 @@
 import AutomaUIKit
 import SwiftUI
 
+/// Documentation Here
 public struct __CAPNAME__Screen: View {
     public init() {}
 

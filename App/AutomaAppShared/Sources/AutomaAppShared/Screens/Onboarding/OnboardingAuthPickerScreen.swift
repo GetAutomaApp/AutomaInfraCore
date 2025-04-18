@@ -11,6 +11,7 @@ internal enum AuthScreenRoute {
     case register
 }
 
+/// Authentication picker on onboarding screen, where a user can choose to login or register
 public struct OnboardingAuthPickerScreen: View {
     @State private var path: [AuthScreenRoute] = []
 

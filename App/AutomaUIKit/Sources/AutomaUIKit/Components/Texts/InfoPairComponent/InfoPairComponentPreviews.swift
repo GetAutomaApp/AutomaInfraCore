@@ -1,11 +1,11 @@
-// InfoPairComponent_Previews.swift
+// InfoPairComponentPreviews.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import SwiftUI
 
-internal struct InfoPairComponent_Previews: PreviewProvider {
+internal struct InfoPairComponentPreviews: PreviewProvider {
     static var previews: some View {
         InfoPairWrapperView()
     }

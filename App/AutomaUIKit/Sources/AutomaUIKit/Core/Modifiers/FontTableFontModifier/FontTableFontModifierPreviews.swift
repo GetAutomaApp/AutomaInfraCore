@@ -1,11 +1,11 @@
-// FontTableFontModifier_Previews.swift
+// FontTableFontModifierPreviews.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import SwiftUI
 
-internal struct FontTableFontModifier_Previews: PreviewProvider {
+internal struct FontTableFontModifierPreviews: PreviewProvider {
     static var previews: some View {
         TestView()
     }

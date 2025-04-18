@@ -1,4 +1,4 @@
-// PhoneNumberTextInputComponent_Previews.swift
+// PhoneNumberTextInputComponentPreviews.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -7,7 +7,7 @@ import SwiftUI
 
 // Add a preview per state difference (No need to add all states)
 
-internal struct PhoneNumberTextInputComponent_Previews: PreviewProvider {
+internal struct PhoneNumberTextInputComponentPreviews: PreviewProvider {
     static var previews: some View {
         PhoneNumberTextInputComponentWrapperView()
     }

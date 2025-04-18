@@ -20,6 +20,7 @@ internal enum BaseEnvironmentUrl: String, CaseIterable {
     case staging = "https://api-staging.getautoma.app"
 }
 
+/// Debug menu for application, to change app behavior, environment and other configuration options
 public struct DebugMenu: View {
     @EnvironmentObject public var baseEnvironmentConfig: BaseAppEnvironmentObject
 

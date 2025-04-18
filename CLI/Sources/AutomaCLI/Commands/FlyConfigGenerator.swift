@@ -11,11 +11,13 @@ private enum FlyEnvironments: String, CaseIterable {
     case staging
 }
 
+/// Generates a fly.io config file from the input config & environment type
 public struct FlyConfigGenerator: Command {
     public var help: String {
         "Generates a fly.io config file from the input config & environment type"
     }
 
+    /// Arguments when generating a config
     public struct Signature: CommandSignature {
         public init() {}
 

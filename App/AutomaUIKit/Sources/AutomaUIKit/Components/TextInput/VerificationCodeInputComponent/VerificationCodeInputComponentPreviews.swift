@@ -1,4 +1,4 @@
-// VerificationCodeInputComponent_Previews.swift
+// VerificationCodeInputComponentPreviews.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -7,7 +7,7 @@ import SwiftUI
 
 // Add a preview per state difference (No need to add all states)
 
-internal struct VerificationCodeInputComponent_Previews: PreviewProvider {
+internal struct VerificationCodeInputComponentPreviews: PreviewProvider {
     static var previews: some View {
         VerificationCodeInputComponentWrapperView()
     }

@@ -6,6 +6,7 @@
 import DataTypes
 import Foundation
 
+/// The output information of a shell command
 public struct ShellOutput {
     public let stdout: String?
     public let stderr: String?
@@ -20,6 +21,7 @@ public enum OperatingSystem {
     case unknown(value: String)
 }
 
+/// A simple shell wrapper in Swift, to execute shell commands
 public struct Shell {
     public let operatingSystem: OperatingSystem
     public let copyCommand: String
