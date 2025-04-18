@@ -6,6 +6,6 @@
 @testable import App
 import XCTest
 
-final class _CAPNAME__SyncJobIntegrationTests: XCTestCase {
+public final class _CAPNAME__SyncJobIntegrationTests: XCTestCase {
     // Add service test methods here
 }

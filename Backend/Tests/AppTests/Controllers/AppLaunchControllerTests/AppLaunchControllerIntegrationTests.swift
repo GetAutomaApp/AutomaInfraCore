@@ -8,7 +8,7 @@ import Testing
 import VaporTesting
 
 @Suite("App Launch Controller Integration Tests")
-final class AppLaunchControllerIntegrationTests {
+public final class AppLaunchControllerIntegrationTests {
     private func withApp(_ test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {

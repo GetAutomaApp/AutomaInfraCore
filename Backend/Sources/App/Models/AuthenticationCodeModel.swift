@@ -7,7 +7,7 @@ import DataTypes
 import Fluent
 import Vapor
 
-final class AuthenticationCodeModel: Model, @unchecked Sendable {
+public final class AuthenticationCodeModel: Model, @unchecked Sendable {
     static let schema = "Authentication-Code"
 
     @ID(key: .id)

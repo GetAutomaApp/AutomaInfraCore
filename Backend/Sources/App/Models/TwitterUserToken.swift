@@ -7,7 +7,7 @@ import DataTypes
 import Fluent
 import Vapor
 
-final class TwitterUserToken: Model, @unchecked Sendable {
+public final class TwitterUserToken: Model, @unchecked Sendable {
     static let schema = "Twitter-User-Token"
 
     @ID(key: .id)

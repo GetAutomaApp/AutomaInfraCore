@@ -7,7 +7,7 @@ import DataTypes
 import Fluent
 import Vapor
 
-final class JwtTokenModel: Model, @unchecked Sendable {
+public final class JwtTokenModel: Model, @unchecked Sendable {
     static let schema = "Jwt-Token"
 
     @ID(key: .id)

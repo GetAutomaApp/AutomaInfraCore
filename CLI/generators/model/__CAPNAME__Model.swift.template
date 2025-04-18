@@ -2,7 +2,7 @@ import Vapor
 import Fluent
 import DataTypes
 
-final class __CAPNAME__Model: Model, @unchecked Sendable {
+public final class __CAPNAME__Model: Model, @unchecked Sendable {
     static let schema = "__CAPNAME_DASHED__"
 
     @ID(key: .id)

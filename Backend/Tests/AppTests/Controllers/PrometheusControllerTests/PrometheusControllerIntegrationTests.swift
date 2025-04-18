@@ -8,7 +8,7 @@ import Testing
 import VaporTesting
 
 @Suite("Prometheus Controller Integration Tests")
-final class PrometheusControllerIntegrationTests {
+public final class PrometheusControllerIntegrationTests {
     private func withApp(_ test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {

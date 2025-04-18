@@ -5,7 +5,7 @@
 
 import XCTest
 
-final class AppLaunchControllerInteractorUnitTests: XCTestCase {
+public final class AppLaunchControllerInteractorUnitTests: XCTestCase {
     public var interactor: AppLaunchControllerInteractor!
 
     override func setUp() {

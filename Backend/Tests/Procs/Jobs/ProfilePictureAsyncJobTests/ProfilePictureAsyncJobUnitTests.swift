@@ -6,7 +6,6 @@
 @testable import App
 import XCTest
 
-final class _CAPNAME__AsyncJob
-UnitTests: XCTestCase {
+public final class _CAPNAME__AsyncJobUnitTests: XCTestCase {
     // Add job test methods here
 }
