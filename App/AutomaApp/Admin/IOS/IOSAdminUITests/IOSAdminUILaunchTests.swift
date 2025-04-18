@@ -10,7 +10,7 @@ public final class IOSAdminUILaunchTests: XCTestCase {
         true
     }
 
-    override func setUpWithError() throws {
+    override public func setUpWithError() throws {
         continueAfterFailure = false
     }
 

@@ -16,7 +16,7 @@ public final class IOSAdminUITests: XCTestCase {
         // before they run. The setUp method is a good place to do this.
     }
 
-    override func tearDownWithError() throws {
+    override public func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 

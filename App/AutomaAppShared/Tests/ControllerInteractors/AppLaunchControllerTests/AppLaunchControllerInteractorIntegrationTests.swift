@@ -8,12 +8,12 @@ import XCTest
 public final class AppLaunchControllerInteractorIntegrationTests: XCTestCase {
     public var interactor: AppLaunchControllerInteractor!
 
-    override func setUp() {
+    override public func setUp() {
         super.setUp()
         interactor = AppLaunchControllerInteractor()
     }
 
-    override func tearDown() {
+    override public func tearDown() {
         interactor = nil
         super.tearDown()
     }
