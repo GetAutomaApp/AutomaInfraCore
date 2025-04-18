@@ -27,3 +27,4 @@ jobs:
         with:
           working-directory: './CLI'
           compose: 'true'
+          compose-file: '../docker-compose.yml'
