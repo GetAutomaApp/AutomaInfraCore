@@ -28,5 +28,7 @@ public final class IOSAdminUILaunchTests: XCTestCase {
         add(attachment)
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

@@ -19,5 +19,7 @@ class VerificationCodeInputComponentTests: XCTestCase {
         XCTAssertNotNil(component)
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

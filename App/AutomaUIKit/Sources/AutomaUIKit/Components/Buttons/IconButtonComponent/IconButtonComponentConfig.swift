@@ -81,5 +81,7 @@ public class IconButtonComponentConfig: ButtonFrameComponentConfig {
         frameVariant = isDisabled ? .disabled : .generic
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

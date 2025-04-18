@@ -28,5 +28,7 @@ public class TextInputComponentComponentConfig: TextInputFrameComponentConfig {
         self.errorSegmentColor = errorSegmentColor
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

@@ -39,5 +39,7 @@ public class IOSUITests: XCTestCase {
         }
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

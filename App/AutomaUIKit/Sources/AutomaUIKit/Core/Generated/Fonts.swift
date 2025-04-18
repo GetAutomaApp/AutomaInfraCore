@@ -187,7 +187,9 @@ private final class BundleToken {
         #endif
     }()
 
-    deinit {}
+    deinit {
+        return
+    }
 }
 
 // swiftlint:enable convenience_type

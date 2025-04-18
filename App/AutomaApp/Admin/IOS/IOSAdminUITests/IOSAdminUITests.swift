@@ -39,5 +39,7 @@ public final class IOSAdminUITests: XCTestCase {
         }
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

@@ -28,5 +28,7 @@ public final class AppLaunchControllerIntegrationTests {
         #expect(Bool(true))
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

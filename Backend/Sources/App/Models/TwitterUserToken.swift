@@ -69,5 +69,7 @@ public final class TwitterUserToken: Model, @unchecked Sendable {
         )
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

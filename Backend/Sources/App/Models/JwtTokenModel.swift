@@ -70,5 +70,7 @@ public final class JwtTokenModel: Model, @unchecked Sendable {
         )
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

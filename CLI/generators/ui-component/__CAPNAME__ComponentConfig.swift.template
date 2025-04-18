@@ -12,5 +12,7 @@ public class __CAPNAME__ComponentConfig: ObservableObject {
 
     public let textColor: Color = .black
     
-    deinit {}
+    deinit {
+    	return
+	}
 }

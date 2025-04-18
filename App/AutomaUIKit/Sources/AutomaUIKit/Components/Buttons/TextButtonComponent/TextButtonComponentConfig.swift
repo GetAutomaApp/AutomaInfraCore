@@ -76,5 +76,7 @@ public class TextButtonComponentConfig: ButtonFrameComponentConfig {
         frameVariant = isDisabled ? .disabled : .generic
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

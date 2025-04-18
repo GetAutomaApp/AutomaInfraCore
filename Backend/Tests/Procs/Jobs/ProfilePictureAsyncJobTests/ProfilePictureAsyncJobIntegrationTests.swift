@@ -8,5 +8,7 @@ import XCTest
 
 public final class _CAPNAME__SyncJobIntegrationTests: XCTestCase {
     // Add service test methods here
-    deinit {}
+    deinit {
+        return
+    }
 }

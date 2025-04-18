@@ -31,5 +31,7 @@ public final class PrometheusControllerIntegrationTests {
         }
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

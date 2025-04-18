@@ -39,5 +39,7 @@ public class PhoneNumberTextInputComponentConfig: TextInputComponentComponentCon
         )
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

@@ -19,5 +19,7 @@ class MultiTextInputComponentTests: XCTestCase {
         XCTAssertNotNil(component)
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

@@ -27,5 +27,7 @@ public class InfoPairComponentConfig: ObservableObject {
         self.variant = variant
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

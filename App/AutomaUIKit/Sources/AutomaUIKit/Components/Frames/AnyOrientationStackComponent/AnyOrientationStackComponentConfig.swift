@@ -29,5 +29,7 @@ public class AnyOrientationStackComponentConfig: ObservableObject {
         self.spacing = spacing
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

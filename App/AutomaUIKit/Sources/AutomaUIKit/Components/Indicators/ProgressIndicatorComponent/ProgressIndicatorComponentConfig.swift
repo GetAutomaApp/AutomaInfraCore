@@ -120,5 +120,7 @@ public class ProgressIndicatorComponentConfig: ObservableObject {
         currentStep = step
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

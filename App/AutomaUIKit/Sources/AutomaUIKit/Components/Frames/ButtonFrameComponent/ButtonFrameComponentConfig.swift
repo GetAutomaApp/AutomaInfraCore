@@ -44,5 +44,7 @@ public class ButtonFrameComponentConfig: ObservableObject {
         self.defaultPadding = defaultPadding
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

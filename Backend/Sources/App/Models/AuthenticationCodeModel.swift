@@ -67,5 +67,7 @@ public final class AuthenticationCodeModel: Model, @unchecked Sendable {
         )
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

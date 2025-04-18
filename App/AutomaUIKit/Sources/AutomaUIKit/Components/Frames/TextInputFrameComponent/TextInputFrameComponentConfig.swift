@@ -62,5 +62,7 @@ public class TextInputFrameComponentConfig: ObservableObject {
         self.cornerRadius = cornerRadius
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

@@ -8,5 +8,7 @@ import XCTest
 
 public final class _CAPNAME__AsyncJobUnitTests: XCTestCase {
     // Add job test methods here
-    deinit {}
+    deinit {
+        return
+    }
 }

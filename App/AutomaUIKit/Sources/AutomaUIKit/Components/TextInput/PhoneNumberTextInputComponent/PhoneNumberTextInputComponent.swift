@@ -52,7 +52,9 @@ internal struct PhoneNumberTextFieldView: UIViewRepresentable {
             }
         }
 
-        deinit {}
+        deinit {
+            return
+        }
     }
 
     public func makeCoordinator() -> Coordinator {

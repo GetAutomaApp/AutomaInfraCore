@@ -42,5 +42,7 @@ public class KeychainHelper {
         try? keychain.deleteItem(forKey: key.rawValue)
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

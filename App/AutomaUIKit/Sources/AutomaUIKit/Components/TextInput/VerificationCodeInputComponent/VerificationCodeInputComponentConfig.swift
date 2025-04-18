@@ -20,5 +20,7 @@ public class VerificationCodeInputComponentConfig: TextInputComponentComponentCo
         text = " - "
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

@@ -99,5 +99,7 @@ public final class UserModel: Model, @unchecked Sendable {
         )
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

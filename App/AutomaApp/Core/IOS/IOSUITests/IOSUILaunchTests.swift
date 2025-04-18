@@ -28,5 +28,7 @@ public class IOSUILaunchTests: XCTestCase {
         add(attachment)
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

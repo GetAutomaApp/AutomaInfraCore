@@ -20,5 +20,7 @@ public final class AppLaunchControllerInteractorIntegrationTests: XCTestCase {
         super.tearDown()
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

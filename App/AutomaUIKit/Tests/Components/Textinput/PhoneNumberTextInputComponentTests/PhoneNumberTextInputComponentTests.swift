@@ -18,5 +18,7 @@ class PhoneNumberTextInputComponentTests: XCTestCase {
         XCTAssertNotNil(component)
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }

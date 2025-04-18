@@ -56,5 +56,7 @@ public final class TwitterOAuthToken: Model, @unchecked Sendable {
         $user.id = userID
     }
 
-    deinit {}
+    deinit {
+        return
+    }
 }
