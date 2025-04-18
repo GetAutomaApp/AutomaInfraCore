@@ -6,8 +6,10 @@
 @testable import IOS
 import Testing
 
+@Suite("IOS Tests")
 internal struct IOSTests {
-    @Test public func example() throws {
+    @Test("Example Test")
+    public func example() throws {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
     }
 }

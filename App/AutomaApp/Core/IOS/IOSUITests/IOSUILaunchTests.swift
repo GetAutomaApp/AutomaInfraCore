@@ -6,11 +6,11 @@
 import XCTest
 
 public final class IOSUILaunchTests: XCTestCase {
-    override class var runsForEachTargetApplicationUIConfiguration: Bool {
+    override public class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }
 
-    override func setUpWithError() throws {
+    override public func setUpWithError() throws {
         continueAfterFailure = false
     }
 

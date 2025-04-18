@@ -6,7 +6,7 @@
 import XCTest
 
 public final class IOSUITests: XCTestCase {
-    override func setUpWithError() throws {
+    override public func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
         // In UI tests it is usually best to stop immediately when a failure occurs.
@@ -16,7 +16,7 @@ public final class IOSUITests: XCTestCase {
         // before they run. The setUp method is a good place to do this.
     }
 
-    override func tearDownWithError() throws {
+    override public func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 

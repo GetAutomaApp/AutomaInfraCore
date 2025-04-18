@@ -41,7 +41,8 @@ internal struct PhoneNumberTextFieldView: UIViewRepresentable {
             self.config = config
         }
 
-        @objc public func textFieldDidChange(_ textField: UITextField) {
+        @objc
+        public func textFieldDidChange(_ textField: UITextField) {
             config.phoneNumber = textField.text ?? ""
 
             if let phoneTextField = textField as? PhoneNumberTextField {

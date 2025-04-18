@@ -11,6 +11,40 @@ internal struct IOSApp: App {
     @StateObject public var baseConfig = BaseAppEnvironmentObject()
     @StateObject public var networkChecker: NetworkManager = .init()
 
+    @Sendable
+    private func onAppOpen() async {
+        let launchManager = AppLaunch(
+            baseURL: baseConfig.apiBaseURL
+        )
+
+        if networkChecker.isConnected {
+            let serverRequiredVersion = await launchManager.getClientConfig()
+
+            if serverRequiredVersion.requiredClientVersion > baseConfig.clientVersion {
+                baseConfig.shouldUpdateApp = true
+            }
+
+            baseConfig.isLoggedIn = await launchManager.getAccessToken()
+            if baseConfig.isLoggedIn {
+                baseConfig.isAccepted = await launchManager
+                    .isUserAccepted()
+            }
+        }
+
+        baseConfig.isAppFinishedLoading = true
+
+        Timer.scheduledTimer(withTimeInterval: 900, repeats: true) { _ in
+            Task {
+                if await networkChecker.isConnected {
+                    let result = await launchManager.getAccessToken()
+                    await MainActor.run {
+                        baseConfig.isLoggedIn = result
+                    }
+                }
+            }
+        }
+    }
+
     public var body: some Scene {
         WindowGroup {
             ContentView()
@@ -20,38 +54,8 @@ internal struct IOSApp: App {
                         baseConfig.isDebugMenuActive = true
                     #endif
                 }
-                .task {
-                    let launchManager = AppLaunch(
-                        baseURL: baseConfig.apiBaseURL
-                    )
-
-                    if networkChecker.isConnected {
-                        let serverRequiredVersion = await launchManager.getClientConfig()
-
-                        if serverRequiredVersion.requiredClientVersion > baseConfig.clientVersion {
-                            baseConfig.shouldUpdateApp = true
-                        }
-
-                        baseConfig.isLoggedIn = await launchManager.getAccessToken()
-                        if baseConfig.isLoggedIn {
-                            baseConfig.isAccepted = await launchManager
-                                .isUserAccepted()
-                        }
-                    }
-
-                    baseConfig.isAppFinishedLoading = true
-
-                    Timer.scheduledTimer(withTimeInterval: 900, repeats: true) { _ in
-                        Task {
-                            if await networkChecker.isConnected {
-                                let result = await launchManager.getAccessToken()
-                                await MainActor.run {
-                                    baseConfig.isLoggedIn = result
-                                }
-                            }
-                        }
-                    }
-                }.fullScreenCover(isPresented: $baseConfig.isDebugMenuActive) {
+                .task(onAppOpen)
+                .fullScreenCover(isPresented: $baseConfig.isDebugMenuActive) {
                     DebugMenu()
                 }
                 .environmentObject(baseConfig)

@@ -58,8 +58,8 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				IOS/IOSTests/IOSTests.swift,
+				IOS/IOSUITests/IOSUILaunchTests.swift,
 				IOS/IOSUITests/IOSUITests.swift,
-				IOS/IOSUITests/IOSUITestsLaunchTests.swift,
 			);
 			target = 38F8D37A2CFA3F3700CC1E46 /* IOS */;
 		};
@@ -73,8 +73,8 @@
 		38F8D4552CFA42F200CC1E46 /* Exceptions for "Core" folder in "IOSUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				IOS/IOSUITests/IOSUILaunchTests.swift,
 				IOS/IOSUITests/IOSUITests.swift,
-				IOS/IOSUITests/IOSUITestsLaunchTests.swift,
 			);
 			target = 38F8D3942CFA3F3800CC1E46 /* IOSUITests */;
 		};
