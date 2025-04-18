@@ -25,7 +25,7 @@ public class TextButtonComponentConfig: ButtonFrameComponentConfig {
     }
 
     /// Whether the button is disabled or not. When disabled, the button appears inactive.
-    @Published var isDisabled: Bool = false {
+    @Published public var isDisabled: Bool = false {
         didSet {
             manageDisabledState()
         }

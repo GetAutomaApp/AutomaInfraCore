@@ -15,7 +15,7 @@ public struct AuthenticationFormScreenFrame<CenterContent: View>: View {
 
     @Binding public var isValid: Bool
 
-    @ViewBuilder let centerContent: () -> CenterContent
+    @ViewBuilder public let centerContent: () -> CenterContent
 
     public let action: () async -> Void
 

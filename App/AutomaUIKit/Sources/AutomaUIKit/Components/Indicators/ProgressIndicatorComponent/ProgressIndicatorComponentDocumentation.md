@@ -26,7 +26,7 @@ LINK: [FIGMA](https://www.figma.com/design/x5MkR0UFRMUkp0eiAXVbmy/AutomaUIKit?no
 #### How to use this component
 This component can be used extremely simply by using the 1 initializer that is currently active.
 ```swift
-@ObservableObject var config = ProgressIndicatorComponentConfig()
+@ObservableObject public var config = ProgressIndicatorComponentConfig()
 ...
 ProgressIndicatorComponent(config: config, onSelfAppear: ((config) -> Void)?)
 ```

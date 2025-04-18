@@ -15,7 +15,7 @@ import SwiftUI
  For more information on how to use this, take a look at `InfoPairComponentDocumentation.md`
  */
 public struct InfoPairComponent: View {
-    @ObservedObject var config: InfoPairComponentConfig
+    @ObservedObject public var config: InfoPairComponentConfig
 
     public let onSelfAppear: (InfoPairComponentConfig) -> Void
 

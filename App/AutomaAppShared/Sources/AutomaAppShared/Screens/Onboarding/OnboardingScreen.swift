@@ -13,10 +13,10 @@ internal struct OnboardingScreenContent {
 }
 
 public struct OnboardingScreen: View {
-    @ObservedObject var titleConfig: InfoPairComponentConfig = .init()
-    @ObservedObject var progressIndicatorConfig: ProgressIndicatorComponentConfig = .init()
-    @ObservedObject var iconButtonConfig: IconButtonComponentConfig = .init()
-    @State var shouldShowApplyScreen: Bool = false
+    @ObservedObject public var titleConfig: InfoPairComponentConfig = .init()
+    @ObservedObject public var progressIndicatorConfig: ProgressIndicatorComponentConfig = .init()
+    @ObservedObject public var iconButtonConfig: IconButtonComponentConfig = .init()
+    @State public var shouldShowApplyScreen: Bool = false
     @State private var shouldShowRegisterScreen: Bool = false
 
     let onboardingScreenContent: [OnboardingScreenContent] = [

@@ -16,7 +16,7 @@ import SwiftUI
  */
 public struct ProgressIndicatorComponent: View {
     // The Config used to manipulate this component's state.
-    @ObservedObject var config: ProgressIndicatorComponentConfig
+    @ObservedObject public var config: ProgressIndicatorComponentConfig
 
     // Allows you to customise the configuration once this apears, this could also be used as a reset state in more
     // complex cases like scroll views.

@@ -11,8 +11,8 @@ public enum FocusedField {
 }
 
 public struct VerificationCodeInputComponent: View {
-    @ObservedObject var config: VerificationCodeInputComponentConfig
-    @FocusState var focusedText: FocusedField?
+    @ObservedObject public var config: VerificationCodeInputComponentConfig
+    @FocusState public var focusedText: FocusedField?
 
     let onSelfAppear: (VerificationCodeInputComponentConfig) -> Void
 

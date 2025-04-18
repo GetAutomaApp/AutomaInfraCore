@@ -13,7 +13,7 @@ class PhoneNumberTextInputComponentTests: XCTestCase {
     // one test case per method
     // one test case per completed flow (action)
     // one test case per potential edge-case
-    @MainActor func testIntegration() throws {
+    @MainActor public func testIntegration() throws {
         let component = PhoneNumberTextInputComponent()
         XCTAssertNotNil(component)
     }

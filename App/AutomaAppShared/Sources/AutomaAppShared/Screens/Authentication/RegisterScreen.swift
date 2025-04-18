@@ -8,11 +8,11 @@ import DataTypes
 import SwiftUI
 
 public struct RegisterScreen: View {
-    @StateObject var phoneInputConfig: PhoneNumberTextInputComponentConfig = .init()
-    @StateObject var verificationInputConfig: VerificationCodeInputComponentConfig = .init()
-    @State var timeout: Double = 0
+    @StateObject public var phoneInputConfig: PhoneNumberTextInputComponentConfig = .init()
+    @StateObject public var verificationInputConfig: VerificationCodeInputComponentConfig = .init()
+    @State public var timeout: Double = 0
 
-    @EnvironmentObject var baseEnvironmentConfig: BaseAppEnvironmentObject
+    @EnvironmentObject public var baseEnvironmentConfig: BaseAppEnvironmentObject
 
     var authInteractor: AuthenticationControllerInteractor {
         .init(

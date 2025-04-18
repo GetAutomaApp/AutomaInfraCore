@@ -14,7 +14,7 @@ internal struct AnyOrientationStackComponent_Previews: PreviewProvider {
 }
 
 internal struct AnyOrientationStackComponentWrapperView: View {
-    @ObservedObject var config = AnyOrientationStackComponentConfig()
+    @ObservedObject public var config = AnyOrientationStackComponentConfig()
     public var body: some View {
         AnyOrientationStackComponent(config: config) {
             Text("HI")

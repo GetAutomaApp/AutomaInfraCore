@@ -72,7 +72,7 @@ The `InfoPairComponentConfig` class conforms to `ObservableObject` and is typica
 You can modify the `InfoPairComponentConfig` to change the information pair's content and appearance:
 
 ```swift
-@StateObject var infoPairConfig = InfoPairComponentConfig()
+@StateObject public var infoPairConfig = InfoPairComponentConfig()
 
 InfoPairComponent(config: infoPairConfig)
 .onAppear {
@@ -115,8 +115,8 @@ As your design system evolves, you might want to add more properties to the conf
 
 ```swift
 class ExtendedInfoPairComponentConfig: InfoPairComponentConfig {
-    @Published var textColor: Color = .primary
-    @Published var fontSize: CGFloat = 16
+    @Published public var textColor: Color = .primary
+    @Published public var fontSize: CGFloat = 16
 }
 ```
 

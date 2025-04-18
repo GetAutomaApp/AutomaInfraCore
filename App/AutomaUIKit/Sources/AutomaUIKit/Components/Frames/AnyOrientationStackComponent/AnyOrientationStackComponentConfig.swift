@@ -11,11 +11,11 @@ public enum AnyOrientationStackComponentVariants {
 
 /// Add a short description here about the config
 public class AnyOrientationStackComponentConfig: ObservableObject {
-    @Published var variant: AnyOrientationStackComponentVariants = .vstack
+    @Published public var variant: AnyOrientationStackComponentVariants = .vstack
 
-    @Published var vstackAlignment: HorizontalAlignment
-    @Published var hstackAlignment: VerticalAlignment
-    @Published var spacing: CGFloat
+    @Published public var vstackAlignment: HorizontalAlignment
+    @Published public var hstackAlignment: VerticalAlignment
+    @Published public var spacing: CGFloat
 
     public init(
         variant: AnyOrientationStackComponentVariants = .vstack,

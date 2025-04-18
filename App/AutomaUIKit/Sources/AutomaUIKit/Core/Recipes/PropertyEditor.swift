@@ -49,7 +49,7 @@ public struct AnyKeyPath<TheObservedObject, TheValueType> {
  - Parameter max: The maximum that the `value` property is allowed to be.
  */
 private struct PaddingSliderInput: View {
-    @Binding var value: CGFloat
+    @Binding public var value: CGFloat
     public let label: String
     public let max: CGFloat = 30
 
@@ -87,7 +87,7 @@ public struct PaddingEditor: View {
 }
 
 internal struct CGSizeEdtior: View {
-    @Binding var cgSize: CGSize
+    @Binding public var cgSize: CGSize
 
     public var body: some View {
         HStack {
@@ -140,7 +140,7 @@ public struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: V
  This method currently isn't perfect but it does reduce the code duplication by 10 fold.
  */
 public struct PropertyEditor<T: ObservableObject, Content: View>: View {
-    @ObservedObject var object: T
+    @ObservedObject public var object: T
     public let properties: [[AnyKeyPath<T, Any>]]
 
     @ViewBuilder public let viewer: () -> Content

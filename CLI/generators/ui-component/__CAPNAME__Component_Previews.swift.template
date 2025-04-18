@@ -8,7 +8,7 @@ internal struct __CAPNAME__Component_Previews: PreviewProvider {
 }
 
 internal struct __CAPNAME__ComponentWrapperView: View {
-    @ObservedObject var config = __CAPNAME__ComponentConfig()
+    @ObservedObject public var config = __CAPNAME__ComponentConfig()
     public var body: some View {
         __CAPNAME__Component(config: config).padding()
     }

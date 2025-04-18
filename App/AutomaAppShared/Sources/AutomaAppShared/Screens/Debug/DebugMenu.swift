@@ -21,15 +21,15 @@ internal enum BaseEnvironmentUrl: String, CaseIterable {
 }
 
 public struct DebugMenu: View {
-    @EnvironmentObject var baseEnvironmentConfig: BaseAppEnvironmentObject
+    @EnvironmentObject public var baseEnvironmentConfig: BaseAppEnvironmentObject
 
-    @StateObject var closeButtonConfig: IconButtonComponentConfig = .init()
+    @StateObject public var closeButtonConfig: IconButtonComponentConfig = .init()
 
-    @StateObject var environmentPickerConfig: TextInputFrameComponentConfig = .init(
+    @StateObject public var environmentPickerConfig: TextInputFrameComponentConfig = .init(
         text: BaseEnvironmentUrl.sandbox.rawValue
     )
 
-    @StateObject var environmentPicketButtonConfig: TextButtonComponentConfig = .init()
+    @StateObject public var environmentPicketButtonConfig: TextButtonComponentConfig = .init()
 
     public init() {}
 

@@ -7,7 +7,7 @@ import PhoneNumberKit
 import SwiftUI
 
 internal struct PhoneNumberTextFieldView: UIViewRepresentable {
-    @ObservedObject var config: PhoneNumberTextInputComponentConfig
+    @ObservedObject public var config: PhoneNumberTextInputComponentConfig
 
     private let textField = PhoneNumberTextField()
     public func makeUIView(context: Context) -> PhoneNumberKit.PhoneNumberTextField {
@@ -35,13 +35,13 @@ internal struct PhoneNumberTextFieldView: UIViewRepresentable {
     }
 
     class Coordinator: NSObject, UITextFieldDelegate {
-        @ObservedObject var config: PhoneNumberTextInputComponentConfig
+        @ObservedObject public var config: PhoneNumberTextInputComponentConfig
 
         init(config: PhoneNumberTextInputComponentConfig) {
             self.config = config
         }
 
-        @objc func textFieldDidChange(_ textField: UITextField) {
+        @objc public func textFieldDidChange(_ textField: UITextField) {
             config.phoneNumber = textField.text ?? ""
 
             if let phoneTextField = textField as? PhoneNumberTextField {
@@ -58,7 +58,7 @@ internal struct PhoneNumberTextFieldView: UIViewRepresentable {
 }
 
 public struct PhoneNumberTextInputComponent: View {
-    @ObservedObject var config: PhoneNumberTextInputComponentConfig
+    @ObservedObject public var config: PhoneNumberTextInputComponentConfig
 
     public init(
         config: PhoneNumberTextInputComponentConfig

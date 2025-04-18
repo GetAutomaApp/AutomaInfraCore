@@ -18,8 +18,8 @@ import ViewExtractor
  To see usage examples & visuals, check out `AnyOrientationStackModifierDocumentation.md`
  */
 public struct AnyOrientationStackComponent<Content: View>: View {
-    @ObservedObject var config: AnyOrientationStackComponentConfig
-    @ViewBuilder let content: Content
+    @ObservedObject public var config: AnyOrientationStackComponentConfig
+    @ViewBuilder public let content: Content
 
     public init(config: AnyOrientationStackComponentConfig, @ViewBuilder content: () -> Content) {
         self.config = config

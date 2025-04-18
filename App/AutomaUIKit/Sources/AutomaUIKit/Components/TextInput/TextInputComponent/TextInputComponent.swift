@@ -6,7 +6,7 @@
 import SwiftUI
 
 public struct TextInputComponentComponent: View {
-    @ObservedObject var config: TextInputComponentComponentConfig
+    @ObservedObject public var config: TextInputComponentComponentConfig
 
     public let onIconTap: (TextInputComponentComponentConfig) -> Void
     public let onSelfAppear: (TextInputComponentComponentConfig) -> Void

@@ -15,7 +15,7 @@ import SwiftUI
 public struct NoNetworkConnectionView: View {
     public init() {}
 
-    @StateObject var titleConfig: InfoPairComponentConfig = .init(
+    @StateObject public var titleConfig: InfoPairComponentConfig = .init(
         title: "You're not connected!",
         description: "Please ensure you have an active internet connection!"
     )

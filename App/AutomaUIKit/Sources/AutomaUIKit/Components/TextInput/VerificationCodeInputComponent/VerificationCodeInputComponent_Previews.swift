@@ -14,7 +14,7 @@ internal struct VerificationCodeInputComponent_Previews: PreviewProvider {
 }
 
 internal struct VerificationCodeInputComponentWrapperView: View {
-    @ObservedObject var config = VerificationCodeInputComponentConfig()
+    @ObservedObject public var config = VerificationCodeInputComponentConfig()
     public var body: some View {
         PropertyEditor(object: config, properties: [
             [AnyKeyPath("Title", keyPath: \.title)],

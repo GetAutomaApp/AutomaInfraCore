@@ -12,7 +12,7 @@ internal struct InfoPairComponent_Previews: PreviewProvider {
 }
 
 internal struct InfoPairWrapperView: View {
-    @ObservedObject var config = InfoPairComponentConfig()
+    @ObservedObject public var config = InfoPairComponentConfig()
 
     public var body: some View {
         PropertyEditor(

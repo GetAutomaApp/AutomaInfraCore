@@ -7,7 +7,7 @@
 import Testing
 
 internal struct IOSAdminTests {
-    @Test func example() throws {
+    @Test public func example() throws {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
     }
 }

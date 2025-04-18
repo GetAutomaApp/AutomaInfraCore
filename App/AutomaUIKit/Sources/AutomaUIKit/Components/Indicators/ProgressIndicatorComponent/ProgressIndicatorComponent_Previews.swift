@@ -12,7 +12,7 @@ internal struct ProgressIndicatorComponent_Previews: PreviewProvider {
 }
 
 internal struct TestProgressView: View {
-    @ObservedObject var config = ProgressIndicatorComponentConfig()
+    @ObservedObject public var config = ProgressIndicatorComponentConfig()
 
     public var body: some View {
         VStack {

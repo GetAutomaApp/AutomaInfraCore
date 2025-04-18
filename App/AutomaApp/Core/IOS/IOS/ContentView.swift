@@ -14,8 +14,8 @@ import SwiftUI
 // 4. Make sure functionality works if refresh token gets set to null we go back to the onboarding screen
 
 internal struct ContentView: View {
-    @EnvironmentObject var baseEnvironmentConfig: BaseAppEnvironmentObject
-    @EnvironmentObject var networkChecker: NetworkManager
+    @EnvironmentObject public var baseEnvironmentConfig: BaseAppEnvironmentObject
+    @EnvironmentObject public var networkChecker: NetworkManager
 
     public var body: some View {
         if networkChecker.isConnected {

@@ -8,8 +8,8 @@ import SwiftUI
 
 @main
 internal struct IOSApp: App {
-    @StateObject var baseConfig = BaseAppEnvironmentObject()
-    @StateObject var networkChecker: NetworkManager = .init()
+    @StateObject public var baseConfig = BaseAppEnvironmentObject()
+    @StateObject public var networkChecker: NetworkManager = .init()
 
     public var body: some Scene {
         WindowGroup {

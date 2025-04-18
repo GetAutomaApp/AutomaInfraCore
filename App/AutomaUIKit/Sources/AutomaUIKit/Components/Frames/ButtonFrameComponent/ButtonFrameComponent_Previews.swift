@@ -12,7 +12,7 @@ internal struct ButtonFrameComponent_Previews: PreviewProvider {
 }
 
 internal struct ButtonFrameComponent_PreviewsView: View {
-    @StateObject var buttonConfig: ButtonFrameComponentConfig = .init()
+    @StateObject public var buttonConfig: ButtonFrameComponentConfig = .init()
 
     public var body: some View {
         PropertyEditor(
@@ -53,7 +53,7 @@ internal struct ButtonFrameComponent_PreviewsView: View {
 }
 
 internal struct AutoButtonVariationsView: View {
-    @StateObject var buttonController: ButtonFrameComponentConfig = .init()
+    @StateObject public var buttonController: ButtonFrameComponentConfig = .init()
     @State private var isTimerActive = false
 
     public let switchDelay: TimeInterval = 0.5
