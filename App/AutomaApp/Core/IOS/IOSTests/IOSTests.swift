@@ -8,8 +8,9 @@ import Testing
 
 @Suite("IOS Tests")
 internal struct IOSTests {
+    /// Example test
     @Test("Example Test")
-    public func example() throws {
+    public func example() {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
     }
 }

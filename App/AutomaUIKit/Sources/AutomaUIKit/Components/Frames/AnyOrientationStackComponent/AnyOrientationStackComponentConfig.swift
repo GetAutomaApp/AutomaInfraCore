@@ -28,4 +28,6 @@ public class AnyOrientationStackComponentConfig: ObservableObject {
         self.hstackAlignment = hstackAlignment
         self.spacing = spacing
     }
+
+    deinit {}
 }

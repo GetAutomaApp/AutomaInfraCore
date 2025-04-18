@@ -55,4 +55,6 @@ public final class TwitterOAuthToken: Model, @unchecked Sendable {
         self.deletedAt = deletedAt
         $user.id = userID
     }
+
+    deinit {}
 }

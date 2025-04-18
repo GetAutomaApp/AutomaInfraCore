@@ -74,4 +74,6 @@ internal struct RSSFeedReaderClientTests {
             }
         }
     }
+
+    deinit {}
 }

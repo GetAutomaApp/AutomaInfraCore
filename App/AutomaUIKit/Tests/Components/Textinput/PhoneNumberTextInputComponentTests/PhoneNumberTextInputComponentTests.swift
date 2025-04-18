@@ -17,4 +17,6 @@ class PhoneNumberTextInputComponentTests: XCTestCase {
     public func testIntegration() throws { let component = PhoneNumberTextInputComponent()
         XCTAssertNotNil(component)
     }
+
+    deinit {}
 }

@@ -18,4 +18,6 @@ class VerificationCodeInputComponentTests: XCTestCase {
         let component = VerificationCodeInputComponent()
         XCTAssertNotNil(component)
     }
+
+    deinit {}
 }

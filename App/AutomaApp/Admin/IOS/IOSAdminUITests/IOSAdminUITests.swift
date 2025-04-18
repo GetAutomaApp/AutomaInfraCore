@@ -6,7 +6,7 @@
 import XCTest
 
 public final class IOSAdminUITests: XCTestCase {
-    override func setUpWithError() throws {
+    override static func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
         // In UI tests it is usually best to stop immediately when a failure occurs.
@@ -38,4 +38,6 @@ public final class IOSAdminUITests: XCTestCase {
             }
         }
     }
+
+    deinit {}
 }

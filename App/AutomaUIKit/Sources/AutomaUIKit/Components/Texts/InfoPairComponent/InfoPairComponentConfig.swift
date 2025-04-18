@@ -26,4 +26,6 @@ public class InfoPairComponentConfig: ObservableObject {
         self.description = description
         self.variant = variant
     }
+
+    deinit {}
 }

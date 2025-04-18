@@ -80,4 +80,6 @@ public class IconButtonComponentConfig: ButtonFrameComponentConfig {
         print("Icon Button Setting Variant to \(isDisabled)")
         frameVariant = isDisabled ? .disabled : .generic
     }
+
+    deinit {}
 }

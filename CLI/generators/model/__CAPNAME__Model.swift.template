@@ -47,4 +47,6 @@ public final class __CAPNAME__Model: Model, @unchecked Sendable {
         )
         return model
     }
+
+    deinit {}
 }

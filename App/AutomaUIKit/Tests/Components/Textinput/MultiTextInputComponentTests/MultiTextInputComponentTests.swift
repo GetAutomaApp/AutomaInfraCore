@@ -18,4 +18,6 @@ class MultiTextInputComponentTests: XCTestCase {
         let component = MultiTextInputComponent()
         XCTAssertNotNil(component)
     }
+
+    deinit {}
 }

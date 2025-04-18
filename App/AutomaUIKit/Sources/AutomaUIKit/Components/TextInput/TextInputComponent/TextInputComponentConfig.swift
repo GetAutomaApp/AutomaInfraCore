@@ -27,4 +27,6 @@ public class TextInputComponentComponentConfig: TextInputFrameComponentConfig {
         self.titleSegmentColor = titleSegmentColor
         self.errorSegmentColor = errorSegmentColor
     }
+
+    deinit {}
 }

@@ -26,4 +26,6 @@ public class BaseAppEnvironmentObject: ObservableObject {
             }
         }
     }
+
+    deinit {}
 }

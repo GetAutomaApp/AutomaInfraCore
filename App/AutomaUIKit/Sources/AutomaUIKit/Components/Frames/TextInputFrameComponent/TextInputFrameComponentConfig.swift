@@ -61,4 +61,6 @@ public class TextInputFrameComponentConfig: ObservableObject {
         self.padding = padding
         self.cornerRadius = cornerRadius
     }
+
+    deinit {}
 }

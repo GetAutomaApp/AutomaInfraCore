@@ -66,4 +66,6 @@ public final class AuthenticationCodeModel: Model, @unchecked Sendable {
             deletedAt: dto.deletedAt
         )
     }
+
+    deinit {}
 }

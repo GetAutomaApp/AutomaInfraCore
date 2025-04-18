@@ -41,4 +41,6 @@ public class KeychainHelper {
     public static func delete(for key: KeyChainKeys) {
         try? keychain.deleteItem(forKey: key.rawValue)
     }
+
+    deinit {}
 }

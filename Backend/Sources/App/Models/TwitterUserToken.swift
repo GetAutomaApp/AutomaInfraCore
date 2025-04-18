@@ -68,4 +68,6 @@ public final class TwitterUserToken: Model, @unchecked Sendable {
             oauthTokenID: $oauthToken.id
         )
     }
+
+    deinit {}
 }

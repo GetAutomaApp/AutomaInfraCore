@@ -38,4 +38,6 @@ public class PhoneNumberTextInputComponentConfig: TextInputComponentComponentCon
             title: "Phone Number"
         )
     }
+
+    deinit {}
 }

@@ -19,4 +19,6 @@ public class VerificationCodeInputComponentConfig: TextInputComponentComponentCo
         super.init()
         text = " - "
     }
+
+    deinit {}
 }

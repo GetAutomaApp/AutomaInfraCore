@@ -98,4 +98,6 @@ public final class UserModel: Model, @unchecked Sendable {
             accepted: dto.accepted
         )
     }
+
+    deinit {}
 }

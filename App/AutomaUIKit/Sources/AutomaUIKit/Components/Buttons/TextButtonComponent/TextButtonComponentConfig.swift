@@ -75,4 +75,6 @@ public class TextButtonComponentConfig: ButtonFrameComponentConfig {
     public func manageDisabledState() {
         frameVariant = isDisabled ? .disabled : .generic
     }
+
+    deinit {}
 }

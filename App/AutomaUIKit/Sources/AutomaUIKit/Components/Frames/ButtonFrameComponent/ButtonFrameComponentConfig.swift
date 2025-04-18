@@ -43,4 +43,6 @@ public class ButtonFrameComponentConfig: ObservableObject {
         self.variantDisabledBackground = variantDisabledBackground
         self.defaultPadding = defaultPadding
     }
+
+    deinit {}
 }

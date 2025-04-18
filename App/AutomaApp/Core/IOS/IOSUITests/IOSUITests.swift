@@ -5,7 +5,7 @@
 
 import XCTest
 
-public final class IOSUITests: XCTestCase {
+public class IOSUITests: XCTestCase {
     override public func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
@@ -38,4 +38,6 @@ public final class IOSUITests: XCTestCase {
             }
         }
     }
+
+    deinit {}
 }

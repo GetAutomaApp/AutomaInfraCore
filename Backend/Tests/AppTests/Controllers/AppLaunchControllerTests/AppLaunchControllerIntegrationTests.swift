@@ -27,4 +27,6 @@ public final class AppLaunchControllerIntegrationTests {
     public func testRequest() {
         #expect(Bool(true))
     }
+
+    deinit {}
 }

@@ -51,6 +51,8 @@ internal struct PhoneNumberTextFieldView: UIViewRepresentable {
                 config.isValid = false
             }
         }
+
+        deinit {}
     }
 
     public func makeCoordinator() -> Coordinator {

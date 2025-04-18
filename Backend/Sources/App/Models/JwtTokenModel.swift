@@ -69,4 +69,6 @@ public final class JwtTokenModel: Model, @unchecked Sendable {
             updatedAt: dto.updatedAt, deletedAt: dto.deletedAt
         )
     }
+
+    deinit {}
 }

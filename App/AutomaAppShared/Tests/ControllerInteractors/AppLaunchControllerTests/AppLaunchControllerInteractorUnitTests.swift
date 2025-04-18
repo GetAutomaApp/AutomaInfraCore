@@ -19,4 +19,6 @@ public final class AppLaunchControllerInteractorUnitTests: XCTestCase {
     }
 
     // Note: These integration tests should not be run against the main backend if it is a backend interactor.
+
+    deinit {}
 }

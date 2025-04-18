@@ -11,4 +11,6 @@ public class __CAPNAME__ComponentConfig: ObservableObject {
     @Published public var variant: __CAPNAME__ComponentVariants = .generic
 
     public let textColor: Color = .black
+    
+    deinit {}
 }

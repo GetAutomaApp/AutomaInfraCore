@@ -25,4 +25,6 @@ public class NetworkManager: ObservableObject, @unchecked Sendable {
 
         monitor.start(queue: queue)
     }
+
+    deinit {}
 }

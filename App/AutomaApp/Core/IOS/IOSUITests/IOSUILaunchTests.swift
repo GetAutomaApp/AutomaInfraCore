@@ -5,7 +5,7 @@
 
 import XCTest
 
-public final class IOSUILaunchTests: XCTestCase {
+public class IOSUILaunchTests: XCTestCase {
     override public class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }
@@ -27,4 +27,6 @@ public final class IOSUILaunchTests: XCTestCase {
         attachment.lifetime = .keepAlways
         add(attachment)
     }
+
+    deinit {}
 }
