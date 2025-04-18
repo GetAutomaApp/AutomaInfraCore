@@ -7,7 +7,6 @@ let package = Package(
         .macOS(.v15),
     ],
     dependencies: [
-        // 💧 A server-side Swift web framework.
         .package(url: "https://github.com/vapor/vapor.git", from: "4.99.3"),
         .package(path: "../Backend/DataTypes"),
     ],
