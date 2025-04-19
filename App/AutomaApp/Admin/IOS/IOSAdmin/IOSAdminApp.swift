@@ -5,8 +5,15 @@
 
 import SwiftUI
 
+/// The main entry point for the iOS admin application
+///
+/// This app structure serves as the root of the application, configuring the main window
+/// and establishing the dark color scheme as the default appearance.
 @main
 internal struct IOSAdminApp: App {
+    /// The body of the app that defines its scene structure
+    ///
+    /// Creates a window group containing the main ContentView with dark mode enabled
     public var body: some Scene {
         WindowGroup {
             ContentView()

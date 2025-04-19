@@ -3,23 +3,34 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-//
-//  AuthenticationLoop.swift
-//  AutomaAppShared
-//
-//  Created by Simon Ferns on 2/22/25.
-//
 import DataTypes
 import SwiftUI
 
-/// Struct used when user opens application
+/// Handles application launch and authentication flow
+///
+/// This struct manages the initial app launch sequence including:
+/// - Authentication token management
+/// - User acceptance status verification
+/// - Client configuration retrieval
 public struct AppLaunch: Sendable {
+    /// The base URL for API requests
     public let baseURL: String
 
+    /// Creates a new AppLaunch instance
+    ///
+    /// - Parameter baseURL: The base URL for API requests
     public init(baseURL: String) {
         self.baseURL = baseURL
     }
 
+    /// Retrieves and validates the access token
+    ///
+    /// This method:
+    /// 1. Checks for an existing refresh token
+    /// 2. If found, attempts to get a new access token
+    /// 3. Updates keychain storage with new tokens
+    ///
+    /// - Returns: A boolean indicating if a valid access token was obtained
     public func getAccessToken() async -> Bool {
         let authenticationController = AuthenticationControllerInteractor(baseURL: baseURL)
         let keychain = KeychainHelper.self
@@ -55,6 +66,10 @@ public struct AppLaunch: Sendable {
         return false
     }
 
+    /// Checks if the current user has accepted the terms of service
+    ///
+    /// - Returns: A boolean indicating if the user has accepted the terms
+    /// - Note: Returns false if there is an error checking the acceptance status
     public func isUserAccepted() async -> Bool {
         let appLaunchInteractor = AppLaunchControllerInteractor(baseURL: baseURL)
         do {
@@ -65,6 +80,15 @@ public struct AppLaunch: Sendable {
         }
     }
 
+    /// Retrieves the client configuration from the server
+    ///
+    /// This method fetches configuration settings including:
+    /// - Required client version
+    /// - Feature flags
+    /// - Other server-defined settings
+    ///
+    /// - Returns: An AppLaunchClientConfigDTO containing the configuration
+    /// - Note: Returns a default configuration if there is an error fetching from server
     public func getClientConfig() async -> AppLaunchClientConfigDTO {
         let appLaunchInteractor = AppLaunchControllerInteractor(baseURL: baseURL)
         do {

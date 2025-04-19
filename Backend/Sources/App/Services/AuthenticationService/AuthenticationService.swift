@@ -209,7 +209,7 @@ struct AuthenticationService: Sendable {
 
             return try await helper.generateAccessToken(
                 userId: userId,
-                expiresIn: 86_400,
+                expiresIn: 86400,
                 type: .access,
                 signer: signer
             )

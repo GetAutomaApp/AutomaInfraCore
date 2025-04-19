@@ -9,7 +9,7 @@ public enum VerificationCodeInputComponentVariants {
     case generic
 }
 
-public class VerificationCodeInputComponentConfig: TextInputComponentComponentConfig {
+public class VerificationCodeInputComponentConfig: TextInputComponentConfig {
     @Published public var separatorIcon: DesignIcons
 
     public init(

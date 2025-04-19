@@ -6,6 +6,7 @@
 import AutomaUIKit
 import SwiftUI
 
+/// Layout view for all onboarding screens
 public struct OnboardingScreenFrame<TitleContent: View, FooterContent: View>: View {
     public let titleContent: () -> TitleContent
     public let footerContent: () -> FooterContent

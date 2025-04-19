@@ -5,12 +5,15 @@
 
 import SwiftUI
 
+/// Preview for `TextInputFrameComponent`
 public struct TextInputFrameComponentPreviews: PreviewProvider {
     public static var previews: some View {
         TextInputFrameComponentPropertyEditor()
     }
 }
 
+/// `TextInputFrameComponent` property editor, allowing you to edit properties and see changes in
+/// the UI
 public struct TextInputFrameComponentPropertyEditor: View {
     @StateObject private var config = TextInputFrameComponentConfig()
 

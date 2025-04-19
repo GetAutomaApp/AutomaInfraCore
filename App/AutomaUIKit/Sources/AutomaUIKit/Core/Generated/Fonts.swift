@@ -26,55 +26,59 @@ typealias Font = FontConvertible.Font
 // swiftlint:disable identifier_name line_length type_body_length
 internal enum FontFamily {
     enum CrimsonText {
-        static let bold = FontConvertible(
+        public static let bold = FontConvertible(
             name: "CrimsonText-Bold",
             family: "Crimson Text",
             path: "CrimsonText-Bold.ttf"
         )
-        static let boldItalic = FontConvertible(
+        public static let boldItalic = FontConvertible(
             name: "CrimsonText-BoldItalic",
             family: "Crimson Text",
             path: "CrimsonText-BoldItalic.ttf"
         )
-        static let italic = FontConvertible(
+        public static let italic = FontConvertible(
             name: "CrimsonText-Italic",
             family: "Crimson Text",
             path: "CrimsonText-Italic.ttf"
         )
-        static let regular = FontConvertible(
+        public static let regular = FontConvertible(
             name: "CrimsonText-Regular",
             family: "Crimson Text",
             path: "CrimsonText-Regular.ttf"
         )
-        static let semiBold = FontConvertible(
+        public static let semiBold = FontConvertible(
             name: "CrimsonText-SemiBold",
             family: "Crimson Text",
             path: "CrimsonText-SemiBold.ttf"
         )
-        static let semiBoldItalic = FontConvertible(
+        public static let semiBoldItalic = FontConvertible(
             name: "CrimsonText-SemiBoldItalic",
             family: "Crimson Text",
             path: "CrimsonText-SemiBoldItalic.ttf"
         )
-        static let all: [FontConvertible] = [bold, boldItalic, italic, regular, semiBold, semiBoldItalic]
+        public static let all: [FontConvertible] = [bold, boldItalic, italic, regular, semiBold, semiBoldItalic]
     }
 
     enum SFProText {
-        static let bold = FontConvertible(name: "SFProText-Bold", family: "SF Pro Text", path: "SF-Pro-Text-Bold.otf")
-        static let regular = FontConvertible(
+        public static let bold = FontConvertible(
+            name: "SFProText-Bold",
+            family: "SF Pro Text",
+            path: "SF-Pro-Text-Bold.otf"
+        )
+        public static let regular = FontConvertible(
             name: "SFProText-Regular",
             family: "SF Pro Text",
             path: "SF-Pro-Text-Regular.otf"
         )
-        static let semibold = FontConvertible(
+        public static let semibold = FontConvertible(
             name: "SFProText-Semibold",
             family: "SF Pro Text",
             path: "SF-Pro-Text-Semibold.otf"
         )
-        static let all: [FontConvertible] = [bold, regular, semibold]
+        public static let all: [FontConvertible] = [bold, regular, semibold]
     }
 
-    static let allCustomFonts: [FontConvertible] = [CrimsonText.all, SFProText.all].flatMap(\.self)
+    public static let allCustomFonts: [FontConvertible] = [CrimsonText.all, SFProText.all].flatMap(\.self)
     static func registerAllCustomFonts() {
         allCustomFonts.forEach { $0.register() }
     }
@@ -152,7 +156,7 @@ extension FontConvertible.Font {
 
 #if canImport(SwiftUI)
     @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-    extension SwiftUI.Font {
+    public extension SwiftUI.Font {
         static func custom(_ font: FontConvertible, size: CGFloat) -> SwiftUI.Font {
             font.registerIfNeeded()
             return custom(font.name, size: size)
@@ -160,7 +164,7 @@ extension FontConvertible.Font {
     }
 
     @available(iOS 14.0, tvOS 14.0, watchOS 7.0, macOS 11.0, *)
-    extension SwiftUI.Font {
+    public extension SwiftUI.Font {
         static func custom(_ font: FontConvertible, fixedSize: CGFloat) -> SwiftUI.Font {
             font.registerIfNeeded()
             return custom(font.name, fixedSize: fixedSize)
@@ -179,7 +183,7 @@ extension FontConvertible.Font {
 
 // swiftlint:disable convenience_type
 private final class BundleToken {
-    static let bundle: Bundle = {
+    public static let bundle: Bundle = {
         #if SWIFT_PACKAGE
             return Bundle.module
         #else

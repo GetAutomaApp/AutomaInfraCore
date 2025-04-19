@@ -7,6 +7,8 @@ import AutomaUIKit
 import StoreKit
 import SwiftUI
 
+/// View that shows when a user must update the app in order to continue using it
+/// (user has outdated version of the app)
 public struct ForceUpdate: View {
     public init() {}
 

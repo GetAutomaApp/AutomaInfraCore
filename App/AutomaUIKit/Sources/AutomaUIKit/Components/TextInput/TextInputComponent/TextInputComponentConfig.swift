@@ -5,9 +5,9 @@
 
 import SwiftUI
 
-public enum TextInputComponentComponentVariants {}
+public enum TextInputComponentVariants {}
 
-public class TextInputComponentComponentConfig: TextInputFrameComponentConfig {
+public class TextInputComponentConfig: TextInputFrameComponentConfig {
     @Published public var title: String
     @Published public var errorMessage: String
     @Published public var titleContentFont: IsFontTableFont

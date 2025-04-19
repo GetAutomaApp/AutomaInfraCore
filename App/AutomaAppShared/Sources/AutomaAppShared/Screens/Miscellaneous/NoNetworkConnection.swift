@@ -12,6 +12,7 @@
 import AutomaUIKit
 import SwiftUI
 
+/// View to show when user has no internet connection
 public struct NoNetworkConnectionView: View {
     public init() {}
 

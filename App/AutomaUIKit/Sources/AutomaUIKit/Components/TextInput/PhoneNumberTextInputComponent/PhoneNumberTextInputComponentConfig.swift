@@ -8,7 +8,7 @@ import SwiftUI
 public enum PhoneNumberTextInputComponentVariants {}
 
 /// Add a short description here about the config
-public class PhoneNumberTextInputComponentConfig: TextInputComponentComponentConfig {
+public class PhoneNumberTextInputComponentConfig: TextInputComponentConfig {
     @Published public var phoneNumber: String
 
     public var timesUntilShowErrorMessage = 2

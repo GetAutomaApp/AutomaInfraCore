@@ -5,16 +5,16 @@
 
 import SwiftUI
 
-public struct TextInputComponentComponent: View {
-    @ObservedObject public var config: TextInputComponentComponentConfig
+public struct TextInputComponent: View {
+    @ObservedObject public var config: TextInputComponentConfig
 
-    public let onIconTap: (TextInputComponentComponentConfig) -> Void
-    public let onSelfAppear: (TextInputComponentComponentConfig) -> Void
+    public let onIconTap: (TextInputComponentConfig) -> Void
+    public let onSelfAppear: (TextInputComponentConfig) -> Void
 
     public init(
-        config: TextInputComponentComponentConfig = .init(),
-        onIconTap: @escaping (TextInputComponentComponentConfig) -> Void = { _ in },
-        onSelfAppear: @escaping (TextInputComponentComponentConfig) -> Void = { _ in }
+        config: TextInputComponentConfig = .init(),
+        onIconTap: @escaping (TextInputComponentConfig) -> Void = { _ in },
+        onSelfAppear: @escaping (TextInputComponentConfig) -> Void = { _ in }
     ) {
         self.config = config
         self.onIconTap = onIconTap

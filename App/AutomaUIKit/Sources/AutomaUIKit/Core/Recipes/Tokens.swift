@@ -95,7 +95,7 @@ internal struct DesignIconsConfig: Sendable {
 public enum DesignTokens {
     public static let colors: DesignColors = .init()
     public static let padding: DesignPadding = .init()
-    static let icons: DesignIconsConfig = .init()
+    public static let icons: DesignIconsConfig = .init()
 
     public static let defaultCornerRadius: CGFloat = 12
 }

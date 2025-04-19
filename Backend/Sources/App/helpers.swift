@@ -7,7 +7,7 @@
 
 import Vapor
 
-extension Environment {
+public extension Environment {
     static func getOrThrow(_ key: String) throws -> String {
         guard let value = Environment.get(key) else {
             throw Abort(.notFound, reason: "Value for key \(key) not found")
@@ -17,7 +17,7 @@ extension Environment {
     }
 }
 
-extension Task where Success == Void, Failure == any Error {
+public extension Task where Success == Void, Failure == any Error {
     static func detachedLogOnError(
         to: String,
         logger: Logger,

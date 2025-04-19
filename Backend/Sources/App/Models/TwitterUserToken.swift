@@ -8,7 +8,7 @@ import Fluent
 import Vapor
 
 public final class TwitterUserToken: Model, @unchecked Sendable {
-    static let schema = "Twitter-User-Token"
+    public static let schema = "Twitter-User-Token"
 
     @ID(key: .id)
     public var id: UUID?

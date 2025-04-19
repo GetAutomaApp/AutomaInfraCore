@@ -155,7 +155,7 @@ internal struct AuthenticationServiceHelper {
         let messageService = MessageService()
         let accessToken = try await generateAccessToken(
             userId: userId,
-            expiresIn: 86_400,
+            expiresIn: 86400,
             type: .access,
             signer: signer
         )

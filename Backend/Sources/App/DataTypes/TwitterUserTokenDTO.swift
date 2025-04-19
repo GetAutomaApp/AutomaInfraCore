@@ -5,6 +5,8 @@
 
 import Vapor
 
+/// Access and secret access token for a Twitter account, also known as it's user tokens.
+/// DTO for `TwitteUserToken`
 public struct TwitterUserTokenDTO: Content {
     public var id: UUID?
     public var createdAt: Date?

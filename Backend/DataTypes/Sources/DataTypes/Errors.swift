@@ -70,6 +70,7 @@ public enum GenericErrors: String, Error, Decodable, Encodable {
     }
 }
 
+/// Error from network response as Vapor `Content` object
 public struct ResponseError: Content {
     public let error: GenericErrors
 

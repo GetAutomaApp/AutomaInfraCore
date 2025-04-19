@@ -6,6 +6,7 @@
 import AutomaUIKit
 import SwiftUI
 
+/// Layout frame for all authentication screens
 public struct AuthenticationFormScreenFrame<CenterContent: View>: View {
     public var title: String = "Enter Title"
     public var description: String = "Enter Desc"

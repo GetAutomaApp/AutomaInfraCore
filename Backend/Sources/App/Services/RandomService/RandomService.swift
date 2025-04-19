@@ -7,7 +7,7 @@ import Fluent
 import Vapor
 
 internal enum RandomService {
-    static let animals = [
+    public static let animals = [
         "Dog",
         "Cat",
         "Bird",
@@ -23,7 +23,7 @@ internal enum RandomService {
         "Hedgehog",
     ]
 
-    static let objects = [
+    public static let objects = [
         "Chair",
         "Table",
         "Spoon",
@@ -40,7 +40,7 @@ internal enum RandomService {
         "Doodle",
     ]
 
-    static let adjectives = [
+    public static let adjectives = [
         "Whimsical",
         "Cute",
         "Adorable",
@@ -64,7 +64,7 @@ internal enum RandomService {
         "Chirpy",
     ]
 
-    static let moods = [
+    public static let moods = [
         "Snappy",
         "Sunny",
         "Quirky",
@@ -77,7 +77,7 @@ internal enum RandomService {
         "Friendly",
     ]
 
-    static let allWords = adjectives + moods + animals + objects
+    public static let allWords = adjectives + moods + animals + objects
 
     static func randomUsername() -> String {
         let mood = moods.randomElement()!

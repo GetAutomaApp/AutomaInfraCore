@@ -90,7 +90,7 @@ public func configure(_ app: Application) async throws {
     // keep this here while `AppTests.swift` is empty
 }
 
-extension DatabaseID {
+public extension DatabaseID {
     static let primary = DatabaseID(string: "primary")
     static let readOnly = DatabaseID(string: "readOnly")
 }

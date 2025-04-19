@@ -8,7 +8,7 @@ import Fluent
 import Vapor
 
 public final class JwtTokenModel: Model, @unchecked Sendable {
-    static let schema = "Jwt-Token"
+    public static let schema = "Jwt-Token"
 
     @ID(key: .id)
     public var id: UUID?

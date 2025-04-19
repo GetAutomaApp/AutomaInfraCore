@@ -8,7 +8,7 @@ import Metrics
 import Prometheus
 
 internal struct MetricsService {
-    static let global = Self()
+    public static let global = Self()
 
     private var prometheus: PrometheusCollectorRegistry
 
@@ -20,13 +20,15 @@ internal struct MetricsService {
         prometheus = prometheusRegistry
     }
 
+    /// Emit metrics into buffer and return data
     public func emit() -> Data {
-        public var buffer = [UInt8]()
+        var buffer = [UInt8]()
         prometheus.emit(into: &buffer)
         let data = String(decoding: buffer, as: Unicode.UTF8.self)
         return Data(data.utf8)
     }
 
+    /// Make a counter type metric
     public func makeCounter(name: String, labels: [String: String] = [:]) -> Prometheus.Counter {
         prometheus
             .makeCounter(
@@ -41,82 +43,82 @@ internal struct MetricsService {
 }
 
 internal enum BackendMetric {
-    static let totalSuccessfulVerificationCodesSent = MetricsService.global.makeCounter(
+    public static let totalSuccessfulVerificationCodesSent = MetricsService.global.makeCounter(
         name: "total_verification_codes_sent",
         labels: ["status": MetricStatus.success.rawValue]
     )
 
-    static let totalFailedVerificationCodesSent = MetricsService.global.makeCounter(
+    public static let totalFailedVerificationCodesSent = MetricsService.global.makeCounter(
         name: "total_verification_codes_sent",
         labels: ["status": MetricStatus.fail.rawValue]
     )
 
-    static let totalUsersCreated = MetricsService.global.makeCounter(
+    public static let totalUsersCreated = MetricsService.global.makeCounter(
         name: "total_users_created",
         labels: ["status": MetricStatus.success.rawValue]
     )
 
-    static let totalUsersAlreadyExists = MetricsService.global.makeCounter(
+    public static let totalUsersAlreadyExists = MetricsService.global.makeCounter(
         name: "total_users_created",
         labels: ["status": MetricStatus.alreadyExists.rawValue]
     )
 
-    static let totalSuccessfulTokensRefreshed = MetricsService.global.makeCounter(
+    public static let totalSuccessfulTokensRefreshed = MetricsService.global.makeCounter(
         name: "total_token_refresh_attempts",
         labels: ["status": MetricStatus.success.rawValue]
     )
 
-    static let totalFailedTokensRefreshed = MetricsService.global.makeCounter(
+    public static let totalFailedTokensRefreshed = MetricsService.global.makeCounter(
         name: "total_token_refresh_attempts",
         labels: ["status": MetricStatus.fail.rawValue]
     )
 
-    static let totalLogoutAttempted = MetricsService.global.makeCounter(
+    public static let totalLogoutAttempted = MetricsService.global.makeCounter(
         name: "total_logout_attempts",
         labels: ["status": MetricStatus.success.rawValue]
     )
 
-    static let totalFailedLogoutAttempted = MetricsService.global.makeCounter(
+    public static let totalFailedLogoutAttempted = MetricsService.global.makeCounter(
         name: "total_logout_attempts",
         labels: ["status": MetricStatus.fail.rawValue]
     )
 
-    static let totalProfilePicturesGenerated = MetricsService.global.makeCounter(
+    public static let totalProfilePicturesGenerated = MetricsService.global.makeCounter(
         name: "total_profile_pictures_generated",
         labels: [
             "status": MetricStatus.success.rawValue,
         ]
     )
 
-    static let totalProfilePicturesGenerationFailed = MetricsService.global.makeCounter(
+    public static let totalProfilePicturesGenerationFailed = MetricsService.global.makeCounter(
         name: "total_profile_pictures_generated",
         labels: [
             "status": MetricStatus.fail.rawValue,
         ]
     )
 
-    static let totalTextMessagesSent = MetricsService.global.makeCounter(
+    public static let totalTextMessagesSent = MetricsService.global.makeCounter(
         name: "total_text_messages_sent",
         labels: [
             "status": MetricStatus.success.rawValue,
         ]
     )
 
-    static let totalTextMessagesSentFailed = MetricsService.global.makeCounter(
+    public static let totalTextMessagesSentFailed = MetricsService.global.makeCounter(
         name: "total_text_messages_sent",
         labels: [
             "status": MetricStatus.fail.rawValue,
         ]
     )
 
-    static let totalDiscordWebhookMessagesSent = MetricsService.global.makeCounter(
+    public static let totalDiscordWebhookMessagesSent = MetricsService.global.makeCounter(
         name: "total_discord_webhook_messages_sent",
         labels: [
             "status": MetricStatus.success.rawValue,
         ]
     )
 
-    static let openAIImageGenerationRequests = MetricsService.global.makeCounter(
+    public static let openAIImageGenerationRequests = MetricsService.global.makeCounter(
         name: "openai_image_generation_requests"
     )
 
@@ -207,21 +209,21 @@ internal enum BackendMetric {
         )
     }
 
-    static let totalMediaFilesUploadedToTigris = MetricsService.global.makeCounter(
+    public static let totalMediaFilesUploadedToTigris = MetricsService.global.makeCounter(
         name: "total_media_files_uploaded_to_tigris",
         labels: [
             "status": MetricStatus.success.rawValue,
         ]
     )
 
-    static let totalMediaFilesUploadedToTigrisFailed = MetricsService.global.makeCounter(
+    public static let totalMediaFilesUploadedToTigrisFailed = MetricsService.global.makeCounter(
         name: "total_media_files_uploaded_to_tigris",
         labels: [
             "status": MetricStatus.fail.rawValue,
         ]
     )
 
-    static func firecrawlScrapeMarkdown(
+    public static func firecrawlScrapeMarkdown(
         status: MetricStatus,
         url: String
     ) -> Prometheus.Counter {

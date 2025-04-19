@@ -8,7 +8,7 @@ import Fluent
 import Vapor
 
 public final class UserModel: Model, @unchecked Sendable {
-    static let schema = "User"
+    public static let schema = "User"
 
     @ID(key: .id)
     public var id: UUID?

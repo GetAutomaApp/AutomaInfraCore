@@ -5,40 +5,53 @@
 
 import XCTest
 
+/// A test case class for UI testing of the iOS application
+///
+/// This class contains UI tests to verify the application's user interface behavior and performance
 public class IOSUITests: XCTestCase {
+    /// Sets up the test environment before each test method is executed
+    ///
+    /// This method is called before the invocation of each test method in the class.
+    /// It configures the test environment by:
+    /// - Disabling continue after failure to stop tests immediately when a failure occurs
+    /// - Setting up initial interface state required for tests
     override public func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests
-        // before they run. The setUp method is a good place to do this.
     }
 
+    /// Tears down the test environment after each test method is executed
+    ///
+    /// This method is called after the invocation of each test method in the class
+    /// to clean up any resources or state that were set up during the test.
     override public func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    /// Tests basic functionality of the application
+    ///
+    /// This test method launches the application and can be extended to verify
+    /// specific UI behaviors and interactions
     @MainActor
     public func testExample() throws {
-        // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 
+    /// Measures the launch performance of the application
+    ///
+    /// This test method measures how long it takes to launch the application
+    /// using XCTest metrics. It is only available on newer OS versions.
+    /// - Throws: An error if the performance measurement fails
     @MainActor
     public func testLaunchPerformance() throws {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
             measure(metrics: [XCTApplicationLaunchMetric()]) {
                 XCUIApplication().launch()
             }
         }
     }
 
+    /// Cleanup when the test case is deallocated
     deinit {
         return
     }

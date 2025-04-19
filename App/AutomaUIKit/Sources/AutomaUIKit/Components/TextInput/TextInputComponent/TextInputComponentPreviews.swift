@@ -7,14 +7,14 @@ import SwiftUI
 
 // Add a preview per state difference (No need to add all states)
 
-internal struct TextInputComponentComponentPreviews: PreviewProvider {
+internal struct TextInputComponentPreviews: PreviewProvider {
     static var previews: some View {
-        TextInputComponentComponentWrapperView()
+        TextInputComponentWrapperView()
     }
 }
 
-internal struct TextInputComponentComponentWrapperView: View {
-    @ObservedObject public var config = TextInputComponentComponentConfig()
+internal struct TextInputComponentWrapperView: View {
+    @ObservedObject public var config = TextInputComponentConfig()
 
     public var body: some View {
         PropertyEditor(
@@ -41,7 +41,7 @@ internal struct TextInputComponentComponentWrapperView: View {
             ]
         ) {
             VStack {
-                TextInputComponentComponent(config: config)
+                TextInputComponent(config: config)
 
                 EnumPropertyView(
                     value: $config.variant,

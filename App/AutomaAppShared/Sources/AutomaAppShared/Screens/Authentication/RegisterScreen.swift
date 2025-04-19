@@ -7,6 +7,7 @@ import AutomaUIKit
 import DataTypes
 import SwiftUI
 
+/// Register view, where user can register a new account
 public struct RegisterScreen: View {
     @StateObject public var phoneInputConfig: PhoneNumberTextInputComponentConfig = .init()
     @StateObject public var verificationInputConfig: VerificationCodeInputComponentConfig = .init()
