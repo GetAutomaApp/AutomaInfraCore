@@ -15,7 +15,7 @@ jobs:
         with:
           swift-version: "6.1"
 
-      - run: ls -al CLI/.build
+      - run: ls -al ./
 
       - name: Get Cache
         uses: actions/cache@v3
@@ -24,7 +24,7 @@ jobs:
           key: cli-cache-${{ hashFiles('CLI/Package.resolved') }}
           path: CLI/.build
 
-      - run: ls -al CLI/.build
+      - run: ls -al ./
 
       - name: Run SwiftTesting
         uses: GetAutomaApp/opensource-actions/swifttesting@5-implement-standardized-swift-test-action
