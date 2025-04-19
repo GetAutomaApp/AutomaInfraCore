@@ -1,6 +1,0 @@
-services:
-  alpine:
-    image: alpine:latest
-    container_name: alpine_box_1
-    command: tail -f /dev/null
-    tty: true

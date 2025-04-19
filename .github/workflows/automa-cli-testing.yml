@@ -7,7 +7,7 @@ on:
 
 jobs:
   swifttest:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -26,5 +26,4 @@ jobs:
         uses: GetAutomaApp/opensource-actions/swifttesting@5-implement-standardized-swift-test-action
         with:
           working-directory: './CLI'
-          compose: 'true'
-          compose-file: '../docker-compose.yml'
+          compose: 'false'
