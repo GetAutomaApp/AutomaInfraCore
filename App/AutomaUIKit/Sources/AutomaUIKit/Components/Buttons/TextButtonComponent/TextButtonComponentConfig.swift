@@ -6,6 +6,12 @@
 import SwiftUI
 
 /// Enum defining the different variants of the TextButton component.
+/// This enum provides various button shape options that can be used to customize the appearance of text buttons.
+///
+/// - circle: A circular button shape
+/// - generic: A standard button shape with default styling
+/// - pill: An elongated button with fully rounded ends
+/// - square: A button with equal width and height
 public enum TextButtonVariants: String, CaseIterable {
     case circle
     case generic
@@ -13,69 +19,98 @@ public enum TextButtonVariants: String, CaseIterable {
     case square
 }
 
-/// Configuration for the TextButtonComponent that extends from `ButtonFrameComponentConfig`.
-/// It defines the visual style, state (enabled/disabled), and the default text.
+/// Configuration class for the TextButtonComponent that extends from `ButtonFrameComponentConfig`.
+/// This class manages the visual styling, state management, and text content of a text button component.
+///
+/// The configuration includes:
+/// - Button variant selection (shape and layout)
+/// - Enabled/disabled state management
+/// - Button text content
+/// - Variant-specific styling properties
 public class TextButtonComponentConfig: ButtonFrameComponentConfig {
-    /// The variant of the button (e.g., generic, square, circle, pill).
-    /// This controls the button's shape and layout style.
+    /// The variant of the button that determines its shape and layout style.
+    /// Changes to this property automatically trigger variant-specific styling updates.
+    ///
+    /// - Note: Default value is `.generic`
     @Published public var variant: TextButtonVariants = .generic {
         didSet {
             applyVariantStyling()
         }
     }
 
-    /// Whether the button is disabled or not. When disabled, the button appears inactive.
+    /// Controls the enabled/disabled state of the button.
+    /// When set to `true`, the button becomes inactive and its appearance is updated accordingly.
+    ///
+    /// - Note: Default value is `false` (enabled)
     @Published public var isDisabled: Bool = false {
         didSet {
             manageDisabledState()
         }
     }
 
-    /// The text to display on the button. This defines the visual text that the button will use
+    /// The text content displayed on the button.
+    /// This property defines the button's label that will be shown to users.
+    ///
+    /// - Note: Default value is "Enter Text Here"
     @Published public var text: String = "Enter Text Here"
 
-    /// Initializes the `TextButtonComponentConfig` with default styling.
+    /// Initializes a new instance of TextButtonComponentConfig with default settings.
     ///
-    /// This calls the superclass's initializer and applies the default styling for the button's variant.
+    /// This initializer:
+    /// 1. Calls the superclass initializer
+    /// 2. Applies the default variant styling
+    ///
+    /// - Returns: A configured TextButtonComponentConfig instance
     public init() {
         super.init()
         applyVariantStyling()
     }
 
-    /// Applies the appropriate styling based on the selected variant.
+    /// Applies styling properties based on the current button variant.
     ///
-    /// This method adjusts properties like `isCircular`, `roundness`, `fillSpace`, and `defaultPadding`
-    /// based on the button's variant (generic, square, circle, or pill).
+    /// This method configures the following properties for each variant:
+    /// - isCircular: Determines if the button has circular corners
+    /// - roundness: The corner radius for non-circular variants
+    /// - fillSpace: Whether the button should expand to fill available space
+    /// - defaultPadding: The internal padding of the button
     public func applyVariantStyling() {
         switch variant {
         case .generic:
+            // Apply standard button styling with default corner radius
             isCircular = false
             roundness = DesignTokens.defaultCornerRadius
             fillSpace = true
         case .square:
+            // Apply square button styling with equal dimensions
             isCircular = false
             roundness = DesignTokens.defaultCornerRadius
             fillSpace = false
             defaultPadding = DesignTokens.padding.buttonEven
         case .circle:
+            // Apply circular button styling
             isCircular = true
             fillSpace = false
             defaultPadding = DesignTokens.padding.buttonEven
         case .pill:
+            // Apply pill-shaped button styling with rounded ends
             isCircular = true
             fillSpace = true
             defaultPadding = DesignTokens.padding.button
         }
     }
 
-    /// Manages the disabled state of the button.
+    /// Updates the button's frame variant based on its disabled state.
     ///
-    /// When the button is disabled (`isDisabled = true`), the button's frame variant is set to `.disabled`.
-    /// If the button is not disabled, it uses the `.generic` frame variant.
+    /// This method:
+    /// - Sets the frame variant to `.disabled` when the button is disabled
+    /// - Sets the frame variant to `.generic` when the button is enabled
+    ///
+    /// - Note: This is automatically called when the `isDisabled` property changes
     public func manageDisabledState() {
         frameVariant = isDisabled ? .disabled : .generic
     }
 
+    /// Cleanup method called when the instance is being deallocated
     deinit {
         return
     }

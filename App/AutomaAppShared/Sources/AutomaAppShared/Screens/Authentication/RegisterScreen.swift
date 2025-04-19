@@ -7,26 +7,51 @@ import AutomaUIKit
 import DataTypes
 import SwiftUI
 
-/// Register view, where user can register a new account
+/// A view that handles the user registration process through phone number verification
+///
+/// This screen manages a two-step registration process:
+/// 1. Phone number input and verification code request
+/// 2. Verification code input and account creation
+///
+/// The view handles:
+/// - Phone number validation
+/// - SMS code sending and verification
+/// - Timeout management for code resending
+/// - Error handling and display
 public struct RegisterScreen: View {
+    /// Configuration for the phone number input field
     @StateObject public var phoneInputConfig: PhoneNumberTextInputComponentConfig = .init()
+
+    /// Configuration for the verification code input field
     @StateObject public var verificationInputConfig: VerificationCodeInputComponentConfig = .init()
+
+    /// Countdown timer for code resending timeout
     @State public var timeout: Double = 0
 
+    /// Environment configuration containing API base URL and authentication state
     @EnvironmentObject public var baseEnvironmentConfig: BaseAppEnvironmentObject
 
+    /// Authentication controller for handling API requests
     var authInteractor: AuthenticationControllerInteractor {
-        .init(
-            baseURL: baseEnvironmentConfig.apiBaseURL
-        )
+        .init(baseURL: baseEnvironmentConfig.apiBaseURL)
     }
 
+    /// State tracking whether the previous error was a timeout
     @State private var wasPreviousErrorTimeout: Bool = false
+
+    /// Controls whether timeout error messages should be displayed
     @State private var shouldShowTimeoutError: Bool = true
-    @State private var timer: Timer? // To avoid race conditions
+
+    /// Timer instance for managing countdown
+    @State private var timer: Timer?
+
+    /// Indicates whether verification code has been sent
     @State private var didSendCode: Bool = false
+
+    /// Tracks if the verification code input is valid
     @State private var isValidVerificationScreenState: Bool = false
 
+    /// Formats the timeout duration into a user-friendly message
     private var formattedTimeout: String {
         let error = String(format: "%.1f", timeout)
         if !didSendCode {
@@ -36,8 +61,14 @@ public struct RegisterScreen: View {
         }
     }
 
+    /// Creates a new instance of the registration screen
     public init() {}
 
+    /// The main view body implementing the registration UI
+    ///
+    /// Displays either:
+    /// - Phone number input screen with validation
+    /// - Verification code input screen with resend option
     public var body: some View {
         VStack {
             if !didSendCode {
@@ -96,6 +127,9 @@ public struct RegisterScreen: View {
         }
     }
 
+    /// Starts the countdown timer for code resending timeout
+    ///
+    /// Updates the UI every 0.1 seconds and manages error messages
     @MainActor
     private func startTimer() {
         timer?.invalidate() // Invalidate existing timer if it exists
@@ -121,11 +155,15 @@ public struct RegisterScreen: View {
         }
     }
 
+    /// Stops and invalidates the countdown timer
     private func stopTimer() {
         timer?.invalidate()
         timer = nil
     }
 
+    /// Sends authentication code to the provided phone number
+    ///
+    /// Handles API response and updates UI state based on the result
     public func sendAuthenticationCode() async {
         let phoneNumber = phoneInputConfig.phoneNumber
         do {
@@ -151,6 +189,12 @@ public struct RegisterScreen: View {
         }
     }
 
+    /// Verifies the entered authentication code
+    ///
+    /// On successful verification:
+    /// - Stores authentication tokens in keychain
+    /// - Updates login state
+    /// - Handles potential errors
     public func verifyAuthenticationCode() async {
         let phoneNumber = phoneInputConfig.phoneNumber
         let code = verificationInputConfig.text
@@ -184,6 +228,9 @@ public struct RegisterScreen: View {
         }
     }
 
+    /// Creates a binding for phone number validation state
+    ///
+    /// Returns a computed binding that considers both timeout and phone number validity
     private func createIsValidPhoneNumberBinding() -> Binding<Bool> {
         .init(get: {
             timeout == 0 && phoneInputConfig.isValid

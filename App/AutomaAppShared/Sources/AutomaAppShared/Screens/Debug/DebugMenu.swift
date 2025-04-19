@@ -13,27 +13,41 @@
 import AutomaUIKit
 import SwiftUI
 
+/// Represents the available base environment URLs for the application
+/// Used to switch between different API environments
 internal enum BaseEnvironmentUrl: String, CaseIterable {
+    /// Local development environment
     case localhost = "http://localhost:8080"
+    /// Production environment
     case production = "https://api-production.getautoma.app"
+    /// Sandbox testing environment
     case sandbox = "https://api-sandbox.getautoma.app"
+    /// Staging environment
     case staging = "https://api-staging.getautoma.app"
 }
 
-/// Debug menu for application, to change app behavior, environment and other configuration options
+/// Debug menu view for the application
+/// Provides interface for changing app behavior, environment and other configuration options
 public struct DebugMenu: View {
+    /// Environment object for managing base application configuration
     @EnvironmentObject public var baseEnvironmentConfig: BaseAppEnvironmentObject
 
+    /// Configuration for the close button in the debug menu
     @StateObject public var closeButtonConfig: IconButtonComponentConfig = .init()
 
+    /// Configuration for the environment URL picker text input
     @StateObject public var environmentPickerConfig: TextInputFrameComponentConfig = .init(
         text: BaseEnvironmentUrl.sandbox.rawValue
     )
 
+    /// Configuration for the environment picker confirmation button
     @StateObject public var environmentPicketButtonConfig: TextButtonComponentConfig = .init()
 
+    /// Initializes a new instance of the debug menu
     public init() {}
 
+    /// The body of the debug menu view
+    /// Displays sections for profile actions and API configuration
     public var body: some View {
         Form {
             Section {
@@ -112,6 +126,7 @@ public struct DebugMenu: View {
     }
 }
 
+/// SwiftUI preview provider for the DebugMenu view
 #Preview {
     DebugMenu()
         .preferredColorScheme(.dark)

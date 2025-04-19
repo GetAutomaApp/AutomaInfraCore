@@ -6,17 +6,26 @@
 import AutomaUIKit
 import SwiftUI
 
+/// Represents the available authentication routes in the onboarding flow
+/// - login: Route to the login screen
+/// - register: Route to the registration screen
 internal enum AuthScreenRoute {
     case login
     case register
 }
 
-/// Authentication picker on onboarding screen, where a user can choose to login or register
+/// Authentication picker screen presented during onboarding
+/// Allows users to choose between logging in to an existing account or registering a new one
+/// This screen serves as the entry point to the authentication flow
 public struct OnboardingAuthPickerScreen: View {
+    /// Navigation path state storing the current authentication route
     @State private var path: [AuthScreenRoute] = []
 
+    /// Initializes a new instance of the OnboardingAuthPickerScreen
     public init() {}
 
+    /// The main view body of the OnboardingAuthPickerScreen
+    /// Presents a navigation stack with options to login or register
     public var body: some View {
         NavigationStack(path: $path) {
             OnboardingScreenFrame(
@@ -36,6 +45,8 @@ public struct OnboardingAuthPickerScreen: View {
         }
     }
 
+    /// Creates the title content for the onboarding screen
+    /// - Returns: A view containing the welcome message and app description
     @ViewBuilder
     private func makeTitleContent() -> some View {
         InfoPairComponent(config:
@@ -45,6 +56,8 @@ public struct OnboardingAuthPickerScreen: View {
             ))
     }
 
+    /// Creates the footer content containing authentication options
+    /// - Returns: A view with Register and Login buttons
     @ViewBuilder
     private func makeFooter() -> some View {
         VStack {
@@ -62,6 +75,7 @@ public struct OnboardingAuthPickerScreen: View {
     }
 }
 
+/// SwiftUI preview provider for OnboardingAuthPickerScreen
 #Preview {
     OnboardingAuthPickerScreen()
 }

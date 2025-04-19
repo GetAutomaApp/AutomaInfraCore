@@ -5,16 +5,22 @@
 
 import SwiftUI
 
+/// A preview provider for the TextButtonComponent that displays various configuration options and states
 internal struct TextButtonComponentPreviews: PreviewProvider {
+    /// Returns a view containing the TextButtonComponent previews with configurable properties
     static var previews: some View {
         TextButtonComponentPreviewsView()
     }
 }
 
+/// A view that provides an interactive preview of the TextButtonComponent with editable properties
 internal struct TextButtonComponentPreviewsView: View {
+    /// Shared configuration object for the TextButtonComponent that maintains its state
     @StateObject private var sharedConfig = TextButtonComponentConfig()
 
+    /// The main view body that displays the TextButtonComponent with its property editor
     public var body: some View {
+        // Create a property editor with configurable options for the TextButtonComponent
         PropertyEditor(
             object: sharedConfig,
             properties: [
@@ -28,16 +34,27 @@ internal struct TextButtonComponentPreviewsView: View {
             ]
         ) {
             VStack {
-                TextButtonComponent(config: sharedConfig, onSelfAppear: { config in
-                    config.text = "0"
-                }, action: { config in config.text = "\(Int(config.text)! + 1)" })
-                    .contentTransition(.symbolEffect(.replace))
+                // Display the TextButtonComponent with a counter functionality
+                TextButtonComponent(
+                    config: sharedConfig,
+                    onSelfAppear: { config in
+                        // Initialize the button text to "0"
+                        config.text = "0"
+                    },
+                    action: { config in
+                        // Increment the counter when button is pressed
+                        config.text = "\(Int(config.text)! + 1)"
+                    }
+                )
+                .contentTransition(.symbolEffect(.replace))
 
+                // Add frame variant selector
                 EnumPropertyView(
                     value: $sharedConfig.frameVariant,
                     cases: ButtonFrameVariants.allCases
                 )
 
+                // Add button variant selector
                 EnumPropertyView(
                     value: $sharedConfig.variant,
                     cases: TextButtonVariants.allCases

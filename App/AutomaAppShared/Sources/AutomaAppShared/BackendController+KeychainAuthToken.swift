@@ -7,7 +7,25 @@ import Alamofire
 import DataTypes
 import Foundation
 
+/// Extension to BackendControllerInteractor that provides network request functionality
 public extension BackendControllerInteractor {
+    /// Performs an HTTP request to the specified endpoint with optional authentication
+    ///
+    /// This method handles network requests with configurable parameters and optional JWT authentication.
+    /// If JWT authentication is enabled, it will attempt to retrieve an authentication token from the keychain
+    /// and add it to the request headers.
+    ///
+    /// - Parameters:
+    ///   - endpoint: The API endpoint to send the request to
+    ///   - method: The HTTP method to use for the request (GET, POST, etc.)
+    ///   - headers: Optional HTTP headers to include in the request
+    ///   - parameters: Optional parameters to be encoded in the request
+    ///   - encoding: The parameter encoding to use (defaults to JSONEncoding.default)
+    ///   - jwt: Boolean flag indicating whether to include JWT authentication (defaults to false)
+    ///
+    /// - Returns: A DataResponse object containing the response data or error
+    ///
+    /// - Note: The method uses async/await pattern and internally manages the continuation
     func performRequest(
         endpoint: String,
         method: Alamofire.HTTPMethod,

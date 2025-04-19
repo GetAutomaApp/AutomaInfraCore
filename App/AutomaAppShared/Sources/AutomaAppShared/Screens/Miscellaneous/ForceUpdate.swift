@@ -7,18 +7,27 @@ import AutomaUIKit
 import StoreKit
 import SwiftUI
 
-/// View that shows when a user must update the app in order to continue using it
-/// (user has outdated version of the app)
+/// A view that forces users to update the app when they have an outdated version
+/// This view is displayed when a user must update the app to continue using it
 public struct ForceUpdate: View {
+    /// Initializes a new ForceUpdate view
+    /// - Returns: A new ForceUpdate view instance
     public init() {}
 
+    /// Configuration for the title and description text displayed at the top of the view
+    /// Initialized with default update notification messages
     @StateObject public var titleConfig: InfoPairComponentConfig = .init(
         title: "It's time for an update!",
         description: "You have an older version of the app!"
     )
 
+    /// Configuration for the update button displayed at the bottom of the view
+    /// Initialized with default settings
     @StateObject public var buttonConfig: TextButtonComponentConfig = .init()
 
+    /// The body of the ForceUpdate view
+    /// Displays a vertical stack containing an info pair component for the title/description
+    /// and a button that opens the App Store update page
     public var body: some View {
         VStack(alignment: .leading) {
             InfoPairComponent(config: titleConfig)
@@ -31,6 +40,8 @@ public struct ForceUpdate: View {
         }.defaultScreenPadding()
     }
 
+    /// Opens the App Store page for the app to allow the user to update
+    /// Uses UIApplication to open the URL in the default browser or App Store app
     public func openUpdateScreen() {
         if let url = URL(string: "https://apps.apple.com/us/app/places-curated-discovery/id6446208302") {
             UIApplication.shared.open(url)
@@ -38,6 +49,8 @@ public struct ForceUpdate: View {
     }
 }
 
+/// Preview provider for the ForceUpdate view
+/// Shows the view in dark mode for development purposes
 #Preview {
     ForceUpdate()
         .preferredColorScheme(.dark)
