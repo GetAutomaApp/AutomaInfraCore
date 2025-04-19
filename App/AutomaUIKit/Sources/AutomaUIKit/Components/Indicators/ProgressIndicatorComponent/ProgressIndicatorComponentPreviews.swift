@@ -22,7 +22,7 @@ internal struct TestProgressView: View {
                 [AnyKeyPath("Enable Animation", keyPath: \.isAnimating)],
                 [AnyKeyPath("Step Length", keyPath: \.stepLength)],
                 [AnyKeyPath("Step Height", keyPath: \.stepHeight)],
-                [AnyKeyPath("Step Colour", keyPath: \.stepColour)],
+                [AnyKeyPath("Step Color", keyPath: \.stepColor)],
             ]) {
                 VStack {
                     HStack {

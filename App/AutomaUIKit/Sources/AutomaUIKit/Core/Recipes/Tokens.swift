@@ -8,12 +8,12 @@ import SwiftUI
 public struct DesignColors: Sendable {
     public let primary: Color = .init(hex: "0FA958")
 
-    /// Text Colours
+    /// Text Colors
     public let primaryText: Color = .init(hex: "FFFFFF")
     public let secondaryText: Color = .init(hex: "B4B4B4")
     public let textDark: Color = .init(hex: "000000")
 
-    /// Whitespace Colours
+    /// Whitespace Colors
     public let primaryWhitespace1: Color = .init(hex: "000000")
     public let primaryWhitespace2: Color = .init(hex: "3C3C3C")
     public let primaryWhitespace3: Color = .init(hex: "7C7C7C")

@@ -5,15 +5,20 @@
 
 import SwiftUI
 
+/// A preview provider for the ButtonFrameComponent
 internal struct ButtonFrameComponentPreviews: PreviewProvider {
+    /// Returns a view containing various button frame component previews
     static var previews: some View {
         ButtonFrameComponentPreviewsView()
     }
 }
 
+/// A view that displays various configurations and examples of ButtonFrameComponent
 internal struct ButtonFrameComponentPreviewsView: View {
+    /// The configuration object for the button frame component
     @StateObject public var buttonConfig: ButtonFrameComponentConfig = .init()
 
+    /// The main view body displaying property controls and button examples
     public var body: some View {
         PropertyEditor(
             object: buttonConfig,
@@ -52,12 +57,18 @@ internal struct ButtonFrameComponentPreviewsView: View {
     }
 }
 
+/// A view that demonstrates automatic variations of button styles and configurations
 internal struct AutoButtonVariationsView: View {
+    /// The configuration controller for the button frame component
     @StateObject public var buttonController: ButtonFrameComponentConfig = .init()
+
+    /// Tracks whether the automatic variation timer is active
     @State private var isTimerActive = false
 
+    /// The delay between automatic style changes in seconds
     public let switchDelay: TimeInterval = 0.5
 
+    /// The main view body displaying buttons with automatic style variations
     public var body: some View {
         HStack {
             ButtonFrameComponent(config: buttonController, action: { config in
@@ -78,23 +89,31 @@ internal struct AutoButtonVariationsView: View {
         }
     }
 
+    /// Starts the automatic variant changing timer if it's not already active
+    /// This function initiates a cycle of automatic style changes for the button
     public func startChangingVariant() {
+        // Check if timer is already active to prevent multiple timers
         if isTimerActive {
             return
         }
 
         isTimerActive = true
 
+        // Schedule the first variant update
         DispatchQueue.main.asyncAfter(deadline: .now() + switchDelay) {
             updateVariant()
         }
     }
 
+    /// Updates the button's appearance with random variants and configurations
+    /// This function is called repeatedly while the timer is active
     public func updateVariant() {
+        // Randomly update button properties
         buttonController.frameVariant = .allCases.randomElement()!
         buttonController.isCircular = .random()
         buttonController.fillSpace = .random()
 
+        // Schedule next update if timer is still active
         if isTimerActive {
             DispatchQueue.main.asyncAfter(deadline: .now() + switchDelay) {
                 updateVariant()
@@ -102,6 +121,8 @@ internal struct AutoButtonVariationsView: View {
         }
     }
 
+    /// Stops the automatic variant changing timer
+    /// This function halts the automatic style changes for the button
     public func stopChangingVariant() {
         isTimerActive = false
     }
