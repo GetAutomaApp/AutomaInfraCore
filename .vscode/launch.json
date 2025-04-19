@@ -17,6 +17,24 @@
             "name": "Release App (Backend)",
             "program": "${workspaceFolder:AutomaInfraCore}/Backend/.build/release/App",
             "preLaunchTask": "swift: Build Release App (Backend)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:AutomaInfraCore}/CLI",
+            "name": "Debug AutomaCLI (CLI)",
+            "program": "${workspaceFolder:AutomaInfraCore}/CLI/.build/debug/AutomaCLI",
+            "preLaunchTask": "swift: Build Debug AutomaCLI (CLI)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:AutomaInfraCore}/CLI",
+            "name": "Release AutomaCLI (CLI)",
+            "program": "${workspaceFolder:AutomaInfraCore}/CLI/.build/release/AutomaCLI",
+            "preLaunchTask": "swift: Build Release AutomaCLI (CLI)"
         }
     ]
 }
