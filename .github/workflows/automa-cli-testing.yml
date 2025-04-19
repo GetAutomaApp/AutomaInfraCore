@@ -17,6 +17,8 @@ jobs:
         with:
           key: cli-cache-${{ hashFiles('CLI/Package.resolved') }}
           path: CLI/.build
+          restore-keys: |
+            cli-cache-
 
       - name: Run SwiftTesting
         uses: GetAutomaApp/opensource-actions/swifttesting@5-implement-standardized-swift-test-action
