@@ -18,9 +18,10 @@ jobs:
       - name: Run Unit Tests
         uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
-          compose: "true"
+          compose: "false"
           working-directory: "./Backend"
-          extra_args: "--filter '.*UnitTests.*'"
+          swift_test_extra_args: "--filter '.*UnitTests.*'"
+
 
   integration-tests:
     runs-on: ubuntu-latest
@@ -36,4 +37,5 @@ jobs:
         with:
           compose: "true"
           working-directory: "./Backend"
-          extra_args: "--filter '.*IntegrationTests.*'"
+          swift_test_extra_args: "--filter '.*IntegrationTests.*'"
+          docker_compose_extra_args: "--scale api_dev=0 --scale worker_dev=0"
