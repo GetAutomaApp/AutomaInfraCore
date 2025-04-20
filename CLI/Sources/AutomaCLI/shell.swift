@@ -6,37 +6,51 @@
 import DataTypes
 import Foundation
 
-/// The output information of a shell command
+/// The output information of a shell command.
 public struct ShellOutput {
+    /// The standard output of the command.
     public let stdout: String?
+    /// The standard error output of the command.
     public let stderr: String?
+    /// The exit status of the command.
     public let exitStatus: Int
+    /// A flag indicating whether the command resulted in an error.
     public let isError: Bool
+    /// The command that was executed.
     public let command: String
 }
 
+/// Enum representing different operating systems.
 public enum OperatingSystem {
     case linux
     case macos
     case unknown(value: String)
 }
 
-/// A simple shell wrapper in Swift, to execute shell commands
+/// A simple shell wrapper in Swift, to execute shell commands.
 public struct Shell {
+    /// The operating system on which the shell is running.
     public let operatingSystem: OperatingSystem
+    /// The command used to copy text to the clipboard.
     public let copyCommand: String
 
+    /// Initializes a new instance of `Shell`.
+    /// - Throws: An error if the operating system cannot be determined.
     init() throws {
         operatingSystem = try Self.getOperatingSystem()
         copyCommand = Self.getCopyCommand(os: operatingSystem)
     }
 
+    /// Executes a shell command and returns the output.
+    /// - Parameter command: The command to execute.
+    /// - Returns: The output of the command.
     @discardableResult
     public static func run(_ command: String) -> ShellOutput {
         let task = Process()
         let stdoutPipe = Pipe()
         let stderrPipe = Pipe()
 
+        // Set up the process to execute the command
         task.standardOutput = stdoutPipe
         task.standardError = stderrPipe
         task.executableURL = URL(filePath: "/bin/zsh")
@@ -47,6 +61,7 @@ public struct Shell {
         task.standardInput = nil
         try! task.run()
 
+        // Read the output from the command
         let stdoutData = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
         let stderrData = stderrPipe.fileHandleForReading.readDataToEndOfFile()
 
@@ -66,6 +81,9 @@ public struct Shell {
         )
     }
 
+    /// Determines the operating system on which the shell is running.
+    /// - Returns: The detected operating system.
+    /// - Throws: An error if the operating system cannot be determined.
     private static func getOperatingSystem() throws -> OperatingSystem {
         let result = Self.run("uname -s")
 
@@ -88,6 +106,9 @@ public struct Shell {
         }
     }
 
+    /// Gets the command used to copy text to the clipboard based on the operating system.
+    /// - Parameter os: The operating system.
+    /// - Returns: The command used to copy text to the clipboard.
     private static func getCopyCommand(os operatingSystem: OperatingSystem) -> String {
         switch operatingSystem {
         case .macos:
