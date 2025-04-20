@@ -11,16 +11,16 @@ import VaporTesting
 /// chat completion client implementations
 protocol ChatCompletionClientTestSuite {
     /// The default prompt to use for chat completion tests
-    public var defaultPrompt: String { get }
+    var defaultPrompt: String { get }
 
     /// The maximum number of tokens allowed in a chat completion
-    public var maxTokens: Int { get }
+    var maxTokens: Int { get }
 
     /// Creates a chat completion using the configured client
     /// - Parameter query: The chat completion request parameters
     /// - Returns: The generated chat completion result
     /// - Throws: Any errors that occur during the chat completion process
-    public func createChat(app: Application, query: ChatCompletionContent) async throws -> ChatCompletionResult
+    func createChat(app: Application, query: ChatCompletionContent) async throws -> ChatCompletionResult
 }
 
 extension ChatCompletionClientTestSuite {
@@ -42,7 +42,7 @@ extension ChatCompletionClientTestSuite {
     ///   - Application initialization errors
     ///   - Test execution errors
     ///   - Shutdown errors
-    public func withApp(test: (Application) async throws -> Void) async throws {
+    internal func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
             try await test(app)
@@ -62,7 +62,7 @@ extension ChatCompletionClientTestSuite {
     ///   - Client initialization errors
     ///   - Network errors
     ///   - Invalid response formats
-    public func createChat(app: Application, query: ChatCompletionContent) async throws -> ChatCompletionResult {
+    internal func createChat(app: Application, query: ChatCompletionContent) async throws -> ChatCompletionResult {
         let client = ChatCompletionClient(logger: app.logger)
 
         let queryWithMaxTokens: ChatCompletionContent = .init(

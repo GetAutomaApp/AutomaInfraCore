@@ -7,38 +7,60 @@ import DataTypes
 import Fluent
 import Vapor
 
+/// Model representing a user.
 public final class UserModel: Model, @unchecked Sendable {
     public static let schema = "User"
 
+    /// Unique identifier for the user.
     @ID(key: .id)
     public var id: UUID?
 
+    /// The username of the user.
     @Field(key: "username")
     public var username: String
 
+    /// The phone number of the user.
     @Field(key: "phone_number")
     public var phoneNumber: String
 
+    /// The Instagram handle of the user.
     @OptionalField(key: "instagram_handle")
     public var instagramHandle: String?
 
+    /// The profile picture key of the user.
     @OptionalField(key: "profile_picture_key")
     public var profilePictureKey: String?
 
+    /// Timestamp when the user was created.
     @Timestamp(key: "created_at", on: .create)
     public var createdAt: Date?
 
+    /// Timestamp when the user was last updated.
     @Timestamp(key: "updated_at", on: .update)
     public var updatedAt: Date?
 
+    /// Timestamp when the user was deleted.
     @Timestamp(key: "deleted_at", on: .delete)
     public var deletedAt: Date?
 
+    /// Indicates if the user has accepted terms.
     @Field(key: "accepted")
     public var accepted: Bool
 
+    /// Initializes a new instance of `UserModel`.
     init() {}
 
+    /// Initializes a new instance of `UserModel` with the provided parameters.
+    /// - Parameters:
+    ///   - id: Unique identifier for the user.
+    ///   - username: The username of the user.
+    ///   - phoneNumber: The phone number of the user.
+    ///   - instagramHandle: The Instagram handle of the user.
+    ///   - profilePictureKey: The profile picture key of the user.
+    ///   - createdAt: Timestamp when the user was created.
+    ///   - updatedAt: Timestamp when the user was last updated.
+    ///   - deletedAt: Timestamp when the user was deleted.
+    ///   - accepted: Indicates if the user has accepted terms.
     init(
         id: UUID? = nil,
         username: String,
@@ -61,6 +83,8 @@ public final class UserModel: Model, @unchecked Sendable {
         self.accepted = accepted
     }
 
+    /// Converts the model to a `UserDTO`.
+    /// - Returns: An instance of `UserDTO`.
     public func toDTO() -> UserDTO {
         let profilePictureUrl: String?
         do {
@@ -88,6 +112,9 @@ public final class UserModel: Model, @unchecked Sendable {
         )
     }
 
+    /// Creates a `UserModel` from a `UserDTO`.
+    /// - Parameter dto: The `UserDTO` to convert.
+    /// - Returns: An instance of `UserModel`.
     static func fromDTO(dto: UserDTO) -> UserModel {
         UserModel(
             id: dto.id,

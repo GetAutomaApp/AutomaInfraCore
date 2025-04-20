@@ -13,7 +13,7 @@ import VaporTesting
 protocol ImageGenerationClientTestSuite {
     /// The default prompt to use for image generation tests
     /// This prompt should generate safe, consistent test images
-    public var defaultPrompt: String { get }
+    var defaultPrompt: String { get }
 }
 
 extension ImageGenerationClientTestSuite {
@@ -31,7 +31,7 @@ extension ImageGenerationClientTestSuite {
     ///   - Application initialization errors
     ///   - Test execution errors
     ///   - Shutdown errors
-    public func withApp(test: (Application) async throws -> Void) async throws {
+    private func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
             try await test(app)
@@ -49,7 +49,7 @@ extension ImageGenerationClientTestSuite {
     /// - Parameter query: The image generation query parameters
     /// - Returns: The generated image result
     /// - Throws: Any errors that occur during the image generation process
-    public func generateImage(app: Application, query: GenerateImageQuery) async throws -> GenerateImageResult {
+    internal func generateImage(app: Application, query: GenerateImageQuery) async throws -> GenerateImageResult {
         let client = ImageGenerationClient(logger: app.logger)
         return try await client.generateImage(query)
     }

@@ -37,6 +37,7 @@ internal struct RSSFeedReaderClientTests {
     /// - Parameters:
     ///   - url: The URL to test fetching from
     ///   - feedExists: Whether the URL is expected to contain a valid feed
+    /// - Throws: Any errors that occur during test execution or feed parsing.
     @Test(
         "Get feed items when feed exists",
         arguments: [
@@ -51,11 +52,12 @@ internal struct RSSFeedReaderClientTests {
             (URL(string: "https://invalid-feed.com")!, false),
         ]
     )
-    public func getFeedItemsWhenFeedExists(url: URL, feedExists: Bool) async throws {
+    internal func getFeedItemsWhenFeedExists(url: URL, feedExists: Bool) async throws {
         try await withApp { app in
             let client = RSSFeedReaderClient(logger: app.logger)
 
             if !feedExists {
+                // Expect an error when the feed does not exist
                 try await #require(
                     throws: RSSFeedReaderClientError.self,
                     "Should throw error when feed does not exist"
@@ -65,17 +67,16 @@ internal struct RSSFeedReaderClientTests {
                 return
             }
 
+            // Read the feed from the URL
             let result = try await client.read(from: url)
 
+            // Ensure the feed contains items
             try #require(!result.items.isEmpty, "Feed should have items")
 
             for item in result.items {
+                // Ensure each item has a non-empty title
                 #expect(!item.title.isEmpty, "Item title should not be empty")
             }
         }
-    }
-
-    deinit {
-        return
     }
 }

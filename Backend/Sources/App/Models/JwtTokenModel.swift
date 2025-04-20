@@ -7,32 +7,50 @@ import DataTypes
 import Fluent
 import Vapor
 
+/// Model representing a JWT token.
 public final class JwtTokenModel: Model, @unchecked Sendable {
     public static let schema = "Jwt-Token"
 
+    /// Unique identifier for the JWT token.
     @ID(key: .id)
     public var id: UUID?
 
+    /// The JWT token string.
     @Field(key: "token")
     public var token: String
 
+    /// The user ID associated with the JWT token.
     @Field(key: "user_id")
     public var userId: UUID
 
+    /// The subject of the JWT token.
     @Enum(key: "subject")
     public var subject: JWTTokenSubject
 
+    /// Timestamp when the JWT token was created.
     @Timestamp(key: "created_at", on: .create)
     public var createdAt: Date?
 
+    /// Timestamp when the JWT token was last updated.
     @Timestamp(key: "updated_at", on: .update)
     public var updatedAt: Date?
 
+    /// Timestamp when the JWT token was deleted.
     @Timestamp(key: "deleted_at", on: .delete)
     public var deletedAt: Date?
 
+    /// Initializes a new instance of `JwtTokenModel`.
     init() {}
 
+    /// Initializes a new instance of `JwtTokenModel` with the provided parameters.
+    /// - Parameters:
+    ///   - id: Unique identifier for the JWT token.
+    ///   - token: The JWT token string.
+    ///   - userId: The user ID associated with the JWT token.
+    ///   - subject: The subject of the JWT token.
+    ///   - createdAt: Timestamp when the JWT token was created.
+    ///   - updatedAt: Timestamp when the JWT token was last updated.
+    ///   - deletedAt: Timestamp when the JWT token was deleted.
     init(
         id: UUID? = nil,
         token: String,
@@ -51,6 +69,8 @@ public final class JwtTokenModel: Model, @unchecked Sendable {
         self.deletedAt = deletedAt
     }
 
+    /// Converts the model to a `JwtTokenDTO`.
+    /// - Returns: An instance of `JwtTokenDTO`.
     public func toDTO() -> JwtTokenDTO {
         .init(
             id: id,
@@ -63,6 +83,9 @@ public final class JwtTokenModel: Model, @unchecked Sendable {
         )
     }
 
+    /// Creates a `JwtTokenModel` from a `JwtTokenDTO`.
+    /// - Parameter dto: The `JwtTokenDTO` to convert.
+    /// - Returns: An instance of `JwtTokenModel`.
     static func fromDTO(dto: JwtTokenDTO) -> JwtTokenModel {
         JwtTokenModel(
             id: dto.id, token: dto.token, userId: dto.userId, subject: dto.subject, createdAt: dto.createdAt,

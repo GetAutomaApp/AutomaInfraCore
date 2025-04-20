@@ -9,12 +9,22 @@ import JWT
 import Queues
 import Vapor
 
+/// Helper struct for authentication service operations.
 internal struct AuthenticationServiceHelper {
+    /// The database for writing operations.
     public let writeDb: Database
+    /// The database for reading operations.
     public let readDb: Database
+    /// The logger for logging messages.
     public let logger: Logger
 
+    /// Validates and deletes an authentication code.
+    /// - Parameters:
+    ///   - phoneNumber: The phone number associated with the code.
+    ///   - code: The authentication code to validate.
+    /// - Throws: Throws an error if validation fails.
     public func getValidateAndDeleteCode(phoneNumber: String, code: String) async throws {
+        // Log the start of code validation
         logger.info(
             "Starting validation of authentication code",
             metadata: [
@@ -25,6 +35,8 @@ internal struct AuthenticationServiceHelper {
         )
 
         let messageService = MessageService()
+
+        // Query the valid code by phone number and code
         let validCode = try await AuthenticationCodeModel
             .query(on: readDb)
             .filter(\.$phoneNumber == phoneNumber)
@@ -32,6 +44,7 @@ internal struct AuthenticationServiceHelper {
             .first()
 
         guard let validCode else {
+            // Log the error for invalid code
             logger.error(
                 "Authentication code is invalid",
                 metadata: [
@@ -44,6 +57,7 @@ internal struct AuthenticationServiceHelper {
             throw GenericErrors.invalidCode
         }
 
+        // Log the valid code
         logger.info(
             "Authentication code is valid",
             metadata: [
@@ -54,19 +68,31 @@ internal struct AuthenticationServiceHelper {
             ]
         )
 
+        // Send a Discord webhook event for valid code
         try messageService.sendDiscordWebhookAppEvent(
             input: phoneNumber,
             event: "submitted valid code `\(code)`",
             logger: logger
         )
 
+        // Delete the valid code from the database
         try await validCode.delete(on: writeDb)
     }
 
+    /// Returns the code deletion time.
+    /// - Returns: A `Date` representing the code deletion time.
     public func codeDeletionTime() -> Date {
-        Date().addingTimeInterval(15 * 60)
+        Date().addingTimeInterval(15 * 60) // Code expires after 15 minutes
     }
 
+    /// Generates an access token for a user.
+    /// - Parameters:
+    ///   - userId: The user ID.
+    ///   - expiresIn: The expiration time for the token.
+    ///   - subject: The subject of the token.
+    ///   - signer: The JWT signer.
+    /// - Returns: A signed JWT token string.
+    /// - Throws: Throws an error if token generation fails.
     public func generateAccessToken(
         userId: String,
         expiresIn: TimeInterval,
@@ -85,12 +111,15 @@ internal struct AuthenticationServiceHelper {
             tokenId: UUID()
         )
 
+        // Sign the token using the JWT signer
         let signedToken = try await signer.sign(token)
 
+        // Delete old tokens for the user
         try await deleteOldTokens(userId: userId, subject: subject, skip: 5)
 
         let tokenId = UUID()
 
+        // Save the new token to the database
         try await JwtTokenModel(
             id: tokenId,
             token: signedToken,
@@ -102,11 +131,18 @@ internal struct AuthenticationServiceHelper {
         return signedToken
     }
 
+    /// Deletes old tokens for a user.
+    /// - Parameters:
+    ///   - userId: The user ID.
+    ///   - subject: The subject of the tokens to delete.
+    ///   - skip: The number of tokens to skip before deleting.
+    /// - Throws: Throws an error if token deletion fails.
     public func deleteOldTokens(
         userId: UUID,
         subject: JWTTokenSubject,
         skip: Int? = nil
     ) async throws {
+        // Log the start of token deletion
         logger.info(
             "Deleting old tokens",
             metadata: [
@@ -117,7 +153,7 @@ internal struct AuthenticationServiceHelper {
             ]
         )
 
-        public var query = JwtTokenModel.query(on: writeDb)
+        var query = JwtTokenModel.query(on: writeDb)
             .filter(\.$userId == userId)
             .filter(\.$subject == subject)
             .sort(\.$createdAt, .descending)
@@ -126,9 +162,11 @@ internal struct AuthenticationServiceHelper {
             query = query.range(skip...)
         }
 
+        // Retrieve tokens to delete
         let tokensToDelete = try await query.all()
 
         for token in tokensToDelete {
+            // Delete each token
             try await token.delete(on: writeDb)
             logger.info(
                 "Deleted token",
@@ -140,10 +178,17 @@ internal struct AuthenticationServiceHelper {
         }
     }
 
+    /// Creates an authentication tokens payload.
+    /// - Parameters:
+    ///   - userId: The user ID.
+    ///   - signer: The JWT signer.
+    /// - Returns: An `AuthenticationTokensPayloadDTO` containing access and refresh tokens.
+    /// - Throws: Throws an error if token creation fails.
     public func createAuthenticationTokensPayload(
         userId: String,
         signer: Request.JWT
     ) async throws -> AuthenticationTokensPayloadDTO {
+        // Log the start of tokens payload creation
         logger.info(
             "Creating authentication tokens payload",
             metadata: [
@@ -153,6 +198,8 @@ internal struct AuthenticationServiceHelper {
         )
 
         let messageService = MessageService()
+
+        // Generate access and refresh tokens
         let accessToken = try await generateAccessToken(
             userId: userId,
             expiresIn: 86400,
@@ -171,6 +218,7 @@ internal struct AuthenticationServiceHelper {
             refreshToken: refreshToken
         )
 
+        // Log the successful creation of tokens payload
         logger.info(
             "Successfully created authentication tokens payload",
             metadata: [
@@ -181,6 +229,7 @@ internal struct AuthenticationServiceHelper {
             ]
         )
 
+        // Send a Discord webhook event for tokens creation
         try messageService.sendDiscordWebhookAppEvent(
             input: userId,
             event: "generated tokens: `access: \(accessToken.count)` `refresh: \(refreshToken.count)`",
@@ -190,12 +239,16 @@ internal struct AuthenticationServiceHelper {
         return tokensPayload
     }
 
+    /// Retrieves the distance for authentication code validation.
+    /// - Returns: A `Double` representing the distance.
+    /// - Throws: Throws an error if retrieval fails.
     public func getDistance() throws -> Double {
         let distanceRawValue = try Environment.getOrThrow("AUTHENTICATION_CODE_DISTANCE")
 
         guard
             let distance = Double(distanceRawValue)
         else {
+            // Log the error for conversion failure
             logger.error(
                 "Could not convert AUTHENTICATION_CODE_DISTANCE raw value to Double.",
                 metadata: [
@@ -208,12 +261,21 @@ internal struct AuthenticationServiceHelper {
         return distance
     }
 
+    /// Sends an authentication code to a user.
+    /// - Parameters:
+    ///   - queue: The queue for dispatching jobs.
+    ///   - code: The authentication code to send.
+    ///   - phoneNumber: The phone number to send the code to.
+    ///   - codeModelId: The ID of the code model.
+    /// - Returns: An `AuthenticationCodeResponseDTO` indicating success and timeout.
+    /// - Throws: Throws an error if sending the code fails.
     public func sendAuthCode(
         queue: Queue,
         code: String,
         phoneNumber: String,
         codeModelId: UUID
     ) async throws -> AuthenticationCodeResponseDTO {
+        // Dispatch a job to send the authentication code
         try await queue.dispatch(
             TransactionalMessageAsyncJob.self,
             .init(
@@ -232,8 +294,10 @@ internal struct AuthenticationServiceHelper {
             deletedAt: codeDeletionTime()
         )
 
+        // Save the code model to the database
         try await codeModel.save(on: writeDb)
 
+        // Log the successful sending of the code
         logger.info(
             "Sent verification code to user",
             metadata: [
@@ -249,6 +313,13 @@ internal struct AuthenticationServiceHelper {
         return .init(success: true, timeout: 60)
     }
 
+    /// Handles the case where an authentication code was not sent due to a specific error.
+    /// - Parameters:
+    ///   - code: The authentication code.
+    ///   - phoneNumber: The phone number to send the code to.
+    ///   - codeModelId: The ID of the code model.
+    ///   - error: The specific error that occurred.
+    /// - Throws: Throws the provided error.
     public func handleAuthCodeNotSent(
         code: String,
         phoneNumber: String,
@@ -256,8 +327,9 @@ internal struct AuthenticationServiceHelper {
         error: GenericErrors
     ) throws {
         BackendMetric.totalFailedVerificationCodesSent.increment()
+        // Log the error for failed code sending
         logger.error(
-            "Couldn't Sent verification code to user",
+            "Couldn't sent verification code to user",
             metadata: [
                 "to": .string("AuthenticationService.sendAuthCode"),
                 "phoneNumber": .string(phoneNumber),
@@ -269,6 +341,13 @@ internal struct AuthenticationServiceHelper {
         throw error
     }
 
+    /// Handles the case where an authentication code was not sent due to an unknown error.
+    /// - Parameters:
+    ///   - code: The authentication code.
+    ///   - phoneNumber: The phone number to send the code to.
+    ///   - codeModelId: The ID of the code model.
+    ///   - error: The unknown error that occurred.
+    /// - Throws: Throws a generic unknown error.
     public func handleAuthCodeNotSent(
         code: String,
         phoneNumber: String,
@@ -276,8 +355,9 @@ internal struct AuthenticationServiceHelper {
         error: any Error
     ) throws {
         BackendMetric.totalFailedVerificationCodesSent.increment()
+        // Log the error for failed code sending
         logger.error(
-            "Couldn't Sent verification code to user",
+            "Couldn't sent verification code to user",
             metadata: [
                 "to": .string("AuthenticationService.sendAuthCode"),
                 "phoneNumber": .string(phoneNumber),

@@ -8,9 +8,18 @@ import Fluent
 import OpenAI
 import Vapor
 
+/// Service for managing profile picture generation.
 internal struct ProfilePictureService {
+    /// Logger for logging messages.
     public let logger: Logger
 
+    /// Creates a profile picture for a user.
+    /// - Parameters:
+    ///   - user: The user data transfer object.
+    ///   - totalRegenerationAttempts: The total number of regeneration attempts.
+    ///   - excludeText: Flag indicating whether to exclude text from the image.
+    /// - Returns: A string representing the S3 URL of the generated profile picture.
+    /// - Throws: Throws an error if profile picture generation fails.
     public func createProfilePicture(for user: UserDTO, totalRegenerationAttempts: Int = 3,
                                      excludeText: Bool = true) async throws -> String
     {
@@ -18,6 +27,7 @@ internal struct ProfilePictureService {
             let tigrisService = try TigrisService()
             let messageService = MessageService()
 
+            // Create a query for generating the profile picture
             let query = AIPromptFormatterService.createOpenAIProfilePictureQuery(
                 username: user.username
             )
@@ -27,6 +37,7 @@ internal struct ProfilePictureService {
                 throw GenericErrors.invalidUserId
             }
 
+            // Log the start of profile picture generation
             logger.info(
                 "Generating profile picture",
                 metadata: [
@@ -37,6 +48,7 @@ internal struct ProfilePictureService {
                 ]
             )
 
+            // Send a Discord webhook event for profile picture generation
             try messageService
                 .sendDiscordWebhookAppEvent(
                     input: "generating profile picture for \(userId) - \(user.username)",
@@ -44,12 +56,14 @@ internal struct ProfilePictureService {
                     logger: logger
                 )
 
+            // Generate the image
             let result = try await generateImage(
                 totalRegenerationAttempts: totalRegenerationAttempts,
                 query: query,
                 excludeText: excludeText
             )
 
+            // Generate the S3 URL for the image
             let s3Url = try generateImageKey(for: user)
 
             let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
@@ -57,6 +71,7 @@ internal struct ProfilePictureService {
 
             let jsonEncoder = JSONEncoder()
 
+            // Upload the image and metadata to S3
             _ = try await (
                 tigrisService
                     .put(
@@ -75,8 +90,10 @@ internal struct ProfilePictureService {
                 )
             )
 
+            // Get the Tigris URL for the image
             let url = try tigrisService.getTigrisUrl(s3Url)
 
+            // Send a Discord webhook event for successful profile picture generation
             try messageService
                 .sendDiscordWebhookAppEvent(
                     input: "generated profile picture for \(userId) - \(user.username)",
@@ -85,6 +102,7 @@ internal struct ProfilePictureService {
                     logger: logger
                 )
 
+            // Log the successful generation of the profile picture
             logger.info(
                 "Successfully generated profile picture for user",
                 metadata: [
@@ -100,6 +118,7 @@ internal struct ProfilePictureService {
             BackendMetric.totalProfilePicturesGenerated.increment()
             return s3Url
         } catch {
+            // Log the error for failed profile picture generation
             logger.error(
                 "Failed to generate profile picture",
                 metadata: [
@@ -115,16 +134,23 @@ internal struct ProfilePictureService {
         }
     }
 
+    /// Generates an image based on the provided query.
+    /// - Parameters:
+    ///   - totalRegenerationAttempts: The total number of regeneration attempts.
+    ///   - query: The query for generating the image.
+    ///   - excludeText: Flag indicating whether to exclude text from the image.
+    /// - Returns: A `GenerateImageResult` object containing the generated image.
+    /// - Throws: Throws an error if image generation fails.
     private func generateImage(totalRegenerationAttempts: Int, query: GenerateImageQuery,
                                excludeText: Bool) async throws -> GenerateImageResult
     {
         let textExtractionService = TextExtractionService()
         let imageClient = ImageGenerationClient(logger: logger)
 
-        public var hasText = false
-        public var totalAttemptsLeft = totalRegenerationAttempts
+        var hasText = false
+        var totalAttemptsLeft = totalRegenerationAttempts
 
-        public var result: GenerateImageResult?
+        var result: GenerateImageResult?
         // If there is still text on the image after 3 attempts, we will ignore the text and continue generating the
         // image
         repeat {
@@ -143,6 +169,7 @@ internal struct ProfilePictureService {
             throw GenericErrors.missingImage
         }
 
+        // Log the attempt to generate an image without text
         logger.info(
             "Attempted to generate an image without text",
             metadata: [
@@ -155,6 +182,10 @@ internal struct ProfilePictureService {
         return result
     }
 
+    /// Generates an image key for a user.
+    /// - Parameter user: The user data transfer object.
+    /// - Returns: A string representing the S3 URL of the image.
+    /// - Throws: Throws an error if the user ID is invalid.
     public func generateImageKey(for user: UserDTO) throws -> String {
         let bucket = try Environment.getOrThrow("TIGRIS_MEDIA_BUCKET_NAME")
 

@@ -31,7 +31,7 @@ internal struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
             GenerateImageModel.dall_e_2, // will use openai client
         ]
     )
-    public func generateImageResultSuccess(model: GenerateImageModel) async throws {
+    internal func generateImageResultSuccess(model: GenerateImageModel) async throws {
         try await withApp { app in
             let totalImagesToGenerate = 1
 
@@ -45,6 +45,7 @@ internal struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
                 imageStyle: .vivid
             ))
 
+            // Verify the number of images generated matches the request
             #expect(result.images.count == totalImagesToGenerate)
         }
     }

@@ -2,7 +2,9 @@ import Vapor
 import Fluent
 import DataTypes
 
+/// Represents a model for `__CAPNAME__`.
 public final class __CAPNAME__Model: Model, @unchecked Sendable {
+    /// The schema name for the model.
     public static let schema = "__CAPNAME_DASHED__"
 
     @ID(key: .id)
@@ -17,8 +19,15 @@ public final class __CAPNAME__Model: Model, @unchecked Sendable {
     @Timestamp(key: "deleted_at", on: .delete)
     public var deletedAt: Date?
 
+    /// Initializes a new instance of `__CAPNAME__Model`.
     init() {}
 
+    /// Initializes a new instance of `__CAPNAME__Model` with the given parameters.
+    /// - Parameters:
+    ///   - id: The unique identifier for the model.
+    ///   - createdAt: The creation date of the model.
+    ///   - updatedAt: The last update date of the model.
+    ///   - deletedAt: The deletion date of the model.
     init(
         id: UUID? = nil,
         createdAt: Date? = nil,
@@ -31,7 +40,8 @@ public final class __CAPNAME__Model: Model, @unchecked Sendable {
         self.deletedAt = deletedAt
     }
 
-
+    /// Converts the model to a DTO.
+    /// - Returns: A `__CAPNAME__DTO` representing the model.
     public func toDTO() -> __CAPNAME__DTO {
         .init(
             id: id,
@@ -41,6 +51,9 @@ public final class __CAPNAME__Model: Model, @unchecked Sendable {
         )
     }
 
+    /// Creates a model from a DTO.
+    /// - Parameter dto: The DTO to convert.
+    /// - Returns: A `__CAPNAME__Model` representing the DTO.
     static func fromDTO(dto: __CAPNAME__DTO) -> __CAPNAME__Model {
         let model = __CAPNAME__Model(
             id: dto.id,  createdAt: dto.createdAt, updatedAt: dto.updatedAt, deletedAt: dto.deletedAt
@@ -49,6 +62,6 @@ public final class __CAPNAME__Model: Model, @unchecked Sendable {
     }
 
     deinit {
-    	return
-	}
+        return
+    }
 }

@@ -8,9 +8,13 @@ import Fluent
 import SotoS3
 import Vapor
 
+/// Service for interacting with Tigris S3 storage.
 internal struct TigrisService: ~Copyable {
+    /// The S3 client for interacting with Tigris.
     public let client: S3
 
+    /// Initializes a new instance of `TigrisService`.
+    /// - Throws: Throws an error if initialization fails.
     init() throws {
         let clientAuth = try AWSClient(
             credentialProvider: .static(
@@ -26,20 +30,35 @@ internal struct TigrisService: ~Copyable {
         )
     }
 
+    /// Deinitializes the `TigrisService` and shuts down the client.
     deinit {
         do {
             try client.client.syncShutdown()
         } catch {}
     }
 
+    /// Retrieves a string from Tigris.
+    /// - Parameter _: The input string.
+    /// - Returns: An empty string.
+    /// - Throws: Throws an error if retrieval fails.
     public func get(_: String) throws -> String {
         ""
     }
 
+    /// Retrieves a public URL from Tigris.
+    /// - Parameter _: The input string.
+    /// - Returns: An empty string.
+    /// - Throws: Throws an error if retrieval fails.
     public func publicUrl(_: String) throws -> String {
         ""
     }
 
+    /// Signs a URL for access.
+    /// - Parameters:
+    ///   - input: The input string.
+    ///   - expiresIn: The expiration time for the signed URL.
+    /// - Returns: A signed URL string.
+    /// - Throws: Throws an error if signing fails.
     public func sign(input: String, expiresIn: TimeAmount) async throws -> String {
         let url = try await client
             .signURL(
@@ -51,6 +70,16 @@ internal struct TigrisService: ~Copyable {
         return url.absoluteString
     }
 
+    /// Uploads content to Tigris.
+    /// - Parameters:
+    ///   - input: The input string.
+    ///   - content: The content to upload.
+    ///   - acl: The access control list for the object.
+    ///   - metadata: Optional metadata for the object.
+    ///   - expires: Optional expiration date for the object.
+    ///   - contentType: Optional content type for the object.
+    /// - Returns: An optional `S3.PutObjectOutput` object.
+    /// - Throws: Throws an error if upload fails.
     public func put(
         input: String,
         content: ByteBuffer,
@@ -80,8 +109,12 @@ internal struct TigrisService: ~Copyable {
         }
     }
 
+    /// Decodes an S3 path into a bucket and key.
+    /// - Parameter s3Path: The S3 path to decode.
+    /// - Returns: An `S3Path` object containing the bucket and key.
+    /// - Throws: Throws an error if the path is too short.
     public func decodeS3Path(_ s3Path: String) throws -> Self.S3Path {
-        public var pathComponents = s3Path.pathComponents
+        var pathComponents = s3Path.pathComponents
 
         if pathComponents.count < 3 {
             throw GenericErrors.s3PathTooShort
@@ -95,6 +128,10 @@ internal struct TigrisService: ~Copyable {
         return .init(bucket: bucket, key: key)
     }
 
+    /// Retrieves the Tigris URL for an S3 path.
+    /// - Parameter s3Path: The S3 path.
+    /// - Returns: A string representing the Tigris URL.
+    /// - Throws: Throws an error if the URL is invalid.
     public func getTigrisUrl(
         _ s3Path: String
     ) throws -> String {
@@ -125,8 +162,11 @@ internal struct TigrisService: ~Copyable {
         }
     }
 
-    struct S3Path {
+    /// Represents an S3 path with a bucket and key.
+    internal struct S3Path {
+        /// The bucket name.
         public let bucket: String
+        /// The key within the bucket.
         public let key: String
     }
 }

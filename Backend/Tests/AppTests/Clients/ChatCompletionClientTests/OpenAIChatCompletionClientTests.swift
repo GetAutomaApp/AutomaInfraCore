@@ -26,7 +26,7 @@ internal struct OpenAIChatCompletionClientTests: ChatCompletionClientTestSuite {
     ///   - Network errors
     ///   - Invalid response formats
     @Test("Generate Chat Completion Result Success")
-    public func generateChatCompletionResultSuccess() async throws {
+    internal func generateChatCompletionResultSuccess() async throws {
         try await withApp { app in
             let model = ChatCompletionModel.gpt4o
 

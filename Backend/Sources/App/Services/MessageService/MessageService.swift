@@ -14,7 +14,15 @@ import Vapor
     import FoundationNetworking
 #endif
 
+/// Service for handling message-related operations.
 internal struct MessageService: Decodable {
+    /// Sends an SMS message to a specified phone number.
+    /// - Parameters:
+    ///   - phoneNumber: The phone number to send the message to.
+    ///   - message: The content of the message.
+    ///   - logger: The logger for logging messages.
+    /// - Returns: The message ID if the message is sent successfully.
+    /// - Throws: Throws an error if sending the message fails.
     public func sendSmS(
         to phoneNumber: String,
         message: String,
@@ -31,8 +39,10 @@ internal struct MessageService: Decodable {
             let region = try Environment.getOrThrow("AWS_DEFAULT_REGION")
             let client = SNS(client: clientAuth, region: .other(region))
 
+            // Publish the message to the specified phone number
             let output = try await client.publish(.init(message: message, phoneNumber: phoneNumber))
 
+            // Send a Discord webhook event for the message
             try sendDiscordWebhookAppEvent(
                 input: "random -> \(phoneNumber)",
                 event: "sending message: `\(message)`",
@@ -40,6 +50,7 @@ internal struct MessageService: Decodable {
             )
 
             if let messageId = output.messageId {
+                // Log the successful sending of the message
                 logger.info(
                     "Sent sms message to user",
                     metadata: [
@@ -53,6 +64,7 @@ internal struct MessageService: Decodable {
                 BackendMetric.totalTextMessagesSent.increment()
                 return messageId
             } else {
+                // Log the failure to send the message
                 logger.error(
                     "Failed to send message to user",
                     metadata: [
@@ -64,6 +76,7 @@ internal struct MessageService: Decodable {
                 throw GenericErrors.smsMessageFailed
             }
         } catch {
+            // Log the error for failed message sending
             logger.error(
                 "Failed to send message",
                 metadata: [
@@ -78,6 +91,12 @@ internal struct MessageService: Decodable {
         }
     }
 
+    /// Sends a Discord webhook message.
+    /// - Parameters:
+    ///   - webhookURL: The URL of the webhook to send the message to.
+    ///   - message: The message to send.
+    ///   - logger: The logger for logging messages.
+    /// - Throws: Throws an error if sending the webhook message fails.
     public func sendWebhookMessage(webhookURL: URL, message: DiscordWebhookMessage, logger: Logger) async throws {
         BackendMetric.totalDiscordWebhookMessagesSent.increment()
 
@@ -89,17 +108,19 @@ internal struct MessageService: Decodable {
             let encoder = JSONEncoder()
             let jsonData = try encoder.encode(message)
 
-            public var request = URLRequest(url: webhookURL)
+            var request = URLRequest(url: webhookURL)
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = jsonData
 
+            // Send the request and receive the response
             let (data, response) = try await URLSession.shared.data(for: request)
 
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 204 {
                 throw GenericErrors.discordWebhookMessageFailed
             }
 
+            // Log the successful sending of the webhook message
             logger.info(
                 "Sent Discord webhook message successfully",
                 metadata: [
@@ -110,6 +131,7 @@ internal struct MessageService: Decodable {
             )
 
         } catch {
+            // Log the error for failed webhook message sending
             logger.error(
                 "Failed to send Discord webhook message",
                 metadata: [
@@ -122,6 +144,14 @@ internal struct MessageService: Decodable {
         }
     }
 
+    /// Sends a Discord webhook event for application events.
+    /// - Parameters:
+    ///   - input: The input string for the event.
+    ///   - event: The event description.
+    ///   - imageUrl: Optional URL for an image to include in the event.
+    ///   - logger: The logger for logging messages.
+    ///   - withUrl: The URL of the webhook to send the event to.
+    /// - Throws: Throws an error if sending the webhook event fails.
     public func sendDiscordWebhookAppEvent(
         input: String,
         event: String,
@@ -145,6 +175,12 @@ internal struct MessageService: Decodable {
         }
     }
 
+    /// Sends a Discord alert for critical errors.
+    /// - Parameters:
+    ///   - alertTitle: The title of the alert.
+    ///   - error: The error that occurred.
+    ///   - logger: The logger for logging messages.
+    /// - Throws: Throws an error if sending the alert fails.
     public func sendDiscordAlert(
         alertTitle: String,
         error: Error,

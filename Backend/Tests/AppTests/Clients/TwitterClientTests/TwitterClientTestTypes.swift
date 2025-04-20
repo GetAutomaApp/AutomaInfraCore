@@ -21,15 +21,19 @@ extension TwitterClientTestSuite {
     ///   - Database configuration errors
     ///   - Test execution errors
     ///   - Shutdown errors
-    public func withApp(test: (Application) async throws -> Void) async throws {
+    private func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
+            // Configure the database for the application
             try await configureDatabase(app: app)
+            // Execute the test closure with the application instance
             try await test(app)
         } catch {
+            // Shut down the application in case of errors
             try await app.asyncShutdown()
             throw error
         }
+        // Ensure proper cleanup by shutting down the application
         try await app.asyncShutdown()
     }
 }

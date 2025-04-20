@@ -7,11 +7,15 @@ import Foundation
 import Metrics
 import Prometheus
 
+/// Service for managing and emitting metrics.
 internal struct MetricsService {
+    /// Global instance of the `MetricsService`.
     public static let global = Self()
 
+    /// Prometheus collector registry for managing metrics.
     private var prometheus: PrometheusCollectorRegistry
 
+    /// Initializes a new instance of `MetricsService`.
     private init() {
         let prometheusRegistry = PrometheusCollectorRegistry()
         let myProm = PrometheusMetricsFactory(registry: prometheusRegistry)
@@ -20,7 +24,8 @@ internal struct MetricsService {
         prometheus = prometheusRegistry
     }
 
-    /// Emit metrics into buffer and return data
+    /// Emits metrics into a buffer and returns the data.
+    /// - Returns: A `Data` object containing the emitted metrics.
     public func emit() -> Data {
         var buffer = [UInt8]()
         prometheus.emit(into: &buffer)
@@ -28,7 +33,11 @@ internal struct MetricsService {
         return Data(data.utf8)
     }
 
-    /// Make a counter type metric
+    /// Creates a counter type metric.
+    /// - Parameters:
+    ///   - name: The name of the counter.
+    ///   - labels: Optional labels for the counter.
+    /// - Returns: A `Prometheus.Counter` object.
     public func makeCounter(name: String, labels: [String: String] = [:]) -> Prometheus.Counter {
         prometheus
             .makeCounter(
@@ -37,52 +46,65 @@ internal struct MetricsService {
             )
     }
 
+    /// Converts a dictionary of strings to a tuple array.
+    /// - Parameter dictionary: The dictionary to convert.
+    /// - Returns: An array of tuples representing the dictionary.
     private func convertStringDictionaryToStringMap(_ dictionary: [String: String]) -> [(String, String)] {
         zip(dictionary.keys, dictionary.values).map { ($0.0, $0.1) }
     }
 }
 
+/// Enum for managing backend metrics.
 internal enum BackendMetric {
+    /// Counter for successful verification codes sent.
     public static let totalSuccessfulVerificationCodesSent = MetricsService.global.makeCounter(
         name: "total_verification_codes_sent",
         labels: ["status": MetricStatus.success.rawValue]
     )
 
+    /// Counter for failed verification codes sent.
     public static let totalFailedVerificationCodesSent = MetricsService.global.makeCounter(
         name: "total_verification_codes_sent",
         labels: ["status": MetricStatus.fail.rawValue]
     )
 
+    /// Counter for total users created.
     public static let totalUsersCreated = MetricsService.global.makeCounter(
         name: "total_users_created",
         labels: ["status": MetricStatus.success.rawValue]
     )
 
+    /// Counter for users that already exist.
     public static let totalUsersAlreadyExists = MetricsService.global.makeCounter(
         name: "total_users_created",
         labels: ["status": MetricStatus.alreadyExists.rawValue]
     )
 
+    /// Counter for successful token refresh attempts.
     public static let totalSuccessfulTokensRefreshed = MetricsService.global.makeCounter(
         name: "total_token_refresh_attempts",
         labels: ["status": MetricStatus.success.rawValue]
     )
 
+    /// Counter for failed token refresh attempts.
     public static let totalFailedTokensRefreshed = MetricsService.global.makeCounter(
         name: "total_token_refresh_attempts",
         labels: ["status": MetricStatus.fail.rawValue]
     )
 
+    /// Counter for logout attempts.
     public static let totalLogoutAttempted = MetricsService.global.makeCounter(
         name: "total_logout_attempts",
         labels: ["status": MetricStatus.success.rawValue]
     )
 
+    /// Counter for failed logout attempts.
     public static let totalFailedLogoutAttempted = MetricsService.global.makeCounter(
         name: "total_logout_attempts",
         labels: ["status": MetricStatus.fail.rawValue]
     )
 
+    /// Counter for profile pictures generated.
     public static let totalProfilePicturesGenerated = MetricsService.global.makeCounter(
         name: "total_profile_pictures_generated",
         labels: [
@@ -90,6 +112,7 @@ internal enum BackendMetric {
         ]
     )
 
+    /// Counter for failed profile picture generation.
     public static let totalProfilePicturesGenerationFailed = MetricsService.global.makeCounter(
         name: "total_profile_pictures_generated",
         labels: [
@@ -97,6 +120,7 @@ internal enum BackendMetric {
         ]
     )
 
+    /// Counter for text messages sent.
     public static let totalTextMessagesSent = MetricsService.global.makeCounter(
         name: "total_text_messages_sent",
         labels: [
@@ -104,6 +128,7 @@ internal enum BackendMetric {
         ]
     )
 
+    /// Counter for failed text messages sent.
     public static let totalTextMessagesSentFailed = MetricsService.global.makeCounter(
         name: "total_text_messages_sent",
         labels: [
@@ -111,6 +136,7 @@ internal enum BackendMetric {
         ]
     )
 
+    /// Counter for Discord webhook messages sent.
     public static let totalDiscordWebhookMessagesSent = MetricsService.global.makeCounter(
         name: "total_discord_webhook_messages_sent",
         labels: [
@@ -118,10 +144,14 @@ internal enum BackendMetric {
         ]
     )
 
+    /// Counter for OpenAI image generation requests.
     public static let openAIImageGenerationRequests = MetricsService.global.makeCounter(
         name: "openai_image_generation_requests"
     )
 
+    /// Creates a counter for OpenAI image generation requests.
+    /// - Parameter status: The status of the request.
+    /// - Returns: A `Prometheus.Counter` object.
     static func openAIImageGenerationRequest(
         status: MetricStatus
     ) -> Prometheus.Counter {
@@ -133,9 +163,9 @@ internal enum BackendMetric {
         )
     }
 
-    /// Creates a counter to track Twitter OAuth request metrics
-    /// - Parameter status: The status of the OAuth request (success/fail/etc)
-    /// - Returns: A Prometheus counter for Twitter OAuth requests with the given status
+    /// Creates a counter to track Twitter OAuth request metrics.
+    /// - Parameter status: The status of the OAuth request (success/fail/etc).
+    /// - Returns: A Prometheus counter for Twitter OAuth requests with the given status.
     static func twitterOAuthRequest(
         status: MetricStatus
     ) -> Prometheus.Counter {
@@ -147,9 +177,9 @@ internal enum BackendMetric {
         )
     }
 
-    /// Creates a counter to track Twitter user token conversion metrics
-    /// - Parameter status: The status of the token conversion (success/fail/etc)
-    /// - Returns: A Prometheus counter for Twitter token conversions with the given status
+    /// Creates a counter to track Twitter user token conversion metrics.
+    /// - Parameter status: The status of the token conversion (success/fail/etc).
+    /// - Returns: A Prometheus counter for Twitter token conversions with the given status.
     static func twitterUserTokensConverted(
         status: MetricStatus
     ) -> Prometheus.Counter {
@@ -161,9 +191,9 @@ internal enum BackendMetric {
         )
     }
 
-    /// Creates a counter to track Twitter post tweet metrics
-    /// - Parameter status: The status of posting the tweet (success/fail/etc)
-    /// - Returns: A Prometheus counter for tweet posts with the given status
+    /// Creates a counter to track Twitter post tweet metrics.
+    /// - Parameter status: The status of posting the tweet (success/fail/etc).
+    /// - Returns: A Prometheus counter for tweet posts with the given status.
     static func twitterPostTweet(
         status: MetricStatus
     ) -> Prometheus.Counter {
@@ -175,6 +205,13 @@ internal enum BackendMetric {
         )
     }
 
+    /// Creates a counter to track RSS feed reader metrics.
+    /// - Parameters:
+    ///   - status: The status of the RSS feed read.
+    ///   - url: The URL of the RSS feed.
+    ///   - isRSSFeed: Optional flag indicating if the URL is an RSS feed.
+    ///   - didThrowOnFeedInitialization: Flag indicating if an error occurred during feed initialization.
+    /// - Returns: A Prometheus counter for RSS feed reads with the given status.
     static func rssFeedReaderMetric(
         status: MetricStatus,
         url: URL,
@@ -194,6 +231,12 @@ internal enum BackendMetric {
         )
     }
 
+    /// Creates a counter to track chat completion service calls.
+    /// - Parameters:
+    ///   - platform: The platform used for chat completion.
+    ///   - model: The model used for chat completion.
+    ///   - status: The status of the service call.
+    /// - Returns: A Prometheus counter for chat completion service calls with the given status.
     static func chatCompletionServiceCall(
         platform: ChatCompletionPlatform,
         model: ChatCompletionModel,
@@ -209,6 +252,7 @@ internal enum BackendMetric {
         )
     }
 
+    /// Counter for media files uploaded to Tigris.
     public static let totalMediaFilesUploadedToTigris = MetricsService.global.makeCounter(
         name: "total_media_files_uploaded_to_tigris",
         labels: [
@@ -216,6 +260,7 @@ internal enum BackendMetric {
         ]
     )
 
+    /// Counter for failed media file uploads to Tigris.
     public static let totalMediaFilesUploadedToTigrisFailed = MetricsService.global.makeCounter(
         name: "total_media_files_uploaded_to_tigris",
         labels: [
@@ -223,6 +268,11 @@ internal enum BackendMetric {
         ]
     )
 
+    /// Creates a counter to track Firecrawl markdown scraping metrics.
+    /// - Parameters:
+    ///   - status: The status of the scraping.
+    ///   - url: The URL being scraped.
+    /// - Returns: A Prometheus counter for Firecrawl markdown scraping with the given status.
     public static func firecrawlScrapeMarkdown(
         status: MetricStatus,
         url: String

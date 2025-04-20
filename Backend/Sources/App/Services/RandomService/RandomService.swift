@@ -6,7 +6,9 @@
 import Fluent
 import Vapor
 
+/// Service for generating random values.
 internal enum RandomService {
+    /// List of animal names.
     public static let animals = [
         "Dog",
         "Cat",
@@ -23,6 +25,7 @@ internal enum RandomService {
         "Hedgehog",
     ]
 
+    /// List of object names.
     public static let objects = [
         "Chair",
         "Table",
@@ -40,6 +43,7 @@ internal enum RandomService {
         "Doodle",
     ]
 
+    /// List of adjectives.
     public static let adjectives = [
         "Whimsical",
         "Cute",
@@ -64,6 +68,7 @@ internal enum RandomService {
         "Chirpy",
     ]
 
+    /// List of moods.
     public static let moods = [
         "Snappy",
         "Sunny",
@@ -77,18 +82,24 @@ internal enum RandomService {
         "Friendly",
     ]
 
+    /// Combined list of all words.
     public static let allWords = adjectives + moods + animals + objects
 
+    /// Generates a random username.
+    /// - Returns: A string representing a random username.
     static func randomUsername() -> String {
         let mood = moods.randomElement()!
         let adjective = adjectives.randomElement()!
         let object = objects.randomElement()!
 
+        // Generate a random UUID and take the first 4 characters
         let randomAppend = UUID().uuidString.split(separator: "-").first!.prefix(4)
 
         return "\(mood)\(adjective)\(object)\(randomAppend)"
     }
 
+    /// Generates a random code.
+    /// - Returns: A string representing a random code.
     static func randomCode() -> String {
         let first = allWords.randomElement()!.lowercased()
         let second = allWords.randomElement()!.lowercased()

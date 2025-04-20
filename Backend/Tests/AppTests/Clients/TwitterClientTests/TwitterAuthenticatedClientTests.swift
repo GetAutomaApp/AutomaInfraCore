@@ -25,12 +25,14 @@ internal struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
     ///   - Client initialization errors
     ///   - API request failures
     @Test("Post Tweet")
-    public func postTweet() async throws {
+    internal func postTweet() async throws {
         try await withApp { app in
+            // Retrieve the test Twitter user token ID from the environment
             let testTwitterUserTokenID = try Environment.getOrThrow("TEST_TWITTER_USER_TOKEN_ID")
             guard
                 let twitterUserTokenID = UUID(uuidString: testTwitterUserTokenID)
             else {
+                // Ensure the token ID can be converted to a UUID
                 try #require(
                     Bool(false),
                     "Failed to convert test Twitter User Token ID of value '\(testTwitterUserTokenID)' to UUID."
@@ -38,23 +40,28 @@ internal struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
                 return
             }
 
+            // Query the database for the Twitter user token
             guard
                 let token = try await TwitterUserToken.query(on: app.db)
                 .filter(\.$id == twitterUserTokenID)
                 .first()
             else {
+                // Ensure the token is found in the database
                 try #require(Bool(false), "Failed to find Twitter User Token.")
                 return
             }
 
+            // Create an authenticated Twitter client with the token
             let client = try TwitterClient(
                 logger: app.logger,
                 client: app.client,
                 database: app.db
             ).authenticated(token: token.toDTO())
 
+            // Generate a random message and post a tweet
             let message = UUID().uuidString
             let response = try await client.postTweet(message: message)
+            // Ensure the response contains the expected message
             #expect(response.data.text == message, "Tweet message should match")
         }
     }

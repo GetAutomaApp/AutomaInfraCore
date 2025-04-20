@@ -1,7 +1,10 @@
 import Fluent
 
+/// Represents a migration for `__CAPNAME__`.
 internal struct __CAPNAME__Migration__TIMESTAMP__: AsyncMigration {
-    /// Prepare `__CAPNAME__` migration
+    /// Prepares the `__CAPNAME__` migration.
+    /// - Parameter database: The database to apply the migration to.
+    /// - Throws: Any errors that occur during migration preparation.
     public func prepare(on database: Database) async throws {
         try await database.schema("__CAPNAME_DASHED__")
             .id()
@@ -11,7 +14,9 @@ internal struct __CAPNAME__Migration__TIMESTAMP__: AsyncMigration {
             .create()
     }
 
-    /// Revert `__CAPNAME__` migration
+    /// Reverts the `__CAPNAME__` migration.
+    /// - Parameter database: The database to revert the migration on.
+    /// - Throws: Any errors that occur during migration reversion.
     public func revert(on database: Database) async throws {
         try await database.schema("__CAPNAME_DASHED__").delete()
     }
