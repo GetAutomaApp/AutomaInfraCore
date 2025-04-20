@@ -5,16 +5,29 @@
 
 import SwiftUI
 
-// Add a preview per state difference (No need to add all states)
-
+/// A preview provider for the PhoneNumberTextInputComponent.
+/// This struct provides SwiftUI previews to visualize the component in different states.
 internal struct PhoneNumberTextInputComponentPreviews: PreviewProvider {
+    /// The static previews property required by PreviewProvider protocol.
+    /// Returns a view containing the phone number input component preview.
+    ///
+    /// - Returns: A view wrapped in the PhoneNumberTextInputComponentWrapperView.
     static var previews: some View {
         PhoneNumberTextInputComponentWrapperView()
     }
 }
 
+/// A wrapper view that contains the preview implementation for PhoneNumberTextInputComponent.
+/// This view provides a testing environment for the phone number input component.
 internal struct PhoneNumberTextInputComponentWrapperView: View {
+    /// The body property required by the View protocol.
+    /// Configures and displays the phone number input component with default settings.
+    ///
+    /// - Returns: A view containing the configured PhoneNumberTextInputComponent.
     public var body: some View {
+        // Note: Commented code below represents additional configuration options
+        // that can be uncommented and modified for testing different component states
+
 //        PropertyEditor(
 //            object: config,
 //            properties: [
@@ -52,6 +65,8 @@ internal struct PhoneNumberTextInputComponentWrapperView: View {
 //                )
 //            }
 
+        // Creates a basic preview of the phone number input component
+        // with default configuration, padding, and dark color scheme
         PhoneNumberTextInputComponent(config: .init()).padding().preferredColorScheme(.dark)
     }
 }

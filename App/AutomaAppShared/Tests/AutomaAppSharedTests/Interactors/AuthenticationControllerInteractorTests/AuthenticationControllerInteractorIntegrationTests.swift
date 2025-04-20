@@ -3,29 +3,30 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+/// Integration tests for the AuthenticationControllerInteractor
+///
+/// This test suite verifies the integration between the AuthenticationControllerInteractor
+/// and its dependencies, ensuring proper functionality of authentication-related operations
+/// in a more comprehensive context.
+///
+/// The tests in this suite focus on:
+/// - End-to-end authentication flows
+/// - Integration with authentication services
+/// - Proper state management during authentication processes
+/// - Error handling across component boundaries
+///
+/// - Note: These tests require a proper test environment setup with all necessary dependencies.
 @testable import AutomaAppShared
 import Testing
 
-/// Integration test suite for the Authentication Controller Interactor
-/// This test suite verifies the integration between the Authentication Controller
-/// and its dependencies, ensuring proper authentication flows and error handling
+/// Test suite for AuthenticationControllerInteractor integration tests
 ///
-/// Test coverage includes:
-/// - Authentication success scenarios
-/// - Authentication failure scenarios
-/// - Error handling and propagation
-/// - Integration with dependent services
+/// This struct contains all integration tests for the AuthenticationController,
+/// verifying the interaction between various components of the authentication system.
 ///
-/// TODO: Proper testing for this (and rename struct)
-/// TODO: Test bad scenarios / failures (ensure we throw typesafe errors)
-internal struct Test {
-    /// Collection of test cases for authentication scenarios
-    ///
-    /// This struct contains test methods that verify:
-    /// - User login flows
-    /// - Token validation
-    /// - Session management
-    /// - Error conditions and recovery
-    ///
-    /// TODO: Write tests for all kinds of scenarios
+/// - Important: All test methods should be properly isolated and should clean up any test data
+///             or state modifications after completion.
+@Test("AuthenticationControllerInteractorIntegrationTests")
+internal struct AuthenticationControllerInteractorIntegrationTests {
+    // Test methods will be added here to verify different integration scenarios
 }

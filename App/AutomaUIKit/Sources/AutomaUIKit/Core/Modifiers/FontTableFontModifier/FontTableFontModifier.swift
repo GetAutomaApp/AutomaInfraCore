@@ -43,10 +43,29 @@ public struct FontTableFontModifier: ViewModifier {
     }
 }
 
+/// A type alias that restricts the `FontTableFontModifier` to be used only with `Text` views.
+/// This ensures type safety and prevents the modifier from being used with incompatible view types.
 public typealias FontTableFontModifierViewTypes = Text // Use Type Narrowing Please!
 
+/// Extension that adds font modification capabilities to Text views.
+/// This extension is marked with `@MainActor` to ensure all UI updates occur on the main thread.
 @MainActor
 public extension FontTableFontModifierViewTypes {
+    /// Applies a custom font from the FontTable to the text view.
+    ///
+    /// This method allows you to apply predefined fonts from the FontTable system while
+    /// optionally specifying a custom color for the text.
+    ///
+    /// - Parameters:
+    ///   - font: A value conforming to `IsFontTableFont` that specifies the font to be applied
+    ///   - colour: An optional Color value that, if provided, will be applied to the text
+    /// - Returns: A modified view with the specified font and color applied
+    ///
+    /// Example usage:
+    /// ```
+    /// Text("Hello, World!")
+    ///     .fontTableFont(FontTable.Headings.h1, .blue)
+    /// ```
     func fontTableFont(_ font: IsFontTableFont, _ colour: Color? = nil) -> some View {
         modifier(FontTableFontModifier(fontTableType: font, colour: colour))
     }
