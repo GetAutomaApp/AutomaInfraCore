@@ -32,6 +32,7 @@ struct AppLaunchController: RouteCollection {
         }
     }
 
+    // trigger tests
     @Sendable
     func getClientConfig(req _: Request) async throws -> AppLaunchClientConfigDTO {
         .init()
