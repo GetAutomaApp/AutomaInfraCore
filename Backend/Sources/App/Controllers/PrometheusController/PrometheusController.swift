@@ -7,13 +7,20 @@ import Fluent
 import Prometheus
 import Vapor
 
+/// Controller for handling Prometheus metrics requests.
 internal struct PrometheusController: RouteCollection {
+    /// Registers routes for Prometheus operations.
+    /// - Parameter routes: The routes builder to register routes on.
     public func boot(routes: RoutesBuilder) throws {
         let prometheusRoute = routes.grouped("Prometheus")
 
         prometheusRoute.get("metrics", use: metrics)
     }
 
+    /// Retrieves Prometheus metrics.
+    /// - Parameter req: The request object.
+    /// - Returns: A string containing the metrics data.
+    /// - Throws: An error if metrics retrieval or conversion fails.
     @Sendable
     public func metrics(req: Request) throws -> String {
         try validate(req: req)
@@ -30,6 +37,9 @@ internal struct PrometheusController: RouteCollection {
         return metrics
     }
 
+    /// Validates the request for Prometheus metrics.
+    /// - Parameter req: The request object.
+    /// - Throws: An error if the authentication token is invalid.
     private func validate(req: Request) throws {
         let query = try req.query.decode(PrometheusRouteQuery.self)
         let token = try Environment.getOrThrow("FLY_METRICS_TOKEN")

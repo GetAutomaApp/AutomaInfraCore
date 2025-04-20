@@ -9,18 +9,38 @@ import Foundation
 import TwitterAPIKit
 import Vapor
 
+/// A client for interacting with Twitter API, handling authentication and requests.
 internal struct TwitterClient: TwitterClientBase {
+    /// Logger instance for tracking operations.
     public let logger: Logger
+
+    /// HTTP client for making requests.
     public let client: Client
+
+    /// Database instance for data persistence.
     public let database: Database
+
+    /// OAuth client for handling Twitter authentication.
     public let auth: TwitterOAuthClient
 
+    /// Callback URL for OAuth authentication.
     public let callbackURL: URL
+
+    /// Twitter API client instance.
     public let twitterClient: TwitterAPIClient
 
+    /// Consumer key for Twitter API.
     public let consumerKey: String
+
+    /// Consumer secret for Twitter API.
     public let consumerSecret: String
 
+    /// Initializes a new TwitterClient.
+    /// - Parameters:
+    ///   - logger: Logger instance for tracking operations.
+    ///   - client: HTTP client for making requests.
+    ///   - database: Database instance for data persistence.
+    /// - Throws: An error if environment variables are missing or URL is invalid.
     public init(logger: Logger, client: Client, database: Database) throws {
         self.logger = logger
         self.client = client
@@ -50,6 +70,9 @@ internal struct TwitterClient: TwitterClientBase {
         )
     }
 
+    /// Creates an authenticated Twitter client using the provided user token.
+    /// - Parameter token: The user token containing access credentials.
+    /// - Returns: An instance of `TwitterAuthenticatedClient`.
     public func authenticated(token: TwitterUserTokenDTO) -> TwitterAuthenticatedClient {
         .init(
             logger: logger,
@@ -68,6 +91,10 @@ internal struct TwitterClient: TwitterClientBase {
         )
     }
 
+    /// Retrieves the user token from the request headers.
+    /// - Parameter req: The request containing the authorization header.
+    /// - Returns: A `TwitterUserTokenDTO` decoded from the header.
+    /// - Throws: An error if the token is missing or decoding fails.
     public static func getUserToken(req: Request) throws -> TwitterUserTokenDTO {
         guard
             let tokenBase64String = req.headers.first(name: "Authorization")

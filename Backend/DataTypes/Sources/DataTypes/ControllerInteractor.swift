@@ -7,24 +7,30 @@ import Alamofire
 import Vapor
 
 /// Protocol used on the client and integration tests to call endpoints for a controller
-/// (collection of routes)
+/// (collection of routes). This protocol defines the basic requirements for making HTTP requests
+/// to controller endpoints.
 public protocol ControllerInteractor {
-    /// Server base url
+    /// The base URL of the server to which requests will be made
+    /// This should include the scheme (http/https) and domain
     var baseURL: String { get }
 
-    /// Alamofire request session
+    /// The Alamofire session used to make network requests
+    /// This session manages the underlying URLSession and request configuration
     var session: Alamofire.Session { get }
 
-    /// Make a request to a specific endpoint and get the Alamofire response object
-    /// - Parameters:
-    ///   - endpoint: Controller route endpoint
-    ///   - method: Request method (get, post, etc)
-    ///   - headers: Headers to pass with the request
-    ///   - parameters: Parameters to pass with the request
-    ///   - encoding: Encoding method
+    /// Makes an HTTP request to a specific endpoint and returns the Alamofire response
     ///
-    /// - Throws: An error with making the request
-    /// - Returns: Alamofire response object, including data and error
+    /// This method handles the creation and execution of HTTP requests using Alamofire
+    ///
+    /// - Parameters:
+    ///   - endpoint: The specific route endpoint to call (e.g., "/users")
+    ///   - method: The HTTP method to use (GET, POST, PUT, DELETE, etc.)
+    ///   - headers: Optional HTTP headers to include in the request
+    ///   - parameters: Optional parameters to be included in the request body or query string
+    ///   - encoding: The method to use for parameter encoding (e.g., JSON, URL encoding)
+    ///
+    /// - Throws: An error if the request fails to execute
+    /// - Returns: An Alamofire DataResponse object containing the response data and any errors
     func performRequest(
         endpoint: String,
         method: Alamofire.HTTPMethod,
@@ -34,12 +40,17 @@ public protocol ControllerInteractor {
     ) async throws -> DataResponse<Data?, AFError>
 }
 
-/// Create default implementations of functions in protocol, including `performRequest`
+/// Default implementations for the ControllerInteractor protocol
+/// Provides concrete implementations of common functionality
 public extension ControllerInteractor {
+    /// Default Alamofire session implementation
+    /// Returns the shared default session instance
     var session: Alamofire.Session {
         .default
     }
 
+    /// Default implementation of performRequest that executes an HTTP request
+    /// This implementation handles the async request execution using continuation
     func performRequest(
         endpoint: String,
         method: Alamofire.HTTPMethod,
@@ -47,8 +58,10 @@ public extension ControllerInteractor {
         parameters: Alamofire.Parameters? = nil,
         encoding: ParameterEncoding = JSONEncoding.default
     ) async -> DataResponse<Data?, AFError> {
+        // Construct the full URL by combining base URL and endpoint
         let url = "\(baseURL)\(endpoint)"
 
+        // Use continuation to wrap the asynchronous Alamofire request
         return await withCheckedContinuation { continuation in
             self.session.request(
                 url,
@@ -63,52 +76,56 @@ public extension ControllerInteractor {
     }
 }
 
-/// Optional data and error for the response of calling an endpoint
-/// in a controller from the backend
-/// Data is always optional unless the decoding failed (which will also be an error)
+/// A generic structure that represents the response from a backend controller endpoint
+/// This structure includes both the response data and any potential errors
 public struct BackendControllerResponseOutput<K: Content> {
-    /// Optional data, conforming to `Content`; this is the response content
+    /// The decoded response data of type K, which must conform to Content protocol
+    /// This will be nil if there was an error or no data was returned
     public let data: K?
 
-    /// Optional error, an occurred with getting the response
+    /// Any error that occurred during the request or response processing
+    /// This will be nil if the request was successful
     public let error: GenericErrors?
 
-    /// Create a new `BackendControllerResponseOutput` instance
-    /// - Parameters:
-    ///   - data: Optional data; the response content
-    ///   - error: Optional error; an error that occurred in getting the response
+    /// Initializes a new instance of BackendControllerResponseOutput
     ///
+    /// - Parameters:
+    ///   - data: The optional response data of type K
+    ///   - error: An optional error that occurred during the request or processing
     public init(data: K?, error: GenericErrors?) {
         self.data = data
         self.error = error
     }
 }
 
-/// Protocol specifically to interact with backend controllers on the client
+/// Protocol for interacting specifically with backend controllers
+/// Extends ControllerInteractor with additional functionality for handling backend responses
 public protocol BackendControllerInteractor: ControllerInteractor {
-    /// Decode response from network request to expected `Content` data type
-    /// - Parameters:
-    ///   - data: Data response, containing optional data on success and error on failure
-    ///   - decodeTo: expected `Content` data type
+    /// Decodes a network response into the expected Content type
     ///
-    /// - Returns: `BackendControllerResponseOutput`, containing optional error and data
+    /// - Parameters:
+    ///   - data: The raw response data from the network request
+    ///   - decodeTo: The expected type to decode the response into
+    ///
+    /// - Returns: A BackendControllerResponseOutput containing either the decoded data or an error
     func decodeResponse<K: Content>(
         _ data: DataResponse<Data?, AFError>,
         _ decodeTo: K.Type
     ) -> BackendControllerResponseOutput<K>
 }
 
-/// Implement `decodeResponse` and `handleResponse` function
+/// Default implementations for BackendControllerInteractor
+/// Provides concrete implementations for response handling and decoding
 public extension BackendControllerInteractor {
-    /// Get the expected response `Content` data type, or throw an error
-    /// Use this function to get the content object of a response
-    /// - Parameters:
-    ///   - response: Data response, containing optional data on success and error on failure
-    ///   - decodeTo: expected `Content` data type
-    ///   - rethrow: an array of errors to directly throw if the error is one of them, else throw an unknown error
+    /// Processes a response and returns the expected Content type or throws an error
     ///
-    /// - Throws: `GenericErrors`
-    /// - Returns: `K`, a `Content` object; the response data
+    /// - Parameters:
+    ///   - response: The raw response from the network request
+    ///   - decodeTo: The type to decode the response into
+    ///   - rethrow: Array of errors that should be rethrown directly if encountered
+    ///
+    /// - Throws: GenericErrors depending on the response state
+    /// - Returns: The decoded response data of type K
     func handleResponse<K: Content>(
         response: DataResponse<Data?, AFError>,
         decodeTo: K.Type,
@@ -122,7 +139,7 @@ public extension BackendControllerInteractor {
         if let error = output.error {
             print("Error checking if user exists: \(error.localizedDescription)")
 
-            // Loop over errors and check if error is one of the errors to throw directly
+            // Check if the error should be rethrown directly
             try rethrow.forEach { rethrowError in
                 if rethrowError == error {
                     throw error
@@ -138,31 +155,36 @@ public extension BackendControllerInteractor {
         return data
     }
 
+    /// Decodes the response data and handles any Alamofire errors
+    ///
+    /// - Parameters:
+    ///   - data: The response data to decode
+    ///   - decodeTo: The type to decode into
+    ///
+    /// - Returns: A BackendControllerResponseOutput containing the decoded data or error
     func decodeResponse<K: Content>(
         _ data: DataResponse<Data?, AFError>,
         _ decodeTo: K.Type
     ) -> BackendControllerResponseOutput<K> {
         if let alamofireError = data.error, getErrorFromResponse(data.data) == nil {
-            // TODO: Get logging into here
             if isNetworkOrConnectionError(alamofireError) {
                 return .init(data: nil, error: .networkConnectivityError)
             }
-
             return .init(data: nil, error: .alamofireError)
         }
 
-        // If no error, process the data
         return decodeResponse(data.data, decodeTo)
     }
 
-    // Private methods for internal use only
+    // Private helper methods
 
-    /// Decode response into `BackendControllerResponseOutput`,
-    /// an object with the content and error
+    /// Decodes raw data into a BackendControllerResponseOutput
+    ///
     /// - Parameters:
-    ///   - data: Optional data to be decoded
-    ///   - K: The expected response data type
-    /// - Returns: `BackendControllerResponseOutput`
+    ///   - data: The raw data to decode
+    ///   - K: The type to decode into
+    ///
+    /// - Returns: A BackendControllerResponseOutput containing the decoded data or error
     private func decodeResponse<K: Content>(
         _ data: Data?,
         _: K.Type
@@ -181,9 +203,10 @@ public extension BackendControllerInteractor {
         }
     }
 
-    /// Function that checks if a specific error is either a connection or network error.
-    /// - Parameter error: Optional error to be checked
-    /// - Returns: Bool, true if the error is a connection or network error
+    /// Determines if an error is related to network connectivity
+    ///
+    /// - Parameter error: The error to check
+    /// - Returns: True if the error is a network-related error
     private func isNetworkOrConnectionError(_ error: Error?) -> Bool {
         guard let error = error as? URLError else { return false }
 
@@ -203,13 +226,14 @@ public extension BackendControllerInteractor {
         } != nil
     }
 
-    /// Get error from a network request response data
-    /// - Parameter data: Optional response data
-    /// - Returns: Optional `GenericErrors`
+    /// Extracts an error from response data if present
+    ///
+    /// - Parameter data: The response data to check for errors
+    /// - Returns: A GenericErrors instance if an error is found, nil otherwise
     private func getErrorFromResponse(
         _ data: Data?
     ) -> GenericErrors? {
-        guard let data else { return nil } // Can't have error if response is empty
+        guard let data else { return nil }
 
         let decoder = JSONDecoder()
         do {
@@ -221,10 +245,11 @@ public extension BackendControllerInteractor {
     }
 }
 
-/// Get the status code more easily from a `DataResponse`
+/// Extension to provide convenient access to response status codes
 public extension DataResponse {
-    /// Function to get the response status code
-    /// - Returns: The status code, an optional integer
+    /// Retrieves the HTTP status code from the response
+    ///
+    /// - Returns: The HTTP status code as an optional Int
     func statusCode() -> Int? {
         response?.statusCode
     }

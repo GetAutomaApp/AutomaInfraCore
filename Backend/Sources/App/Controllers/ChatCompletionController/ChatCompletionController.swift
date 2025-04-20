@@ -7,7 +7,10 @@ import Fluent
 import OpenAI
 import Vapor
 
+/// Controller for handling chat completion requests.
 internal struct ChatCompletionController: RouteCollection {
+    /// Registers routes for chat completion operations.
+    /// - Parameter routes: The routes builder to register routes on.
     public func boot(routes: RoutesBuilder) throws {
         let chatCompletionRoute = routes.grouped("ChatCompletion").grouped(
             TestControllerMiddleware()
@@ -16,6 +19,10 @@ internal struct ChatCompletionController: RouteCollection {
         chatCompletionRoute.post("openai", use: openai)
     }
 
+    /// Handles chat completion requests using OpenAI.
+    /// - Parameter req: The request containing chat completion content.
+    /// - Returns: A string containing the chat completion result.
+    /// - Throws: An error if the request or chat completion fails.
     @Sendable
     public func openai(req: Request) async throws -> String {
         let openaiClient = try OpenAIChatCompletionClient(logger: req.logger)

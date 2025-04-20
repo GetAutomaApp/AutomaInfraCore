@@ -6,14 +6,29 @@
 import DataTypes
 import Vapor
 
-// Scrapes website content in markdown format. This scraper can bypass captchas / proxies if configured in the
-// microservice: https://github.com/GetAutomaApp/firecrawl-clone
+/// A client for scraping website content in markdown format using the Firecrawl microservice.
+///
+/// This client can bypass captchas and proxies if configured in the microservice.
+/// The microservice is available at: https://github.com/GetAutomaApp/firecrawl-clone
 internal struct FirecrawlClient {
+    /// The HTTP client used for making requests to the Firecrawl microservice.
     private let client: Client
+
+    /// Logger for recording events and errors during scraping operations.
     private let logger: Logger
+
+    /// Base URL for the Firecrawl microservice.
     private let baseUrl: String
+
+    /// API key for authenticating requests to the Firecrawl microservice.
     private let apiKey: String
 
+    /// Initializes a new instance of the FirecrawlClient.
+    ///
+    /// - Parameters:
+    ///   - client: The HTTP client used for making requests.
+    ///   - logger: Logger for recording events and errors.
+    /// - Throws: An error if the environment variables for base URL or API key are not set.
     public init(client: Client, logger: Logger) throws {
         self.client = client
         self.logger = logger
@@ -22,6 +37,11 @@ internal struct FirecrawlClient {
         apiKey = try Environment.getOrThrow("FIRECRAWL_SELFHOST_API_KEY")
     }
 
+    /// Scrapes markdown content from a given URL using the Firecrawl microservice.
+    ///
+    /// - Parameter input: The input containing the URL to scrape.
+    /// - Returns: A `WebsiteResponseItem` containing links, markdown content, and image URLs.
+    /// - Throws: An error if the scraping operation fails.
     public func scrapeMarkdown(from input: ScrapeMarkdownInput) async throws -> WebsiteResponseItem {
         BackendMetric
             .firecrawlScrapeMarkdown(status: .start, url: input.url)
@@ -31,12 +51,14 @@ internal struct FirecrawlClient {
             let url = try createScrapeUrl()
             let headers = try createHeaders()
 
+            // Sends a POST request to the Firecrawl microservice with the input data
             let response = try await client.post(
                 .init(string: url.absoluteString),
                 headers: headers,
                 content: input
             )
 
+            // Decodes the response content into a FirecrawlScrapeResult
             guard let decodedData = try? response.content.decode(FirecrawlScrapeResult.self) else {
                 logger.error(
                     "Invalid response from firecrawl microservice",
@@ -51,8 +73,10 @@ internal struct FirecrawlClient {
                 throw FirecrawlClientErrors.failedToScrape
             }
 
+            // Extracts image URLs from the markdown content
             let images = getMarkdownImageUrls(from: decodedData.data.markdown)
 
+            // Filters valid URLs from the response links
             let validUrls = decodedData.data.links.reduce(into: [String]()) { result, link in
                 if URL(string: link) != nil, !link.starts(with: "#") {
                     result.append(link)
@@ -85,6 +109,10 @@ internal struct FirecrawlClient {
         }
     }
 
+    /// Extracts image URLs from markdown content using regular expressions.
+    ///
+    /// - Parameter markdown: The markdown content to extract image URLs from.
+    /// - Returns: An array of image URLs found in the markdown content.
     private func getMarkdownImageUrls(from markdown: String) -> [String] {
         let pattern = #"!\[.*?\]\((https?:\/\/[^\s)]+)\)"#
 
@@ -108,6 +136,10 @@ internal struct FirecrawlClient {
         }
     }
 
+    /// Creates the URL for the scrape request to the Firecrawl microservice.
+    ///
+    /// - Returns: The URL for the scrape request.
+    /// - Throws: An error if the URL is invalid.
     private func createScrapeUrl() throws -> URL {
         guard let url = URL(string: "\(baseUrl)/v1/scrape") else {
             throw GenericErrors.invalidUrl
@@ -115,6 +147,9 @@ internal struct FirecrawlClient {
         return url
     }
 
+    /// Creates the HTTP headers for the scrape request.
+    ///
+    /// - Returns: The HTTP headers including content type and API key.
     private func createHeaders() throws -> HTTPHeaders {
         .init([
             ("Content-Type", "application/json"),

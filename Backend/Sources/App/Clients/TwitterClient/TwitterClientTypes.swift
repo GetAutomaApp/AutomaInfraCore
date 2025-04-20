@@ -7,9 +7,17 @@ import Fluent
 import TwitterAPIKit
 import Vapor
 
+/// A protocol defining the base requirements for a Twitter client.
 protocol TwitterClientBase {
-    public var logger: Logger { get }
-    public var client: Client { get }
-    public var database: Database { get }
-    public var twitterClient: TwitterAPIClient { get }
+    /// Logger instance for tracking operations.
+    var logger: Logger { get }
+
+    /// HTTP client for making requests.
+    var client: Client { get }
+
+    /// Database instance for data persistence.
+    var database: Database { get }
+
+    /// Twitter API client instance.
+    var twitterClient: TwitterAPIClient { get }
 }

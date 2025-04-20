@@ -39,12 +39,15 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     /// - Returns: A GenerateImageResult containing the generated images and metadata
     /// - Throws: OpenAIImageGenerationClientError if generation or encoding fails
     public func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult {
+        // Start the backend metric for image generation request
         BackendMetric.openAIImageGenerationRequest(status: .start).increment()
 
+        // Extract parameters from the query
         let imageSize = query.imageSize?.rawValue
         let quality = query.quality?.rawValue
         let style = query.imageStyle?.rawValue
 
+        // Create the query for image generation
         let queryForImageGeneration: ImagesQuery = try .init(
             prompt: query.prompt,
             model: getModel(from: query.model),
@@ -54,13 +57,15 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
             size: imageSize != nil ? .init(rawValue: imageSize!) : nil,
             style: style != nil ? .init(rawValue: style!) : nil
         )
-        public var result: ImagesResult?
+        var result: ImagesResult?
 
         do {
+            // Attempt to generate images with retry logic
             try await retry(maxAttempts: 3) {
                 result = try await client.images(query: queryForImageGeneration)
             }
         } catch {
+            // Log and throw an error if image generation fails
             BackendMetric.openAIImageGenerationRequest(status: .fail).increment()
             logger.error(
                 "Failed to generate image",
@@ -74,12 +79,14 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
             throw OpenAIImageGenerationClientError.generationError(error)
         }
 
+        // Ensure the result is not nil
         guard
             let result
         else {
             throw OpenAIImageGenerationClientError.generationError()
         }
 
+        // Log successful image generation
         logger.info(
             "Successfully generated response.",
             metadata: [
@@ -91,6 +98,7 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
         let images: [Data]
 
         do {
+            // Encode the result and extract images
             resultData = try JSONEncoder().encode(result)
             images = try result.data.map { image in
                 guard
@@ -102,6 +110,7 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
                 return data
             }
         } catch {
+            // Log and throw an error if encoding fails
             BackendMetric.openAIImageGenerationRequest(status: .fail).increment()
             logger.error(
                 "Failed to encode result or images response.",
@@ -113,8 +122,10 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
             throw OpenAIImageGenerationClientError.encodeError(error)
         }
 
+        // Increment the success metric
         BackendMetric.openAIImageGenerationRequest(status: .success).increment()
 
+        // Return the generated images and metadata
         return .init(
             images: images,
             metadataJSON: resultData

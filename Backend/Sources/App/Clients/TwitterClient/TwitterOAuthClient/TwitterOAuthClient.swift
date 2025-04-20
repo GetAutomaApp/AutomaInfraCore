@@ -12,10 +12,19 @@ import Vapor
 /// This client manages the OAuth token request, authentication URL generation,
 /// and conversion of OAuth tokens to user access tokens.
 internal struct TwitterOAuthClient: TwitterClientBase {
+    /// Logger instance for tracking operations
     public let logger: Logger
+
+    /// HTTP client for making requests
     public let client: Client
+
+    /// Database instance for token storage
     public let database: Database
+
+    /// Twitter API client instance
     public let twitterClient: TwitterAPIClient
+
+    /// OAuth callback URL for the authentication flow
     public var callbackURL: URL
 
     /// Initializes a new TwitterOAuthClient.
@@ -40,22 +49,24 @@ internal struct TwitterOAuthClient: TwitterClientBase {
     }
 
     /// Requests a new OAuth token from Twitter.
-    /// - Returns: A TwitterOAuthToken instance if successful
-    /// - Throws: TwitterOAuthClientError if the request fails
+    ///
+    /// This method initiates the OAuth token request process with Twitter,
+    /// and returns a `TwitterOAuthToken` if successful.
+    ///
+    /// - Returns: A `TwitterOAuthToken` instance if successful.
+    /// - Throws: `TwitterOAuthClientError` if the request fails.
     public func requestToken() async throws -> TwitterOAuthToken {
         BackendMetric.twitterOAuthRequest(status: .start).increment()
         let response = twitterClient.auth.oauth10a
             .postOAuthRequestToken(.init(
                 oauthCallback: callbackURL.absoluteString
             ))
-        guard
-            let tokenObject = await response.responseObject.success
-        else {
+
+        // Check for a successful response
+        guard let tokenObject = await response.responseObject.success else {
             BackendMetric.twitterOAuthRequest(status: .fail).increment()
             let message = "Failed to obtain request token."
-            guard
-                let error = await response.responseObject.error
-            else {
+            guard let error = await response.responseObject.error else {
                 throw TwitterOAuthClientError.unknown(error: .message(message))
             }
             logger.error(
@@ -68,6 +79,7 @@ internal struct TwitterOAuthClient: TwitterClientBase {
             throw TwitterOAuthClientError.responseError(error)
         }
 
+        // Save the OAuth token to the database
         let savedToken = try await saveOAuthToken(tokenObject: tokenObject)
 
         BackendMetric.twitterOAuthRequest(status: .success).increment()
@@ -76,14 +88,18 @@ internal struct TwitterOAuthClient: TwitterClientBase {
     }
 
     /// Generates the authentication URL for the user to authorize the application.
-    /// - Parameter tokenObject: The OAuth token object obtained from requestToken()
-    /// - Returns: URL that the user should visit to authorize the application
-    /// - Throws: TwitterOAuthClientError if URL generation fails
+    ///
+    /// This method constructs the URL that the user should visit to authorize the application
+    /// using the provided OAuth token.
+    ///
+    /// - Parameter tokenObject: The OAuth token object obtained from `requestToken()`.
+    /// - Returns: URL that the user should visit to authorize the application.
+    /// - Throws: `TwitterOAuthClientError` if URL generation fails.
     public func makeAuthenticateURL(tokenObject: TwitterOAuthToken) throws -> URL {
         let oauthToken = tokenObject.oauthToken
 
-        guard
-            let authenticateURL = twitterClient.auth.oauth10a
+        // Generate the authentication URL
+        guard let authenticateURL = twitterClient.auth.oauth10a
             .makeOAuthAuthenticateURL(.init(oauthToken: oauthToken))
         else {
             logger.error(
@@ -107,20 +123,27 @@ internal struct TwitterOAuthClient: TwitterClientBase {
     }
 
     /// Converts OAuth tokens to user access tokens after successful authentication.
+    ///
+    /// This method exchanges the OAuth token and verifier for user access tokens.
+    ///
     /// - Parameters:
-    ///   - oauthToken: The OAuth token received from Twitter
-    ///   - oauthVerifier: The verification code received after user authorization
-    /// - Returns: TwitterUserToken containing access tokens
-    /// - Throws: TwitterOAuthClientError if token conversion fails
+    ///   - oauthToken: The OAuth token received from Twitter.
+    ///   - oauthVerifier: The verification code received after user authorization.
+    /// - Returns: `TwitterUserToken` containing access tokens.
+    /// - Throws: `TwitterOAuthClientError` if token conversion fails.
     public func getUserTokens(oauthToken: String, oauthVerifier: String) async throws -> TwitterUserToken {
-        guard
-            let oauthTokenObject = try await getOAuthTokenObject(fromOAuthToken: oauthToken)
-        else {
+        // Retrieve the OAuth token object from the database
+        guard let oauthTokenObject = try await getOAuthTokenObject(fromOAuthToken: oauthToken) else {
             throw TwitterOAuthClientError.invalidOAuthToken
         }
 
-        let userTokens =
-            try await convertOAuthTokenToUserTokens(tokenObject: oauthTokenObject, oauthVerifier: oauthVerifier)
+        // Convert the OAuth token to user access tokens
+        let userTokens = try await convertOAuthTokenToUserTokens(
+            tokenObject: oauthTokenObject,
+            oauthVerifier: oauthVerifier
+        )
+
+        // Save the user tokens to the database
         return try await saveUserTokens(
             userTokens: userTokens,
             oauthTokenObject: oauthTokenObject,
@@ -129,12 +152,15 @@ internal struct TwitterOAuthClient: TwitterClientBase {
     }
 
     /// Saves the user tokens to the database.
+    ///
+    /// This method persists the user tokens in the database for future use.
+    ///
     /// - Parameters:
-    ///   - userTokens: The tokens to be saved
-    ///   - oauthTokenObject: The original OAuth token
-    ///   - oauthVerifier: The verification code
-    /// - Returns: The saved TwitterUserToken
-    /// - Throws: Database errors if saving fails
+    ///   - userTokens: The tokens to be saved.
+    ///   - oauthTokenObject: The original OAuth token.
+    ///   - oauthVerifier: The verification code.
+    /// - Returns: The saved `TwitterUserToken`.
+    /// - Throws: Database errors if saving fails.
     private func saveUserTokens(userTokens: TwitterUserTokens, oauthTokenObject: TwitterOAuthToken,
                                 oauthVerifier: String) async throws -> TwitterUserToken
     {
@@ -169,9 +195,12 @@ internal struct TwitterOAuthClient: TwitterClientBase {
     }
 
     /// Saves an OAuth token to the database.
-    /// - Parameter tokenObject: The OAuth token to save
-    /// - Returns: The saved TwitterOAuthToken
-    /// - Throws: Database errors if saving fails
+    ///
+    /// This method persists the OAuth token in the database for future use.
+    ///
+    /// - Parameter tokenObject: The OAuth token to save.
+    /// - Returns: The saved `TwitterOAuthToken`.
+    /// - Throws: Database errors if saving fails.
     private func saveOAuthToken(tokenObject: TwitterOAuthTokenV1) async throws -> TwitterOAuthToken {
         let token = TwitterOAuthToken(
             oauthToken: tokenObject.oauthToken,
@@ -202,9 +231,12 @@ internal struct TwitterOAuthClient: TwitterClientBase {
     }
 
     /// Retrieves an OAuth token from the database.
-    /// - Parameter oauthToken: The token string to look up
-    /// - Returns: Optional TwitterOAuthToken if found
-    /// - Throws: Database errors if query fails
+    ///
+    /// This method fetches an OAuth token from the database using the provided token string.
+    ///
+    /// - Parameter oauthToken: The token string to look up.
+    /// - Returns: Optional `TwitterOAuthToken` if found.
+    /// - Throws: Database errors if query fails.
     private func getOAuthTokenObject(fromOAuthToken oauthToken: String) async throws -> TwitterOAuthToken? {
         do {
             return try await TwitterOAuthToken
@@ -225,11 +257,14 @@ internal struct TwitterOAuthClient: TwitterClientBase {
     }
 
     /// Converts an OAuth token to user access tokens.
+    ///
+    /// This method exchanges the OAuth token and verifier for user access tokens.
+    ///
     /// - Parameters:
-    ///   - tokenObject: The OAuth token to convert
-    ///   - oauthVerifier: The verification code from the OAuth process
-    /// - Returns: TwitterUserTokens containing access and secret tokens
-    /// - Throws: TwitterOAuthClientError if conversion fails
+    ///   - tokenObject: The OAuth token to convert.
+    ///   - oauthVerifier: The verification code from the OAuth process.
+    /// - Returns: `TwitterUserTokens` containing access and secret tokens.
+    /// - Throws: `TwitterOAuthClientError` if conversion fails.
     private func convertOAuthTokenToUserTokens(tokenObject: TwitterOAuthToken,
                                                oauthVerifier: String) async throws -> TwitterUserTokens
     {
@@ -239,15 +274,12 @@ internal struct TwitterOAuthClient: TwitterClientBase {
             oauthVerifier: oauthVerifier
         )).responseObject
 
-        guard
-            let success = response.success
-        else {
+        // Check for a successful conversion
+        guard let success = response.success else {
             BackendMetric.twitterUserTokensConverted(status: .fail).increment()
             let message = "Failed to convert oauth token to user access token and user secret access token."
 
-            guard
-                let error = response.error
-            else {
+            guard let error = response.error else {
                 logger.error(
                     .init(stringLiteral: message),
                     metadata: [

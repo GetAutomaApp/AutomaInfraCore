@@ -7,7 +7,10 @@ import DataTypes
 import Fluent
 import Vapor
 
+/// Controller for handling authentication-related routes.
 internal struct AuthenticationController: RouteCollection {
+    /// Registers routes for authentication operations.
+    /// - Parameter routes: The routes builder to register routes on.
     public func boot(routes: RoutesBuilder) throws {
         let authenticationRoute = routes.grouped("Authentication")
 
@@ -26,6 +29,10 @@ internal struct AuthenticationController: RouteCollection {
         authenticatedRouteGroup.post("logout", use: logout)
     }
 
+    /// Sends a registration code to the user's phone number.
+    /// - Parameter req: The request containing the phone number.
+    /// - Returns: A DTO containing the authentication code response.
+    /// - Throws: An error if the user already exists or sending the code fails.
     @Sendable
     public func registerCode(req: Request) async throws -> AuthenticationCodeResponseDTO {
         let dto = try req.content.decode(PhoneNumberPayloadDTO.self)
@@ -45,6 +52,10 @@ internal struct AuthenticationController: RouteCollection {
         )
     }
 
+    /// Registers a new user with the provided phone number and code.
+    /// - Parameter req: The request containing the phone number and code.
+    /// - Returns: A DTO containing the authentication tokens.
+    /// - Throws: An error if the user already exists or registration fails.
     @Sendable
     public func register(req: Request) async throws -> AuthenticationTokensPayloadDTO {
         let dto = try req.content.decode(AuthPhoneCodePayloadDTO.self)
@@ -62,6 +73,10 @@ internal struct AuthenticationController: RouteCollection {
         return try await authService.register(payload: dto, signer: req.jwt, queue: req.queue)
     }
 
+    /// Sends a login code to the user's phone number.
+    /// - Parameter req: The request containing the phone number.
+    /// - Returns: A DTO containing the authentication code response.
+    /// - Throws: An error if the user is not found or sending the code fails.
     @Sendable
     public func loginCode(req: Request) async throws -> AuthenticationCodeResponseDTO {
         let dto = try req.content.decode(PhoneNumberPayloadDTO.self)
@@ -81,6 +96,10 @@ internal struct AuthenticationController: RouteCollection {
         )
     }
 
+    /// Logs in a user with the provided phone number and code.
+    /// - Parameter req: The request containing the phone number and code.
+    /// - Returns: A DTO containing the authentication tokens.
+    /// - Throws: An error if login fails.
     @Sendable
     public func login(req: Request) async throws -> AuthenticationTokensPayloadDTO {
         let dto = try req.content.decode(AuthPhoneCodePayloadDTO.self)
@@ -94,6 +113,10 @@ internal struct AuthenticationController: RouteCollection {
         return try await authService.login(payload: dto, signer: req.jwt)
     }
 
+    /// Refreshes the user's access token.
+    /// - Parameter req: The request containing the refresh token.
+    /// - Returns: A DTO containing the new access token.
+    /// - Throws: An error if the token is invalid or refreshing fails.
     @Sendable
     public func refreshToken(req: Request) async throws -> AccessTokenPayloadDTO {
         let tokenString = try req.query.get(String?.self, at: "xxrt")
@@ -130,6 +153,10 @@ internal struct AuthenticationController: RouteCollection {
         }
     }
 
+    /// Logs out the user.
+    /// - Parameter req: The request containing the user's token.
+    /// - Returns: HTTP status indicating the result of the operation.
+    /// - Throws: An error if logout fails.
     @Sendable
     public func logout(req: Request) async throws -> HTTPStatus {
         let token = try await req.jwt.verify(as: JWTTokenPayload.self)

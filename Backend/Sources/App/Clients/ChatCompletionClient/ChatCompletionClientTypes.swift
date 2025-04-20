@@ -9,13 +9,13 @@ import Vapor
 /// Implementations handle the specifics of interacting with different AI platforms
 protocol ChatCompletion {
     /// Logger instance for tracking operations and errors
-    public var logger: Logger { get }
+    var logger: Logger { get }
 
     /// Creates a chat completion using the specified query parameters
     /// - Parameter query: The chat completion request parameters
     /// - Returns: The generated chat completion result
     /// - Throws: Errors that occur during the chat completion process
-    public func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult
+    func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult
 }
 
 /// Structure representing the content of a chat completion request

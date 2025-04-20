@@ -7,19 +7,53 @@ import Foundation
 import OpenAI
 import Vapor
 
+/// A protocol defining the base requirements for an image generation client.
+///
+/// This protocol requires conforming types to provide a logger and a method for generating images.
 protocol ImageGenerationClientBase {
-    public var logger: Logger { get }
-    public func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult
+    /// Logger instance for tracking operations and errors.
+    var logger: Logger { get }
+
+    /// Generates images based on the provided query parameters.
+    ///
+    /// - Parameter query: The query containing generation parameters like prompt, model, etc.
+    /// - Returns: A `GenerateImageResult` containing the generated images and metadata.
+    /// - Throws: An error if the image generation fails.
+    func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult
 }
 
+/// A structure representing the query parameters for image generation.
+///
+/// This struct encapsulates the parameters required for generating images, such as model, prompt, and optional
+/// settings.
 internal struct GenerateImageQuery: Content {
+    /// The model to use for image generation.
     public let model: GenerateImageModel
+
+    /// The prompt describing the desired image.
     public let prompt: String
+
+    /// The total number of images to generate.
     public let totalImagesToGenerate: Int?
+
+    /// The quality setting for the generated images.
     public let quality: GenerateImageQuality?
+
+    /// The size of the generated images.
     public let imageSize: GenerateImageSize?
+
+    /// The style of the generated images.
     public let imageStyle: GenerateImageStyle?
 
+    /// Initializes a new instance of `GenerateImageQuery`.
+    ///
+    /// - Parameters:
+    ///   - model: The model to use for image generation.
+    ///   - prompt: The prompt describing the desired image.
+    ///   - totalImagesToGenerate: The total number of images to generate (optional).
+    ///   - quality: The quality setting for the images (optional).
+    ///   - imageSize: The size of the images (optional).
+    ///   - imageStyle: The style of the images (optional).
     init(
         model: GenerateImageModel,
         prompt: String,
@@ -37,13 +71,21 @@ internal struct GenerateImageQuery: Content {
     }
 }
 
+/// An enumeration representing the models available for image generation.
+///
+/// This enum defines the supported models for generating images, such as DALL-E 2 and DALL-E 3.
 internal enum GenerateImageModel: String, Codable {
-    /// https://platform.openai.com/docs/models/dall-e-2
+    /// Represents the DALL-E 2 model.
     case dall_e_2 = "dall-e-2"
 
-    /// https://platform.openai.com/docs/models/dall-e-3
+    /// Represents the DALL-E 3 model.
     case dall_e_3 = "dall-e-3"
 
+    /// Retrieves the platform-specific client for the model.
+    ///
+    /// - Parameter logger: The logger instance to use for operation tracking.
+    /// - Returns: The corresponding platform client for the model.
+    /// - Throws: An error if the client initialization fails.
     public func getPlatformClient(logger: Logger) throws -> any ImageGenerationClientBase {
         switch self {
         case .dall_e_2, .dall_e_3:
@@ -52,25 +94,55 @@ internal enum GenerateImageModel: String, Codable {
     }
 }
 
+/// A structure representing the result of an image generation operation.
+///
+/// This struct contains the generated images and associated metadata.
 internal struct GenerateImageResult: Content {
+    /// The generated images as an array of data.
     public let images: [Data]
+
+    /// The metadata associated with the generated images in JSON format.
     public let metadataJSON: Data
 }
 
+/// An enumeration representing the quality settings for image generation.
+///
+/// This enum defines the available quality settings for generated images, such as HD and standard.
 internal enum GenerateImageQuality: String, Codable {
+    /// Represents high-definition quality.
     case hd
+
+    /// Represents standard quality.
     case standard
 }
 
+/// An enumeration representing the size options for image generation.
+///
+/// This enum defines the available sizes for generated images, including options specific to DALL-E 3 models.
 public enum GenerateImageSize: String, Codable, Sendable {
+    /// Represents a size of 1024x1024 pixels.
     case _1024 = "1024x1024"
-    case _1024_1792 = "1024x1792" // for dall-e-3 models
-    case _1792_1024 = "1792x1024" // for dall-e-3 models
+
+    /// Represents a size of 1024x1792 pixels, specific to DALL-E 3 models.
+    case _1024_1792 = "1024x1792"
+
+    /// Represents a size of 1792x1024 pixels, specific to DALL-E 3 models.
+    case _1792_1024 = "1792x1024"
+
+    /// Represents a size of 256x256 pixels.
     case _256 = "256x256"
+
+    /// Represents a size of 512x512 pixels.
     case _512 = "512x512"
 }
 
+/// An enumeration representing the style options for image generation.
+///
+/// This enum defines the available styles for generated images, such as natural and vivid.
 public enum GenerateImageStyle: String, Codable, Sendable {
+    /// Represents a natural style.
     case natural
+
+    /// Represents a vivid style.
     case vivid
 }

@@ -5,27 +5,50 @@
 
 import Vapor
 
+/// Represents common error cases that can occur throughout the application
+/// Conforms to String, Error, Decodable, and Encodable protocols for serialization and error handling
 public enum GenericErrors: String, Error, Decodable, Encodable {
+    /// Error when a request is aborted
     case abortError
+    /// Error related to Alamofire networking operations
     case alamofireError
+    /// Error when sending a Discord webhook message fails
     case discordWebhookMessageFailed
+    /// Error when response decoding fails
     case failedToDecodeResponse
+    /// Error when response encoding fails
     case failedToEncodeResponse
+    /// Error for invalid verification code
     case invalidCode
+    /// Error for incorrectly formatted phone number
     case invalidPhoneNumber
+    /// Error for invalid authentication token
     case invalidToken
+    /// Error for malformed URL
     case invalidUrl
+    /// Error for invalid user ID format
     case invalidUserId
+    /// Error when required image is missing
     case missingImage
+    /// Error for network connectivity issues
     case networkConnectivityError
+    /// Error when S3 path is too short
     case s3PathTooShort
+    /// Error when SMS message sending fails
     case smsMessageFailed
+    /// Error when API returns neither error nor response
     case unexpectedApiStateNoErrorAndNoResponse
+    /// Generic unknown error
     case unknownError
+    /// Error when attempting to create user that already exists
     case userAlreadyExists
+    /// Error when user cannot be found
     case userNotFound
+    /// Error when verification code requests exceed rate limit
     case verificationCodeRateLimit
 
+    /// Provides human-readable error messages for each error case
+    /// - Returns: A string containing the user-friendly error message
     public var message: String {
         switch self {
         case .invalidCode:
@@ -70,10 +93,14 @@ public enum GenericErrors: String, Error, Decodable, Encodable {
     }
 }
 
-/// Error from network response as Vapor `Content` object
+/// Represents an error response structure that can be sent over the network
+/// Conforms to Vapor's Content protocol for HTTP response handling
 public struct ResponseError: Content {
+    /// The specific error that occurred
     public let error: GenericErrors
 
+    /// Initializes a new ResponseError
+    /// - Parameter error: The GenericErrors case to be wrapped in the response
     public init(error: GenericErrors) {
         self.error = error
     }
