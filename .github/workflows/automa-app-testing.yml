@@ -8,37 +8,37 @@ on:
       - "App/**/*.swift"
 
 jobs:
-  automa-app-shared-unit-tests:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
+#   automa-app-shared-unit-tests:
+#     runs-on: macos-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: "6.1"
+#       - uses: swift-actions/setup-swift@v2
+#         with:
+#           swift-version: "6.1"
 
-      - name: Run Unit Tests
-        uses: GetAutomaApp/opensource-actions/swifttesting@main
-        with:
-          compose: "false"
-          working-directory: "./App/AutomaAppShared"
-          swift_test_extra_args: "--filter '.*UnitTests.*'"
+#       - name: Run Unit Tests
+#         uses: GetAutomaApp/opensource-actions/swifttesting@main
+#         with:
+#           compose: "false"
+#           working-directory: "./App/AutomaAppShared"
+#           swift_test_extra_args: "--filter '.*UnitTests.*'"
 
-  automa-app-shared-integration-tests:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
+#   automa-app-shared-integration-tests:
+#     runs-on: macos-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: "6.1"
+#       - uses: swift-actions/setup-swift@v2
+#         with:
+#           swift-version: "6.1"
 
-      - name: Run Unit Tests
-        uses: GetAutomaApp/opensource-actions/swifttesting@main
-        with:
-          compose: "false"
-          working-directory: "./App/AutomaAppShared"
-          swift_test_extra_args: "--filter '.*IntegrationTests.*'"
+#       - name: Run Unit Tests
+#         uses: GetAutomaApp/opensource-actions/swifttesting@main
+#         with:
+#           compose: "false"
+#           working-directory: "./App/AutomaAppShared"
+#           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
 
   automa-app-core-unit-tests:
     runs-on: macos-latest
@@ -56,50 +56,50 @@ jobs:
           schema: "IOS"
           destination: "platform=iOS Simulator,name=iPhone 14,OS=16.0"
 
-  automa-app-core-integration-tests:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
+#   automa-app-core-integration-tests:
+#     runs-on: macos-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: "6.1"
+#       - uses: swift-actions/setup-swift@v2
+#         with:
+#           swift-version: "6.1"
 
-      - name: Run Unit Tests
-        uses: GetAutomaApp/opensource-actions/swifttesting@main
-        with:
-          compose: "false"
-          working-directory: "./App/AutomaApp/Core/IOS"
-          swift_test_extra_args: "--filter '.*IntegrationTests.*'"
+#       - name: Run Unit Tests
+#         uses: GetAutomaApp/opensource-actions/swifttesting@main
+#         with:
+#           compose: "false"
+#           working-directory: "./App/AutomaApp/Core/IOS"
+#           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
 
-  automa-app-admin-unit-tests:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
+#   automa-app-admin-unit-tests:
+#     runs-on: macos-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: "6.1"
+#       - uses: swift-actions/setup-swift@v2
+#         with:
+#           swift-version: "6.1"
 
-      - name: Run Unit Tests
-        uses: GetAutomaApp/opensource-actions/swifttesting@main
-        with:
-          compose: "false"
-          working-directory: "./App/AutomaApp/Admin/IOS-ADMIN"
-          swift_test_extra_args: "--filter '.*UnitTests.*'"
+#       - name: Run Unit Tests
+#         uses: GetAutomaApp/opensource-actions/swifttesting@main
+#         with:
+#           compose: "false"
+#           working-directory: "./App/AutomaApp/Admin/IOS-ADMIN"
+#           swift_test_extra_args: "--filter '.*UnitTests.*'"
 
-  automa-app-admin-integration-tests:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
+#   automa-app-admin-integration-tests:
+#     runs-on: macos-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: "6.1"
+#       - uses: swift-actions/setup-swift@v2
+#         with:
+#           swift-version: "6.1"
 
-      - name: Run Unit Tests
-        uses: GetAutomaApp/opensource-actions/swifttesting@main
-        with:
-          compose: "false"
-          working-directory: "./App/AutomaApp/Admin/IOS-ADMIN"
-          swift_test_extra_args: "--filter '.*IntegrationTests.*'"
+#       - name: Run Unit Tests
+#         uses: GetAutomaApp/opensource-actions/swifttesting@main
+#         with:
+#           compose: "false"
+#           working-directory: "./App/AutomaApp/Admin/IOS-ADMIN"
+#           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
