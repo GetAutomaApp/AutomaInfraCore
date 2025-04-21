@@ -25,7 +25,7 @@ jobs:
           swift_test_extra_args: "--filter '.*UnitTests.*'"
 
   automa-app-shared-integration-tests:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
 
