@@ -1,0 +1,41 @@
+# Run AutomaAppShared Tests (integ & unit)
+# Run AutomaApp Tests (integ & unit)
+name: Run `AutomaApp(related)` Tests
+
+on:
+  pull_request:
+    paths:
+      - "App/**/*.swift"
+
+jobs:
+  automa-app-shared-unit-tests:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.1"
+
+      - name: Run Unit Tests
+        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        with:
+          compose: "false"
+          working-directory: "./App/AutomaAppShared"
+          swift_test_extra_args: "--filter '.*UnitTests.*'"
+
+  automa-app-shared-integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.1"
+
+      - name: Run Unit Tests
+        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        with:
+          compose: "false"
+          working-directory: "./App/AutomaAppShared"
+          swift_test_extra_args: "--filter '.*IntegrationTests.*'"
