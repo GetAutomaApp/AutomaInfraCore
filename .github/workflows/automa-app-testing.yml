@@ -52,7 +52,7 @@ jobs:
       - name: Run Unit Tests
         uses: GetAutomaApp/opensource-actions/xctesting@9-implement-xcodebuild-testing-action
         with:
-          working-directory: "./App/AutomaApp/Core/IOS"
+          working-directory: "./App/AutomaApp/"
           schema: "IOS"
           destination: "platform=iOS Simulator,name=iPhone 14,OS=16.0"
 
