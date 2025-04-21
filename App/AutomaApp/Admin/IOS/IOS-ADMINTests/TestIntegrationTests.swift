@@ -4,6 +4,7 @@ import Testing
 struct TestIntegrationTests {
     @Test("Test Print")
     func testPrint() {
+        // Trigger Tests
         print("Hello, World!")
     }
 }

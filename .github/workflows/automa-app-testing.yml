@@ -50,11 +50,11 @@ jobs:
           swift-version: "6.1"
 
       - name: Run Unit Tests
-        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        uses: GetAutomaApp/opensource-actions/xctesting@9-implement-xcodebuild-testing-action
         with:
-          compose: "false"
           working-directory: "./App/AutomaApp/Core/IOS"
-          swift_test_extra_args: "--filter '.*UnitTests.*'"
+          schema: "IOS"
+          destination: "platform=iOS Simulator,name=iPhone 14,OS=16.0"
 
   automa-app-core-integration-tests:
     runs-on: macos-latest
