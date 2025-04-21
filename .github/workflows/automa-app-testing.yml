@@ -39,3 +39,67 @@ jobs:
           compose: "false"
           working-directory: "./App/AutomaAppShared"
           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
+
+  automa-app-core-unit-tests:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.1"
+
+      - name: Run Unit Tests
+        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        with:
+          compose: "false"
+          working-directory: "./App/AutomaApp/Core/IOS"
+          swift_test_extra_args: "--filter '.*UnitTests.*'"
+
+  automa-app-core-integration-tests:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.1"
+
+      - name: Run Unit Tests
+        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        with:
+          compose: "false"
+          working-directory: "./App/AutomaApp/Core/IOS"
+          swift_test_extra_args: "--filter '.*IntegrationTests.*'"
+
+  automa-app-admin-unit-tests:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.1"
+
+      - name: Run Unit Tests
+        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        with:
+          compose: "false"
+          working-directory: "./App/AutomaApp/Admin/IOS-ADMIN"
+          swift_test_extra_args: "--filter '.*UnitTests.*'"
+
+  automa-app-admin-integration-tests:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.1"
+
+      - name: Run Unit Tests
+        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        with:
+          compose: "false"
+          working-directory: "./App/AutomaApp/Admin/IOS-ADMIN"
+          swift_test_extra_args: "--filter '.*IntegrationTests.*'"
