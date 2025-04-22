@@ -54,7 +54,7 @@ jobs:
         with:
           working-directory: "./App/AutomaApp/"
           schema: "IOS"
-          destination: "platform=iOS Simulator,name=iPhone 14,OS=16.0"
+          destination: "platform=iOS Simulator,name=iPhone 16,OS=18.0"
 
 #   automa-app-core-integration-tests:
 #     runs-on: macos-latest
