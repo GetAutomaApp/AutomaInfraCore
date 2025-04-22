@@ -24,21 +24,21 @@ jobs:
 #           working-directory: "./App/AutomaAppShared"
 #           swift_test_extra_args: "--filter '.*UnitTests.*'"
 
-#   automa-app-shared-integration-tests:
-#     runs-on: macos-latest
-#     steps:
-#       - uses: actions/checkout@v4
+  automa-app-shared-integration-tests:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
 
-#       - uses: swift-actions/setup-swift@v2
-#         with:
-#           swift-version: "6.1"
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.1"
 
-#       - name: Run Unit Tests
-#         uses: GetAutomaApp/opensource-actions/swifttesting@main
-#         with:
-#           compose: "false"
-#           working-directory: "./App/AutomaAppShared"
-#           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
+      - name: Run Unit Tests
+        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        with:
+          compose: "false"
+          working-directory: "./App/AutomaAppShared"
+          swift_test_extra_args: "--filter '.*IntegrationTests.*'"
 
   automa-app-core-unit-tests:
     runs-on: macos-15

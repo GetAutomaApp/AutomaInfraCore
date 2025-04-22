@@ -1,0 +1,25 @@
+name: Run `AutomaApp(related)` Tests
+
+on:
+  pull_request:
+    paths:
+      - "App/AutomaApp/Core/**/*.swift"
+      - "App/AutomaAppShared/**/*.swift"
+
+jobs:
+    automa-app-core-unit-tests:
+        runs-on: macos-15
+        steps:
+          - uses: actions/checkout@v4
+
+          - uses: swift-actions/setup-swift@v2
+            with:
+              swift-version: "6.1"
+
+          - name: Run Unit Tests
+            uses: GetAutomaApp/opensource-actions/xctesting@9-implement-xcodebuild-testing-action
+            with:
+              working-directory: "./App/AutomaApp/"
+              schema: "IOS"
+              destination: "platform=iOS Simulator,name=iPhone 16,OS=18.0"
+              testing-targets: "IOSTests"
