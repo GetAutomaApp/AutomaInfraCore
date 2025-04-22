@@ -41,7 +41,7 @@ jobs:
 #           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
 
   automa-app-core-unit-tests:
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
 
