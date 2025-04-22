@@ -1,13 +1,7 @@
-// IOS_ADMINTests.swift
-// Copyright (c) 2025 GetAutomaApp
-// All source code and related assets are the property of GetAutomaApp.
-// All rights reserved.
+import XCTest
 
-@testable import IOS_ADMIN
-import Testing
-
-struct IOS_ADMINTests {
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+final class ExampleTests: XCTestCase {
+    func testPrintHello() {
+        print("✅ Hello from XCTest!")
     }
 }
