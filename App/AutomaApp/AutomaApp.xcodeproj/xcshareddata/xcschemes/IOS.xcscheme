@@ -52,6 +52,39 @@
                ReferencedContainer = "container:AutomaApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3825E67B2DB7D692002FC6EB"
+               BuildableName = "IOSIntegrationTests.xctest"
+               BlueprintName = "IOSIntegrationTests"
+               ReferencedContainer = "container:AutomaApp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3825E6882DB7D6A8002FC6EB"
+               BuildableName = "IOSUnitTests.xctest"
+               BlueprintName = "IOSUnitTests"
+               ReferencedContainer = "container:AutomaApp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3825E6B12DB7D717002FC6EB"
+               BuildableName = "IOS-ADMINUnitTests.xctest"
+               BlueprintName = "IOS-ADMINUnitTests"
+               ReferencedContainer = "container:AutomaApp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
