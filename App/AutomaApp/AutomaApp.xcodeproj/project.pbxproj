@@ -42,6 +42,20 @@
 			remoteGlobalIDString = 38F8D37A2CFA3F3700CC1E46;
 			remoteInfo = IOS;
 		};
+		38A9C63D2DB92A350080069A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 38F8D3712CFA3EBB00CC1E46 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 38F8D4132CFA42D200CC1E46;
+			remoteInfo = "IOS-ADMIN";
+		};
+		38A9C63F2DB92A400080069A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 38F8D3712CFA3EBB00CC1E46 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 38F8D4132CFA42D200CC1E46;
+			remoteInfo = "IOS-ADMIN";
+		};
 		38F8D3962CFA3F3800CC1E46 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 38F8D3712CFA3EBB00CC1E46 /* Project object */;
@@ -313,6 +327,7 @@
 			);
 			dependencies = (
 				3825E6812DB7D692002FC6EB /* PBXTargetDependency */,
+				38A9C63E2DB92A350080069A /* PBXTargetDependency */,
 			);
 			name = IOSIntegrationTests;
 			packageProductDependencies = (
@@ -373,6 +388,7 @@
 			);
 			dependencies = (
 				3825E6B72DB7D717002FC6EB /* PBXTargetDependency */,
+				38A9C6402DB92A400080069A /* PBXTargetDependency */,
 			);
 			name = "IOS-ADMINUnitTests";
 			packageProductDependencies = (
@@ -491,7 +507,7 @@
 					};
 					3825E6B12DB7D717002FC6EB = {
 						CreatedOnToolsVersion = 16.2;
-						TestTargetID = 38F8D37A2CFA3F3700CC1E46;
+						TestTargetID = 38F8D4132CFA42D200CC1E46;
 					};
 					38F8D37A2CFA3F3700CC1E46 = {
 						CreatedOnToolsVersion = 16.0;
@@ -677,6 +693,16 @@
 			isa = PBXTargetDependency;
 			target = 38F8D37A2CFA3F3700CC1E46 /* IOS */;
 			targetProxy = 3825E6B62DB7D717002FC6EB /* PBXContainerItemProxy */;
+		};
+		38A9C63E2DB92A350080069A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 38F8D4132CFA42D200CC1E46 /* IOS-ADMIN */;
+			targetProxy = 38A9C63D2DB92A350080069A /* PBXContainerItemProxy */;
+		};
+		38A9C6402DB92A400080069A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 38F8D4132CFA42D200CC1E46 /* IOS-ADMIN */;
+			targetProxy = 38A9C63F2DB92A400080069A /* PBXContainerItemProxy */;
 		};
 		38F8D3972CFA3F3800CC1E46 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1191,7 +1217,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/IOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IOS-ADMIN.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/IOS-ADMIN";
 			};
 			name = Debug;
 		};
@@ -1258,7 +1284,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/IOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IOS-ADMIN.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/IOS-ADMIN";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
