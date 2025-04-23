@@ -1,9 +1,10 @@
-name: Run `AutomaApp - CORE (IOS)` Tests
+
+name: Run `AutomaApp - ADMIN (IOS)` Tests
 
 on:
   pull_request:
     paths:
-      - "App/AutomaApp/Core/**/*.swift"
+      - "App/AutomaApp/Admin/**/*.swift"
       - "App/AutomaAppShared/**/*.swift"
 
 jobs:
@@ -21,9 +22,9 @@ jobs:
             uses: GetAutomaApp/opensource-actions/xctesting@9-implement-xcodebuild-testing-action
             with:
               working-directory: "./App/AutomaApp/"
-              schema: "IOS"
+              schema: "IOS-ADMIN"
               destination: "platform=iOS Simulator,name=iPhone 16,OS=18.0"
-              testing-targets: "IOSIntegrationTests,IOSUnitTests"
+              testing-targets: "IOS-ADMINIntegrationTests,IOS-ADMINUnitTests"
 
     automa-app-core-ui-tests:
         runs-on: macos-15
@@ -39,6 +40,6 @@ jobs:
             uses: GetAutomaApp/opensource-actions/xctesting@9-implement-xcodebuild-testing-action
             with:
               working-directory: "./App/AutomaApp/"
-              schema: "IOS"
+              schema: "IOS-ADMIN"
               destination: "platform=iOS Simulator,name=iPhone 16,OS=18.0"
-              testing-targets: "IOSUITests"
+              testing-targets: "IOS-ADMINUITests"
