@@ -6,8 +6,8 @@
 import SwiftUI
 
 /// Represents the different visual variants available for the ProgressIndicatorComponent
-/// - generic: The default variant that displays a simple progress indicator
 public enum ProgressIndicatorVariants {
+    /// The default variant that displays a simple progress indicator
     case generic
 }
 

@@ -22,7 +22,7 @@ public struct VerificationCodeInputComponent: View {
     @FocusState public var focusedText: FocusedField?
 
     /// Callback triggered when the view appears
-    let onSelfAppear: (VerificationCodeInputComponentConfig) -> Void
+    public let onSelfAppear: (VerificationCodeInputComponentConfig) -> Void
 
     /// Initializes a new verification code input component
     /// - Parameters:

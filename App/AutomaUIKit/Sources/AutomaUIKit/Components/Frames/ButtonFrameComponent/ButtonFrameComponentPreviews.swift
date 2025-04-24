@@ -34,16 +34,22 @@ internal struct ButtonFrameComponentPreviewsView: View {
             VStack {
                 AutoButtonVariationsView()
                 HStack {
-                    ButtonFrameComponent(config: buttonConfig, action: {
-                        print("Clicked Me")
-                    }) {
+                    ButtonFrameComponent(
+                        config: buttonConfig,
+                        action: ({
+                            print("Clicked Me")
+                        })
+                    ) {
                         Text("Hello, World")
                             .fontTableFont(FontTable.SFPro.Body.body4)
                     }
 
-                    ButtonFrameComponent(config: buttonConfig, action: {
-                        print("Clicked Me")
-                    }) {
+                    ButtonFrameComponent(
+                        config: buttonConfig,
+                        action: ({
+                            print("Clicked Me")
+                        })
+                    ) {
                         Image(systemName: "play.fill")
                     }
                 }
@@ -71,10 +77,13 @@ internal struct AutoButtonVariationsView: View {
     /// The main view body displaying buttons with automatic style variations
     public var body: some View {
         HStack {
-            ButtonFrameComponent(config: buttonController, action: { config in
-                config.isCircular.toggle()
-                config.frameVariant = .disabled
-            }) { _ in
+            ButtonFrameComponent(
+                config: buttonController,
+                action: ({ config in
+                    config.isCircular.toggle()
+                    config.frameVariant = .disabled
+                })
+            ) { _ in
                 ProgressView()
             } onSelfAppear: { _ in
                 startChangingVariant()
@@ -82,10 +91,19 @@ internal struct AutoButtonVariationsView: View {
 
             Spacer()
 
-            IconButtonComponent(onSelfAppear: { config in config.variant = .square }, configAction: { config in
-                isTimerActive ? stopChangingVariant() : startChangingVariant()
-                config.icon = isTimerActive ? .pause : .play
-            })
+            IconButtonComponent(
+                onSelfAppear: { config in
+                    config.variant = .square
+                },
+                configAction: { config in
+                    if isTimerActive {
+                        stopChangingVariant()
+                    } else {
+                        startChangingVariant()
+                    }
+                    config.icon = isTimerActive ? .pause : .play
+                }
+            )
         }
     }
 
@@ -108,8 +126,12 @@ internal struct AutoButtonVariationsView: View {
     /// Updates the button's appearance with random variants and configurations
     /// This function is called repeatedly while the timer is active
     public func updateVariant() {
+        // Disable rule, because `ButtonFrameVariants` has more than 0 cases, \
+        // so it will find a random element
+        // swiftlint:disable force_unwrapping
         // Randomly update button properties
         buttonController.frameVariant = .allCases.randomElement()!
+        // swiftlint:disable force_unwrapping
         buttonController.isCircular = .random()
         buttonController.fillSpace = .random()
 

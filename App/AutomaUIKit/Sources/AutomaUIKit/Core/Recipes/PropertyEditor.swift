@@ -146,11 +146,11 @@ public struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: V
     /**
      Checks if a given type is a DesignIcon.
 
-     - Parameter t: The type to check
+     - Parameter type: The type to check
      - Returns: True if the type is a DesignIcon, false otherwise
      */
-    private func isDesignIcon(_ t: some Any) -> Bool {
-        t is DesignIcons
+    private func isDesignIcon(_ type: some Any) -> Bool {
+        type is DesignIcons
     }
 }
 
@@ -265,11 +265,16 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
             ))
         } else if property.type == CGFloat.self {
             let value = property.get(object) as! CGFloat
-            PaddingSliderInput(value: Binding(get: { value }, set: { newValue in
-                var mutableObject = object
-                property.set(&mutableObject, newValue)
-            }),
-            label: property.label)
+            PaddingSliderInput(
+                value: Binding(
+                    get: { value },
+                    set: { newValue in
+                        var mutableObject = object
+                        property.set(&mutableObject, newValue)
+                    }
+                ),
+                label: property.label
+            )
         } else if property.type == Color.self {
             let value = property.get(object) as! Color
             ColorPicker("\(property.label):", selection: Binding(get: {

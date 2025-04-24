@@ -52,13 +52,13 @@ import SwiftUI
         }
 
         /// Coordinator class that handles the delegation and communication between UIKit and SwiftUI
-        class Coordinator: NSObject, UITextFieldDelegate {
+        public class Coordinator: NSObject, UITextFieldDelegate {
             /// The configuration object shared with the parent view
             @ObservedObject public var config: PhoneNumberTextInputComponentConfig
 
             /// Initializes the coordinator with the given configuration
             /// - Parameter config: The configuration object to use
-            init(config: PhoneNumberTextInputComponentConfig) {
+            public init(config: PhoneNumberTextInputComponentConfig) {
                 self.config = config
             }
 

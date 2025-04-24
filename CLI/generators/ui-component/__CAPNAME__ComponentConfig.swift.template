@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// All different variants of __CAPNAME__
+/// - generic: Represents the default state of __CAPNAME__
 public enum __CAPNAME__ComponentVariants {
     case generic
 }
