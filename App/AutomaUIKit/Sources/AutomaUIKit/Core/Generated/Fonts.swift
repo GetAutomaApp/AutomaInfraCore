@@ -16,7 +16,7 @@
 
 /// Deprecated font typealias that will be removed in SwiftGen 7.0
 @available(*, deprecated, renamed: "FontConvertible.Font", message: "This typealias will be removed in SwiftGen 7.0")
-typealias Font = FontConvertible.Font
+internal typealias Font = FontConvertible.Font
 
 // swiftlint:disable superfluous_disable_command file_length implicit_return
 // swiftlint:disable identifier_name line_length type_body_length
@@ -26,7 +26,7 @@ typealias Font = FontConvertible.Font
 /// Namespace containing all custom font families used in the application
 internal enum FontFamily {
     /// The Crimson Text font family with its various styles
-    enum CrimsonText {
+    internal enum CrimsonText {
         /// Bold variant of Crimson Text font
         public static let bold = FontConvertible(
             name: "CrimsonText-Bold",
@@ -68,7 +68,7 @@ internal enum FontFamily {
     }
 
     /// The SF Pro Text font family with its various styles
-    enum SFProText {
+    internal enum SFProText {
         /// Bold variant of SF Pro Text font
         public static let bold = FontConvertible(
             name: "SFProText-Bold",
@@ -99,8 +99,6 @@ internal enum FontFamily {
         allCustomFonts.forEach { $0.register() }
     }
 }
-
-// swiftlint:enable identifier_name line_length type_body_length
 
 // MARK: - Implementation Details
 
@@ -185,12 +183,12 @@ public struct FontConvertible: Sendable {
 }
 
 /// Convenience initializer for platform-specific fonts
-extension FontConvertible.Font {
+internal extension FontConvertible.Font {
     /// Creates a platform-specific font from a FontConvertible
     /// - Parameters:
     ///   - font: The FontConvertible to create the font from
     ///   - size: The desired size of the font
-    convenience init?(font: FontConvertible, size: CGFloat) {
+    public convenience init?(font: FontConvertible, size: CGFloat) {
         font.registerIfNeeded()
         self.init(name: font.name, size: size)
     }
