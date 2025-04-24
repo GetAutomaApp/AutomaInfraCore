@@ -27,7 +27,7 @@ public extension UIApplication {
 @MainActor
 public class KeychainHelper {
     /// Enumeration of available keychain keys for storing different types of tokens
-    public enum KeyChainKeys: String {
+    internal enum KeyChainKeys: String {
         /// Key for storing the authentication token
         case authenticationToken
         /// Key for storing the refresh token
@@ -35,14 +35,14 @@ public class KeychainHelper {
     }
 
     /// Static instance of SimpleKeychain configured to only be accessible after first unlock of the device
-    static var keychain = SimpleKeychain(
+    internal static var keychain = SimpleKeychain(
         accessibility: .afterFirstUnlockThisDeviceOnly
     )
 
     /// Retrieves a string value from the keychain for the specified key
     /// - Parameter key: The keychain key to retrieve the value for
     /// - Returns: The string value if it exists, nil otherwise
-    public static func get(for key: KeyChainKeys) -> String? {
+    internal static func get(for key: KeyChainKeys) -> String? {
         try? keychain.string(forKey: key.rawValue)
     }
 
@@ -51,7 +51,7 @@ public class KeychainHelper {
     ///   - key: The keychain key to store the value for
     ///   - value: The string value to store
     /// - Returns: Boolean indicating whether the operation was successful
-    public static func set(for key: KeyChainKeys, value: String) -> Bool {
+    internal static func set(for key: KeyChainKeys, value: String) -> Bool {
         (
             try? keychain.set(value, forKey: key.rawValue)
         ) != nil
@@ -59,7 +59,7 @@ public class KeychainHelper {
 
     /// Deletes the value associated with the specified key from the keychain
     /// - Parameter key: The keychain key whose value should be deleted
-    public static func delete(for key: KeyChainKeys) {
+    internal static func delete(for key: KeyChainKeys) {
         try? keychain.deleteItem(forKey: key.rawValue)
     }
 

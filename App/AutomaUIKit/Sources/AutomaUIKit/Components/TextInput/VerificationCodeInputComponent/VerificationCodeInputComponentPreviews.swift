@@ -12,7 +12,7 @@ import SwiftUI
 internal struct VerificationCodeInputComponentPreviews: PreviewProvider {
     /// The preview content showing the verification code input component wrapper view
     /// - Returns: A view containing the verification code input component preview
-    static var previews: some View {
+    public static var previews: some View {
         VerificationCodeInputComponentWrapperView()
     }
 }

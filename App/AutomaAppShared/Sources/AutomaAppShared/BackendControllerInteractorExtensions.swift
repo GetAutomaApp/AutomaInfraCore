@@ -1,4 +1,4 @@
-// BackendController+KeychainAuthToken.swift
+// BackendControllerInteractorExtensions.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -47,15 +47,18 @@ public extension BackendControllerInteractor {
         let url = "\(baseURL)\(endpoint)"
 
         return await withCheckedContinuation { continuation in
-            self.session.request(
-                url,
-                method: method,
-                parameters: parameters,
-                encoding: encoding,
-                headers: headers
-            ).validate().response { response in
-                continuation.resume(returning: response)
-            }
+            self.session
+                .request(
+                    url,
+                    method: method,
+                    parameters: parameters,
+                    encoding: encoding,
+                    headers: headers
+                )
+                .validate()
+                .response { response in
+                    continuation.resume(returning: response)
+                }
         }
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 /// This struct provides SwiftUI previews for testing and development purposes
 internal struct ProgressIndicatorComponentPreviews: PreviewProvider {
     /// The preview content showing a test implementation of the progress indicator
-    static var previews: some View {
+    public static var previews: some View {
         TestProgressView()
     }
 }

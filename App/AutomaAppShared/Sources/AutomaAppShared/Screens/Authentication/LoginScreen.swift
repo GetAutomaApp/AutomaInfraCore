@@ -28,7 +28,7 @@ public struct LoginScreen: View {
     @EnvironmentObject public var baseEnvironmentConfig: BaseAppEnvironmentObject
 
     /// Authentication interactor used for making API requests
-    var authInteractor: AuthenticationControllerInteractor {
+    private var authInteractor: AuthenticationControllerInteractor {
         .init(
             baseURL: baseEnvironmentConfig.apiBaseURL
         )
@@ -220,9 +220,12 @@ public struct LoginScreen: View {
     /// Returns a binding that combines the timeout status and phone input validation
     /// - Returns: A binding to a Boolean indicating if the phone number input is valid
     private func createIsValidPhoneNumberBinding() -> Binding<Bool> {
-        .init(get: {
-            timeout == 0 && phoneInputConfig.isValid
-        }, set: { _ in })
+        .init(
+            get: {
+                timeout == 0 && phoneInputConfig.isValid
+            },
+            set: { _ in }
+        )
     }
 }
 

@@ -1,4 +1,4 @@
-// Initialisation.swift
+// Initialization.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -35,7 +35,7 @@ public extension View {
     /// - On macOS: Returns the visible frame of the main screen
     ///
     /// - Returns: A `CGRect` representing the screen dimensions
-    func getRect() -> CGRect {
+    func getRect() -> CGRect? {
         #if os(iOS)
             // Return the bounds of the main screen on iOS
             return UIScreen.main.bounds
@@ -43,7 +43,7 @@ public extension View {
 
         #if canImport(AppKit)
             // Return the visible frame of the main screen on macOS
-            return NSScreen.main!.visibleFrame
+            return NSScreen.main?.visibleFrame
         #endif
     }
 }

@@ -8,7 +8,7 @@ import SwiftUI
 /// A preview provider for the ButtonFrameComponent
 internal struct ButtonFrameComponentPreviews: PreviewProvider {
     /// Returns a view containing various button frame component previews
-    static var previews: some View {
+    public static var previews: some View {
         ButtonFrameComponentPreviewsView()
     }
 }

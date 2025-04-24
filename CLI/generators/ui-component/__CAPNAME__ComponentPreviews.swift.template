@@ -3,7 +3,7 @@ import SwiftUI
 
 /// Provides previews for `__CAPNAME__Component`.
 internal struct __CAPNAME__ComponentPreviews: PreviewProvider {
-    static var previews: some View {
+     public static var previews: some View {
         __CAPNAME__ComponentWrapperView()
     }
 }

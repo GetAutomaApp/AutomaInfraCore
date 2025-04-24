@@ -57,9 +57,10 @@ internal struct AuthenticationControllerInteractor: BackendControllerInteractor 
     ///   - code: The verification code received by the user
     /// - Returns: An `AuthenticationTokensPayloadDTO` containing access and refresh tokens
     /// - Throws: User exists error, invalid code error, or network connectivity issues
-    public func makeRegisterRequest(_ phoneNumber: String,
-                                    _ code: String) async throws -> AuthenticationTokensPayloadDTO
-    {
+    public func makeRegisterRequest(
+        _ phoneNumber: String,
+        _ code: String
+    ) async throws -> AuthenticationTokensPayloadDTO {
         let params = try AuthPhoneCodePayloadDTO(phoneNumber: phoneNumber, code: code).encodeToDictionary()
 
         let response = await performRequest(
@@ -147,10 +148,10 @@ internal struct AuthenticationControllerInteractor: BackendControllerInteractor 
     ///   - handleInvalidToken: A closure to execute if the refresh token is invalid
     /// - Returns: An `AccessTokenPayloadDTO` containing the new access token
     /// - Throws: Invalid user ID error, user not found error, or network connectivity issues
-    public func makeRefreshTokenRequest(_ refreshToken: String,
-                                        handleInvalidToken: @escaping () async throws -> Void) async throws
-        -> AccessTokenPayloadDTO
-    {
+    public func makeRefreshTokenRequest(
+        _ refreshToken: String,
+        handleInvalidToken: @escaping () async throws -> Void
+    ) async throws -> AccessTokenPayloadDTO {
         let params = ["xxrt": refreshToken]
 
         let response = await performRequest(

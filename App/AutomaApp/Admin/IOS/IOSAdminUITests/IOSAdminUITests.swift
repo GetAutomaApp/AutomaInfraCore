@@ -10,15 +10,15 @@ import XCTest
 /// This test class contains UI tests that verify the functionality and performance
 /// of the iOS Admin app through automated UI testing. It includes tests for basic
 /// app functionality and launch performance metrics.
-public final class IOSAdminUITests: XCTestCase {
+internal final class IOSAdminUITests: XCTestCase {
     /// Sets up the test environment before running any tests
     ///
     /// This method:
     /// 1. Configures the test case to stop immediately on failure
     /// 2. Sets up any required initial UI state (like orientation)
     ///
-    /// - Throws: An error if the setup process fails
-    override static func setUpWithError() throws {
+    /// - Throws: Aninternalerror if the setup process fails
+    override internal static func setUpWithError() throws {
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
 
@@ -32,7 +32,7 @@ public final class IOSAdminUITests: XCTestCase {
     /// the environment is reset for subsequent tests.
     ///
     /// - Throws: An error if the teardown process fails
-    override public func tearDownWithError() throws {
+    override internal func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
@@ -43,7 +43,7 @@ public final class IOSAdminUITests: XCTestCase {
     ///
     /// - Throws: An error if the test fails or if the app fails to launch
     @MainActor
-    public func testExample() throws {
+    internal func testExample() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
@@ -58,7 +58,7 @@ public final class IOSAdminUITests: XCTestCase {
     ///
     /// - Throws: An error if the performance test fails
     @MainActor
-    public func testLaunchPerformance() throws {
+    internal func testLaunchPerformance() throws {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
             // This measures how long it takes to launch your application.
             measure(metrics: [XCTApplicationLaunchMetric()]) {

@@ -12,7 +12,7 @@ import SwiftUI
 internal struct AnyOrientationStackComponentPreviews: PreviewProvider {
     /// The preview content showing the AnyOrientationStackComponent wrapped in a container view
     /// - Returns: A view containing the preview content
-    static var previews: some View {
+    public static var previews: some View {
         AnyOrientationStackComponentWrapperView()
     }
 }

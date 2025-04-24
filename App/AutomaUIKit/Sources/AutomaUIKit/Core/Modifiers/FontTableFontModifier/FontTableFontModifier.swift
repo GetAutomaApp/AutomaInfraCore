@@ -6,14 +6,19 @@
 import SwiftUI
 
 /**
- The `FontTableFontModifier` is a view modifier used to apply fonts from the `FontTable` to `Text` views in SwiftUI.
- It allows you to use custom font styles defined in the `FontTable` enums, ensuring consistency across your app.
+ The `FontTableFontModifier` is a view modifier used to apply fonts from the `FontTable`
+ to `Text` views in SwiftUI.
+ It allows you to use custom font styles defined in the `FontTable` enums,
+ ensuring consistency across your app.
 
- This modifier takes an object conforming to the `IsFontTableFont` protocol, which provides access to the appropriate `Font` instance.
- By using this modifier, you can apply predefined fonts that are part of the `FontTable`, including headings, body text, and meta labels.
+ This modifier takes an object conforming to the `IsFontTableFont` protocol,
+ which provides access to the appropriate `Font` instance.
+ By using this modifier, you can apply predefined fonts that are part of the
+ `FontTable`, including headings, body text, and meta labels.
 
  - Parameters:
-     - fontTableType: A value conforming to the `IsFontTableFont` protocol, which provides the corresponding `SwiftUI.Font`.
+     - fontTableType: A value conforming to the `IsFontTableFont` protocol, which provides the
+     corresponding `SwiftUI.Font`.
 
  - Returns: A `View` with the specified font applied.
 

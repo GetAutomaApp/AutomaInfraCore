@@ -13,7 +13,7 @@ import XCTest
 ///
 /// This test suite validates the functionality of the VerificationCodeInputComponent,
 /// ensuring proper initialization and behavior of the verification code input interface.
-class VerificationCodeInputComponentTests: XCTestCase {
+internal class VerificationCodeInputComponentTests: XCTestCase {
     // one test case per method
     // one test case per completed flow (action)
     // one test case per potential edge-case
@@ -26,7 +26,7 @@ class VerificationCodeInputComponentTests: XCTestCase {
     ///
     /// - Throws: XCTest assertions if the component fails to initialize properly
     @MainActor
-    public func testIntegration() throws {
+    internal func testIntegration() throws {
         // Create a new instance of the verification code input component
         let component = VerificationCodeInputComponent()
 

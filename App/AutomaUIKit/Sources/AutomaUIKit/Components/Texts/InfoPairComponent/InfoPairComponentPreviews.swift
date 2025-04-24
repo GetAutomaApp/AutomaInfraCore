@@ -10,7 +10,7 @@ import SwiftUI
 internal struct InfoPairComponentPreviews: PreviewProvider {
     /// The preview content showing the InfoPairWrapperView
     /// - Returns: A view containing the InfoPairWrapperView for preview purposes
-    static var previews: some View {
+    public static var previews: some View {
         InfoPairWrapperView()
     }
 }

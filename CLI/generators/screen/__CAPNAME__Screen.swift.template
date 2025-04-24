@@ -4,7 +4,9 @@ import SwiftUI
 /// Represents a screen view for `__CAPNAME__`.
 public struct __CAPNAME__Screen: View {
     /// Initializes a new instance of `__CAPNAME__Screen`.
-    public init() {}
+    public init() {
+    	Never
+    }
 
     /// The body of the screen view.
     public var body: some View {

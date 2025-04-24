@@ -1,4 +1,4 @@
-// NoNetworkConnection.swift
+// NoNetworkConnectionView.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -25,7 +25,9 @@ public struct NoNetworkConnectionView: View {
     /// Creates a new instance of `NoNetworkConnectionView`
     ///
     /// - Returns: A new `NoNetworkConnectionView` instance
-    public init() {}
+    public init() {
+        Never
+    }
 
     /// Configuration for the information display component
     ///

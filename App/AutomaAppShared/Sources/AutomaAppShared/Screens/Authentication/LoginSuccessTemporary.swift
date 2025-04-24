@@ -3,11 +3,6 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-// RegisterScreen.swift
-// Copyright (c) 2025 GetAutomaApp
-// All source code and related assets are the property of GetAutomaApp.
-// All rights reserved.
-
 import AutomaUIKit
 import SwiftUI
 
@@ -25,7 +20,9 @@ public struct LoginSuccessTemporary: View {
     /// Creates a new instance of the temporary login success screen
     ///
     /// This initializer creates the view with default configurations
-    public init() {}
+    public init() {
+        Never
+    }
 
     /// The main view body that defines the screen's layout and content
     ///
@@ -39,7 +36,10 @@ public struct LoginSuccessTemporary: View {
                 InfoPairComponent(
                     config: .init(
                         title: "Thanks for your patience!",
-                        description: "The app is currently being developed. This screen will be removed once the app is open for general use!"
+                        description: """
+                        The app is currently being developed. \
+                        This screen will be removed once the app is open for general use!
+                        """"
                     )
                 )
             },

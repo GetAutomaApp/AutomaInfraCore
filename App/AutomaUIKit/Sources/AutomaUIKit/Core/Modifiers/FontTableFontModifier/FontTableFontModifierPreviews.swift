@@ -9,7 +9,7 @@ import SwiftUI
 /// using the fontTableFont modifier.
 internal struct FontTableFontModifierPreviews: PreviewProvider {
     /// The preview content showing different font styles
-    static var previews: some View {
+    public static var previews: some View {
         TestView()
     }
 }
@@ -113,7 +113,7 @@ internal struct ContentView: View {
 
             Text("This is bold SFPro Text!")
                 .fontTableFont(FontTable.SFPro.Meta.caption1)
-
-        }.padding()
+        }
+        .padding()
     }
 }

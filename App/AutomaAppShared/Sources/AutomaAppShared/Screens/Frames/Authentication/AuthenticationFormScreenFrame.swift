@@ -48,13 +48,16 @@ public struct AuthenticationFormScreenFrame<CenterContent: View>: View {
 
             Spacer()
 
-            IconButtonComponent(config: buttonConfig, onSelfAppear: { config in
-                print("calling on appear now")
-                config.isDisabled = true
-                config.icon = .arrowRight
-            }, action: {
-                await action()
-            })
+            IconButtonComponent(
+                config: buttonConfig,
+                onSelfAppear: { config in
+                    print("calling on appear now")
+                    config.isDisabled = true
+                    config.icon = .arrowRight
+                }, action: {
+                    await action()
+                }
+            )
             .onChange(of: isValid) {
                 print("is changing \(isValid)")
                 buttonConfig.isDisabled = !isValid

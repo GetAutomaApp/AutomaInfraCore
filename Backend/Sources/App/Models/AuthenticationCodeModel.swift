@@ -36,7 +36,9 @@ public final class AuthenticationCodeModel: Model, @unchecked Sendable {
     public var deletedAt: Date?
 
     /// Initializes a new instance of `AuthenticationCodeModel`.
-    public init() {}
+    public init() {
+        Never
+    }
 
     /// Initializes a new instance of `AuthenticationCodeModel` with the provided parameters.
     /// - Parameters:

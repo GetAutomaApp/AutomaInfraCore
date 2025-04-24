@@ -18,21 +18,21 @@ import SwiftUI
 /// - SMS code sending and verification
 /// - Timeout management for code resending
 /// - Error handling and display
-public struct RegisterScreen: View {
+internal struct RegisterScreen: View {
     /// Configuration for the phone number input field
-    @StateObject public var phoneInputConfig: PhoneNumberTextInputComponentConfig = .init()
+    @StateObject internal var phoneInputConfig: PhoneNumberTextInputComponentConfig = .init()
 
     /// Configuration for the verification code input field
-    @StateObject public var verificationInputConfig: VerificationCodeInputComponentConfig = .init()
+    @StateObject internal var verificationInputConfig: VerificationCodeInputComponentConfig = .init()
 
     /// Countdown timer for code resending timeout
-    @State public var timeout: Double = 0
+    @State internal var timeout: Double = 0
 
     /// Environment configuration containing API base URL and authentication state
-    @EnvironmentObject public var baseEnvironmentConfig: BaseAppEnvironmentObject
+    @EnvironmentObject internal var baseEnvironmentConfig: BaseAppEnvironmentObject
 
     /// Authentication controller for handling API requests
-    var authInteractor: AuthenticationControllerInteractor {
+    internal var authInteractor: AuthenticationControllerInteractor {
         .init(baseURL: baseEnvironmentConfig.apiBaseURL)
     }
 
@@ -62,14 +62,16 @@ public struct RegisterScreen: View {
     }
 
     /// Creates a new instance of the registration screen
-    public init() {}
+    public init() {
+        Never
+    }
 
     /// The main view body implementing the registration UI
     ///
     /// Displays either:
     /// - Phone number input screen with validation
     /// - Verification code input screen with resend option
-    public var body: some View {
+    internal var body: some View {
         VStack {
             if !didSendCode {
                 AuthenticationFormScreenFrame(
@@ -164,7 +166,7 @@ public struct RegisterScreen: View {
     /// Sends authentication code to the provided phone number
     ///
     /// Handles API response and updates UI state based on the result
-    public func sendAuthenticationCode() async {
+    internal func sendAuthenticationCode() async {
         let phoneNumber = phoneInputConfig.phoneNumber
         do {
             let response = try await authInteractor.makeRegisterCodeRequest(
@@ -195,7 +197,7 @@ public struct RegisterScreen: View {
     /// - Stores authentication tokens in keychain
     /// - Updates login state
     /// - Handles potential errors
-    public func verifyAuthenticationCode() async {
+    internal func verifyAuthenticationCode() async {
         let phoneNumber = phoneInputConfig.phoneNumber
         let code = verificationInputConfig.text
 
@@ -234,7 +236,7 @@ public struct RegisterScreen: View {
     private func createIsValidPhoneNumberBinding() -> Binding<Bool> {
         .init(get: {
             timeout == 0 && phoneInputConfig.isValid
-        }, set: { _ in })
+        }, set: { _ in Never })
     }
 }
 

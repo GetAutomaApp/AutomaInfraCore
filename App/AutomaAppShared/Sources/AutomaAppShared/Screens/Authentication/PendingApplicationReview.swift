@@ -19,7 +19,9 @@ public struct PendingApplicationReview: View {
     /// Creates a new instance of the pending application review screen
     ///
     /// This view is stateless and doesn't require any initialization parameters
-    public init() {}
+    public init() {
+        Never
+    }
 
     /// The main view body that constructs the pending application review UI
     ///

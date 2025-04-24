@@ -12,7 +12,9 @@ import SwiftUI
 public struct ForceUpdate: View {
     /// Initializes a new ForceUpdate view
     /// - Returns: A new ForceUpdate view instance
-    public init() {}
+    public init() {
+        Never
+    }
 
     /// Configuration for the title and description text displayed at the top of the view
     /// Initialized with default update notification messages

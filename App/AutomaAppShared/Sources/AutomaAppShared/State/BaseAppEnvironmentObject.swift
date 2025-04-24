@@ -1,4 +1,4 @@
-// ReactiveAppState.swift
+// BaseAppEnvironmentObject.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -30,10 +30,13 @@ public class BaseAppEnvironmentObject: ObservableObject {
 
     /// The base URL for API requests, persisted using AppStorage
     /// Defaults to the sandbox environment
-    @AppStorage("apiBaseURL") public var apiBaseURL: String = "https://api-sandbox.getautoma.app"
+    @AppStorage("apiBaseURL")
+    public var apiBaseURL: String = "https://api-sandbox.getautoma.app"
 
     /// Initializes a new instance of the BaseAppEnvironmentObject
-    public init() {}
+    public init() {
+        Never
+    }
 
     /// Logs out the current user and clears their refresh token from the keychain
     /// This method:

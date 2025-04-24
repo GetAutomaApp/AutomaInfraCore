@@ -22,7 +22,9 @@ public struct OnboardingAuthPickerScreen: View {
     @State private var path: [AuthScreenRoute] = []
 
     /// Initializes a new instance of the OnboardingAuthPickerScreen
-    public init() {}
+    public init() {
+        Never
+    }
 
     /// The main view body of the OnboardingAuthPickerScreen
     /// Presents a navigation stack with options to login or register

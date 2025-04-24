@@ -40,7 +40,9 @@ public final class JwtTokenModel: Model, @unchecked Sendable {
     public var deletedAt: Date?
 
     /// Initializes a new instance of `JwtTokenModel`.
-    public init() {}
+    public init() {
+        Never
+    }
 
     /// Initializes a new instance of `JwtTokenModel` with the provided parameters.
     /// - Parameters:

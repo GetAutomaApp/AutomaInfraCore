@@ -13,7 +13,7 @@ import XCTest
 ///
 /// This class contains test methods to verify the functionality of the MultiTextInputComponent,
 /// including integration tests and edge cases.
-class MultiTextInputComponentTests: XCTestCase {
+internal class MultiTextInputComponentTests: XCTestCase {
     // one test case per method
     // one test case per completed flow (action)
     // one test case per potential edge-case

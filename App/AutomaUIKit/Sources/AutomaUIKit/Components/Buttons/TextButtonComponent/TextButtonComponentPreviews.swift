@@ -8,7 +8,7 @@ import SwiftUI
 /// A preview provider for the TextButtonComponent that displays various configuration options and states
 internal struct TextButtonComponentPreviews: PreviewProvider {
     /// Returns a view containing the TextButtonComponent previews with configurable properties
-    static var previews: some View {
+    public static var previews: some View {
         TextButtonComponentPreviewsView()
     }
 }

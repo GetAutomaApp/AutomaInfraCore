@@ -9,7 +9,7 @@ import SwiftUI
 /// of the button in SwiftUI previews.
 internal struct IconButtonComponentPreviews: PreviewProvider {
     /// The preview content showing different states and configurations of the IconButtonComponent
-    static var previews: some View {
+    public static var previews: some View {
         IconButtonComponentPreviewsView()
     }
 }

@@ -3,7 +3,7 @@ import SwiftUI
 
 /// Provides previews for `__CAPNAME__Modifier`.
 internal struct __CAPNAME__ModifierPreviews: PreviewProvider {
-    static var previews: some View {
+     public static var previews: some View {
         __CAPNAME__ModifierWrapperView()
     }
 }

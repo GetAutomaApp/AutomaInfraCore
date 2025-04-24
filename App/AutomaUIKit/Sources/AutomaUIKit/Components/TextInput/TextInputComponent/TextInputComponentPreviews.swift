@@ -9,7 +9,7 @@ import SwiftUI
 /// and states of the text input component.
 internal struct TextInputComponentPreviews: PreviewProvider {
     /// Returns a view that wraps the TextInputComponent with configuration controls
-    static var previews: some View {
+    public static var previews: some View {
         TextInputComponentWrapperView()
     }
 }

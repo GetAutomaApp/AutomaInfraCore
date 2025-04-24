@@ -39,27 +39,41 @@ public struct OnboardingScreen: View {
     @State private var shouldShowRegisterScreen: Bool = false
 
     /// Array of content for each onboarding screen
-    let onboardingScreenContent: [OnboardingScreenContent] = [
+    private let onboardingScreenContent: [OnboardingScreenContent] = [
         .init(
             title: "Create & manage profiles",
-            description: "Automa provides a platform to create and manage social media accounts seamlessly with our integrated tools."
+            description: """
+            Automa provides a platform to create and manage social media accounts \
+            seamlessly with our integrated tools.
+            """
         ),
         .init(
             title: "Earn & manage profits",
-            description: "Automa has a robust set of tools that can be leveraged to help you earn an income from your newly found fame."
+            description: """
+            Automa has a robust set of tools that can be leveraged to help you earn \
+            an income from your newly found fame.
+            """
         ),
         .init(
             title: "AI that generates content",
-            description: "Automa automatically creates high quality content via our robust AI technology, that automates everything."
+            description: """
+            Automa automatically creates high quality content via our robust AI technology, \
+            that automates everything.
+            """
         ),
         .init(
             title: "Exclusive Community",
-            description: "Automa is built on community, trust and friendship. With recurring events, success stories and more!"
+            description: """
+            Automa is built on community, trust and friendship. With recurring events, \
+            success stories and more!"
+            """
         ),
     ]
 
     /// Initializes a new onboarding screen
-    public init() {}
+    public init() {
+        Never
+    }
 
     /// The main view body that manages navigation between different screens
     public var body: some View {
@@ -94,7 +108,7 @@ public struct OnboardingScreen: View {
                 Spacer()
                 IconButtonComponent(
                     config: iconButtonConfig,
-                    onSelfAppear: { _ in
+                    onSelfAppear: () {
                         iconButtonConfig.variant = .circle
                         iconButtonConfig.icon = .arrowRight
                     }
@@ -115,7 +129,10 @@ public struct OnboardingScreen: View {
                     config.title = "Apply to Join"
                     config
                         .description =
-                        "We are a closed community, accepting the highest quality candidates only. If you are ambitious, click next!"
+                        """
+                        We are a closed community, accepting the highest quality candidates only. \
+                        If you are ambitious, click next!
+                        """
                 }
             },
             footerContent: {
