@@ -6,14 +6,17 @@
 import SwiftUI
 
 /**
- A reusable button component that allows for flexible configuration of its action, content, and appearance.
+ A reusable button component that allows for flexible configuration of its action, content, \
+ and appearance.
 
- This component supports multiple initializer variations to allow for different configurations of actions and content:
+ This component supports multiple initializer variations to allow for different \
+ configurations of actions and content:
  - Action with or without configuration
  - Content with or without configuration
  - Automatic configuration defaults if no custom values are provided.
 
- The component is highly customizable through its ButtonFrameComponentConfig object, allowing for:
+ The component is highly customizable through its ButtonFrameComponentConfig object, \
+ allowing for:
  - Different visual variants (generic, disabled, rainbow)
  - Customizable padding and spacing
  - Flexible content layout
@@ -41,18 +44,21 @@ internal struct ButtonFrameComponent<Content: View>: View {
     // MARK: - Initializer 1: Action with config, content without config
 
     /**
-     Initializes a `ButtonFrameComponent` where the action uses the button's configuration and the content is static.
+     Initializes a `ButtonFrameComponent` where the action uses the button's configuration \
+     and the content is static.
 
      - Parameter config: An optional configuration object to customize the button's appearance.
      - Parameter action: A closure that defines the action triggered when the button is tapped.
      - Parameter content: A closure returning the content view to be displayed inside the button.
      - Parameter onSelfAppear: A closure called when the button appears on screen.
      */
-    init(config: ButtonFrameComponentConfig,
-         action: @escaping (ButtonFrameComponentConfig) -> Void,
-         @ViewBuilder content: @escaping () -> Content,
-         onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in })
-    {
+    public init(
+        config: ButtonFrameComponentConfig,
+        action: @escaping (ButtonFrameComponentConfig) -> Void,
+        @ViewBuilder content: @escaping () -> Content,
+        onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in
+        }
+    ) {
         self.config = config
         self.action = action
         self.onSelfAppear = onSelfAppear
@@ -62,18 +68,20 @@ internal struct ButtonFrameComponent<Content: View>: View {
     // MARK: - Initializer 2: Content with config, action without config
 
     /**
-     Initializes a `ButtonFrameComponent` where the content uses the button's configuration and the action is static.
+     Initializes a `ButtonFrameComponent` where the content uses the button's configuration \
+     and the action is static.
 
      - Parameter config: An optional configuration object to customize the button's appearance.
      - Parameter action: A closure that defines the action triggered when the button is tapped.
      - Parameter content: A ViewBuilder closure that exposes the config, Returns `some View`
      - Parameter onSelfAppear: A closure called when the button appears on screen.
      */
-    init(config: ButtonFrameComponentConfig,
-         action: @escaping () -> Void,
-         @ViewBuilder content: @escaping (ButtonFrameComponentConfig) -> Content,
-         onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in })
-    {
+    public init(
+        config: ButtonFrameComponentConfig,
+        action: @escaping () -> Void,
+        @ViewBuilder content: @escaping (ButtonFrameComponentConfig) -> Content,
+        onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in }
+    ) {
         self.config = config
         self.action = { _ in action() }
         self.onSelfAppear = onSelfAppear
@@ -83,18 +91,20 @@ internal struct ButtonFrameComponent<Content: View>: View {
     // MARK: - Initializer 3: Neither action nor content use config
 
     /**
-     Initializes a `ButtonFrameComponent` where neither the action nor the content uses the configuration.
+     Initializes a `ButtonFrameComponent` where neither the action nor the content \
+     uses the configuration.
 
      - Parameter config: An optional configuration object to customize the button's appearance.
      - Parameter action: A closure that defines the action triggered when the button is tapped.
      - Parameter content: A closure returning the content view to be displayed inside the button.
      - Parameter onSelfAppear: A closure called when the button appears on screen.
      */
-    init(config: ButtonFrameComponentConfig,
-         action: @escaping () -> Void,
-         @ViewBuilder content: @escaping () -> Content,
-         onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in })
-    {
+    public init(
+        config: ButtonFrameComponentConfig,
+        action: @escaping () -> Void,
+        @ViewBuilder content: @escaping () -> Content,
+        onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in }
+    ) {
         self.config = config
         self.action = { _ in action() }
         self.onSelfAppear = onSelfAppear
@@ -105,14 +115,15 @@ internal struct ButtonFrameComponent<Content: View>: View {
 
     /**
      Initializes a `ButtonFrameComponent` where both the action and content use the configuration.
-     This is the most flexible initialization option, allowing full access to configuration in both action and content.
+     This is the most flexible initialization option, allowing full access to configuration \
+     in both action and content.
 
      - Parameter config: An optional configuration object to customize the button's appearance.
      - Parameter action: A closure that defines the action when the button is tapped.
      - Parameter content: A closure returning the content view to be displayed inside the button.
      - Parameter onSelfAppear: A closure called when the button appears on screen.
      */
-    init(
+    public init(
         config: ButtonFrameComponentConfig,
         action: @escaping (ButtonFrameComponentConfig) -> Void,
         @ViewBuilder content: @escaping (ButtonFrameComponentConfig) -> Content,
@@ -135,7 +146,8 @@ internal struct ButtonFrameComponent<Content: View>: View {
      - Handles appearance states and animations
      - Manages button state (enabled/disabled)
 
-     The body implements a composable view hierarchy that can be customized through the configuration object.
+     The body implements a composable view hierarchy that can be customized through \
+     the configuration object.
      */
     public var body: some View {
         Button(action: {
@@ -161,7 +173,8 @@ internal struct ButtonFrameComponent<Content: View>: View {
     // MARK: - Helper Functions
 
     /**
-     Determines and returns the appropriate background color for the button based on the configuration's variant.
+     Determines and returns the appropriate background color for the button based on \
+     the configuration's variant.
 
      This method handles the visual styling of the button based on its current state:
      - Disabled state shows a muted background

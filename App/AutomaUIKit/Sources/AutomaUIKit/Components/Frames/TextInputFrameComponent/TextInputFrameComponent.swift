@@ -6,12 +6,13 @@
 import SwiftUI
 
 /**
- The `TextInputFrameComponent` is a reusable SwiftUI component that provides a customizable text input field with optional icon support.
+ The `TextInputFrameComponent` is a reusable SwiftUI component that provides a customizable \
+ text input field with optional icon support.
 
- This component creates a text input field with configurable styling, including background color, padding, corner radius,
- and optional icon placement. It supports both enabled and disabled states, and allows for custom actions on icon tap
-
- and component appearance.
+ This component creates a text input field with configurable styling, \
+ including background color, padding, corner radius,
+ and optional icon placement. It supports both enabled and disabled states, \
+ and allows for custom actions on icon tap and component appearance.
 
  Example usage:
  ```

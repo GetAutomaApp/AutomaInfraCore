@@ -188,6 +188,7 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
         }.preferredColorScheme(.dark)
     }
 
+    // swiftlint:disable force_cast
     /**
      Creates an appropriate editing interface based on the property type.
 
@@ -296,4 +297,5 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
             Text("\(property.label)")
         }
     }
+    // swiftlint:enable force_cast
 }

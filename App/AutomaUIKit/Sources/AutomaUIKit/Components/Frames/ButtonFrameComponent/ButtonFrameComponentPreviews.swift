@@ -131,7 +131,7 @@ internal struct AutoButtonVariationsView: View {
         // swiftlint:disable force_unwrapping
         // Randomly update button properties
         buttonController.frameVariant = .allCases.randomElement()!
-        // swiftlint:disable force_unwrapping
+        // swiftlint:enable force_unwrapping
         buttonController.isCircular = .random()
         buttonController.fillSpace = .random()
 
