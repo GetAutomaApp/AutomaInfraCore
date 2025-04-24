@@ -6,12 +6,13 @@
 import SwiftUI
 
 /// Defines the available stack orientations for the AnyOrientationStackComponent
-///
-/// - hstack: Horizontal stack that arranges views in a row
-/// - vstack: Vertical stack that arranges views in a column
-/// - zstack: Depth-based stack that overlays views on top of each other
 public enum AnyOrientationStackComponentVariants {
-    case hstack, vstack, zstack
+    /// Horizontal stack that arranges views in a row
+    case hstack
+    /// Vertical stack that arranges views in a column
+    case vstack
+    /// Depth-based stack that overlays views on top of each other
+    case zstack
 }
 
 /// Configuration class for AnyOrientationStackComponent that manages the layout properties

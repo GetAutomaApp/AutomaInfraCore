@@ -7,10 +7,13 @@ import SwiftUI
 import ViewExtractor
 
 /**
- The `AnyOrientationStackComponent` is a reusable component that provides flexible stack layouts with dynamic orientation switching.
+ The `AnyOrientationStackComponent` is a reusable component that provides flexible stack \
+ layouts with dynamic orientation switching.
 
- This component allows you to create stacks that can switch between vertical (VStack), horizontal (HStack), and depth-based (ZStack) orientations
- at runtime. It handles alignment and spacing configurations automatically based on the selected orientation.
+ This component allows you to create stacks that can switch between vertical (VStack), \
+ horizontal (HStack), and depth-based (ZStack) orientations
+ at runtime. It handles alignment and spacing configurations automatically based on the \
+ selected orientation.
 
  Example usage:
  ```
@@ -22,7 +25,8 @@ import ViewExtractor
  ```
 
  - Parameters:
-     - config: The configuration object used to manage state & modifications to `AnyOrientationStackComponent`
+     - config: The configuration object used to manage state \
+     & modifications to `AnyOrientationStackComponent`
  - Returns: A view that arranges its children in the specified stack orientation
 
  To see usage examples & visuals, check out `AnyOrientationStackModifierDocumentation.md`
