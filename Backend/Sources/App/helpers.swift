@@ -7,7 +7,7 @@
 
 import Vapor
 
-public extension Environment {
+internal extension Environment {
     /// Retrieves an environment variable or throws an error if not found.
     /// - Parameter key: The key of the environment variable.
     /// - Returns: The value of the environment variable.
@@ -21,7 +21,7 @@ public extension Environment {
     }
 }
 
-public extension Task where Success == Void, Failure == any Error {
+internal extension Task where Success == Void, Failure == any Error {
     /// Executes a detached task and logs any errors that occur.
     /// - Parameters:
     ///   - to: The destination for logging.

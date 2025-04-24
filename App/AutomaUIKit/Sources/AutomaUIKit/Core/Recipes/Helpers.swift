@@ -50,7 +50,7 @@ internal enum DesignImages {
     /// Applies standard icon styling to an image
     /// - Parameter image: The SwiftUI Image to be styled
     /// - Returns: A View with the image styled according to design system specifications
-    static func iconManipulation(_ image: Image) -> some View {
+    public static func iconManipulation(_ image: Image) -> some View {
         image
             .resizable()
             .aspectRatio(contentMode: .fit)

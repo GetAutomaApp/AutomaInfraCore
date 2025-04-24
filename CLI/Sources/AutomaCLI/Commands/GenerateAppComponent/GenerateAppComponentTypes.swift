@@ -56,7 +56,7 @@ internal enum GenerateAppComponentFileTypeHelper {
         .appendingPathComponent("Backend/Sources/App")
         .standardized.path + "/"
 
-    static func getFileTypes() -> [FileType] {
+    public static func getFileTypes() -> [FileType] {
         [
             FileType(name: "ui-component", configurations: [
                 FileConfig(

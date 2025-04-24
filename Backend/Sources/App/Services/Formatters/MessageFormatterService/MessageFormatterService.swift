@@ -12,7 +12,7 @@ internal enum MessageFormatterService {
     /// Crafts a verification code message.
     /// - Parameter code: The verification code to include in the message.
     /// - Returns: A formatted string containing the verification code.
-    static func craftVerificationCodeMessage(
+    public static func craftVerificationCodeMessage(
         code: String
     ) -> String {
         "your automa verification code is: \"\(code)\""
@@ -24,8 +24,8 @@ internal enum MessageFormatterService {
     ///   - event: The event description.
     ///   - imageUrl: Optional URL for an image to include in the message.
     /// - Returns: A `DiscordWebhookMessage` configured with the provided details.
-    static func craftUserEventDiscordWebhookMessage(input: String, event: String,
-                                                    imageUrl: String? = nil) -> DiscordWebhookMessage
+    public static func craftUserEventDiscordWebhookMessage(input: String, event: String,
+                                                           imageUrl: String? = nil) -> DiscordWebhookMessage
     {
         .init(
             embeds: [

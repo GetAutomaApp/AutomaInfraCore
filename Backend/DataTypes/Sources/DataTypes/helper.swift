@@ -6,7 +6,7 @@
 import Vapor
 
 /// Extension to Vapor's Content protocol providing JSON encoding and decoding utilities
-public extension Content {
+internal extension Content {
     /// Converts the content object to a dictionary representation
     /// - Returns: A dictionary with string keys and sendable values
     /// - Throws: An Abort error if the conversion fails
@@ -26,7 +26,7 @@ public extension Content {
     /// - Parameter data: Optional Data object containing JSON
     /// - Returns: An instance of the conforming type
     /// - Throws: An Abort error if the data is nil or decoding fails
-    static func decodeJSONFromData(data: Data?) throws -> Self {
+    public static func decodeJSONFromData(data: Data?) throws -> Self {
         // Verify that data exists
         guard let data else {
             throw Abort(.badRequest, reason: "No data provided")

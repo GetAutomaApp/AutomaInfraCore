@@ -45,7 +45,7 @@ internal struct Shell {
     /// - Parameter command: The command to execute.
     /// - Returns: The output of the command.
     @discardableResult
-    internal static func run(_ command: String) -> ShellOutput {
+    public static func run(_ command: String) -> ShellOutput {
         let task = Process()
         let stdoutPipe = Pipe()
         let stderrPipe = Pipe()

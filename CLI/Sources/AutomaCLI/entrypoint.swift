@@ -9,7 +9,7 @@ import Vapor
 @main
 internal enum Entrypoint {
     /// The main function that sets up and runs the application.
-    static func main() async throws {
+    public static func main() async throws {
         // Detect the environment and create an application instance
         let env = try Environment.detect()
         let app = try await Application.make(env)

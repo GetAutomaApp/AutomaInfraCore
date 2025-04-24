@@ -87,7 +87,7 @@ internal enum RandomService {
 
     /// Generates a random username.
     /// - Returns: A string representing a random username.
-    static func randomUsername() -> String {
+    public static func randomUsername() -> String {
         let mood = moods.randomElement()!
         let adjective = adjectives.randomElement()!
         let object = objects.randomElement()!
@@ -100,7 +100,7 @@ internal enum RandomService {
 
     /// Generates a random code.
     /// - Returns: A string representing a random code.
-    static func randomCode() -> String {
+    public static func randomCode() -> String {
         let first = allWords.randomElement()!.lowercased()
         let second = allWords.randomElement()!.lowercased()
 

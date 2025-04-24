@@ -54,7 +54,7 @@ public final class __CAPNAME__Model: Model, @unchecked Sendable {
     /// Creates a model from a DTO.
     /// - Parameter dto: The DTO to convert.
     /// - Returns: A `__CAPNAME__Model` representing the DTO.
-    static func fromDTO(dto: __CAPNAME__DTO) -> __CAPNAME__Model {
+    public static func fromDTO(dto: __CAPNAME__DTO) -> __CAPNAME__Model {
         let model = __CAPNAME__Model(
             id: dto.id,  createdAt: dto.createdAt, updatedAt: dto.updatedAt, deletedAt: dto.deletedAt
         )

@@ -152,7 +152,7 @@ internal enum BackendMetric {
     /// Creates a counter for OpenAI image generation requests.
     /// - Parameter status: The status of the request.
     /// - Returns: A `Prometheus.Counter` object.
-    static func openAIImageGenerationRequest(
+    public static func openAIImageGenerationRequest(
         status: MetricStatus
     ) -> Prometheus.Counter {
         MetricsService.global.makeCounter(
@@ -166,7 +166,7 @@ internal enum BackendMetric {
     /// Creates a counter to track Twitter OAuth request metrics.
     /// - Parameter status: The status of the OAuth request (success/fail/etc).
     /// - Returns: A Prometheus counter for Twitter OAuth requests with the given status.
-    static func twitterOAuthRequest(
+    public static func twitterOAuthRequest(
         status: MetricStatus
     ) -> Prometheus.Counter {
         MetricsService.global.makeCounter(
@@ -180,7 +180,7 @@ internal enum BackendMetric {
     /// Creates a counter to track Twitter user token conversion metrics.
     /// - Parameter status: The status of the token conversion (success/fail/etc).
     /// - Returns: A Prometheus counter for Twitter token conversions with the given status.
-    static func twitterUserTokensConverted(
+    public static func twitterUserTokensConverted(
         status: MetricStatus
     ) -> Prometheus.Counter {
         MetricsService.global.makeCounter(
@@ -194,7 +194,7 @@ internal enum BackendMetric {
     /// Creates a counter to track Twitter post tweet metrics.
     /// - Parameter status: The status of posting the tweet (success/fail/etc).
     /// - Returns: A Prometheus counter for tweet posts with the given status.
-    static func twitterPostTweet(
+    public static func twitterPostTweet(
         status: MetricStatus
     ) -> Prometheus.Counter {
         MetricsService.global.makeCounter(
@@ -212,7 +212,7 @@ internal enum BackendMetric {
     ///   - isRSSFeed: Optional flag indicating if the URL is an RSS feed.
     ///   - didThrowOnFeedInitialization: Flag indicating if an error occurred during feed initialization.
     /// - Returns: A Prometheus counter for RSS feed reads with the given status.
-    static func rssFeedReaderMetric(
+    public static func rssFeedReaderMetric(
         status: MetricStatus,
         url: URL,
         isRSSFeed: Bool? = nil,
@@ -237,7 +237,7 @@ internal enum BackendMetric {
     ///   - model: The model used for chat completion.
     ///   - status: The status of the service call.
     /// - Returns: A Prometheus counter for chat completion service calls with the given status.
-    static func chatCompletionServiceCall(
+    public static func chatCompletionServiceCall(
         platform: ChatCompletionPlatform,
         model: ChatCompletionModel,
         status: MetricStatus

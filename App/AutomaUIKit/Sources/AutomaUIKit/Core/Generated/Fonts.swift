@@ -96,7 +96,7 @@ internal enum FontFamily {
     public static let allCustomFonts: [FontConvertible] = [CrimsonText.all, SFProText.all].flatMap(\.self)
 
     /// Registers all custom fonts in the application
-    static func registerAllCustomFonts() {
+    public static func registerAllCustomFonts() {
         allCustomFonts.forEach { $0.register() }
     }
 }
@@ -200,7 +200,7 @@ extension FontConvertible.Font {
 #if canImport(SwiftUI)
     /// SwiftUI Font extensions for iOS 13 and later
     @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-    public extension SwiftUI.Font {
+    internal extension SwiftUI.Font {
         /// Creates a custom SwiftUI Font from a FontConvertible
         /// - Parameters:
         ///   - font: The FontConvertible to create the font from
@@ -220,7 +220,7 @@ extension FontConvertible.Font {
         ///   - font: The FontConvertible to create the font from
         ///   - fixedSize: The fixed size of the font
         /// - Returns: A SwiftUI Font object
-        static func custom(_ font: FontConvertible, fixedSize: CGFloat) -> SwiftUI.Font {
+        internal static func custom(_ font: FontConvertible, fixedSize: CGFloat) -> SwiftUI.Font {
             font.registerIfNeeded()
             return custom(font.name, fixedSize: fixedSize)
         }

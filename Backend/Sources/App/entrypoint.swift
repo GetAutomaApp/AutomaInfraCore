@@ -14,7 +14,7 @@ import Vapor
 internal enum Entrypoint {
     /// The main function that initializes and runs the application.
     /// - Throws: Throws an error if the application fails to start or execute.
-    static func main() async throws {
+    public static func main() async throws {
         // Detect the current environment configuration
         var env = try Environment.detect()
 

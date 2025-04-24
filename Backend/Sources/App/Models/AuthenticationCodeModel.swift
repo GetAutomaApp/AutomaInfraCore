@@ -85,7 +85,7 @@ public final class AuthenticationCodeModel: Model, @unchecked Sendable {
     /// - Parameter dto: The `AuthenticationCodeDTO` to convert.
     /// - Returns: An instance of `AuthenticationCodeModel`.
     /// - Throws: Throws an error if conversion fails.
-    static func fromDTO(dto: AuthenticationCodeDTO) throws -> AuthenticationCodeModel {
+    internal static func fromDTO(dto: AuthenticationCodeDTO) throws -> AuthenticationCodeModel {
         try AuthenticationCodeModel(
             id: dto.id, code: dto.code, phoneNumber: dto.phoneNumber, createdAt: dto.createdAt,
             updatedAt: dto.updatedAt,
