@@ -43,7 +43,8 @@ internal struct TextButtonComponentPreviewsView: View {
                     },
                     action: { config in
                         // Increment the counter when button is pressed
-                        config.text = "\(Int(config.text)! + 1)"
+                        let textAsNum = Int(config.text) ?? 0
+                        config.text = "\(textAsNum + 1)"
                     }
                 )
                 .contentTransition(.symbolEffect(.replace))

@@ -19,10 +19,9 @@
 typealias Font = FontConvertible.Font
 
 // swiftlint:disable superfluous_disable_command file_length implicit_return
+// swiftlint:disable identifier_name line_length type_body_length
 
 // MARK: - Fonts
-
-// swiftlint:disable identifier_name line_length type_body_length
 
 /// Namespace containing all custom font families used in the application
 internal enum FontFamily {
@@ -260,3 +259,5 @@ private final class BundleToken {
 }
 
 // swiftlint:enable convenience_type
+// swiftlint:enable superfluous_disable_command file_length implicit_return
+// swiftlint:enable identifier_name line_length type_body_length

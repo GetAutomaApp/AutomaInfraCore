@@ -8,7 +8,7 @@ import TwitterAPIKit
 import Vapor
 
 /// A protocol defining the base requirements for a Twitter client.
-protocol TwitterClientBase {
+internal protocol TwitterClientBase {
     /// Logger instance for tracking operations.
     var logger: Logger { get }
 

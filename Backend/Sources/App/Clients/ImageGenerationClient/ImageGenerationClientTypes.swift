@@ -10,7 +10,7 @@ import Vapor
 /// A protocol defining the base requirements for an image generation client.
 ///
 /// This protocol requires conforming types to provide a logger and a method for generating images.
-protocol ImageGenerationClientBase {
+internal protocol ImageGenerationClientBase {
     /// Logger instance for tracking operations and errors.
     var logger: Logger { get }
 

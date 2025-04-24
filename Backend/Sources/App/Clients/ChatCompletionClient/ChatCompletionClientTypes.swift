@@ -7,7 +7,7 @@ import Vapor
 
 /// Protocol defining the interface for chat completion services
 /// Implementations handle the specifics of interacting with different AI platforms
-protocol ChatCompletion {
+internal protocol ChatCompletion {
     /// Logger instance for tracking operations and errors
     var logger: Logger { get }
 

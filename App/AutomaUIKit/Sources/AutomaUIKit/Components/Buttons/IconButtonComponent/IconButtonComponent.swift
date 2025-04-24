@@ -94,28 +94,30 @@ public struct IconButtonComponent: View {
     ///
     /// - Returns: A Button view wrapped in a custom frame, displaying the icon and triggering the associated action.
     public var body: some View {
-        ButtonFrameComponent(config: externalConfig, action: {
-            // Execute the config action before the main action
-            configAction(externalConfig)
+        ButtonFrameComponent(
+            config: externalConfig,
+            action: ({
+                // Execute the config action before the main action
+                configAction(externalConfig)
 
-            // Create a task to handle the async action
-            Task {
-                do {
-                    print("starting action")
-                    externalConfig.isLoading = true
-                    try await action()
-                    print("finished action action")
-                    externalConfig.isLoading = false
-                } catch {
-                    // Ensure loading state is reset on error
-                    externalConfig.isLoading = false
-                    throw error
+                // Create a task to handle the async action
+                Task {
+                    do {
+                        print("starting action")
+                        externalConfig.isLoading = true
+                        try await action()
+                        print("finished action action")
+                        externalConfig.isLoading = false
+                    } catch {
+                        // Ensure loading state is reset on error
+                        externalConfig.isLoading = false
+                        throw error
+                    }
                 }
-            }
-        }) {
+            })
+        ) {
             if externalConfig.isLoading {
                 // Display loading indicator when action is in progress
-                // TODO: Convert this to a component so we can have consistent sizing
                 ProgressView()
             } else {
                 // Display the icon with appropriate styling when not loading

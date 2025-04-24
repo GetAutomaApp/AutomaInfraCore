@@ -10,7 +10,7 @@ import VaporTesting
 /// Protocol defining common functionality for image generation client test suites
 /// This protocol provides shared test utilities and default values used across different
 /// image generation client implementations
-protocol ImageGenerationClientTestSuite {
+internal protocol ImageGenerationClientTestSuite {
     /// The default prompt to use for image generation tests
     /// This prompt should generate safe, consistent test images
     var defaultPrompt: String { get }
