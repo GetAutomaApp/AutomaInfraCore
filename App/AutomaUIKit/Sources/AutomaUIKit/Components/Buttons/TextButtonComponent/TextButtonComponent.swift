@@ -111,18 +111,22 @@ public struct TextButtonComponent: View {
     ///
     /// - Returns: A Button view wrapped in a custom frame, displaying the text and triggering the associated action.
     public var body: some View {
-        ButtonFrameComponent(config: config, action: {
-            // Execute the action closure if it exists
-            if let action {
-                action(config)
-            }
-        }) {
+        ButtonFrameComponent(
+            config: config,
+            action: ({
+                // Execute the action closure if it exists
+                if let action {
+                    action(config)
+                }
+            })
+        ) {
             // Create the button's text content with specified styling
             Text(config.text)
                 .fontTableFont(
                     FontTable.SFPro.Headings.head6, DesignTokens.colors.textDark
                 )
-        } onSelfAppear: { _ in
+        }
+        onSelfAppear: { _ in
             print("calling on self appear button frame comp")
             // Execute the onSelfAppear closure if it exists
             if let onSelfAppear {

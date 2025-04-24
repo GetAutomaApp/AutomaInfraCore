@@ -26,6 +26,7 @@ public struct AnyKeyPath<TheObservedObject, TheValueType> {
     /// The type information for the property
     public let type: Any.Type
 
+    // swiftlint:disable force_cast
     /**
      Initializes an `AnyKeyPath` where the `get` and `set` properties makes use of KeyPath syntax.
 
@@ -44,6 +45,7 @@ public struct AnyKeyPath<TheObservedObject, TheValueType> {
         }
         type = ObservableWrappedValueType.self
     }
+    // swiftlint:enable force_cast
 }
 
 /**

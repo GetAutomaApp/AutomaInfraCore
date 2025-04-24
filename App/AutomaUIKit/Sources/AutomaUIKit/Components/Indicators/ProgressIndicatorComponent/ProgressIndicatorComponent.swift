@@ -65,8 +65,10 @@ public struct ProgressIndicatorComponent: View {
                         .foregroundStyle(
                             config.determineStepColor(step)
                         )
-                        .padding(.trailing,
-                                 step == config.totalSteps - 1 ? 0 : config.determineSpaceBetweenSteps)
+                        .padding(
+                            .trailing,
+                            step == config.totalSteps - 1 ? 0 : config.determineSpaceBetweenSteps
+                        )
                         .animation(
                             config.isAnimating ? .spring : nil,
                             value: config.currentStep
