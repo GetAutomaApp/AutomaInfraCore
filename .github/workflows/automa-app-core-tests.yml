@@ -23,7 +23,7 @@ jobs:
               working-directory: "./App/AutomaApp/"
               schema: "IOS"
               destination: "platform=iOS Simulator,name=iPhone 16,OS=18.1"
-              testing-targets: "IOSIntegrationTests,IOSUnitTests"
+              testing-targets: "IOS-IntegrationTests,IOS-UnitTests"
 
     automa-app-core-ui-tests:
         runs-on: [macOS, self-hosted]
@@ -41,4 +41,4 @@ jobs:
               working-directory: "./App/AutomaApp/"
               schema: "IOS"
               destination: "platform=iOS Simulator,name=iPhone 16,OS=18.1"
-              testing-targets: "IOSUITests"
+              testing-targets: "IOS-UITests"
