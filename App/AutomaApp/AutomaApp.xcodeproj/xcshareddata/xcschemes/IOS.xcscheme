@@ -85,6 +85,17 @@
                ReferencedContainer = "container:AutomaApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "385518FE2DBFC77700552736"
+               BuildableName = "IOS-UnitTests.xctest"
+               BlueprintName = "IOS-UnitTests"
+               ReferencedContainer = "container:AutomaApp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
