@@ -9,7 +9,7 @@ on:
 
 jobs:
     automa-app-core-unit-and-integration-tests:
-        runs-on: [macos-15, self-hosted]
+        runs-on: [macOS, self-hosted]
         steps:
           - uses: actions/checkout@v4
 
@@ -27,7 +27,7 @@ jobs:
               testing-targets: "IOS-ADMINIntegrationTests,IOS-ADMINUnitTests"
 
     automa-app-core-ui-tests:
-        runs-on: [macos-15, self-hosted]
+        runs-on: [macOS, self-hosted]
         steps:
           - uses: actions/checkout@v4
 
