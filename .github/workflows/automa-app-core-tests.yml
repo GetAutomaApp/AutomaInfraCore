@@ -22,7 +22,7 @@ jobs:
             with:
               working-directory: "./App/AutomaApp/"
               schema: "IOS"
-              destination: "platform=iOS Simulator,name=iPhone 16,OS=18.0"
+              destination: "platform=iOS Simulator,name=iPhone 16,OS=18.1"
               testing-targets: "IOSIntegrationTests,IOSUnitTests"
 
     automa-app-core-ui-tests:
@@ -40,5 +40,5 @@ jobs:
             with:
               working-directory: "./App/AutomaApp/"
               schema: "IOS"
-              destination: "platform=iOS Simulator,name=iPhone 16,OS=18.0"
+              destination: "platform=iOS Simulator,name=iPhone 16,OS=18.1"
               testing-targets: "IOSUITests"
