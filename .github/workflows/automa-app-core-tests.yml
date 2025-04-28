@@ -8,7 +8,7 @@ on:
 
 jobs:
     automa-app-core-unit-and-integration-tests:
-        runs-on: macos-15
+        runs-on: [macos-15, self-hosted]
         steps:
           - uses: actions/checkout@v4
 
@@ -26,7 +26,7 @@ jobs:
               testing-targets: "IOSIntegrationTests,IOSUnitTests"
 
     automa-app-core-ui-tests:
-        runs-on: macos-15
+        runs-on: [macos-15, self-hosted]
         steps:
           - uses: actions/checkout@v4
 
