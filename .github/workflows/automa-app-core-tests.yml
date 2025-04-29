@@ -17,7 +17,7 @@ jobs:
               key: xcode-cache-deriveddata-${{ github.workflow }}
               restore-keys: xcode-cache-deriveddata-${{ github.workflow }}
 
-          - name: Run Unit Tests
+          - name: Run Tests
             uses: GetAutomaApp/opensource-actions/xctesting@9-implement-xcodebuild-testing-action
             with:
               working-directory: "./App/AutomaApp/"
@@ -35,7 +35,7 @@ jobs:
               key: xcode-cache-deriveddata-${{ github.workflow }}
               restore-keys: xcode-cache-deriveddata-${{ github.workflow }}
 
-          - name: Run Unit Tests
+          - name: Run UI Tests
             uses: GetAutomaApp/opensource-actions/xctesting@9-implement-xcodebuild-testing-action
             with:
               working-directory: "./App/AutomaApp/"

@@ -1,4 +1,3 @@
-
 name: Run `AutomaApp - ADMIN (IOS)` Tests
 
 on:
@@ -8,38 +7,38 @@ on:
       - "App/AutomaAppShared/**/*.swift"
 
 jobs:
-    automa-app-core-unit-and-integration-tests:
-        runs-on: [macOS, self-hosted]
-        steps:
-          - uses: actions/checkout@v4
+  automa-app-core-unit-and-integration-tests:
+    runs-on: [macOS, self-hosted]
+    steps:
+      - uses: actions/checkout@v4
 
-          - uses: irgaly/xcode-cache@v1
-            with:
-              key: xcode-cache-deriveddata-${{ github.workflow }}
-              restore-keys: xcode-cache-deriveddata-${{ github.workflow }}
+      - uses: irgaly/xcode-cache@v1
+        with:
+          key: xcode-cache-deriveddata-${{ github.workflow }}
+          restore-keys: xcode-cache-deriveddata-${{ github.workflow }}
 
-          - name: Run Unit Tests
-            uses: GetAutomaApp/opensource-actions/xctesting@9-implement-xcodebuild-testing-action
-            with:
-              working-directory: "./App/AutomaApp/"
-              schema: "IOS-ADMIN"
-              destination: "platform=iOS Simulator,name=iPhone 16,OS=18.1"
-              testing-targets: "IOS-ADMIN-IntegrationTests,IOS-ADMIN-UnitTests"
+      - name: Run Tests
+        uses: GetAutomaApp/opensource-actions/xctesting@9-implement-xcodebuild-testing-action
+        with:
+          working-directory: "./App/AutomaApp/"
+          schema: "IOS-ADMIN"
+          destination: "platform=iOS Simulator,name=iPhone 16,OS=18.1"
+          testing-targets: "IOS-ADMIN-IntegrationTests,IOS-ADMIN-UnitTests"
 
-    automa-app-core-ui-tests:
-        runs-on: [macOS, self-hosted]
-        steps:
-          - uses: actions/checkout@v4
+  automa-app-core-ui-tests:
+    runs-on: [macOS, self-hosted]
+    steps:
+      - uses: actions/checkout@v4
 
-          - uses: irgaly/xcode-cache@v1
-            with:
-              key: xcode-cache-deriveddata-${{ github.workflow }}
-              restore-keys: xcode-cache-deriveddata-${{ github.workflow }}
+      - uses: irgaly/xcode-cache@v1
+        with:
+          key: xcode-cache-deriveddata-${{ github.workflow }}
+          restore-keys: xcode-cache-deriveddata-${{ github.workflow }}
 
-          - name: Run Unit Tests
-            uses: GetAutomaApp/opensource-actions/xctesting@9-implement-xcodebuild-testing-action
-            with:
-              working-directory: "./App/AutomaApp/"
-              schema: "IOS-ADMIN"
-              destination: "platform=iOS Simulator,name=iPhone 16,OS=18.1"
-              testing-targets: "IOS-ADMIN-UITests"
+      - name: Run UI Tests
+        uses: GetAutomaApp/opensource-actions/xctesting@9-implement-xcodebuild-testing-action
+        with:
+          working-directory: "./App/AutomaApp/"
+          schema: "IOS-ADMIN"
+          destination: "platform=iOS Simulator,name=iPhone 16,OS=18.1"
+          testing-targets: "IOS-ADMIN-UITests"
