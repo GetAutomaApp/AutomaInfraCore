@@ -1,19 +1,21 @@
-// IOS_ADMINUITests.swift
-// Copyright (c) 2025 GetAutomaApp
-// All source code and related assets are the property of GetAutomaApp.
-// All rights reserved.
+//
+//  IOS_ADMIN_UITests.swift
+//  IOS-ADMIN-UITests
+//
+//  Created by Simon Ferns on 4/28/25.
+//
 
 import XCTest
 
-final class IOS_ADMINUITests: XCTestCase {
+final class IOS_ADMIN_UITests: XCTestCase {
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
 
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests
-        // before they run. The setUp method is a good place to do this.
+        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
 
     override func tearDownWithError() throws {

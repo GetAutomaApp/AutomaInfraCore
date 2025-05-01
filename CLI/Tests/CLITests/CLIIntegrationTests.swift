@@ -8,10 +8,12 @@ import Testing
 
 // boilerplate code here, not real tests
 
-@Suite("Fake test suite", .serialized)
-struct AppTests {
-    @Test("Fake test")
+@Suite("Integration test suite", .serialized)
+struct CLIIntegrationTests {
+    @Test("Fake Integration Test")
     func helloWorld() async throws {
         print("Hello, world!")
     }
 }
+
+

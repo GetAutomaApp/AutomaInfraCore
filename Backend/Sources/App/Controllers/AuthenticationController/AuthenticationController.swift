@@ -48,19 +48,15 @@ struct AuthenticationController: RouteCollection {
     @Sendable
     func register(req: Request) async throws -> AuthenticationTokensPayloadDTO {
         let dto = try req.content.decode(AuthPhoneCodePayloadDTO.self)
-
         let authService = AuthenticationService(
             writeDb: req.dbWrite,
             readDb: req.dbReadOnly,
             logger: req.logger
         )
-
         if try await authService.doesUserExist(phoneNumber: dto.phoneNumber) {
             throw GenericErrors.userAlreadyExists
         }
-
         let tokens = try await authService.register(payload: dto, signer: req.jwt, queue: req.queue)
-
         return tokens
     }
 

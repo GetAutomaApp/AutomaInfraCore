@@ -1,11 +1,14 @@
-// IOSUITestsLaunchTests.swift
-// Copyright (c) 2025 GetAutomaApp
-// All source code and related assets are the property of GetAutomaApp.
-// All rights reserved.
+//
+//  IOS_UITestsLaunchTests.swift
+//  IOS-UITests
+//
+//  Created by Simon Ferns on 4/28/25.
+//
 
 import XCTest
 
-final class IOSUITestsLaunchTests: XCTestCase {
+final class IOS_UITestsLaunchTests: XCTestCase {
+
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }
