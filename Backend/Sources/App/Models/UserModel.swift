@@ -48,9 +48,7 @@ public final class UserModel: Model, @unchecked Sendable {
     public var accepted: Bool
 
     /// Initializes a new instance of `UserModel`.
-    public init() {
-        Never
-    }
+    public init() {}
 
     /// Initializes a new instance of `UserModel` with the provided parameters.
     /// - Parameters:

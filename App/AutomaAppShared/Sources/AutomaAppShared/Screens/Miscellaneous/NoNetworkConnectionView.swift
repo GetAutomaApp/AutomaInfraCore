@@ -25,9 +25,7 @@ public struct NoNetworkConnectionView: View {
     /// Creates a new instance of `NoNetworkConnectionView`
     ///
     /// - Returns: A new `NoNetworkConnectionView` instance
-    public init() {
-        Never
-    }
+    public init() {}
 
     /// Configuration for the information display component
     ///

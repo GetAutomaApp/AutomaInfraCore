@@ -1,9 +1,34 @@
-// RSSFeedTypesDTO.swift
+// RssFeedResponse.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
 import Vapor
+
+/// Response structure containing parsed feed items and metadata.
+/// Used to encapsulate the results of an RSS feed parsing operation.
+///
+/// - Note: Conforms to Vapor's `Content` protocol for easy encoding/decoding.
+public struct RssFeedResponse: Content {
+    /// The collection of parsed feed items.
+    /// Contains all successfully parsed items from the feed source.
+    public let items: [GenericRSSFeedItem]
+
+    /// Indicates whether the source was a valid RSS or Atom feed.
+    /// Used to verify the validity of the parsed feed.
+    public let isRssFeed: Bool
+
+    /// Creates a new RSS feed response.
+    /// - Parameters:
+    ///   - items: The collection of parsed feed items.
+    ///   - isRssFeed: Indicates whether the source was a valid RSS or Atom feed.
+    /// - Returns: A fully initialized `RssFeedResponse` instance.
+    public init(items: [GenericRSSFeedItem], isRssFeed: Bool) {
+        // Store the parsed items and feed validity status
+        self.items = items
+        self.isRssFeed = isRssFeed
+    }
+}
 
 /// A standardized representation of an RSS or Atom feed item.
 /// This struct normalizes the different formats into a common structure
@@ -62,31 +87,6 @@ public struct GenericRSSFeedItem: Content {
         self.publishDate = publishDate
         self.content = content
         self.youTubeVideoInfo = youTubeVideoInfo
-    }
-}
-
-/// Response structure containing parsed feed items and metadata.
-/// Used to encapsulate the results of an RSS feed parsing operation.
-///
-/// - Note: Conforms to Vapor's `Content` protocol for easy encoding/decoding.
-public struct RssFeedResponse: Content {
-    /// The collection of parsed feed items.
-    /// Contains all successfully parsed items from the feed source.
-    public let items: [GenericRSSFeedItem]
-
-    /// Indicates whether the source was a valid RSS or Atom feed.
-    /// Used to verify the validity of the parsed feed.
-    public let isRssFeed: Bool
-
-    /// Creates a new RSS feed response.
-    /// - Parameters:
-    ///   - items: The collection of parsed feed items.
-    ///   - isRssFeed: Indicates whether the source was a valid RSS or Atom feed.
-    /// - Returns: A fully initialized `RssFeedResponse` instance.
-    public init(items: [GenericRSSFeedItem], isRssFeed: Bool) {
-        // Store the parsed items and feed validity status
-        self.items = items
-        self.isRssFeed = isRssFeed
     }
 }
 

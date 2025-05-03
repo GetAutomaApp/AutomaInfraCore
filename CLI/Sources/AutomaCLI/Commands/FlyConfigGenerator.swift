@@ -21,9 +21,7 @@ public struct FlyConfigGenerator: Command {
 
     /// Signature for the command, defining the arguments and options.
     public struct Signature: CommandSignature {
-        public init() {
-            Never
-        }
+        public init() {}
 
         /// The path of the fly.io config file.
         @Argument(name: "config-path", help: "The path of the fly.io config file")

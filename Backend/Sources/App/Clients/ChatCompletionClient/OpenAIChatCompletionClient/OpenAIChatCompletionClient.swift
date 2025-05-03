@@ -35,7 +35,7 @@ internal struct OpenAIChatCompletionClient: ChatCompletion {
     ///   - timeout: Maximum time to wait for API responses in seconds (default: 180)
     ///   - apiKey: Optional API key override. If nil, reads from environment variables
     /// - Throws: Environment error if API key cannot be retrieved from environment
-    init(logger: Logger, timeout: TimeInterval = 180, apiKey: String? = nil) throws {
+    public init(logger: Logger, timeout: TimeInterval = 180, apiKey: String? = nil) throws {
         self.apiKey = try apiKey ?? Environment.getOrThrow("OPENAI_API_KEY")
         client = .init(
             configuration: .init(
@@ -70,11 +70,24 @@ internal struct OpenAIChatCompletionClient: ChatCompletion {
             try await retry(
                 maxAttempts: 3
             ) {
+                guard
+                    let message : ChatQuery.ChatCompletionMessageParam = .init(role: .system, content: prompt)
+                else {
+                    logger.error(
+                        "Could not create chat completion messages array, messages is nil",
+                        metadata: [
+                            "to": .string("\(String(describing: Self.self)).\(#function)"),
+                            "model": .string(model.rawValue),
+                            "query": .string(prompt),
+                        ]
+                    )
+                    throw ChatCompletionClientError.requestMessageNil
+                }
+                
+                let messages = [message]
                 result = try await client.chats(
                     query: .init(
-                        messages: [
-                            .init(role: .system, content: prompt)!,
-                        ],
+                        messages: messages,
                         model: model.rawValue,
                         maxTokens: query.maxTokens
                     )

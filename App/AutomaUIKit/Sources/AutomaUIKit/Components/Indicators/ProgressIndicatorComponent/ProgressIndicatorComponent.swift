@@ -6,11 +6,14 @@
 import SwiftUI
 
 /**
- The `ProgressIndicatorComponent` is a reusable component that allows you \
+ The `ProgressIndicatorComponent` is a reusable \
+ component that allows you \
  to present some kind of progression of tasks to the user.
 
- This component has the ability to easily be wrapped & converted into any \
- other component that is needed (that has similar logic), here are some cases:
+ This component has the ability to easily be wrapped \
+ & converted into any \
+ other component that is needed (that has similar logic),\
+ here are some cases:
  - Loading bar can use this by growing the height of each step \
     & slowly stepping over each step.
  - Progress bar to represent the progress of some background work by \

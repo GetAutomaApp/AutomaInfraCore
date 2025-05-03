@@ -20,9 +20,7 @@ public struct LoginSuccessTemporary: View {
     /// Creates a new instance of the temporary login success screen
     ///
     /// This initializer creates the view with default configurations
-    public init() {
-        Never
-    }
+    public init() {}
 
     /// The main view body that defines the screen's layout and content
     ///

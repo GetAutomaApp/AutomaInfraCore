@@ -71,9 +71,7 @@ public struct OnboardingScreen: View {
     ]
 
     /// Initializes a new onboarding screen
-    public init() {
-        Never
-    }
+    public init() {}
 
     /// The main view body that manages navigation between different screens
     public var body: some View {

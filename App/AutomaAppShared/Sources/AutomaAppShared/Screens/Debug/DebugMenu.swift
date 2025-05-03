@@ -44,9 +44,7 @@ public struct DebugMenu: View {
     @StateObject public var environmentPicketButtonConfig: TextButtonComponentConfig = .init()
 
     /// Initializes a new instance of the debug menu
-    public init() {
-        Never
-    }
+    public init() {}
 
     /// The body of the debug menu view
     /// Displays sections for profile actions and API configuration

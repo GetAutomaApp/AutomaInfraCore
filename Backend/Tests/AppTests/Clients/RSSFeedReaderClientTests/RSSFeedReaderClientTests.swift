@@ -41,19 +41,22 @@ internal struct RSSFeedReaderClientTests {
     @Test(
         "Get feed items when feed exists",
         arguments: [
-            (URL(string: "https://news.ycombinator.com/rss")!, true), // rss format
+            (URL(string: "https://news.ycombinator.com/rss"), true), // rss format
             (
                 URL(
                     string: "https://sample-feeds.rowanmanning.com/examples/222780a7caac12b938dfe09cd7d138f9/feed.xml"
-                )!,
+                ),
                 true
             ), // atom feed
-            (URL(string: "https://example.com")!, false),
-            (URL(string: "https://invalid-feed.com")!, false),
+            (URL(string: "https://example.com"), false),
+            (URL(string: "https://invalid-feed.com"), false),
         ]
     )
-    internal func getFeedItemsWhenFeedExists(url: URL, feedExists: Bool) async throws {
-        try await withApp { app in
+    internal func getFeedItemsWhenFeedExists(
+        url: URL?,
+        feedExists: Bool
+    ) async throws {
+        try await withApp { app
             let client = RSSFeedReaderClient(logger: app.logger)
 
             if !feedExists {

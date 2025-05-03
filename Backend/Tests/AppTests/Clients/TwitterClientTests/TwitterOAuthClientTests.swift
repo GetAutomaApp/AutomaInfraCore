@@ -14,7 +14,7 @@ internal struct TwitterOAuthClientTests: TwitterClientTestSuite {
     /// Tests the ability to request an OAuth token
     /// Verifies that the token and token secret are properly generated and contain valid values
     ///
-    // SwitTesting/ - Throws: Any errors that occur during test execution, including:
+    /// - Throws: Any errors that occur during test execution, including:
     ///   - Client initialization errors
     ///   - Token request failures
     @Test("Test Request Token")

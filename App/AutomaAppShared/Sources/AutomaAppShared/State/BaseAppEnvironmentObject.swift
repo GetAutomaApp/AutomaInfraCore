@@ -34,9 +34,7 @@ public class BaseAppEnvironmentObject: ObservableObject {
     public var apiBaseURL: String = "https://api-sandbox.getautoma.app"
 
     /// Initializes a new instance of the BaseAppEnvironmentObject
-    public init() {
-        Never
-    }
+    public init() {}
 
     /// Logs out the current user and clears their refresh token from the keychain
     /// This method:

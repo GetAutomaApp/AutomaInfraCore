@@ -46,7 +46,8 @@ public struct InfoPairComponent: View {
                 .fontTableFont(
                     FontTable.Crimson.Headings.head4,
                     DesignTokens.colors.primaryText
-                ).tag("title")
+                )
+                .tag("title")
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
 
@@ -55,7 +56,8 @@ public struct InfoPairComponent: View {
                 .fontTableFont(
                     FontTable.Crimson.Body.body1,
                     DesignTokens.colors.secondaryText
-                ).tag("description")
+                )
+                .tag("description")
                 .lineLimit(3)
                 .minimumScaleFactor(0.5)
         }.onAppear {

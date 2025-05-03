@@ -44,9 +44,7 @@ public final class TwitterUserToken: Model, @unchecked Sendable {
     public var deletedAt: Date?
 
     /// Initializes a new instance of `TwitterUserToken`.
-    public init() {
-        Never
-    }
+    public init() {}
 
     /// Initializes a new instance of `TwitterUserToken` with the provided parameters.
     /// - Parameters:

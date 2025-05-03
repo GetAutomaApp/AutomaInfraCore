@@ -70,7 +70,7 @@ internal struct FirecrawlClient {
                         "to": .string("FirecrawlClient.scrapeMarkdown"),
                     ]
                 )
-                throw FirecrawlClientErrors.failedToScrape
+                throw FirecrawlClientError.failedToScrape
             }
 
             // Extracts image URLs from the markdown content

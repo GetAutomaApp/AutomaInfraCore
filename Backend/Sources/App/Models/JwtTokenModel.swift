@@ -9,6 +9,8 @@ import Vapor
 
 /// Model representing a JWT token.
 public final class JwtTokenModel: Model, @unchecked Sendable {
+    public init() {}
+    
     public static let schema = "Jwt-Token"
 
     /// Unique identifier for the JWT token.
@@ -39,12 +41,7 @@ public final class JwtTokenModel: Model, @unchecked Sendable {
     @Timestamp(key: "deleted_at", on: .delete)
     public var deletedAt: Date?
 
-    /// Initializes a new instance of `JwtTokenModel`.
-    public init() {
-        Never
-    }
-
-    /// Initializes a new instance of `JwtTokenModel` with the provided parameters.
+    /// Initializes a new instance of `JwtTokenMod` with the provided parameters.
     /// - Parameters:
     ///   - id: Unique identifier for the JWT token.
     ///   - token: The JWT token string.

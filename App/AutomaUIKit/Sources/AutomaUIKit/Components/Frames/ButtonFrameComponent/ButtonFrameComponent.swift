@@ -62,7 +62,9 @@ internal struct ButtonFrameComponent<Content: View>: View {
         self.config = config
         self.action = action
         self.onSelfAppear = onSelfAppear
-        self.content = { _ in content() }
+        self.content = { _ in
+            content()
+        }
     }
 
     // MARK: - Initializer 2: Content with config, action without config
@@ -80,10 +82,13 @@ internal struct ButtonFrameComponent<Content: View>: View {
         config: ButtonFrameComponentConfig,
         action: @escaping () -> Void,
         @ViewBuilder content: @escaping (ButtonFrameComponentConfig) -> Content,
-        onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in }
+        onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in
+        }
     ) {
         self.config = config
-        self.action = { _ in action() }
+        self.action = { _ in
+            action()
+        }
         self.onSelfAppear = onSelfAppear
         self.content = content
     }
@@ -103,12 +108,17 @@ internal struct ButtonFrameComponent<Content: View>: View {
         config: ButtonFrameComponentConfig,
         action: @escaping () -> Void,
         @ViewBuilder content: @escaping () -> Content,
-        onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in }
+        onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in
+        }
     ) {
         self.config = config
-        self.action = { _ in action() }
+        self.action = { _ in
+            action()
+        }
         self.onSelfAppear = onSelfAppear
-        self.content = { _ in content() }
+        self.content = { _ in
+            content()
+        }
     }
 
     // MARK: - Initializer 4: Both action and content use config
@@ -127,7 +137,8 @@ internal struct ButtonFrameComponent<Content: View>: View {
         config: ButtonFrameComponentConfig,
         action: @escaping (ButtonFrameComponentConfig) -> Void,
         @ViewBuilder content: @escaping (ButtonFrameComponentConfig) -> Content,
-        onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in }
+        onSelfAppear: @escaping (ButtonFrameComponentConfig) -> Void = { _ in
+        }
     ) {
         self.config = config
         self.action = action
@@ -150,10 +161,12 @@ internal struct ButtonFrameComponent<Content: View>: View {
      the configuration object.
      */
     public var body: some View {
-        Button(action: {
-            // Execute the configured action with current configuration state
-            action(config)
-        }) {
+        Button(
+            action: ({
+                // Execute the configured action with current configuration state
+                action(config)
+            })
+        ) {
             // Render content with current configuration
             content(config)
                 .frame(maxWidth: config.fillSpace ? .infinity : nil)

@@ -29,7 +29,7 @@ internal struct TwitterOAuthRedirectQueryParameters: Content {
     public let oauthVerifier: String
 
     /// Coding keys to map the JSON keys to the struct properties.
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case oauthToken = "oauth_token"
         case oauthVerifier = "oauth_verifier"
     }

@@ -69,7 +69,9 @@ public extension ControllerInteractor {
                 parameters: parameters,
                 encoding: encoding,
                 headers: headers
-            ).validate().response { response in
+            )
+            .validate()
+            .response { response in
                 continuation.resume(returning: response)
             }
         }
@@ -221,9 +223,7 @@ public extension BackendControllerInteractor {
             URLError.resourceUnavailable,
         ]
 
-        return networkConnectionErrors.first {
-            error.code == $0
-        } != nil
+        return networkConnectionErrors.contains(error.code)
     }
 
     /// Extracts an error from response data if present

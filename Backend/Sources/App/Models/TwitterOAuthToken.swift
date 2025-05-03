@@ -34,9 +34,7 @@ public final class TwitterOAuthToken: Model, @unchecked Sendable {
     @Timestamp(key: "deleted_at", on: .delete)
     public var deletedAt: Date?
 
-    public init() {
-        Never
-    }
+    public init() {}
 
     init(
         id: UUID? = nil,

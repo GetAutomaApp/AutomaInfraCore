@@ -62,9 +62,7 @@ internal struct RegisterScreen: View {
     }
 
     /// Creates a new instance of the registration screen
-    public init() {
-        Never
-    }
+    public init() {}
 
     /// The main view body implementing the registration UI
     ///
@@ -236,7 +234,7 @@ internal struct RegisterScreen: View {
     private func createIsValidPhoneNumberBinding() -> Binding<Bool> {
         .init(get: {
             timeout == 0 && phoneInputConfig.isValid
-        }, set: { _ in Never })
+        }, set: { _ in })
     }
 }
 
