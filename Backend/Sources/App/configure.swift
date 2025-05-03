@@ -85,8 +85,19 @@ public func configure(_ app: Application) async throws {
         try app.register(collection: PrometheusController())
 
         // Configure JWT authentication
+        guard
+            let encryptionSecret = Environment.get("JWT_ENCRYPTION_SECRET")!
+        else {
+            logger.error(
+                "Could not get JWT_ENCRYPTION_SECRET from environment.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                ]
+            )
+            throw Abort(.internalServerError)
+        }
         await app.jwt.keys
-            .add(hmac: .init(stringLiteral: Environment.get("JWT_ENCRYPTION_SECRET")!), digestAlgorithm: .sha256)
+            .add(hmac: .init(stringLiteral: encryptionSecret), digestAlgorithm: .sha256)
 
         // Configure queues
         app.queues.use(.fluent(useSoftDeletes: true))

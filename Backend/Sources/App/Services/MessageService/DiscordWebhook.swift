@@ -12,9 +12,13 @@ internal struct DiscordWebhookMessage: Codable {
     /// The username to display for the message.
     public var username: String?
     /// The URL of the avatar to display for the message.
-    public var avatar_url: String?
+    public var avatarURL: String?
     /// The embeds to include in the message.
     public var embeds: [DiscordEmbed]?
+
+    public enum CodingKeys: String, CodingKey {
+        case avatarURL = "avatar_url"
+    }
 }
 
 /// Represents an embed in a Discord webhook message.
@@ -60,7 +64,11 @@ internal struct DiscordEmbedFooter: Codable {
     /// The text of the footer.
     public var text: String
     /// The URL of the icon to display in the footer.
-    public var icon_url: String?
+    public var iconURL: String?
+
+    public enum CodingKeys: String, CodingKey {
+        case iconURL = "icon_url"
+    }
 }
 
 /// Represents an image in a Discord embed.
@@ -76,7 +84,11 @@ internal struct DiscordEmbedAuthor: Codable {
     /// The URL associated with the author.
     public var url: String?
     /// The URL of the icon to display for the author.
-    public var icon_url: String?
+    public var iconURL: String?
+
+    public enum CodingKeys: String, CodingKey {
+        case iconURL = "icon_url"
+    }
 }
 
 /// Represents the provider of a Discord embed.

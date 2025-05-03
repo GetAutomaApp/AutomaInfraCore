@@ -10,7 +10,7 @@ import Queues
 import Vapor
 
 /// Service for handling authentication-related operations.
-struct AuthenticationService: Sendable {
+public struct AuthenticationService: Sendable {
     /// The database for writing operations.
     public let writeDb: Database
     /// The database for reading operations.
@@ -25,7 +25,7 @@ struct AuthenticationService: Sendable {
     ///   - writeDb: The database for writing operations.
     ///   - readDb: The database for reading operations.
     ///   - logger: The logger for logging messages.
-    init(
+    public init(
         writeDb: Database,
         readDb: Database,
         logger: Logger
@@ -191,15 +191,21 @@ struct AuthenticationService: Sendable {
         )
 
         // Query the user by phone number
-        let user = try await UserModel.query(on: readDb).filter(
-            \.$phoneNumber == payload.phoneNumber
-        ).first()
+        let user = try await UserModel
+            .query(on: readDb)
+            .filter(
+                \.$phoneNumber == payload.phoneNumber
+            )
+            .first()
 
         if let user, let userId = user.id?.uuidString {
             // Send a Discord webhook event for login
             try messageService
-                .sendDiscordWebhookAppEvent(input: "\(payload.phoneNumber) - \(user.username)",
-                                            event: "logging in with code: `\(payload.code)`", logger: logger)
+                .sendDiscordWebhookAppEvent(
+                    input: "\(payload.phoneNumber) - \(user.username)",
+                    event: "logging in with code: `\(payload.code)`",
+                    logger: logger
+                )
 
             // Log the user login
             logger.info(
@@ -260,7 +266,7 @@ struct AuthenticationService: Sendable {
             // Generate and return a new access token
             return try await helper.generateAccessToken(
                 userId: userId,
-                expiresIn: 86400,
+                expiresIn: 86_400,
                 type: .access,
                 signer: signer
             )
@@ -314,7 +320,12 @@ struct AuthenticationService: Sendable {
     public func doesUserExist(phoneNumber: String) async throws -> Bool {
         do {
             // Query the user by phone number
-            let exists = try await UserModel.query(on: readDb).filter(\.$phoneNumber == phoneNumber).first() != nil
+            // swiftlint:disable contains_over_first_not_nil
+            let exists = try await UserModel
+                .query(on: readDb)
+                .filter(\.$phoneNumber == phoneNumber)
+                .first() != nil
+            // swiftlint:enable contains_over_first_not_nil
 
             if exists {
                 BackendMetric.totalUsersAlreadyExists.increment()

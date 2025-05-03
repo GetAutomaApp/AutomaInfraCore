@@ -161,9 +161,11 @@ internal struct TwitterOAuthClient: TwitterClientBase {
     ///   - oauthVerifier: The verification code.
     /// - Returns: The saved `TwitterUserToken`.
     /// - Throws: Database errors if saving fails.
-    private func saveUserTokens(userTokens: TwitterUserTokens, oauthTokenObject: TwitterOAuthToken,
-                                oauthVerifier: String) async throws -> TwitterUserToken
-    {
+    private func saveUserTokens(
+        userTokens: TwitterUserTokens,
+        oauthTokenObject: TwitterOAuthToken,
+        oauthVerifier: String
+    ) async throws -> TwitterUserToken {
         let userTokenModel = TwitterUserToken(
             accessToken: userTokens.accessToken,
             secretAccessToken: userTokens.secretAccessToken,
@@ -265,9 +267,10 @@ internal struct TwitterOAuthClient: TwitterClientBase {
     ///   - oauthVerifier: The verification code from the OAuth process.
     /// - Returns: `TwitterUserTokens` containing access and secret tokens.
     /// - Throws: `TwitterOAuthClientError` if conversion fails.
-    private func convertOAuthTokenToUserTokens(tokenObject: TwitterOAuthToken,
-                                               oauthVerifier: String) async throws -> TwitterUserTokens
-    {
+    private func convertOAuthTokenToUserTokens(
+        tokenObject: TwitterOAuthToken,
+        oauthVerifier: String
+    ) async throws -> TwitterUserTokens {
         BackendMetric.twitterUserTokensConverted(status: .start).increment()
         let response = await twitterClient.auth.oauth10a.postOAuthAccessToken(.init(
             oauthToken: tokenObject.oauthToken,

@@ -19,9 +19,14 @@ internal struct TwitterUserTokenMigration1741708919: AsyncMigration {
             .field("access_token", .string, .required) // Add a required access_token field
             .field("secret_access_token", .string, .required) // Add a required secret_access_token field
             .field("oauth_verifier", .string, .required) // Add a required oauth_verifier field
-            .field("oauth_token_id", .uuid,
-                   .references("Twitter-O-Auth-Token", "id",
-                               onDelete: .cascade)) // Add a foreign key to Twitter-O-Auth-Token
+            .field(
+                "oauth_token_id",
+                .uuid,
+                .references(
+                    "Twitter-O-Auth-Token", "id",
+                    onDelete: .cascade
+                )
+            ) // Add a foreign key to Twitter-O-Auth-Token
             .create() // Create the schema
     }
 

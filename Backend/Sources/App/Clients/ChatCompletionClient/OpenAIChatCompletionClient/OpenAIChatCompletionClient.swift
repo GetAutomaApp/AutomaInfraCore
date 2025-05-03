@@ -71,7 +71,7 @@ internal struct OpenAIChatCompletionClient: ChatCompletion {
                 maxAttempts: 3
             ) {
                 guard
-                    let message : ChatQuery.ChatCompletionMessageParam = .init(role: .system, content: prompt)
+                    let message: ChatQuery.ChatCompletionMessageParam = .init(role: .system, content: prompt)
                 else {
                     logger.error(
                         "Could not create chat completion messages array, messages is nil",
@@ -83,7 +83,7 @@ internal struct OpenAIChatCompletionClient: ChatCompletion {
                     )
                     throw ChatCompletionClientError.requestMessageNil
                 }
-                
+
                 let messages = [message]
                 result = try await client.chats(
                     query: .init(

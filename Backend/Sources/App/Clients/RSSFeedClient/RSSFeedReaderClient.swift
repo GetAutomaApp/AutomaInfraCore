@@ -49,12 +49,14 @@ internal struct RSSFeedReaderClient {
                 ]
             )
 
-            BackendMetric.rssFeedReaderMetric(
-                status: .fail,
-                url: url,
-                isRSSFeed: false,
-                didThrowOnFeedInitialization: true
-            ).increment()
+            BackendMetric
+                .rssFeedReaderMetric(
+                    status: .fail,
+                    url: url,
+                    isRSSFeed: false,
+                    didThrowOnFeedInitialization: true
+                )
+                .increment()
 
             throw RSSFeedReaderClientError.failedToReadFeed(error)
         }

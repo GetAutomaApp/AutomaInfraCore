@@ -161,7 +161,7 @@ internal struct MessageService: Decodable {
             string: try! Environment.getOrThrow("DISCORD_APP_EVENTS_URL")
         )!
     ) throws {
-        Task.detachedLogOnError(to: "MessageService.sendDiscordWebhookAppEvent", logger: logger) {
+        Task.detachedLogOnError(destination: "MessageService.sendDiscordWebhookAppEvent", logger: logger) {
             try await sendWebhookMessage(
                 webhookURL: withUrl,
                 message: MessageFormatterService

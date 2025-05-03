@@ -24,9 +24,11 @@ internal enum MessageFormatterService {
     ///   - event: The event description.
     ///   - imageUrl: Optional URL for an image to include in the message.
     /// - Returns: A `DiscordWebhookMessage` configured with the provided details.
-    public static func craftUserEventDiscordWebhookMessage(input: String, event: String,
-                                                           imageUrl: String? = nil) -> DiscordWebhookMessage
-    {
+    public static func craftUserEventDiscordWebhookMessage(
+        input: String,
+        event: String,
+        imageUrl: String? = nil
+    ) -> DiscordWebhookMessage {
         .init(
             embeds: [
                 .init(

@@ -23,7 +23,10 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     ///   - logger: The logger instance to use for operation tracking
     ///   - timeout: The timeout interval for API requests in seconds (defaults to 180)
     /// - Throws: An error if the OPENAI_API_KEY environment variable is not set
-    init(logger: Logger, timeout: TimeInterval = 180) throws {
+    public init(
+        logger: Logger,
+        timeout: TimeInterval = 180
+    ) throws {
         let token = try Environment.getOrThrow("OPENAI_API_KEY")
         client = .init(
             configuration: .init(
@@ -42,20 +45,29 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
         // Start the backend metric for image generation request
         BackendMetric.openAIImageGenerationRequest(status: .start).increment()
 
-        // Extract parameters from the query
-        let imageSize = query.imageSize?.rawValue
-        let quality = query.quality?.rawValue
-        let style = query.imageStyle?.rawValue
+        var imageQuality: ImagesQuery.Quality?
+        var imageSize: ImagesQuery.Size?
+        var imageStyle: ImagesQuery.Style?
+
+        if let quality = query.quality?.rawValue {
+            imageQuality = .init(rawValue: quality)
+        }
+        if let size = query.imageSize?.rawValue {
+            imageSize = .init(rawValue: size)
+        }
+        if let style = query.imageStyle?.rawValue {
+            imageStyle = .init(rawValue: style)
+        }
 
         // Create the query for image generation
         let queryForImageGeneration: ImagesQuery = try .init(
             prompt: query.prompt,
             model: getModel(from: query.model),
             n: query.totalImagesToGenerate,
-            quality: quality != nil ? .init(rawValue: quality!) : nil,
+            quality: imageQuality,
             responseFormat: .b64_json,
-            size: imageSize != nil ? .init(rawValue: imageSize!) : nil,
-            style: style != nil ? .init(rawValue: style!) : nil
+            size: imageSize,
+            style: imageStyle
         )
         var result: ImagesResult?
 

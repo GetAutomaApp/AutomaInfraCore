@@ -20,9 +20,11 @@ internal struct ProfilePictureService {
     ///   - excludeText: Flag indicating whether to exclude text from the image.
     /// - Returns: A string representing the S3 URL of the generated profile picture.
     /// - Throws: Throws an error if profile picture generation fails.
-    public func createProfilePicture(for user: UserDTO, totalRegenerationAttempts: Int = 3,
-                                     excludeText: Bool = true) async throws -> String
-    {
+    public func createProfilePicture(
+        for user: UserDTO,
+        totalRegenerationAttempts: Int = 3,
+        excludeText: Bool = true
+    ) async throws -> String {
         do {
             let tigrisService = try TigrisService()
             let messageService = MessageService()
@@ -141,10 +143,12 @@ internal struct ProfilePictureService {
     ///   - excludeText: Flag indicating whether to exclude text from the image.
     /// - Returns: A `GenerateImageResult` object containing the generated image.
     /// - Throws: Throws an error if image generation fails.
-    private func generateImage(totalRegenerationAttempts: Int, query: GenerateImageQuery,
-                               excludeText: Bool) async throws -> GenerateImageResult
-    {
-        let textExtractionService = TextExtractionService()
+    private func generateImage(
+        totalRegenerationAttempts: Int,
+        query: GenerateImageQuery,
+        excludeText: Bool
+    ) async throws -> GenerateImageResult {
+        let textExtractionService = TextExtractionService(logger: logger)
         let imageClient = ImageGenerationClient(logger: logger)
 
         var hasText = false

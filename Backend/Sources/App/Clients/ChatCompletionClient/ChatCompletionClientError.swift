@@ -10,11 +10,10 @@ internal enum ChatCompletionClientError: Error {
     /// This can include network errors, authentication failures, or other API-related issues
     case completionError
 
-    /// Could not create messages array to send to platform, because a message was empty
-    case requestMessageNil
-    
     /// Error indicating that the completion was successful but returned an empty message
     /// This typically indicates an issue with the model's response formatting or content filtering
     case completionMessageEmpty
-    
+
+    /// Could not create messages array to send to platform, because a message was empty
+    case requestMessageNil
 }

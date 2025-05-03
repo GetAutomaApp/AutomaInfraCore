@@ -17,7 +17,7 @@ internal struct TransactionalMessageJobInput: Codable {
 
 /// Asynchronous job to send a transactional message.
 internal struct TransactionalMessageAsyncJob: AsyncJob {
-    typealias Payload = TransactionalMessageJobInput
+    public typealias Payload = TransactionalMessageJobInput
 
     /// Processes the job to send a transactional message.
     /// - Parameters:

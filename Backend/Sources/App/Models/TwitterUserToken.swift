@@ -56,7 +56,7 @@ public final class TwitterUserToken: Model, @unchecked Sendable {
     ///   - createdAt: Timestamp when the Twitter user token was created.
     ///   - updatedAt: Timestamp when the Twitter user token was last updated.
     ///   - deletedAt: Timestamp when the Twitter user token was deleted.
-    init(
+    public init(
         id: UUID? = nil,
         accessToken: String,
         secretAccessToken: String,

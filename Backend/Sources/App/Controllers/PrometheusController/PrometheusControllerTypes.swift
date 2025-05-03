@@ -11,7 +11,7 @@ internal struct PrometheusRouteQuery: Content {
     public let authToken: String
 
     /// Coding keys to map the JSON keys to the struct properties.
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case authToken = "auth_token"
     }
 }

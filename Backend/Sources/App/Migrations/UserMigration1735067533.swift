@@ -5,9 +5,11 @@
 
 import Fluent
 import PostgresKit
+import Vapor
 
 /// Migration to create the User schema.
 internal struct UserMigration1735067533: AsyncMigration {
+    public let logger: Logger = .init(label: "UserMigration1735067533")
     /// Prepares the migration by creating the User schema.
     /// - Parameter database: The database instance on which the migration is performed.
     /// - Throws: Throws an error if the schema creation fails.
@@ -24,8 +26,8 @@ internal struct UserMigration1735067533: AsyncMigration {
             .unique(on: "phone_number") // Ensure phone_number is unique
             .create() // Create the schema
 
-        // Create an index on the username column
-        try await (database as! SQLDatabase)
+        let sqlDB = try getSQLDatabase(database)
+        try await sqlDB
             .create(index: "idx_user_by_username")
             .on("User")
             .column("username")
@@ -37,6 +39,19 @@ internal struct UserMigration1735067533: AsyncMigration {
     /// - Throws: Throws an error if the schema deletion fails.
     public func revert(on database: Database) async throws {
         try await database.schema("User").delete()
-        try await (database as! SQLDatabase).drop(index: "idx_user_by_username").run()
+        let sqlDB = try getSQLDatabase(database)
+        try await sqlDB.drop(index: "idx_user_by_username").run()
+    }
+
+    private func getSQLDatabase(_ database: Database) throws -> SQLDatabase {
+        guard
+            let sqlDB = database as? SQLDatabase
+        else {
+            logger.error(
+                "Could not convert database to SQLDatabase"
+            )
+            throw Abort(.internalServerError)
+        }
+        return sqlDB
     }
 }

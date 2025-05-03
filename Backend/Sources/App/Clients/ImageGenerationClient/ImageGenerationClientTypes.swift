@@ -54,7 +54,7 @@ internal struct GenerateImageQuery: Content {
     ///   - quality: The quality setting for the images (optional).
     ///   - imageSize: The size of the images (optional).
     ///   - imageStyle: The style of the images (optional).
-    init(
+    public init(
         model: GenerateImageModel,
         prompt: String,
         totalImagesToGenerate: Int? = nil,
@@ -75,11 +75,14 @@ internal struct GenerateImageQuery: Content {
 ///
 /// This enum defines the supported models for generating images, such as DALL-E 2 and DALL-E 3.
 internal enum GenerateImageModel: String, Codable {
+    // swiftlint:disable identifier_name
     /// Represents the DALL-E 2 model.
     case dall_e_2 = "dall-e-2"
 
     /// Represents the DALL-E 3 model.
     case dall_e_3 = "dall-e-3"
+
+    // swiftlint:enable identifier_name
 
     /// Retrieves the platform-specific client for the model.
     ///
@@ -110,7 +113,7 @@ internal struct GenerateImageResult: Content {
 /// This enum defines the available quality settings for generated images, such as HD and standard.
 internal enum GenerateImageQuality: String, Codable {
     /// Represents high-definition quality.
-    case hd
+    case hdQuality = "hd"
 
     /// Represents standard quality.
     case standard
@@ -120,6 +123,8 @@ internal enum GenerateImageQuality: String, Codable {
 ///
 /// This enum defines the available sizes for generated images, including options specific to DALL-E 3 models.
 public enum GenerateImageSize: String, Codable, Sendable {
+    // swiftlint: disable identifier_name
+
     /// Represents a size of 1024x1024 pixels.
     case _1024 = "1024x1024"
 
@@ -134,6 +139,7 @@ public enum GenerateImageSize: String, Codable, Sendable {
 
     /// Represents a size of 512x512 pixels.
     case _512 = "512x512"
+    // swiftlint: enable identifier_name
 }
 
 /// An enumeration representing the style options for image generation.

@@ -61,7 +61,7 @@ public final class UserModel: Model, @unchecked Sendable {
     ///   - updatedAt: Timestamp when the user was last updated.
     ///   - deletedAt: Timestamp when the user was deleted.
     ///   - accepted: Indicates if the user has accepted terms.
-    init(
+    public init(
         id: UUID? = nil,
         username: String,
         phoneNumber: String,

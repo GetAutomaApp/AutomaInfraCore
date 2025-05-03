@@ -10,7 +10,7 @@ import Vapor
 /// Model representing a JWT token.
 public final class JwtTokenModel: Model, @unchecked Sendable {
     public init() {}
-    
+
     public static let schema = "Jwt-Token"
 
     /// Unique identifier for the JWT token.

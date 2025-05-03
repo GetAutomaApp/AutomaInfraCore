@@ -3,8 +3,6 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-// swiftlint:disable file_name
-
 import Vapor
 
 internal extension Environment {
@@ -24,13 +22,13 @@ internal extension Environment {
 internal extension Task where Success == Void, Failure == any Error {
     /// Executes a detached task and logs any errors that occur.
     /// - Parameters:
-    ///   - to: The destination for logging.
+    ///   - destination: The destination for logging.
     ///   - logger: The logger to use for logging errors.
     ///   - onError: An optional closure to execute on error.
     ///   - onSuccess: An optional closure to execute on success.
     ///   - method: The method to execute in the task.
     static func detachedLogOnError(
-        to: String,
+        destination _: String,
         logger: Logger,
         onError: @escaping @Sendable (Error) async throws -> Void = { _ in },
         onSuccess: @escaping @Sendable () async throws -> Void = {},
@@ -43,8 +41,8 @@ internal extension Task where Success == Void, Failure == any Error {
                 logger.critical(
                     "Error occurred while running detached task",
                     metadata: [
-                        "to": .array([
-                            .string(to),
+                        "destination": .array([
+                            .string(destination),
                             .string("Task.detachedLogOnError"),
                             .string(error.localizedDescription),
                         ]),
