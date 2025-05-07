@@ -22,10 +22,7 @@ internal struct TwitterUserTokenMigration1741708919: AsyncMigration {
             .field(
                 "oauth_token_id",
                 .uuid,
-                .references(
-                    "Twitter-O-Auth-Token", "id",
-                    onDelete: .cascade
-                )
+                .references("Twitter-O-Auth-Token", "id", onDelete: .cascade)
             ) // Add a foreign key to Twitter-O-Auth-Token
             .create() // Create the schema
     }

@@ -126,7 +126,7 @@ internal enum GenerateAppComponentFileTypeHelper {
                         toDirectory: "./Sources/App/Migrations/",
                         nestToDirectory: "",
                         templates: [
-                            "__CAPNAME__Migration__TIMESTAMP__.swift.template",
+                            "__CAPNAME__Migration.swift.template",
                         ]
                     ),
                 ]
@@ -152,7 +152,7 @@ internal enum GenerateAppComponentFileTypeHelper {
                         toDirectory: "./Sources/App/Migrations/",
                         nestToDirectory: "",
                         templates: [
-                            "__CAPNAME__Migration__TIMESTAMP__.swift.template",
+                            "__CAPNAME__Migration.swift.template",
                         ]
                     ),
                 ]

@@ -20,7 +20,7 @@ public final class __CAPNAME__Model: Model, @unchecked Sendable {
     public var deletedAt: Date?
 
     /// Initializes a new instance of `__CAPNAME__Model`.
-    init() {}
+    public init() {}
 
     /// Initializes a new instance of `__CAPNAME__Model` with the given parameters.
     /// - Parameters:
@@ -28,7 +28,7 @@ public final class __CAPNAME__Model: Model, @unchecked Sendable {
     ///   - createdAt: The creation date of the model.
     ///   - updatedAt: The last update date of the model.
     ///   - deletedAt: The deletion date of the model.
-    init(
+    public init(
         id: UUID? = nil,
         createdAt: Date? = nil,
         updatedAt: Date? = nil,

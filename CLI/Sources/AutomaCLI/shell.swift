@@ -36,7 +36,7 @@ internal struct Shell {
 
     /// Initializes a new instance of `Shell`.
     /// - Throws: An error if the operating system cannot be determined.
-    init() throws {
+    public init() throws {
         operatingSystem = try Self.getOperatingSystem()
         copyCommand = Self.getCopyCommand(os: operatingSystem)
     }

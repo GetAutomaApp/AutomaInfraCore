@@ -11,7 +11,7 @@ internal extension Color {
     /// - Parameter hex: A string representing a hex color code. Supports 3-digit RGB (12-bit),
     ///                 6-digit RGB (24-bit), and 8-digit ARGB (32-bit) formats
     /// - Note: Valid formats are: "RGB", "RRGGBB", "AARRGGBB"
-    init(hex: String) {
+    public init(hex: String) {
         // Remove any non-alphanumeric characters from the hex string
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0

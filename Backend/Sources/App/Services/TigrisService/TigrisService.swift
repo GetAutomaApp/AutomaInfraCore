@@ -15,7 +15,7 @@ internal struct TigrisService: ~Copyable {
 
     /// Initializes a new instance of `TigrisService`.
     /// - Throws: Throws an error if initialization fails.
-    init() throws {
+    public init() throws {
         let clientAuth = try AWSClient(
             credentialProvider: .static(
                 accessKeyId: Environment.getOrThrow("TIGRIS_ACCESS_KEY_ID"),

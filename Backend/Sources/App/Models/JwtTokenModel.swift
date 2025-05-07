@@ -50,7 +50,7 @@ public final class JwtTokenModel: Model, @unchecked Sendable {
     ///   - createdAt: Timestamp when the JWT token was created.
     ///   - updatedAt: Timestamp when the JWT token was last updated.
     ///   - deletedAt: Timestamp when the JWT token was deleted.
-    init(
+    public init(
         id: UUID? = nil,
         token: String,
         userId: UUID,

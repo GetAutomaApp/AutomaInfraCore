@@ -1,7 +1,7 @@
 import Fluent
 
 /// Represents a migration for `__CAPNAME__`.
-internal struct __CAPNAME__Migration__TIMESTAMP__: AsyncMigration {
+internal struct __CAPNAME__Migration: AsyncMigration {
     /// Prepares the `__CAPNAME__` migration.
     /// - Parameter database: The database to apply the migration to.
     /// - Throws: Any errors that occur during migration preparation.

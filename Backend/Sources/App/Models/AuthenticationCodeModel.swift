@@ -47,7 +47,7 @@ public final class AuthenticationCodeModel: Model, @unchecked Sendable {
     ///   - updatedAt: Timestamp when the authentication code was last updated.
     ///   - deletedAt: Timestamp when the authentication code was deleted.
     /// - Throws: Throws an error if the phone number is invalid.
-    init(
+    public init(
         id: UUID? = nil,
         code: String,
         phoneNumber: String,

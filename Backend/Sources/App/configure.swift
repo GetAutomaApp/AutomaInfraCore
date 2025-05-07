@@ -86,7 +86,7 @@ public func configure(_ app: Application) async throws {
 
         // Configure JWT authentication
         guard
-            let encryptionSecret = Environment.get("JWT_ENCRYPTION_SECRET")!
+            let encryptionSecret = Environment.get("JWT_ENCRYPTION_SECRET")
         else {
             logger.error(
                 "Could not get JWT_ENCRYPTION_SECRET from environment.",

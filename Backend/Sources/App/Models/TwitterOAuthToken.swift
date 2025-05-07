@@ -36,7 +36,7 @@ public final class TwitterOAuthToken: Model, @unchecked Sendable {
 
     public init() {}
 
-    init(
+    public init(
         id: UUID? = nil,
         oauthToken: String,
         oauthTokenSecret: String,
