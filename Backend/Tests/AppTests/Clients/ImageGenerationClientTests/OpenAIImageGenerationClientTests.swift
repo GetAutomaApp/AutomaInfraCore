@@ -57,7 +57,7 @@ internal struct OpenAIImageGenerationClientTests: ImageGenerationClientTestSuite
             let client = ImageGenerationClient(logger: app.logger)
 
             // Create a query for generating an image using DALL-E 3
-            let query: GenerateImageQuery = .init(
+            let query: ImageGenerationClientBase.GenerateImageQuery = .init(
                 model: .dall_e_3,
                 prompt: defaultPrompt,
                 totalImagesToGenerate: 1,

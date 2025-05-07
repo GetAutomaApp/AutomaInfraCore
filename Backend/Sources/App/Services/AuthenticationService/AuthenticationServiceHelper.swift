@@ -202,7 +202,7 @@ internal struct AuthenticationServiceHelper {
         // Generate access and refresh tokens
         let accessToken = try await generateAccessToken(
             userId: userId,
-            expiresIn: 86400,
+            expiresIn: 86_400,
             type: .access,
             signer: signer
         )

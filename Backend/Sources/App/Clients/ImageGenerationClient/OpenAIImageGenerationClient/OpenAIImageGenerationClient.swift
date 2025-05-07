@@ -41,7 +41,7 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     /// - Parameter query: The query containing generation parameters like prompt, model, size, etc.
     /// - Returns: A GenerateImageResult containing the generated images and metadata
     /// - Throws: OpenAIImageGenerationClientError if generation or encoding fails
-    public func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult {
+    public func generateImage(_ query: Self.GenerateImageQuery) async throws -> Self.GenerateImageResult {
         // Start the backend metric for image generation request
         BackendMetric.openAIImageGenerationRequest(status: .start).increment()
 
@@ -147,7 +147,7 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     /// Converts the GenerateImageModel to OpenAI's Model type
     /// - Parameter model: The GenerateImageModel to convert
     /// - Returns: The corresponding OpenAI Model
-    private func getModel(from model: GenerateImageModel) throws -> Model {
+    private func getModel(from model: Self.GenerateImageModel) throws -> Model {
         switch model {
         case .dall_e_2:
             .dall_e_2
