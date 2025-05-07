@@ -31,7 +31,7 @@ internal struct TwitterAuthenticatedClient: TwitterClientBase {
     /// - Parameter message: The text content of the tweet to post.
     /// - Returns: A `TwitterPostResponse` containing the posted tweet details.
     /// - Throws: `TwitterAuthenticatedClientError` if the request fails or returns invalid data.
-    public func postTweet(message: String) async throws -> TwitterPostResponse {
+    public func postTweet(message: String) async throws -> Self.TwitterPostResponse {
         // Start the backend metric for posting a tweet
         BackendMetric.twitterPostTweet(status: .start).increment()
 
@@ -42,7 +42,7 @@ internal struct TwitterAuthenticatedClient: TwitterClientBase {
             )
         )
         // Await the response and decode it into a TwitterPostResponse
-        let response = await result.responseDecodable(type: TwitterPostResponse.self)
+        let response = await result.responseDecodable(type: Self.TwitterPostResponse.self)
 
         // Check for errors in the response
         if let error = response.error {
@@ -77,5 +77,25 @@ internal struct TwitterAuthenticatedClient: TwitterClientBase {
 
         // Return the successful tweet response
         return tweetResponse
+    }
+
+    /// A structure representing the response from a Twitter post request.
+    ///
+    /// This struct contains the data returned by Twitter after a tweet is posted,
+    /// encapsulated in a `TwitterPostResponseData` object.
+    public struct TwitterPostResponse: Content {
+        /// The data returned by Twitter, including the tweet's text and ID.
+        public let data: Self.TwitterPostResponseData
+    }
+
+    /// A structure representing the data of a Twitter post response.
+    ///
+    /// This struct contains the text and ID of the tweet that was posted.
+    public struct TwitterPostResponseData: Content {
+        /// The text content of the posted tweet.
+        public let text: String
+
+        /// The unique identifier of the posted tweet.
+        public let id: String
     }
 }

@@ -162,7 +162,7 @@ internal struct TwitterOAuthClient: TwitterClientBase {
     /// - Returns: The saved `TwitterUserToken`.
     /// - Throws: Database errors if saving fails.
     private func saveUserTokens(
-        userTokens: TwitterUserTokens,
+        userTokens: Self.TwitterUserTokens,
         oauthTokenObject: TwitterOAuthToken,
         oauthVerifier: String
     ) async throws -> TwitterUserToken {
@@ -270,7 +270,7 @@ internal struct TwitterOAuthClient: TwitterClientBase {
     private func convertOAuthTokenToUserTokens(
         tokenObject: TwitterOAuthToken,
         oauthVerifier: String
-    ) async throws -> TwitterUserTokens {
+    ) async throws -> Self.TwitterUserTokens {
         BackendMetric.twitterUserTokensConverted(status: .start).increment()
         let response = await twitterClient.auth.oauth10a.postOAuthAccessToken(.init(
             oauthToken: tokenObject.oauthToken,
@@ -315,4 +315,42 @@ internal struct TwitterOAuthClient: TwitterClientBase {
 
     // TODO: Use selenium to login user
     private func loginTwitterUser() throws {}
+
+    /// A structure representing the user tokens required for Twitter OAuth authentication.
+    ///
+    /// This struct contains the access token and secret access token used for authenticating
+    /// requests to the Twitter API.
+    public struct TwitterUserTokens: Content {
+        /// The access token used for Twitter API authentication.
+        public let accessToken: String
+
+        /// The secret access token used for Twitter API authentication.
+        public let secretAccessToken: String
+    }
+
+    /// A structure representing the query parameters for Twitter OAuth redirection.
+    ///
+    /// This struct encapsulates the OAuth token and verifier returned by Twitter during
+    /// the OAuth authentication process.
+    public struct TwitterOAuthRedirectQueryParameters: Content {
+        /// The OAuth token returned by Twitter.
+        public let oauthToken: String
+
+        /// The OAuth verifier returned by Twitter.
+        public let oauthVerifier: String
+
+        /// Coding keys to map the JSON keys to the struct properties.
+        public enum CodingKeys: String, CodingKey {
+            case oauthToken = "oauth_token"
+            case oauthVerifier = "oauth_verifier"
+        }
+    }
+
+    /// A structure representing the content of a tweet to be posted.
+    ///
+    /// This struct contains the message text of the tweet to be posted to Twitter.
+    public struct PostTweetContent: Content {
+        /// The text content of the tweet.
+        public let message: String
+    }
 }
