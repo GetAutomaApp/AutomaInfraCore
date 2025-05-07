@@ -45,7 +45,7 @@ internal extension ImageGenerationClientBase {
         public let imageSize: Self.GenerateImageSize?
 
         /// The style of the generated images.
-        public let imageStyle: Self.GenerateImageStyle?
+        public let imageStyle: Self .. GenerateImageStyle?
 
         /// Initializes a new instance of `GenerateImageQuery`.
         ///

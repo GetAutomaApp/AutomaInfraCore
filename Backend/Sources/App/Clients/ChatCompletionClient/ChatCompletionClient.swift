@@ -5,6 +5,81 @@
 
 import Vapor
 
+/// Protocol defining the interface for chat completion services
+/// Implementations handle the specifics of interacting with different AI platforms
+internal protocol ChatCompletionClientBase {
+    /// Logger instance for tracking operations and errors
+    var logger: Logger { get }
+}
+
+internal extension ChatCompletionClientBase {
+    /// Creates a chat completion using the specified query parameters
+    /// - Parameter query: The chat completion request parameters
+    /// - Returns: The generated chat completion result
+    /// - Throws: Errors that occur during the chat completion process
+    func createChat(_ query: Self.ChatCompletionContent) async throws -> Self.ChatCompletionResult
+
+    /// Structure representing the content of a chat completion request
+    /// Contains all necessary parameters to generate a chat completion
+    struct ChatCompletionContent: Content {
+        /// The AI model to use for generating the completion
+        public let model: Self.ChatCompletionModel
+
+        /// The prompt text to send to the AI model
+        public let prompt: String
+
+        /// The maximum number of tokens to generate in the completion
+        public let maxTokens: Int?
+
+        public init(model: Self.ChatCompletionModel, prompt: String, maxTokens: Int? = nil) {
+            self.model = model
+            self.prompt = prompt
+            self.maxTokens = maxTokens
+        }
+    }
+
+    /// Enumeration of supported chat completion models
+    /// Each case represents a specific AI model with its raw string value
+    enum ChatCompletionModel: String, Codable {
+        /// https: // platform.openai.com/docs/models/gpt-4o
+        case gpt4o = "gpt-4o"
+
+        /// https://platform.openai.com/docs/models/gpt-4o-mini
+        case gpt4omini = "gpt-4o-mini"
+
+        /// https://platform.openai.com/docs/models/o1
+        case gpto1 = "o1"
+
+        /// Returns the appropriate platform-specific client for the selected model
+        /// - Parameter logger: Logger instance to be passed to the client
+        /// - Returns: A client conforming to the ChatCompletion protocol
+        /// - Throws: Errors from client initialization
+        public func getPlatformClient(logger: Logger) throws -> any ChatCompletionClientBase {
+            switch self {
+            case .gpt4o, .gpt4omini, .gpto1:
+                try OpenAIChatCompletionClient(logger: logger)
+            }
+        }
+    }
+
+    /// Enumeration of supported chat completion platforms
+    /// Identifies the AI service provider
+    public enum ChatCompletionPlatform: String, Codable {
+        /// OpenAI platform (includes GPT models)
+        case openai
+    }
+
+    /// Structure representing the result of a chat completion
+    /// Contains the generated message and any additional metadata
+    public struct ChatCompletionResult: Content {
+        /// The generated text response from the AI model
+        public let message: String
+
+        /// Additional metadata about the completion
+        public let metadata: Data
+    }
+}
+
 /// Client for handling chat completion requests across different AI platforms.
 /// Delegates requests to the appropriate platform-specific client based on the model.
 ///
@@ -17,7 +92,7 @@ import Vapor
 /// let client = ChatCompletionClient(logger: logger)
 /// let result = try await client.createChat(query)
 /// ```
-internal struct ChatCompletionClient: ChatCompletion {
+public struct ChatCompletionClient: ChatCompletionClientBase {
     /// Logger instance for tracking operations and errors.
     /// This logger is passed to platform-specific clients for consistent logging across the system.
     ///
@@ -42,7 +117,7 @@ internal struct ChatCompletionClient: ChatCompletion {
     ///          - Invalid model selection
     ///          - Network communication
     ///          - Chat completion generation
-    public func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult {
+    public func createChat(_ query: Self.ChatCompletionContent) async throws -> Self.ChatCompletionResult {
         // Get the appropriate platform client based on the requested model
         let client = try query.model.getPlatformClient(logger: logger)
 
