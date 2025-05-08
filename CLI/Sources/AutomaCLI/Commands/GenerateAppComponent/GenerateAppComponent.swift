@@ -304,6 +304,7 @@ public struct GenerateAppComponent: Command {
         public let addToFile: String
     }
 
+    // swiftlint:disable function_body_length
     public enum GenerateAppComponentFileTypeHelper {
         // Base paths for various directories
         public static let baseAppPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
@@ -488,4 +489,5 @@ public struct GenerateAppComponent: Command {
             ]
         }
     }
+    // swiftlint:enable function_body_length
 }

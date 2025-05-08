@@ -95,7 +95,10 @@ internal enum RandomService {
         // swiftlint:enable force_unwrapping
 
         // Generate a random UUID and take the first 4 characters
+
+        // swiftlint:disable force_unwrapping
         let randomAppend = UUID().uuidString.split(separator: "-").first!.prefix(4)
+        // swiftlint:enable force_unwrapping
 
         return "\(mood)\(adjective)\(object)\(randomAppend)"
     }
@@ -103,8 +106,10 @@ internal enum RandomService {
     /// Generates a random code.
     /// - Returns: A string representing a random code.
     public static func randomCode() -> String {
+        // swiftlint:disable force_unwrapping
         let first = allWords.randomElement()!.lowercased()
         let second = allWords.randomElement()!.lowercased()
+        // swiftlint:enable force_unwrapping
 
         return "\(first)-\(second)"
     }

@@ -12,6 +12,7 @@ import Vapor
 internal struct TigrisService: ~Copyable {
     /// The S3 client for interacting with Tigris.
     public let client: S3
+    /// Logger to log messages
     public let logger: Logger
 
     /// Initializes a new instance of `TigrisService`.
@@ -63,25 +64,27 @@ internal struct TigrisService: ~Copyable {
     /// - Returns: A signed URL string.
     /// - Throws: Throws an error if signing fails.
     public func sign(input: String, expiresIn: TimeAmount) async throws -> String {
-    let tigrisUrl = getTigrisUrl(input)
-    guard
-        let tigrisUrl = URL(tigrisUrl)
-    else {
-        logger.error(
-            "Could not convert tigris URL string to URL. This should never happen.",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "tigris_url": .string(tigrisUrl)
-            ]
-        )
-        throw Abort(.internalServerError)
-    }
+        let tigrisUrl = getTigrisUrl(input)
+        guard
+            let urlObj = URL(tigrisUrl)
+        else {
+            logger.error(
+                "Could not convert tigris URL string to URL. This should never happen.",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "tigris_url": .string(tigrisUrl),
+                ]
+            )
+            throw Abort(.internalServerError)
+        }
 
         let url = try await client
             .signURL(
-                url: URL(string: ,
-                httpMethod: .GET,
-                expires: expiresIn
+                url: URL(
+                    string: urlObj,
+                    httpMethod: .GET,
+                    expires: expiresIn
+                )
             )
 
         return url.absoluteString
@@ -113,7 +116,8 @@ internal struct TigrisService: ~Copyable {
                     acl: acl,
                     body: .init(buffer: content),
                     bucket: path.bucket,
-                    contentType: contentType, expires: expires,
+                    contentType: contentType,
+                    expires: expires,
                     key: path.key,
                     metadata: metadata
                 )
