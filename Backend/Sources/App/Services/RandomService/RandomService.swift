@@ -88,9 +88,11 @@ internal enum RandomService {
     /// Generates a random username.
     /// - Returns: A string representing a random username.
     public static func randomUsername() -> String {
+        // swiftlint:disable force_unwrapping
         let mood = moods.randomElement()!
         let adjective = adjectives.randomElement()!
         let object = objects.randomElement()!
+        // swiftlint:enable force_unwrapping
 
         // Generate a random UUID and take the first 4 characters
         let randomAppend = UUID().uuidString.split(separator: "-").first!.prefix(4)

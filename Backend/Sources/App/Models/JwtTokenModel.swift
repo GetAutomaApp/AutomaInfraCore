@@ -87,8 +87,13 @@ public final class JwtTokenModel: Model, @unchecked Sendable {
     /// - Returns: An instance of `JwtTokenModel`.
     internal static func fromDTO(dto: JwtTokenDTO) -> JwtTokenModel {
         JwtTokenModel(
-            id: dto.id, token: dto.token, userId: dto.userId, subject: dto.subject, createdAt: dto.createdAt,
-            updatedAt: dto.updatedAt, deletedAt: dto.deletedAt
+            id: dto.id,
+            token: dto.token,
+            userId: dto.userId,
+            subject: dto.subject,
+            createdAt: dto.createdAt,
+            updatedAt: dto.updatedAt,
+            deletedAt: dto.deletedAt
         )
     }
 

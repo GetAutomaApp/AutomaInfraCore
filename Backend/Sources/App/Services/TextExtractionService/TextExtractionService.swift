@@ -11,6 +11,7 @@ import Vapor
 internal struct TextExtractionService: ~Copyable {
     /// The Textract client for text extraction.
     public let client: Textract
+    /// Logger to log messages
     public let logger: Logger
 
     /// Initializes a new instance of `TextExtractionService`.

@@ -16,7 +16,7 @@ internal struct ProfilePictureJobInput: Codable {
 
 /// Asynchronous job to create a profile picture.
 internal struct ProfilePictureAsyncJob: AsyncJob {
-    typealias Payload = ProfilePictureJobInput
+    public typealias Payload = ProfilePictureJobInput
 
     /// Processes the job to create a profile picture.
     /// - Parameters:

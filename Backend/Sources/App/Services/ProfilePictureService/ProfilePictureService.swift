@@ -26,7 +26,7 @@ internal struct ProfilePictureService {
         excludeText: Bool = true
     ) async throws -> String {
         do {
-            let tigrisService = try TigrisService()
+            let tigrisService = try TigrisService(logger: logger)
             let messageService = MessageService()
 
             // Create a query for generating the profile picture

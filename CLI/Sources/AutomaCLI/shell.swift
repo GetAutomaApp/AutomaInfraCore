@@ -59,7 +59,7 @@ internal struct Shell {
         task.arguments = ["-c", fullCommand]
 
         task.standardInput = nil
-        try! task.run()
+        try task.run()
 
         // Read the output from the command
         let stdoutData = stdoutPipe.fileHandleForReading.readDataToEndOfFile()

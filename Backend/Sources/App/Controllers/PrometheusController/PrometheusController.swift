@@ -49,3 +49,14 @@ internal struct PrometheusController: RouteCollection {
         }
     }
 }
+
+/// Represents the query parameters for Prometheus routes.
+internal struct PrometheusRouteQuery: Content {
+    /// The authentication token for accessing Prometheus metrics.
+    public let authToken: String
+
+    /// Coding keys to map the JSON keys to the struct properties.
+    public enum CodingKeys: String, CodingKey {
+        case authToken = "auth_token"
+    }
+}

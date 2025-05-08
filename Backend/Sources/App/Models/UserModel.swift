@@ -85,7 +85,7 @@ public final class UserModel: Model, @unchecked Sendable {
 
     /// Converts the model to a `UserDTO`.
     /// - Returns: An instance of `UserDTO`.
-    public func toDTO() -> UserDTO {
+    public func toDTO(logger: Logger) -> UserDTO {
         let profilePictureUrl: String?
         do {
             guard let profilePictureKey else {
@@ -93,7 +93,7 @@ public final class UserModel: Model, @unchecked Sendable {
                 throw URLError(.badURL)
             }
 
-            profilePictureUrl = try TigrisService().getTigrisUrl(profilePictureKey)
+            profilePictureUrl = try TigrisService(logger: logger).getTigrisUrl(profilePictureKey)
         } catch {
             profilePictureUrl = nil
         }

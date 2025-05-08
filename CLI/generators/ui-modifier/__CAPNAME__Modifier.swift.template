@@ -22,9 +22,9 @@ internal struct __CAPNAME__Modifier: ViewModifier {
 }
 
 /// Type alias for view types that can be modified by `__CAPNAME__Modifier`.
-typealias __CAPNAME__ModifierViewTypes = View // Use Type Narrowing Please!
+public typealias __CAPNAME__ModifierViewTypes = View // Use Type Narrowing Please!
 
-extension __CAPNAME__ModifierViewTypes {
+public extension __CAPNAME__ModifierViewTypes {
     /// Applies the `__CAPNAME__Modifier` to the view.
     /// - Returns: A modified view.
     public func __CAPNAME_HASKELL__() -> some View {

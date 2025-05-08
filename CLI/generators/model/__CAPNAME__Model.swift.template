@@ -56,7 +56,10 @@ public final class __CAPNAME__Model: Model, @unchecked Sendable {
     /// - Returns: A `__CAPNAME__Model` representing the DTO.
     public static func fromDTO(dto: __CAPNAME__DTO) -> __CAPNAME__Model {
         let model = __CAPNAME__Model(
-            id: dto.id,  createdAt: dto.createdAt, updatedAt: dto.updatedAt, deletedAt: dto.deletedAt
+            id: dto.id,
+            createdAt: dto.createdAt,
+            updatedAt: dto.updatedAt,
+            deletedAt: dto.deletedAt
         )
         return model
     }

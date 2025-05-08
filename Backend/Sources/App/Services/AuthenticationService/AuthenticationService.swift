@@ -70,7 +70,7 @@ public struct AuthenticationService: Sendable {
             accepted: false
         )
 
-        let userDTO = user.toDTO()
+        let userDTO = user.toDTO(logger: logger)
         let profilePictureKey = try profilePictureService.generateImageKey(for: userDTO)
 
         // Dispatch a job to create a profile picture

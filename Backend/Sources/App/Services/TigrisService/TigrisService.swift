@@ -12,10 +12,11 @@ import Vapor
 internal struct TigrisService: ~Copyable {
     /// The S3 client for interacting with Tigris.
     public let client: S3
+    public let logger: Logger
 
     /// Initializes a new instance of `TigrisService`.
     /// - Throws: Throws an error if initialization fails.
-    public init() throws {
+    public init(logger: Logger) throws {
         let clientAuth = try AWSClient(
             credentialProvider: .static(
                 accessKeyId: Environment.getOrThrow("TIGRIS_ACCESS_KEY_ID"),
@@ -28,6 +29,8 @@ internal struct TigrisService: ~Copyable {
             region: .init(rawValue: "auto"),
             endpoint: Environment.getOrThrow("TIGRIS_BASE_URL")
         )
+
+        self.logger = logger
     }
 
     /// Deinitializes the `TigrisService` and shuts down the client.
@@ -60,9 +63,23 @@ internal struct TigrisService: ~Copyable {
     /// - Returns: A signed URL string.
     /// - Throws: Throws an error if signing fails.
     public func sign(input: String, expiresIn: TimeAmount) async throws -> String {
+    let tigrisUrl = getTigrisUrl(input)
+    guard
+        let tigrisUrl = URL(tigrisUrl)
+    else {
+        logger.error(
+            "Could not convert tigris URL string to URL. This should never happen.",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "tigris_url": .string(tigrisUrl)
+            ]
+        )
+        throw Abort(.internalServerError)
+    }
+
         let url = try await client
             .signURL(
-                url: URL(string: getTigrisUrl(input))!,
+                url: URL(string: ,
                 httpMethod: .GET,
                 expires: expiresIn
             )
