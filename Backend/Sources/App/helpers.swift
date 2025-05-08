@@ -28,7 +28,7 @@ internal extension Task where Success == Void, Failure == any Error {
     ///   - onSuccess: An optional closure to execute on success.
     ///   - method: The method to execute in the task.
     static func detachedLogOnError(
-        destination _: String,
+        destination: String,
         logger: Logger,
         onError: @escaping @Sendable (Error) async throws -> Void = { _ in },
         onSuccess: @escaping @Sendable () async throws -> Void = {},

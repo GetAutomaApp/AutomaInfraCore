@@ -11,7 +11,7 @@ import Vapor
 /// A client for generating images using OpenAI's API.
 /// This client handles image generation requests by communicating with OpenAI's DALL-E models.
 /// It supports both DALL-E 2 and DALL-E 3, with configurable parameters for image generation.
-internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
+public struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     /// The underlying OpenAI client used for API communication
     private let client: OpenAI
 
@@ -41,7 +41,7 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     /// - Parameter query: The query containing generation parameters like prompt, model, size, etc.
     /// - Returns: A GenerateImageResult containing the generated images and metadata
     /// - Throws: OpenAIImageGenerationClientError if generation or encoding fails
-    public func generateImage(_ query: Self.GenerateImageQuery) async throws -> Self.GenerateImageResult {
+    public func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult {
         // Start the backend metric for image generation request
         BackendMetric.openAIImageGenerationRequest(status: .start).increment()
 
@@ -147,7 +147,7 @@ internal struct OpenAIImageGenerationClient: ImageGenerationClientBase {
     /// Converts the GenerateImageModel to OpenAI's Model type
     /// - Parameter model: The GenerateImageModel to convert
     /// - Returns: The corresponding OpenAI Model
-    private func getModel(from model: Self.GenerateImageModel) throws -> Model {
+    private func getModel(from model: GenerateImageModel) throws -> Model {
         switch model {
         case .dall_e_2:
             .dall_e_2

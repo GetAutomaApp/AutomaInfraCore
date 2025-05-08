@@ -20,7 +20,7 @@ internal struct FirecrawlTestController: RouteCollection {
     /// - Returns: A `WebsiteResponseItem` containing the scraped data.
     /// - Throws: An error if the scraping operation fails.
     @Sendable
-    public func request(req: Request) async throws -> FirecrawlClient.WebsiteResponseItem {
+    public func request(req: Request) async throws -> WebsiteResponseItem {
         let firecrawlClient = try FirecrawlClient(
             client: req.client,
             logger: req.logger

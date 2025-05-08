@@ -68,6 +68,7 @@ internal struct DiscordEmbedFooter: Codable {
 
     public enum CodingKeys: String, CodingKey {
         case iconURL = "icon_url"
+        case text = "text"
     }
 }
 
@@ -88,6 +89,8 @@ internal struct DiscordEmbedAuthor: Codable {
 
     public enum CodingKeys: String, CodingKey {
         case iconURL = "icon_url"
+        case url = "url"
+        case name = "name"
     }
 }
 

@@ -10,7 +10,7 @@ import Queues
 import Vapor
 
 /// Helper struct for authentication service operations.
-internal struct AuthenticationServiceHelper {
+public struct AuthenticationServiceHelper {
     /// The database for writing operations.
     public let writeDb: Database
     /// The database for reading operations.

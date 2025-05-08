@@ -42,7 +42,7 @@ internal struct FirecrawlClient {
     /// - Parameter input: The input containing the URL to scrape.
     /// - Returns: A `WebsiteResponseItem` containing links, markdown content, and image URLs.
     /// - Throws: An error if the scraping operation fails.
-    public func scrapeMarkdown(from input: Self.ScrapeMarkdownInput) async throws -> Self.WebsiteResponseItem {
+    public func scrapeMarkdown(from input: ScrapeMarkdownInput) async throws -> WebsiteResponseItem {
         BackendMetric
             .firecrawlScrapeMarkdown(status: .start, url: input.url)
             .increment()
@@ -164,59 +164,60 @@ internal struct FirecrawlClient {
     // startCrawl()
     // getCrawlResults()
 
-    /// An enumeration representing the formats supported by the FirecrawlClient.
-    ///
-    /// This enum defines the content formats that can be scraped by the FirecrawlClient,
-    /// including markdown and raw HTML.
-    public enum FirecrawlFormats: String, Content {
-        /// Represents content in markdown format.
-        case markdown
+}
 
-        /// Represents content in raw HTML format.
-        case rawHtml
-    }
+/// An enumeration representing the formats supported by the FirecrawlClient.
+///
+/// This enum defines the content formats that can be scraped by the FirecrawlClient,
+/// including markdown and raw HTML.
+public enum FirecrawlFormats: String, Content {
+    /// Represents content in markdown format.
+    case markdown
 
-    /// A structure representing the input required for scraping markdown content.
-    ///
-    /// This struct is used to encapsulate the URL from which markdown content will be scraped.
-    public struct ScrapeMarkdownInput: Content {
-        /// The URL of the website to scrape.
-        public let url: String
-    }
+    /// Represents content in raw HTML format.
+    case rawHtml
+}
 
-    /// A structure representing the result of a data scrape operation.
-    ///
-    /// This struct contains the scraped markdown content and any links found within it.
-    public struct FirecrawlDataResult: Content {
-        /// The markdown content scraped from the website.
-        public let markdown: String
+/// A structure representing the input required for scraping markdown content.
+///
+/// This struct is used to encapsulate the URL from which markdown content will be scraped.
+public struct ScrapeMarkdownInput: Content {
+    /// The URL of the website to scrape.
+    public let url: String
+}
 
-        /// The list of links extracted from the markdown content.
-        public let links: [String]
-    }
+/// A structure representing the result of a data scrape operation.
+///
+/// This struct contains the scraped markdown content and any links found within it.
+public struct FirecrawlDataResult: Content {
+    /// The markdown content scraped from the website.
+    public let markdown: String
 
-    /// A structure representing the result of a scrape operation.
-    ///
-    /// This struct contains the success status of the operation and the data result.
-    public struct FirecrawlScrapeResult: Content {
-        /// Indicates whether the scrape operation was successful.
-        public let success: Bool
+    /// The list of links extracted from the markdown content.
+    public let links: [String]
+}
 
-        /// The data result containing markdown and links.
-        public let data: Self.FirecrawlDataResult
-    }
+/// A structure representing the result of a scrape operation.
+///
+/// This struct contains the success status of the operation and the data result.
+public struct FirecrawlScrapeResult: Content {
+    /// Indicates whether the scrape operation was successful.
+    public let success: Bool
 
-    /// A structure representing the response item from a website scrape.
-    ///
-    /// This struct contains the links, markdown content, and image URLs extracted from the website.
-    public struct WebsiteResponseItem: Content {
-        /// The list of links extracted from the website.
-        public let links: [String]
+    /// The data result containing markdown and links.
+    public let data: FirecrawlDataResult
+}
 
-        /// The markdown content extracted from the website.
-        public let markdown: String
+/// A structure representing the response item from a website scrape.
+///
+/// This struct contains the links, markdown content, and image URLs extracted from the website.
+public struct WebsiteResponseItem: Content {
+    /// The list of links extracted from the website.
+    public let links: [String]
 
-        /// The list of image URLs extracted from the markdown content.
-        public let imageUrls: [String]
-    }
+    /// The markdown content extracted from the website.
+    public let markdown: String
+
+    /// The list of image URLs extracted from the markdown content.
+    public let imageUrls: [String]
 }

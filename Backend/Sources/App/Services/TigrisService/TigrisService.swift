@@ -64,9 +64,9 @@ internal struct TigrisService: ~Copyable {
     /// - Returns: A signed URL string.
     /// - Throws: Throws an error if signing fails.
     public func sign(input: String, expiresIn: TimeAmount) async throws -> String {
-        let tigrisUrl = getTigrisUrl(input)
+        let tigrisUrl = try getTigrisUrl(input)
         guard
-            let urlObj = URL(tigrisUrl)
+            let urlObj = URL(string: tigrisUrl)
         else {
             logger.error(
                 "Could not convert tigris URL string to URL. This should never happen.",
@@ -80,11 +80,9 @@ internal struct TigrisService: ~Copyable {
 
         let url = try await client
             .signURL(
-                url: URL(
-                    string: urlObj,
-                    httpMethod: .GET,
-                    expires: expiresIn
-                )
+                url: urlObj,
+                httpMethod: .GET,
+                expires: expiresIn
             )
 
         return url.absoluteString

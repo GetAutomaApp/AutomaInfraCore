@@ -152,31 +152,44 @@ internal struct MessageService: Decodable {
     ///   - logger: The logger for logging messages.
     ///   - withUrl: The URL of the webhook to send the event to.
     /// - Throws: Throws an error if sending the webhook event fails.
-    public func try sendDiscordWebhookAppEvent(
+    public func sendDiscordWebhookAppEvent(
         input: String,
         event: String,
         imageUrl: String? = nil,
         logger: Logger,
-        withUrl: URL? = URL(
-            string: Environment.getOrThrow("DISCORD_APP_EVENTS_URL")
-        )
+        withUrl: URL? = nil
     ) throws {
+        var withUrlUnwrapped: URL?
         guard
             let withUrl
         else {
-            logger.error(
-                "Could not send discord webhook, because 'withUrl' is nil.",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "event": .string(event),
-                    "input": .string(input),
-                ]
-            )
-            throw Abort(.internalServerError)
+            guard let
+                url = URL(string: try Environment.getOrThrow("DISCORD_APP_EVENTS_URL"))
+            else {
+                logger.error(
+                    "Could not send discord webhook, because 'withUrl' is nil.",
+                    metadata: [
+                        "to": .string("\(String(describing: Self.self)).\(#function)"),
+                        "event": .string(event),
+                        "input": .string(input),
+                    ]
+                )
+                throw Abort(.internalServerError)
+            }
+            withUrlUnwrapped = url
+            return
         }
+        guard let
+            withUrlUnwrapped
+        else {
+            withUrlUnwrapped = withUrl
+            return
+        }
+        
+
         Task.detachedLogOnError(destination: "MessageService.sendDiscordWebhookAppEvent", logger: logger) {
             try await sendWebhookMessage(
-                webhookURL: withUrl,
+                webhookURL: withUrlUnwrapped,
                 message: MessageFormatterService
                     .craftUserEventDiscordWebhookMessage(
                         input: input,
@@ -200,7 +213,7 @@ internal struct MessageService: Decodable {
         logger: Logger
     ) throws {
         guard
-            let withUrl = URL(string: Environment.getOrThrow("DISCORD_AUTOMA_ALERTS_WEBHOOK_URL"))
+            let withUrl = try URL(string: Environment.getOrThrow("DISCORD_AUTOMA_ALERTS_WEBHOOK_URL"))
         else {
             logger.error(
                 "Could not send discord webhook, because 'withUrl' is nil.",

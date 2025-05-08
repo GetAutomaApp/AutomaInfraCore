@@ -10,7 +10,7 @@ import Queues
 import Vapor
 
 /// Service for handling authentication-related operations.
-public struct AuthenticationService: Sendable {
+public struct AuthenticationService {
     /// The database for writing operations.
     public let writeDb: Database
     /// The database for reading operations.
@@ -70,7 +70,7 @@ public struct AuthenticationService: Sendable {
             accepted: false
         )
 
-        let userDTO = user.toDTO(logger: logger)
+        let userDTO = try user.toDTO(logger: logger)
         let profilePictureKey = try profilePictureService.generateImageKey(for: userDTO)
 
         // Dispatch a job to create a profile picture

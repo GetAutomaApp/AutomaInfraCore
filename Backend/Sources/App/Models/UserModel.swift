@@ -85,11 +85,20 @@ public final class UserModel: Model, @unchecked Sendable {
 
     /// Converts the model to a `UserDTO`.
     /// - Returns: An instance of `UserDTO`.
-    public func toDTO(logger: Logger) -> UserDTO {
+    public func toDTO(logger: Logger) throws -> UserDTO {
         let profilePictureUrl: String?
         do {
-            guard let profilePictureKey else {
-                // TODO: Log here as well (not as important, but good to have)
+            guard
+                let profilePictureKey
+            else {
+                let userId = try self.requireID().uuidString
+                logger.error(
+                    "Profile picture key is nil, could not convert user model to DTO.",
+                    metadata: [
+                        "to": .string("\(String(describing: Self.self)).\(#function)"),
+                        "user_id": .string(userId),
+                    ]
+                )
                 throw URLError(.badURL)
             }
 

@@ -145,16 +145,16 @@ internal struct ProfilePictureService {
     /// - Throws: Throws an error if image generation fails.
     private func generateImage(
         totalRegenerationAttempts: Int,
-        query: ImageGenerationClientBase.GenerateImageQuery,
+        query: GenerateImageQuery,
         excludeText: Bool
-    ) async throws -> ImageGenerationClientBase.GenerateImageResult {
+    ) async throws -> GenerateImageResult {
         let textExtractionService = TextExtractionService(logger: logger)
         let imageClient = ImageGenerationClient(logger: logger)
 
         var hasText = false
         var totalAttemptsLeft = totalRegenerationAttempts
 
-        var result: ImageGenerationClientBase.GenerateImageResult?
+        var result: GenerateImageResult?
         // If there is still text on the image after 3 attempts, we will ignore the text and continue generating the
         // image
         repeat {

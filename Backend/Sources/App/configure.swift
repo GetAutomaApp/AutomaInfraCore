@@ -88,10 +88,10 @@ public func configure(_ app: Application) async throws {
         guard
             let encryptionSecret = Environment.get("JWT_ENCRYPTION_SECRET")
         else {
-            logger.error(
+            app.logger.error(
                 "Could not get JWT_ENCRYPTION_SECRET from environment.",
                 metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "to": .string("configure"),
                 ]
             )
             throw Abort(.internalServerError)

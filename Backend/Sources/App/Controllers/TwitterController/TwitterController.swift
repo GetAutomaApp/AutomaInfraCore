@@ -24,7 +24,7 @@ internal struct TwitterController: RouteCollection {
     @Sendable
     public func redirect(req: Request) async throws -> String {
         let twitterClient = try TwitterClient(logger: req.logger, client: req.client, database: req.db)
-        let queryParameters = try req.query.decode(Self.TwitterOAuthRedirectQueryParameters.self)
+        let queryParameters = try req.query.decode(TwitterOAuthClient.TwitterOAuthRedirectQueryParameters.self)
 
         let userTokens = try await twitterClient.auth.getUserTokens(
             oauthToken: queryParameters.oauthToken,
@@ -52,7 +52,7 @@ internal struct TwitterController: RouteCollection {
             database: req.db
         ).authenticated(token: token)
 
-        let content = try req.content.decode(Self.PostTweetContent.self)
+        let content = try req.content.decode(TwitterOAuthClient.PostTweetContent.self)
         let response = try await authenticatedClient.postTweet(message: content.message)
         req.logger.info(
             "Tweet response",
