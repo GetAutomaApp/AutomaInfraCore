@@ -31,9 +31,6 @@ public let package = Package(
 
     // External package dependencies
     dependencies: [
-        // ViewInspector for SwiftUI testing and inspection
-        .package(url: "https://github.com/nalexn/ViewInspector", from: "0.9.0"),
-
         // Alamofire for networking
         .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.10.0")),
 
@@ -63,7 +60,11 @@ public let package = Package(
                 // Secure keychain storage
                 .product(name: "SimpleKeychain", package: "SimpleKeychain"),
             ],
-            path: "Sources"
+            path: "Sources",
+            exclude: [],
+            resources: [
+                .process("AutomaAppShared/Preview Content/Preview Assets.xcassets"),
+            ]
         ),
 
         // Test target for unit tests

@@ -11,7 +11,7 @@ internal struct __CAPNAME__ControllerInteractor: BackendControllerInteractor {
     /// Makes a request to /__CAPNAME_DASHED__/route_name
     @Test("Make a request to route_name")
     public func makeRequest() async throws -> DataResponse<Data?, AFError> {
-        return try await performRequest(
+        return await performRequest(
             endpoint: "/__CAPNAME_DASHED__/route_name",
             method: .get
         )

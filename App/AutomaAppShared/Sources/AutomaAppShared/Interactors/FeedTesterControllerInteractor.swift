@@ -21,7 +21,7 @@ internal struct FeedTesterControllerInteractor: BackendControllerInteractor {
     /// - Returns: A DataResponse object containing optional Data and any Alamofire errors that occurred
     /// - Throws: An error if the request fails or cannot be completed
     public func makeRequest() async throws -> DataResponse<Data?, AFError> {
-        try await performRequest(
+        await performRequest(
             endpoint: "/Feed-Tester/request",
             method: .get
         )

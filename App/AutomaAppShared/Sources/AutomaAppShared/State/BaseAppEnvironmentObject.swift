@@ -3,7 +3,6 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-import AutomaAppShared
 import SwiftUI
 
 /// A base environment object that manages the global application state.
@@ -43,7 +42,7 @@ public class BaseAppEnvironmentObject: ObservableObject {
     public func logout() {
         isLoggedIn = false
         Task {
-            await DispatchQueue.main.async {
+            DispatchQueue.main.async {
                 KeychainHelper.delete(for: .refreshToken)
             }
         }

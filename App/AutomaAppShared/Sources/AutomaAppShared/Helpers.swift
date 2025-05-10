@@ -51,6 +51,7 @@ public class KeychainHelper {
     ///   - key: The keychain key to store the value for
     ///   - value: The string value to store
     /// - Returns: Boolean indicating whether the operation was successful
+    @discardableResult
     internal static func set(for key: KeyChainKeys, value: String) -> Bool {
         (
             try? keychain.set(value, forKey: key.rawValue)

@@ -106,13 +106,12 @@ public struct OnboardingScreen: View {
                 Spacer()
                 IconButtonComponent(
                     config: iconButtonConfig,
-                    onSelfAppear: () {
+                    onSelfAppear: { _ in
                         iconButtonConfig.variant = .circle
                         iconButtonConfig.icon = .arrowRight
-                    }
-                ) {
-                    handleOnboardingNextScreen()
-                }
+                    },
+                    action: handleOnboardingNextScreen
+                )
             }
         )
     }

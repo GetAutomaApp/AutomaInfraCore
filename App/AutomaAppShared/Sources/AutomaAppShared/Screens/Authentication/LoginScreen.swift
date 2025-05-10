@@ -196,7 +196,7 @@ public struct LoginScreen: View {
                 code
             )
 
-            let success = [
+            let _ = [
                 KeychainHelper
                     .set(for: .authenticationToken, value: response.accessToken),
                 KeychainHelper

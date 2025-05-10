@@ -26,13 +26,13 @@ internal struct AppLaunchControllerInteractor: BackendControllerInteractor {
     /// - Returns: A boolean indicating whether the user has accepted (true) or not (false)
     /// - Throws: Network connectivity errors or other request-related exceptions
     public func makeIsUserAcceptedRequest() async throws -> Bool {
-        let response = try await performRequest(
+        let response = await performRequest(
             endpoint: "/App-Launch/is-user-accepted",
             method: .get,
             jwt: true
         )
 
-        let parsedResponse = try await handleResponse(
+        let parsedResponse = try handleResponse(
             response: response,
             decodeTo: UserIsAcceptedDTO.self,
             rethrow: [
@@ -52,12 +52,12 @@ internal struct AppLaunchControllerInteractor: BackendControllerInteractor {
     /// - Returns: An `AppLaunchClientConfigDTO` containing the client configuration
     /// - Throws: Network connectivity errors or other request-related exceptions
     public func makeGetClientConfig() async throws -> AppLaunchClientConfigDTO {
-        let response = try await performRequest(
+        let response = await performRequest(
             endpoint: "/App-Launch/get-client-config",
             method: .get
         )
 
-        return try await handleResponse(
+        return try handleResponse(
             response: response,
             decodeTo: AppLaunchClientConfigDTO.self,
             rethrow: [

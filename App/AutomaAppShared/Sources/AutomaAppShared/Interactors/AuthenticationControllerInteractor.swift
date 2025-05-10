@@ -37,7 +37,7 @@ internal struct AuthenticationControllerInteractor: BackendControllerInteractor 
             parameters: params
         )
 
-        return try await handleResponse(
+        return try handleResponse(
             response: response,
             decodeTo: AuthenticationCodeResponseDTO.self,
             rethrow: [
@@ -69,7 +69,7 @@ internal struct AuthenticationControllerInteractor: BackendControllerInteractor 
             parameters: params
         )
 
-        return try await handleResponse(
+        return try handleResponse(
             response: response,
             decodeTo: AuthenticationTokensPayloadDTO.self,
             rethrow: [
@@ -97,7 +97,7 @@ internal struct AuthenticationControllerInteractor: BackendControllerInteractor 
             parameters: params
         )
 
-        return try await handleResponse(
+        return try handleResponse(
             response: response,
             decodeTo: AuthenticationCodeResponseDTO.self,
             rethrow: [
@@ -127,7 +127,7 @@ internal struct AuthenticationControllerInteractor: BackendControllerInteractor 
             parameters: params
         )
 
-        return try await handleResponse(
+        return try handleResponse(
             response: response,
             decodeTo: AuthenticationTokensPayloadDTO.self,
             rethrow: [
@@ -161,7 +161,7 @@ internal struct AuthenticationControllerInteractor: BackendControllerInteractor 
             encoding: URLEncoding.default
         )
 
-        let data = try await handleResponse(
+        let data = try handleResponse(
             response: response,
             decodeTo: AccessTokenPayloadDTO.self,
             rethrow: [

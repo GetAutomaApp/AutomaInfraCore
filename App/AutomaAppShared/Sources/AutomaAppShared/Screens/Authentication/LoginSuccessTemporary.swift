@@ -37,7 +37,7 @@ public struct LoginSuccessTemporary: View {
                         description: """
                         The app is currently being developed. \
                         This screen will be removed once the app is open for general use!
-                        """"
+                        """
                     )
                 )
             },
