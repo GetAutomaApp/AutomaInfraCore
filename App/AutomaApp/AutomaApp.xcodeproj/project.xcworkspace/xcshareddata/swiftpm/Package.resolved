@@ -1,5 +1,5 @@
 {
-  "originHash" : "a8ac5762993282aecf803297da80c150876741c0958143896bfc30b1d97af43e",
+  "originHash" : "aed9b448e241bb105a4d8b93a0e5f8f7de88ca46f1c38462c4b159664f010f2f",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -269,15 +269,6 @@
       "state" : {
         "revision" : "e20b1944524d4454c2a65c0054ce345c2c5d0185",
         "version" : "1.0.0"
-      }
-    },
-    {
-      "identity" : "viewinspector",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nalexn/ViewInspector",
-      "state" : {
-        "revision" : "788e7879d38a839c4e348ab0762dcc0364e646a2",
-        "version" : "0.10.1"
       }
     },
     {

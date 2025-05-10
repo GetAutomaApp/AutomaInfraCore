@@ -8,8 +8,6 @@
 import Testing
 @testable import IOS
 
-struct IOS_IntegrationTests {
-
 /// Test suite for the iOS application
 ///
 /// This test suite contains unit tests that verify the functionality and behavior
@@ -32,5 +30,4 @@ internal struct IOSTests {
     public func example() {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
     }
-
 }
