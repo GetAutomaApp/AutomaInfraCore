@@ -51,9 +51,8 @@ extension ImageGenerationClientTestSuite {
     /// - Throws: Any errors that occur during the image generation process
     internal func generateImage(
         app: Application,
-        query: ImageGenerationClientBase
-            .GenerateImageQuery
-    ) async throws -> ImageGenerationClientBase.GenerateImageResult {
+        query: GenerateImageQuery
+    ) async throws -> GenerateImageResult {
         let client = ImageGenerationClient(logger: app.logger)
         return try await client.generateImage(query)
     }

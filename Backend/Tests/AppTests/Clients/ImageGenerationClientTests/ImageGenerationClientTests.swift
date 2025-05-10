@@ -11,7 +11,7 @@ import VaporTesting
 /// Test suite for verifying the functionality of image generation clients
 /// This suite tests different image generation models and ensures they can properly generate images
 /// according to specified parameters like quality, size, and style
-@Suite("Image Generation Client Tests")
+@Suite("ImageGenerationClientTests")
 internal struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
     /// Tests successful image generation for each image generation client
     /// This test verifies that:
@@ -28,22 +28,25 @@ internal struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
     @Test(
         "Each image generation client should be able to generate images",
         arguments: [
-            ImageGenerationClientBase.GenerateImageModel.dall_e_2, // will use openai client
+            GenerateImageModel.dall_e_2, // will use openai client
         ]
     )
-    internal func generateImageResultSuccess(model: ImageGenerationClientBase.GenerateImageModel) async throws {
+    internal func generateImageResultSuccess(model: GenerateImageModel) async throws {
         try await withApp { app in
             let totalImagesToGenerate = 1
 
             // Configure the image generation request with specific parameters
-            let result = try await generateImage(app: app, query: .init(
-                model: model,
-                prompt: defaultPrompt,
-                totalImagesToGenerate: totalImagesToGenerate,
-                quality: .standard,
-                imageSize: ._256,
-                imageStyle: .vivid
-            ))
+            let result = try await generateImage(
+                app: app,
+                query: .init(
+                    model: model,
+                    prompt: defaultPrompt,
+                    totalImagesToGenerate: totalImagesToGenerate,
+                    // quality: .standard,
+                    imageSize: ._256
+                    // imageStyle: .vivid
+                )
+            )
 
             // Verify the number of images generated matches the request
             #expect(result.images.count == totalImagesToGenerate)

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		38F8D4D32CFA43E500CC1E46 /* AutomaUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 38F8D4D22CFA43E500CC1E46 /* AutomaUIKit */; };
+		0EF214BA2DCF91200076517E /* AutomaUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 0EF214B92DCF91200076517E /* AutomaUIKit */; };
 		38F8D4D82CFA446900CC1E46 /* AutomaUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 38F8D4D72CFA446900CC1E46 /* AutomaUIKit */; };
 		38F973D42CFF3CB3003D8308 /* AutomaAppShared in Frameworks */ = {isa = PBXBuildFile; productRef = 38F973D32CFF3CB3003D8308 /* AutomaAppShared */; };
 		38F973D82CFF3D89003D8308 /* AutomaAppShared in Frameworks */ = {isa = PBXBuildFile; productRef = 38F973D72CFF3D89003D8308 /* AutomaAppShared */; };
@@ -173,8 +173,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0EF214BA2DCF91200076517E /* AutomaUIKit in Frameworks */,
 				38F973D42CFF3CB3003D8308 /* AutomaAppShared in Frameworks */,
-				38F8D4D32CFA43E500CC1E46 /* AutomaUIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,8 +271,8 @@
 			);
 			name = IOS;
 			packageProductDependencies = (
-				38F8D4D22CFA43E500CC1E46 /* AutomaUIKit */,
 				38F973D32CFF3CB3003D8308 /* AutomaAppShared */,
+				0EF214B92DCF91200076517E /* AutomaUIKit */,
 			);
 			productName = IOS;
 			productReference = 38F8D37B2CFA3F3700CC1E46 /* IOS.app */;
@@ -873,11 +873,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = app.getautoma.IOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/IOS";
 			};
 			name = Debug;
@@ -941,10 +945,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = app.getautoma.IOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/IOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/IOS";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1015,11 +1023,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = app.getautoma.IOSUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = IOS;
 			};
 			name = Debug;
@@ -1082,10 +1094,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = app.getautoma.IOSUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = IOS;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1335,11 +1351,15 @@
 				PRODUCT_BUNDLE_IDENTIFIER = app.getautoma.IOSAdminTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1401,10 +1421,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = app.getautoma.IOSAdminTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1475,11 +1499,15 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = IOSAdmin;
 			};
 			name = Debug;
@@ -1543,10 +1571,14 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = IOSAdmin;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1632,7 +1664,7 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		38F8D4D22CFA43E500CC1E46 /* AutomaUIKit */ = {
+		0EF214B92DCF91200076517E /* AutomaUIKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AutomaUIKit;
 		};
