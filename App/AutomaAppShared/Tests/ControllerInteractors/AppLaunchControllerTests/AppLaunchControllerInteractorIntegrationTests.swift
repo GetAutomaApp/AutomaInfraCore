@@ -4,6 +4,7 @@
 // All rights reserved.
 
 import XCTest
+@testable import AutomaAppShared
 
 // Note: These integration tests should not be run against the main backend
 // if it is a backend interactor.
@@ -19,10 +20,9 @@ public final class AppLaunchControllerInteractorIntegrationTests: XCTestCase {
     /// Sets up the test environment before each test case.
     /// This method initializes a fresh instance of AppLaunchControllerInteractor
     /// to ensure each test starts with a clean state.
-    override public func setUp() {
-        super.setUp()
-        // Create a new instance of the interactor for testing
-        interactor = AppLaunchControllerInteractor()
+    public func setup() {
+        // create a new instance of the interactor for testing
+        interactor = AppLaunchControllerInteractor(baseURL: "http://127.0.0.1:8080")
     }
 
     /// Tears down the test environment after each test case.

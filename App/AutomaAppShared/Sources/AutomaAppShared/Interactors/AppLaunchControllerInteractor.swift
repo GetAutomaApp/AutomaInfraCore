@@ -12,7 +12,7 @@ import Foundation
 /// This struct provides methods to check user acceptance status and retrieve client configuration
 /// from the backend server during app launch. It conforms to `BackendControllerInteractor` to
 /// utilize common networking functionality.
-internal struct AppLaunchControllerInteractor: BackendControllerInteractor {
+public struct AppLaunchControllerInteractor: BackendControllerInteractor {
     /// The base URL for all API requests
     ///
     /// This URL is used as the prefix for all endpoints when making network requests

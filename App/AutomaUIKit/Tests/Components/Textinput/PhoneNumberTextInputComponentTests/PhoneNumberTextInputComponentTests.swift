@@ -32,7 +32,7 @@ internal class PhoneNumberTextInputComponentTests: XCTestCase {
     @MainActor
     internal func testIntegration() throws {
         // Create a new instance of PhoneNumberTextInputComponent
-        let component = PhoneNumberTextInputComponent()
+        let component = PhoneNumberTextInputComponent(config: .init(phoneNumber: "+1", isValid: true))
 
         // Verify that the component was successfully initialized
         XCTAssertNotNil(component)

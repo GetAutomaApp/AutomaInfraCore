@@ -28,7 +28,7 @@ internal class VerificationCodeInputComponentTests: XCTestCase {
     @MainActor
     internal func testIntegration() throws {
         // Create a new instance of the verification code input component
-        let component = VerificationCodeInputComponent()
+        let component = VerificationCodeInputComponent(config: .init(separatorIcon: .arrowRight))
 
         // Verify that the component was successfully initialized
         XCTAssertNotNil(component)

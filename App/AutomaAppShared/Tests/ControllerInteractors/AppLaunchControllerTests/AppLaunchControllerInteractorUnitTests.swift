@@ -4,6 +4,7 @@
 // All rights reserved.
 
 import XCTest
+@testable import AutomaAppShared
 
 /// Unit test case class for testing the AppLaunchControllerInteractor
 /// This test suite validates the functionality of the app launch controller interactor
@@ -17,9 +18,8 @@ public final class AppLaunchControllerInteractorUnitTests: XCTestCase {
     /// - Creates a new instance of AppLaunchControllerInteractor
     /// - Called automatically before each test method
     override public func setUp() {
-        super.setUp()
         // Initialize a fresh interactor instance for testing
-        interactor = AppLaunchControllerInteractor()
+        interactor = AppLaunchControllerInteractor(baseURL: "http://127.0.0.1:8080")
     }
 
     /// Tears down the test environment after each test method

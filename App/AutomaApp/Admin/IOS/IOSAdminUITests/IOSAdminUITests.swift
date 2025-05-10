@@ -11,21 +11,6 @@ import XCTest
 /// of the iOS Admin app through automated UI testing. It includes tests for basic
 /// app functionality and launch performance metrics.
 internal final class IOSAdminUITests: XCTestCase {
-    /// Sets up the test environment before running any tests
-    ///
-    /// This method:
-    /// 1. Configures the test case to stop immediately on failure
-    /// 2. Sets up any required initial UI state (like orientation)
-    ///
-    /// - Throws: Aninternalerror if the setup process fails
-    override internal static func setUpWithError() throws {
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-
-        // In UI tests it's important to set the initial state - such as interface orientation - required for your tests
-        // before they run. The setUp method is a good place to do this.
-    }
-
     /// Tears down the test environment after tests complete
     ///
     /// Performs cleanup operations after each test method runs, ensuring
