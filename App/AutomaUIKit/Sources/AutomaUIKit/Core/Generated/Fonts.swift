@@ -183,12 +183,12 @@ public struct FontConvertible: Sendable {
 }
 
 /// Convenience initializer for platform-specific fonts
-internal extension FontConvertible.Font {
+public extension FontConvertible.Font {
     /// Creates a platform-specific font from a FontConvertible
     /// - Parameters:
     ///   - font: The FontConvertible to create the font from
     ///   - size: The desired size of the font
-    public convenience init?(font: FontConvertible, size: CGFloat) {
+    convenience init?(font: FontConvertible, size: CGFloat) {
         font.registerIfNeeded()
         self.init(name: font.name, size: size)
     }

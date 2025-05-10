@@ -45,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E13232B2DCF9030000E5D89 /* AutomaUIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AutomaUIKit; path = ../AutomaUIKit; sourceTree = "<group>"; };
 		38F8D37B2CFA3F3700CC1E46 /* IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F8D38B2CFA3F3800CC1E46 /* IOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38F8D3952CFA3F3800CC1E46 /* IOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -244,6 +245,7 @@
 		38F973C72CFF3BC5003D8308 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0E13232B2DCF9030000E5D89 /* AutomaUIKit */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
