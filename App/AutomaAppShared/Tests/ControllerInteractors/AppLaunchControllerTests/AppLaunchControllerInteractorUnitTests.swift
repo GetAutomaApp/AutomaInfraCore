@@ -3,8 +3,8 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-import XCTest
 @testable import AutomaAppShared
+import XCTest
 
 /// Unit test case class for testing the AppLaunchControllerInteractor
 /// This test suite validates the functionality of the app launch controller interactor

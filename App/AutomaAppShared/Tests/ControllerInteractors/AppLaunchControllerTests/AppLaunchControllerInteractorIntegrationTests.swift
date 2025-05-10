@@ -3,8 +3,8 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-import XCTest
 @testable import AutomaAppShared
+import XCTest
 
 // Note: These integration tests should not be run against the main backend
 // if it is a backend interactor.

@@ -1,0 +1,44 @@
+name: Run `AutomaApp - ADMIN (IOS)` Tests
+
+on:
+  pull_request:
+    paths:
+      - "App/AutomaApp/Admin/**/*.swift"
+      - "App/AutomaAppShared/**/*.swift"
+
+jobs:
+  automa-app-core-unit-and-integration-tests:
+    runs-on: [macOS, self-hosted]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: irgaly/xcode-cache@v1
+        with:
+          key: xcode-cache-deriveddata-${{ github.workflow }}
+          restore-keys: xcode-cache-deriveddata-${{ github.workflow }}
+
+      - name: Run Tests
+        uses: GetAutomaApp/opensource-actions/xctesting@main
+        with:
+          working-directory: "./App/AutomaApp/"
+          schema: "IOS-ADMIN"
+          destination: "platform=iOS Simulator,name=iPhone 16,OS=18.1"
+          testing-targets: "IOS-ADMIN-IntegrationTests,IOS-ADMIN-UnitTests"
+
+  automa-app-core-ui-tests:
+    runs-on: [macOS, self-hosted]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: irgaly/xcode-cache@v1
+        with:
+          key: xcode-cache-deriveddata-${{ github.workflow }}
+          restore-keys: xcode-cache-deriveddata-${{ github.workflow }}
+
+      - name: Run UI Tests
+        uses: GetAutomaApp/opensource-actions/xctesting@main
+        with:
+          working-directory: "./App/AutomaApp/"
+          schema: "IOS-ADMIN"
+          destination: "platform=iOS Simulator,name=iPhone 16,OS=18.1"
+          testing-targets: "IOS-ADMIN-UITests"

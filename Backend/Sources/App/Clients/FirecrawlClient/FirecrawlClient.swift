@@ -163,7 +163,6 @@ internal struct FirecrawlClient {
     // These might be used in the future and can be implemented then!
     // startCrawl()
     // getCrawlResults()
-
 }
 
 /// An enumeration representing the formats supported by the FirecrawlClient.

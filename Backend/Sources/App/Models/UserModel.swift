@@ -91,7 +91,7 @@ public final class UserModel: Model, @unchecked Sendable {
             guard
                 let profilePictureKey
             else {
-                let userId = try self.requireID().uuidString
+                let userId = try requireID().uuidString
                 logger.error(
                     "Profile picture key is nil, could not convert user model to DTO.",
                     metadata: [

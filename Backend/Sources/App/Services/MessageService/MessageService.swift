@@ -164,7 +164,7 @@ internal struct MessageService: Decodable {
             let withUrl
         else {
             guard let
-                url = URL(string: try Environment.getOrThrow("DISCORD_APP_EVENTS_URL"))
+                url = try URL(string: Environment.getOrThrow("DISCORD_APP_EVENTS_URL"))
             else {
                 logger.error(
                     "Could not send discord webhook, because 'withUrl' is nil.",
@@ -185,7 +185,6 @@ internal struct MessageService: Decodable {
             withUrlUnwrapped = withUrl
             return
         }
-        
 
         Task.detachedLogOnError(destination: "MessageService.sendDiscordWebhookAppEvent", logger: logger) {
             try await sendWebhookMessage(

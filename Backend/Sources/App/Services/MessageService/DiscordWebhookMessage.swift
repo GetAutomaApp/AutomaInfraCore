@@ -1,4 +1,4 @@
-// DiscordWebhook.swift
+// DiscordWebhookMessage.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -68,7 +68,7 @@ internal struct DiscordEmbedFooter: Codable {
 
     public enum CodingKeys: String, CodingKey {
         case iconURL = "icon_url"
-        case text = "text"
+        case text
     }
 }
 
@@ -89,8 +89,8 @@ internal struct DiscordEmbedAuthor: Codable {
 
     public enum CodingKeys: String, CodingKey {
         case iconURL = "icon_url"
-        case url = "url"
-        case name = "name"
+        case url
+        case name
     }
 }
 

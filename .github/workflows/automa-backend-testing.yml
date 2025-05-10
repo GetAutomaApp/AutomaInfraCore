@@ -1,0 +1,41 @@
+name: Run `AutomaBackend` Tests
+
+on:
+  pull_request:
+    paths:
+      - 'Backend/**/*.swift'
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+           swift-version: "6.1"
+
+      - name: Run Unit Tests
+        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        with:
+          compose: "false"
+          working-directory: "./Backend"
+          swift_test_extra_args: "--filter '.*UnitTests.*'"
+
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: swift-actions/setup-swift@v2
+        with:
+           swift-version: "6.1"
+
+      - name: Run Unit Tests
+        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        with:
+          compose: "true"
+          working-directory: "./Backend"
+          swift_test_extra_args: "--filter '.*IntegrationTests.*'"
+          docker_compose_extra_args: "--scale api_dev=0 --scale worker_dev=0"
