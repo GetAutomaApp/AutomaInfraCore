@@ -45,7 +45,7 @@ internal struct Shell {
     /// - Parameter command: The command to execute.
     /// - Returns: The output of the command.
     @discardableResult
-    public static func run(_ command: String) -> ShellOutput {
+    public static func run(_ command: String) throws -> ShellOutput {
         let task = Process()
         let stdoutPipe = Pipe()
         let stderrPipe = Pipe()
@@ -85,12 +85,12 @@ internal struct Shell {
     /// - Returns: The detected operating system.
     /// - Throws: An error if the operating system cannot be determined.
     private static func getOperatingSystem() throws -> OperatingSystem {
-        let result = Self.run("uname -s")
+        let result = try Self.run("uname -s")
 
         guard
             let output = result.stdout
         else {
-            throw CLIErrors.shellError(
+            throw CLIError.shellError(
                 message: "Could not get operating system output from stdout.",
                 error: result.stderr
             )

@@ -5,10 +5,13 @@
 
 import Vapor
 
-private let fileTypes: [GenerateAppComponent.FileType] = Self.GenerateAppComponentFileTypeHelper.getFileTypes()
+private let fileTypes: [GenerateAppComponent.FileType] = GenerateAppComponent.GenerateAppComponentFileTypeHelper
+    .getFileTypes()
 
 /// Command to generate an app component based on the given name.
 public struct GenerateAppComponent: Command {
+    public init() {}
+
     /// Provides help text for the command.
     public var help: String {
         "Generates an app component based on the given name."
@@ -18,6 +21,7 @@ public struct GenerateAppComponent: Command {
 
     /// Signature for the command, defining the arguments and options.
     public struct Signature: CommandSignature {
+        public init() {}
         /// The component to generate.
         @Argument(
             name: "name",
@@ -112,7 +116,7 @@ public struct GenerateAppComponent: Command {
 
         let shell = try Shell()
         if copy {
-            Shell.run("echo '\(output)' | \(shell.copyCommand)")
+            try Shell.run("echo '\(output)' | \(shell.copyCommand)")
         }
     }
 
@@ -269,15 +273,15 @@ public struct GenerateAppComponent: Command {
     }
 
     /// Represents a file type with its configurations for generating components.
-    public struct FileType {
+    public struct FileType: Sendable {
         /// The name of the file type.
         public let name: String
         /// The configurations associated with the file type.
-        public let configurations: [Self.FileConfig]
+        public let configurations: [GenerateAppComponent.FileConfig]
     }
 
     /// Represents a configuration for a file type.
-    public struct FileConfig {
+    public struct FileConfig: Sendable {
         /// The directory from which templates are sourced.
         public let fromDirectory: String
         /// The directory to which files are generated.
@@ -293,7 +297,7 @@ public struct GenerateAppComponent: Command {
         /// The name of the file type.
         public let name: String
         /// The configurations associated with the file type.
-        public let configurations: [Self.AddToFileConfig]
+        public let configurations: [GenerateAppComponent.AddToFileConfig]
     }
 
     /// Represents a configuration for adding to an existing file.
@@ -320,7 +324,7 @@ public struct GenerateAppComponent: Command {
             .appendingPathComponent("Backend/Sources/App")
             .standardized.path + "/"
 
-        public static func getFileTypes() -> [Self.FileType] {
+        public static func getFileTypes() -> [GenerateAppComponent.FileType] {
             [
                 FileType(name: "ui-component", configurations: [
                     FileConfig(
