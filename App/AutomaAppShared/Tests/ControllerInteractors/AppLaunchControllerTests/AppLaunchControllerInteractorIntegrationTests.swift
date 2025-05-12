@@ -22,7 +22,7 @@ public final class AppLaunchControllerInteractorIntegrationTests: XCTestCase {
     /// to ensure each test starts with a clean state.
     public func setup() {
         // create a new instance of the interactor for testing
-        interactor = AppLaunchControllerInteractor(baseURL: "http://127.0.0.1:8080")
+        interactor = AppLaunchControllerInteractor(baseURL: EnvironmentSecrets.backendBaseURL)
     }
 
     /// Tears down the test environment after each test case.

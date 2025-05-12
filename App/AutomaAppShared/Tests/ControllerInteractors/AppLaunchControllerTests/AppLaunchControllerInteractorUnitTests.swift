@@ -19,7 +19,7 @@ public final class AppLaunchControllerInteractorUnitTests: XCTestCase {
     /// - Called automatically before each test method
     override public func setUp() {
         // Initialize a fresh interactor instance for testing
-        interactor = AppLaunchControllerInteractor(baseURL: "http://127.0.0.1:8080")
+        interactor = AppLaunchControllerInteractor(baseURL: EnvironmentSecrets.backendBaseURL)
     }
 
     /// Tears down the test environment after each test method
