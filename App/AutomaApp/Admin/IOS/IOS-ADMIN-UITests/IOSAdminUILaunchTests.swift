@@ -10,7 +10,7 @@ import XCTest
 /// This test class contains UI tests that verify the launch behavior and appearance
 /// of the iOS app through automated UI testing. It captures screenshots of the launch
 /// process for visual verification.
-public class IOSUILaunchTests: XCTestCase {
+public class IOSAdminUILaunchTests: XCTestCase {
     /// Indicates whether tests should run for each UI configuration
     ///
     /// When true, tests will run for each supported device configuration

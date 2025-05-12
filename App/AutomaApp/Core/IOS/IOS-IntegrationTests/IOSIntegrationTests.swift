@@ -1,19 +1,17 @@
-//
-//  IOS_IntegrationTests.swift
-//  IOS-IntegrationTests
-//
-//  Created by Simon Ferns on 4/28/25.
-//
+// IOSIntegrationTests.swift
+// Copyright (c) 2025 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
 
-import Testing
 @testable import IOS
+import Testing
 
 /// Test suite for the iOS application
 ///
 /// This test suite contains unit tests that verify the functionality and behavior
 /// of the iOS app components. It includes tests for core features and utilities.
 @Suite("IOS Tests")
-internal struct IOSTests {
+internal struct IOSIntegrationTests {
     /// Example test case demonstrating basic test structure
     ///
     /// This test provides a template for writing additional test cases using the Testing framework.

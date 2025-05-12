@@ -9,9 +9,13 @@ import Testing
 // boilerplate code here, not real tests
 
 @Suite("Integration test suite", .serialized)
-struct CLIIntegrationTests {
+internal struct CLIIntegrationTests {
+    /// A description
+    /// - Parameters:
+    ///
+    /// - Throws:
     @Test("Fake Integration Test")
-    func helloWorld() async throws {
+    public func helloWorld() throws {
         print("Hello, world!")
     }
 }

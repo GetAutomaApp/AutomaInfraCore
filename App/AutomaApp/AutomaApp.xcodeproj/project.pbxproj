@@ -70,53 +70,50 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0E2D96712DD1CDCF00F94AFB /* Exceptions for "Admin" folder in "IOS-ADMIN-IntegrationTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"IOS/IOS-ADMIN-IntegrationTests/IOSAdminIntegrationTests.swift",
+			);
+			target = 385519652DBFCCE400552736 /* IOS-ADMIN-IntegrationTests */;
+		};
+		0E2D96732DD1CDEF00F94AFB /* Exceptions for "Admin" folder in "IOS-ADMIN-UITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"IOS/IOS-ADMIN-UITests/IOSAdminUITests.swift",
+			);
+			target = 385519722DBFCCF600552736 /* IOS-ADMIN-UITests */;
+		};
 		3855192F2DBFCC7D00552736 /* Exceptions for "Core" folder in "IOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"IOS/IOS-IntegrationTests/IOS_IntegrationTests.swift",
-				"IOS/IOS-UnitTests/IOS_UnitTests.swift",
+				"IOS/IOS-IntegrationTests/IOSIntegrationTests.swift",
+				"IOS/IOS-UnitTests/IOSUnitTests.swift",
 			);
 			target = 38F8D37A2CFA3F3700CC1E46 /* IOS */;
 		};
 		385519302DBFCC7D00552736 /* Exceptions for "Core" folder in "IOS-UnitTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"IOS/IOS-UnitTests/IOS_UnitTests.swift",
+				"IOS/IOS-UnitTests/IOSUnitTests.swift",
 			);
 			target = 385518FE2DBFC77700552736 /* IOS-UnitTests */;
 		};
 		385519312DBFCC7D00552736 /* Exceptions for "Core" folder in "IOS-IntegrationTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"IOS/IOS-IntegrationTests/IOS_IntegrationTests.swift",
+				"IOS/IOS-IntegrationTests/IOSIntegrationTests.swift",
 			);
 			target = 3855190B2DBFC87300552736 /* IOS-IntegrationTests */;
-		};
-		3855198A2DBFCCFC00552736 /* Exceptions for "Admin" folder in "IOS-ADMIN-IntegrationTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"IOS/IOS-ADMIN-IntegrationTests/IOS_ADMIN_IntegrationTests.swift",
-			);
-			target = 385519652DBFCCE400552736 /* IOS-ADMIN-IntegrationTests */;
-		};
-		3855198B2DBFCCFC00552736 /* Exceptions for "Admin" folder in "IOS-ADMIN-UITests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"IOS/IOS-ADMIN-UITests/IOS_ADMIN_UITests.swift",
-			);
-			target = 385519722DBFCCF600552736 /* IOS-ADMIN-UITests */;
 		};
 		38F8D4812CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"IOS/IOS-ADMIN-IntegrationTests/IOS_ADMIN_IntegrationTests.swift",
-				"IOS/IOS-ADMIN-UITests/IOS_ADMIN_UITests.swift",
-				"IOS/IOS-ADMIN-UITests/IOSUILaunchTests.swift",
+				"IOS/IOS-ADMIN-IntegrationTests/IOSAdminIntegrationTests.swift",
+				"IOS/IOS-ADMIN-UITests/IOSAdminUILaunchTests.swift",
+				"IOS/IOS-ADMIN-UITests/IOSAdminUITests.swift",
 				IOS/IOSAdmin/ContentView.swift,
 				IOS/IOSAdmin/IOSAdminApp.swift,
-				IOS/IOSAdminTests/IOSAdminTests.swift,
-				IOS/IOSAdminUITests/IOSAdminUILaunchTests.swift,
-				IOS/IOSAdminUITests/IOSAdminUITests.swift,
 			);
 			target = 38F8D37A2CFA3F3700CC1E46 /* IOS */;
 		};
@@ -153,8 +150,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				38F8D4812CFA430400CC1E46 /* Exceptions for "Admin" folder in "IOS" target */,
-				3855198A2DBFCCFC00552736 /* Exceptions for "Admin" folder in "IOS-ADMIN-IntegrationTests" target */,
-				3855198B2DBFCCFC00552736 /* Exceptions for "Admin" folder in "IOS-ADMIN-UITests" target */,
+				0E2D96712DD1CDCF00F94AFB /* Exceptions for "Admin" folder in "IOS-ADMIN-IntegrationTests" target */,
+				0E2D96732DD1CDEF00F94AFB /* Exceptions for "Admin" folder in "IOS-ADMIN-UITests" target */,
 			);
 			path = Admin;
 			sourceTree = "<group>";

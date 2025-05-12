@@ -8,9 +8,9 @@ import VaporTesting
 
 /// Protocol defining common functionality for Twitter client test suites
 /// This protocol provides shared test utilities used across different Twitter client implementations
-protocol TwitterClientTestSuite {}
+internal protocol TwitterClientTestSuite {}
 
-extension TwitterClientTestSuite {
+internal extension TwitterClientTestSuite {
     /// Helper function to create and manage a test application instance
     /// Creates a test application, configures the database, runs the provided test closure, and ensures proper cleanup
     ///
@@ -20,7 +20,7 @@ extension TwitterClientTestSuite {
     ///   - Database configuration errors
     ///   - Test execution errors
     ///   - Shutdown errors
-    func withApp(test: (Application) async throws -> Void) async throws {
+    public func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
             try await configureDatabase(app: app)

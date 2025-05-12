@@ -8,7 +8,7 @@ import XCTest
 /// A test case class for UI testing of the iOS application
 ///
 /// This class contains UI tests to verify the application's user interface behavior and performance
-public class IOSUITests: XCTestCase {
+public class IOSAdminUITests: XCTestCase {
     /// Sets up the test environment before each test method is executed
     ///
     /// This method is called before the invocation of each test method in the class.

@@ -205,7 +205,7 @@ internal struct RegisterScreen: View {
                 code
             )
 
-            let _ = [
+            _ = [
                 KeychainHelper
                     .set(
                         for: .authenticationToken,

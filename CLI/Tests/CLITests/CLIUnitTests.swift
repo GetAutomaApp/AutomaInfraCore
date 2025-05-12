@@ -9,9 +9,13 @@ import Testing
 // boilerplate code here, not real tests
 
 @Suite("Unit test suite", .serialized)
-struct CLIUnitTests {
+internal struct CLIUnitTests {
+    /// A description
+    /// - Parameters:
+    ///
+    /// - Throws:
     @Test("Fake Unit test")
-    func helloWorld() async throws {
+    public func helloWorld() throws {
         print("Hello, world!")
     }
 }

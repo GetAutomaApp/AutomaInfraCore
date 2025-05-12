@@ -6,9 +6,12 @@
 import Testing
 
 @Suite("Test Unit Tests")
-struct TestUnitTests {
+internal struct TestUnitTests {
+    /// Placeholder test to test print function from stdlib
+    /// - Parameters:
+    ///
     @Test("Test Print")
-    func testPrint() {
+    public func testPrint() {
         print("Hello, World!")
     }
 }
