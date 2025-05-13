@@ -7,7 +7,7 @@ import Vapor
 
 /// The main entry point for the CLI application.
 @main
-enum Entrypoint {
+internal enum Entrypoint {
     /// The main function that sets up and runs the application.
     public static func main() async throws {
         // Detect the environment and create an application instance

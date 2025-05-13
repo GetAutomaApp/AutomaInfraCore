@@ -114,7 +114,7 @@ InfoPairComponent { config in
 As your design system evolves, you might want to add more properties to the configuration:
 
 ```swift
-class ExtendedInfoPairComponentConfig: InfoPairComponentConfig {
+internal class ExtendedInfoPairComponentConfig: InfoPairComponentConfig {
     @Published public var textColor: Color = .primary
     @Published public var fontSize: CGFloat = 16
 }

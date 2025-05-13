@@ -17,7 +17,7 @@ import XCTest
 /// - One test case per method
 /// - One test case per completed flow (action)
 /// - One test case per potential edge-case
-class PhoneNumberTextInputComponentTests: XCTestCase {
+internal class PhoneNumberTextInputComponentTests: XCTestCase {
     // one test case per method
     // one test case per completed flow (action)
     // one test case per potential edge-case

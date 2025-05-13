@@ -27,7 +27,7 @@ public extension UIApplication {
 @MainActor
 public class KeychainHelper {
     /// Enumeration of available keychain keys for storing different types of tokens
-    enum KeyChainKeys: String {
+    public enum KeyChainKeys: String {
         /// Key for storing the authentication token
         case authenticationToken
         /// Key for storing the refresh token
@@ -35,7 +35,7 @@ public class KeychainHelper {
     }
 
     /// Static instance of SimpleKeychain configured to only be accessible after first unlock of the device
-    static var keychain = SimpleKeychain(
+    public static var keychain = SimpleKeychain(
         accessibility: .afterFirstUnlockThisDeviceOnly
     )
 

@@ -67,7 +67,7 @@ public extension Data {
 }
 
 /// Enum representing an error or a message.
-enum ErrorOrMessage {
+internal enum ErrorOrMessage {
     /// Represents an error.
     case error(Error)
     /// Represents a message.

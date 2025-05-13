@@ -24,9 +24,9 @@ typealias Font = FontConvertible.Font
 // MARK: - Fonts
 
 /// Namespace containing all custom font families used in the application
-enum FontFamily {
+internal enum FontFamily {
     /// The Crimson Text font family with its various styles
-    enum CrimsonText {
+    public enum CrimsonText {
         /// Bold variant of Crimson Text font
         public static let bold = FontConvertible(
             name: "CrimsonText-Bold",
@@ -68,7 +68,7 @@ enum FontFamily {
     }
 
     /// The SF Pro Text font family with its various styles
-    enum SFProText {
+    public enum SFProText {
         /// Bold variant of SF Pro Text font
         public static let bold = FontConvertible(
             name: "SFProText-Bold",

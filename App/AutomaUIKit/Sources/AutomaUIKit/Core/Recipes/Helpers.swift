@@ -46,7 +46,7 @@ public extension Color {
 }
 
 /// Internal enum containing helper methods for image manipulation in the design system
-enum DesignImages {
+internal enum DesignImages {
     /// Applies standard icon styling to an image
     /// - Parameter image: The SwiftUI Image to be styled
     /// - Returns: A View with the image styled according to design system specifications

@@ -4,7 +4,7 @@
 // All rights reserved.
 
 /// Represents errors that can occur in the Prometheus controller.
-enum PrometheusControllerError: Error {
+internal enum PrometheusControllerError: Error {
     /// Error indicating failure to convert metrics data to a string.
     case couldNotConvertMetricsToData
 

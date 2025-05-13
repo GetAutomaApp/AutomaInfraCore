@@ -116,7 +116,7 @@ public func configure(_ app: Application) async throws {
 }
 
 /// Extension for `DatabaseID` to define custom database identifiers.
-extension DatabaseID {
+public extension DatabaseID {
     /// Primary database identifier.
     static let primary = DatabaseID(string: "primary")
     /// Read-only database identifier.
@@ -126,12 +126,12 @@ extension DatabaseID {
 /// Extension for `Request` to provide database access.
 public extension Request {
     /// Provides write access to the database.
-    var dbWrite: Database {
+    dbWrite: Database {
         db(.readOnly)
     }
 
     /// Provides read-only access to the database.
-    var dbReadOnly: Database {
+    dbReadOnly: Database {
         db(.readOnly)
     }
 }

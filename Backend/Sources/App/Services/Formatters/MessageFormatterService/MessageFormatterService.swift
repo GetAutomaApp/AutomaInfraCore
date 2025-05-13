@@ -8,7 +8,7 @@ import Fluent
 import Vapor
 
 /// Service for formatting messages.
-enum MessageFormatterService {
+internal enum MessageFormatterService {
     /// Crafts a verification code message.
     /// - Parameter code: The verification code to include in the message.
     /// - Returns: A formatted string containing the verification code.

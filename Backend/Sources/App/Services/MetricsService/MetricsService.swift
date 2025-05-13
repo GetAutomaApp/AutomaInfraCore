@@ -55,7 +55,7 @@ internal struct MetricsService {
 }
 
 /// Enum for managing backend metrics.
-enum BackendMetric {
+internal enum BackendMetric {
     /// Counter for successful verification codes sent.
     public static let totalSuccessfulVerificationCodesSent = MetricsService.global.makeCounter(
         name: "total_verification_codes_sent",

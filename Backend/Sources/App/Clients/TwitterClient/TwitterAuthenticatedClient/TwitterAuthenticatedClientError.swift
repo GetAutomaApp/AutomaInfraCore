@@ -6,7 +6,7 @@
 import TwitterAPIKit
 
 /// Errors that can occur when making authenticated requests to the Twitter API
-enum TwitterAuthenticatedClientError: Error {
+internal enum TwitterAuthenticatedClientError: Error {
     /// The Twitter API response was empty or nil when data was expected
     case responseEmpty
 

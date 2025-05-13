@@ -20,19 +20,19 @@ import SwiftUI
 /// - Error handling and display
 internal struct RegisterScreen: View {
     /// Configuration for the phone number input field
-    @StateObject var phoneInputConfig: PhoneNumberTextInputComponentConfig = .init()
+    @StateObject public var phoneInputConfig: PhoneNumberTextInputComponentConfig = .init()
 
     /// Configuration for the verification code input field
-    @StateObject var verificationInputConfig: VerificationCodeInputComponentConfig = .init()
+    @StateObject public var verificationInputConfig: VerificationCodeInputComponentConfig = .init()
 
     /// Countdown timer for code resending timeout
-    @State var timeout: Double = 0
+    @State public var timeout: Double = 0
 
     /// Environment configuration containing API base URL and authentication state
-    @EnvironmentObject var baseEnvironmentConfig: BaseAppEnvironmentObject
+    @EnvironmentObject public var baseEnvironmentConfig: BaseAppEnvironmentObject
 
     /// Authentication controller for handling API requests
-    var authInteractor: AuthenticationControllerInteractor {
+    public var authInteractor: AuthenticationControllerInteractor {
         .init(baseURL: baseEnvironmentConfig.apiBaseURL)
     }
 
@@ -69,7 +69,7 @@ internal struct RegisterScreen: View {
     /// Displays either:
     /// - Phone number input screen with validation
     /// - Verification code input screen with resend option
-    var body: some View {
+    public var body: some View {
         VStack {
             if !didSendCode {
                 AuthenticationFormScreenFrame(

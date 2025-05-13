@@ -21,7 +21,7 @@ internal struct ShellOutput {
 }
 
 /// Enum representing different operating systems.
-enum OperatingSystem {
+internal enum OperatingSystem {
     case linux
     case macos
     case unknown(value: String)
