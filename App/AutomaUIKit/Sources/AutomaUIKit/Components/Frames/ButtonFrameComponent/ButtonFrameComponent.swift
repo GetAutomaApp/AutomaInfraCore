@@ -24,7 +24,7 @@ import SwiftUI
 
  For more information, refer to the documentation in `ButtonFrameComponentDocumentation.md`.
  */
-struct ButtonFrameComponent<Content: View>: View {
+internal struct ButtonFrameComponent<Content: View>: View {
     /// The configuration object that controls the button's appearance and behavior
     /// This observed object will automatically trigger view updates when modified
     @ObservedObject private var config: ButtonFrameComponentConfig

@@ -7,7 +7,7 @@ import SwiftUI
 
 /// A preview provider for the InfoPairComponent
 /// This struct provides SwiftUI previews for the InfoPairComponent using a wrapper view
-struct InfoPairComponentPreviews: PreviewProvider {
+internal struct InfoPairComponentPreviews: PreviewProvider {
     /// The preview content showing the InfoPairWrapperView
     /// - Returns: A view containing the InfoPairWrapperView for preview purposes
     public static var previews: some View {
@@ -17,7 +17,7 @@ struct InfoPairComponentPreviews: PreviewProvider {
 
 /// A wrapper view for the InfoPairComponent that provides property editing capabilities
 /// This view allows for real-time editing of the InfoPairComponent's configuration
-struct InfoPairWrapperView: View {
+internal struct InfoPairWrapperView: View {
     /// The configuration object for the InfoPairComponent
     /// This observed object contains all the configurable properties for the component
     @ObservedObject public var config = InfoPairComponentConfig()

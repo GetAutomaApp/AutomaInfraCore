@@ -6,7 +6,7 @@
 import Fluent
 
 /// Migration to add an 'accepted' column to the User schema.
-struct AddAcceptedColumnMigration1740658649: AsyncMigration {
+internal struct AddAcceptedColumnMigration1740658649: AsyncMigration {
     /// Prepares the migration by updating the User schema to include the 'accepted' column.
     /// - Parameter database: The database instance on which the migration is performed.
     /// - Throws: Throws an error if the schema update fails.

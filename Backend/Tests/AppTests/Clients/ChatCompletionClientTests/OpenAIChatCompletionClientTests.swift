@@ -12,7 +12,7 @@ import VaporTesting
 /// Tests for the OpenAI Chat Completion Client implementation
 /// These tests verify the functionality of chat completion generation using OpenAI models
 @Suite("OpenAI Chat Completion Client Tests")
-struct OpenAIChatCompletionClientTests: ChatCompletionClientTestSuite {
+internal struct OpenAIChatCompletionClientTests: ChatCompletionClientTestSuite {
     /// Tests successful chat completion generation using OpenAI's GPT-4o model
     /// Verifies that the client can generate valid chat completions and return proper metadata
     ///

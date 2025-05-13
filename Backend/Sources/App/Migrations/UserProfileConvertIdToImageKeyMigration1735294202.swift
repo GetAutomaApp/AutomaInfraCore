@@ -6,7 +6,7 @@
 import Fluent
 
 /// Migration to convert the profile picture ID to a profile picture key in the User schema.
-struct UserProfileConvertIdToImageKeyMigration1735294202: AsyncMigration {
+internal struct UserProfileConvertIdToImageKeyMigration1735294202: AsyncMigration {
     /// Prepares the migration by updating the User schema.
     /// - Parameter database: The database instance on which the migration is performed.
     /// - Throws: Throws an error if the schema update fails.

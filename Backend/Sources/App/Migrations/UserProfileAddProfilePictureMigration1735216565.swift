@@ -6,7 +6,7 @@
 import Fluent
 
 /// Migration to add a profile picture ID to the User schema.
-struct UserProfileAddProfilePictureMigration1735216565: AsyncMigration {
+internal struct UserProfileAddProfilePictureMigration1735216565: AsyncMigration {
     /// Prepares the migration by adding a profile_picture_id field to the User schema.
     /// - Parameter database: The database instance on which the migration is performed.
     /// - Throws: Throws an error if the schema update fails.

@@ -10,7 +10,7 @@ import VaporTesting
 /// Test suite for Twitter OAuth functionality
 /// These tests verify the ability to request tokens and generate authentication URLs
 @Suite("Twitter OAuth Tests")
-struct TwitterOAuthClientTests: TwitterClientTestSuite {
+internal struct TwitterOAuthClientTests: TwitterClientTestSuite {
     /// Tests the ability to request an OAuth token
     /// Verifies that the token and token secret are properly generated and contain valid values
     ///

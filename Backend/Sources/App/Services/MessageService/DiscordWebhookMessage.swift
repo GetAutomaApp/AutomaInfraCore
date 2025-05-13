@@ -6,7 +6,7 @@
 import Foundation
 
 /// Represents a Discord webhook message.
-struct DiscordWebhookMessage: Codable {
+internal struct DiscordWebhookMessage: Codable {
     /// The content of the message.
     public var content: String?
     /// The username to display for the message.
@@ -22,7 +22,7 @@ struct DiscordWebhookMessage: Codable {
 }
 
 /// Represents an embed in a Discord webhook message.
-struct DiscordEmbed: Codable {
+internal struct DiscordEmbed: Codable {
     /// The title of the embed.
     public var title: String?
     /// The description of the embed.
@@ -50,7 +50,7 @@ struct DiscordEmbed: Codable {
 }
 
 /// Represents a field in a Discord embed.
-struct DiscordEmbedField: Codable {
+internal struct DiscordEmbedField: Codable {
     /// The name of the field.
     public var name: String
     /// The value of the field.
@@ -60,7 +60,7 @@ struct DiscordEmbedField: Codable {
 }
 
 /// Represents the footer of a Discord embed.
-struct DiscordEmbedFooter: Codable {
+internal struct DiscordEmbedFooter: Codable {
     /// The text of the footer.
     public var text: String
     /// The URL of the icon to display in the footer.
@@ -73,13 +73,13 @@ struct DiscordEmbedFooter: Codable {
 }
 
 /// Represents an image in a Discord embed.
-struct DiscordEmbedImage: Codable {
+internal struct DiscordEmbedImage: Codable {
     /// The URL of the image.
     public var url: String?
 }
 
 /// Represents the author of a Discord embed.
-struct DiscordEmbedAuthor: Codable {
+internal struct DiscordEmbedAuthor: Codable {
     /// The name of the author.
     public var name: String
     /// The URL associated with the author.
@@ -95,7 +95,7 @@ struct DiscordEmbedAuthor: Codable {
 }
 
 /// Represents the provider of a Discord embed.
-struct DiscordEmbedProvider: Codable {
+internal struct DiscordEmbedProvider: Codable {
     /// The name of the provider.
     public var name: String
     /// The URL associated with the provider.
@@ -103,7 +103,7 @@ struct DiscordEmbedProvider: Codable {
 }
 
 /// Represents a video in a Discord embed.
-struct DiscordEmbedVideo: Codable {
+internal struct DiscordEmbedVideo: Codable {
     /// The URL of the video.
     public var url: String
 }

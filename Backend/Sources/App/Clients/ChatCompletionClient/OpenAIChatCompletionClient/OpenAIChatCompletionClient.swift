@@ -16,7 +16,7 @@ import Vapor
 /// - Error handling and logging
 /// - Metrics tracking
 /// - Response processing and validation
-struct OpenAIChatCompletionClient: ChatCompletionClientBase {
+internal struct OpenAIChatCompletionClient: ChatCompletionClientBase {
     /// The underlying OpenAI API client used for making API requests
     /// This client handles the low-level communication with OpenAI's services
     private let client: OpenAI

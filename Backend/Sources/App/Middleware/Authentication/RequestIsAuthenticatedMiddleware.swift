@@ -7,7 +7,7 @@ import DataTypes
 import Vapor
 
 /// Middleware to authenticate requests using JWT tokens.
-struct RequestIsAuthenticatedMiddleware: AsyncMiddleware {
+internal struct RequestIsAuthenticatedMiddleware: AsyncMiddleware {
     /// Responds to a request by verifying the JWT token and proceeding if valid.
     /// - Parameters:
     ///   - request: The incoming request to be processed.

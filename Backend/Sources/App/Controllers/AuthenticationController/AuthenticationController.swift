@@ -8,7 +8,7 @@ import Fluent
 import Vapor
 
 /// Controller for handling authentication-related routes.
-struct AuthenticationController: RouteCollection {
+internal struct AuthenticationController: RouteCollection {
     /// Registers routes for authentication operations.
     /// - Parameter routes: The routes builder to register routes on.
     public func boot(routes: RoutesBuilder) throws {

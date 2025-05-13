@@ -12,7 +12,7 @@ import VaporTesting
 /// This suite tests different image generation models and ensures they can properly generate images
 /// according to specified parameters like quality, size, and style
 @Suite("ImageGenerationClientTests")
-struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
+internal struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
     /// Tests successful image generation for each image generation client
     /// This test verifies that:
     /// - The client can be initialized properly

@@ -7,6 +7,6 @@
 import Testing
 
 @Suite("Text Extraction Service Unit Tests")
-struct TextExtractionServiceUnitTests {
+internal struct TextExtractionServiceUnitTests {
     // Add service test methods here
 }

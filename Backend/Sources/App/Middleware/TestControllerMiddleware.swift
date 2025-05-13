@@ -7,7 +7,7 @@ import DataTypes
 import Vapor
 
 /// Middleware to ensure requests to test controllers are authenticated using a specific header key.
-struct TestControllerMiddleware: AsyncMiddleware {
+internal struct TestControllerMiddleware: AsyncMiddleware {
     /// Responds to a request by checking for a valid test controller key in the headers.
     /// - Parameters:
     ///   - request: The incoming request to be processed.

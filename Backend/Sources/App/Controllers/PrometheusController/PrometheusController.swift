@@ -8,7 +8,7 @@ import Prometheus
 import Vapor
 
 /// Controller for handling Prometheus metrics requests.
-struct PrometheusController: RouteCollection {
+internal struct PrometheusController: RouteCollection {
     /// Registers routes for Prometheus operations.
     /// - Parameter routes: The routes builder to register routes on.
     public func boot(routes: RoutesBuilder) throws {
@@ -51,7 +51,7 @@ struct PrometheusController: RouteCollection {
 }
 
 /// Represents the query parameters for Prometheus routes.
-struct PrometheusRouteQuery: Content {
+internal struct PrometheusRouteQuery: Content {
     /// The authentication token for accessing Prometheus metrics.
     public let authToken: String
 

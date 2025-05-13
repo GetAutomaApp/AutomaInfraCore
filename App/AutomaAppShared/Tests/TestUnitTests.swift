@@ -6,7 +6,7 @@
 import Testing
 
 @Suite("Test Unit Tests")
-struct TestUnitTests {
+internal struct TestUnitTests {
     /// Placeholder test to test print function from stdlib
     /// - Parameters:
     ///

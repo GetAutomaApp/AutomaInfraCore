@@ -10,7 +10,7 @@ import Foundation
 /// A controller interactor that handles feed testing functionality
 /// This interactor can be used for 3rd party APIs on both frontend and backend.
 /// Gets automatically generated when creating a backend-controller on the client.
-struct FeedTesterControllerInteractor: BackendControllerInteractor {
+internal struct FeedTesterControllerInteractor: BackendControllerInteractor {
     /// The base URL used for making API requests
     public let baseURL: String
 

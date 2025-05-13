@@ -9,7 +9,7 @@ import SwiftUI
 
 /// A preview provider for the AnyOrientationStackComponent
 /// This struct provides SwiftUI previews to visualize the component in different states
-struct AnyOrientationStackComponentPreviews: PreviewProvider {
+internal struct AnyOrientationStackComponentPreviews: PreviewProvider {
     /// The preview content showing the AnyOrientationStackComponent wrapped in a container view
     /// - Returns: A view containing the preview content
     public static var previews: some View {
@@ -19,7 +19,7 @@ struct AnyOrientationStackComponentPreviews: PreviewProvider {
 
 /// A wrapper view that demonstrates the usage of AnyOrientationStackComponent
 /// This view serves as a container to showcase the component with sample content
-struct AnyOrientationStackComponentWrapperView: View {
+internal struct AnyOrientationStackComponentWrapperView: View {
     /// The configuration object for the stack component
     /// Uses @ObservedObject to respond to changes in the configuration
     @ObservedObject public var config = AnyOrientationStackComponentConfig()

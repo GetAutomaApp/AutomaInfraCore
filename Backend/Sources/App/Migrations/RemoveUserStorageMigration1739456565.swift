@@ -6,7 +6,7 @@
 import Fluent
 
 /// Migration to remove the user-storage schema.
-struct RemoveUserStorageMigration1739456565: AsyncMigration {
+internal struct RemoveUserStorageMigration1739456565: AsyncMigration {
     /// Prepares the migration by deleting the user-storage schema.
     /// - Parameter database: The database instance on which the migration is performed.
     /// - Throws: Throws an error if the schema deletion fails.

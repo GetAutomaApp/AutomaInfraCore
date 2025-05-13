@@ -10,7 +10,7 @@ import VaporTesting
 /// Integration tests for the `PrometheusController`.
 /// These tests verify the controller's ability to handle requests and return metrics data.
 @Suite("Prometheus Controller Integration Tests")
-struct PrometheusControllerIntegrationTests {
+internal struct PrometheusControllerIntegrationTests {
     /// Helper method to create a test application instance for each test.
     /// This method handles proper setup and teardown of the application.
     ///

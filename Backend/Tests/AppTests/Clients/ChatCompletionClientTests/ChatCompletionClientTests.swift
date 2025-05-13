@@ -10,7 +10,7 @@ import Testing
 /// These tests verify that all chat completion client implementations
 /// can successfully generate chat completions with various models
 @Suite("Chat Completion Client Tests")
-struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
+internal struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
     /// Tests that each chat completion client can successfully create a chat completion
     /// This test is parameterized to run with different models, automatically selecting
     /// the appropriate client implementation based on the model

@@ -6,7 +6,7 @@
 @testable import IOS
 import Testing
 
-struct IOS_UnitTests {
+internal struct IOSUnitTests {
     /// Documentation Here
     @Test("Test Name Here")
     public func example() throws {

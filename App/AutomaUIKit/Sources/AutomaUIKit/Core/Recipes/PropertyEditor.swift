@@ -104,7 +104,7 @@ public struct PaddingEditor: View {
 
  This view presents sliders for adjusting width and height values.
  */
-struct CGSizeEdtior: View {
+internal struct CGSizeEdtior: View {
     /// The binding to the CGSize value being edited
     @Binding public var cgSize: CGSize
 

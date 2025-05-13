@@ -7,7 +7,7 @@ import Fluent
 import Vapor
 
 /// Controller for handling Twitter-related routes.
-struct TwitterController: RouteCollection {
+internal struct TwitterController: RouteCollection {
     /// Registers routes for Twitter operations.
     /// - Parameter routes: The routes builder to register routes on.
     public func boot(routes: RoutesBuilder) throws {

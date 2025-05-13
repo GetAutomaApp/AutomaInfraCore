@@ -7,7 +7,7 @@ import DataTypes
 import Foundation
 
 /// The output information of a shell command.
-struct ShellOutput {
+internal struct ShellOutput {
     /// The standard output of the command.
     let stdout: String?
     /// The standard error output of the command.
@@ -28,7 +28,7 @@ enum OperatingSystem {
 }
 
 /// A simple shell wrapper in Swift, to execute shell commands.
-struct Shell {
+internal struct Shell {
     /// The operating system on which the shell is running.
     let operatingSystem: OperatingSystem
     /// The command used to copy text to the clipboard.

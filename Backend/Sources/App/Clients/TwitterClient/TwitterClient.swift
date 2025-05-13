@@ -25,7 +25,7 @@ protocol TwitterClientBase {
 }
 
 /// A client for interacting with Twitter API, handling authentication and requests.
-struct TwitterClient: TwitterClientBase {
+internal struct TwitterClient: TwitterClientBase {
     /// Logger instance for tracking operations.
     public let logger: Logger
 

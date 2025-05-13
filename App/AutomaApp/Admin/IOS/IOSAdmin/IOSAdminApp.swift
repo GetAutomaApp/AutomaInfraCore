@@ -10,7 +10,7 @@ import SwiftUI
 /// This app structure serves as the root of the application, configuring the main window
 /// and establishing the dark color scheme as the default appearance.
 @main
-struct IOSAdminApp: App {
+internal struct IOSAdminApp: App {
     /// The body of the app that defines its scene structure
     ///
     /// Creates a window group containing the main ContentView with dark mode enabled

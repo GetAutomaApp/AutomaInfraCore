@@ -7,7 +7,7 @@ import DataTypes
 import Vapor
 
 /// Middleware to handle errors and convert them into JSON responses.
-struct ErrorStringMiddleware: Middleware {
+internal struct ErrorStringMiddleware: Middleware {
     /// Responds to a request by processing errors and returning a JSON response.
     /// - Parameters:
     ///   - request: The incoming request to be processed.

@@ -11,7 +11,7 @@ import SwiftUI
 /// This struct serves as the root of the application, handling app lifecycle events,
 /// environment configuration, and network connectivity monitoring.
 @main
-struct IOSApp: App {
+internal struct IOSApp: App {
     /// The base environment configuration object containing app state and user authentication information
     @StateObject public var baseConfig = BaseAppEnvironmentObject()
 

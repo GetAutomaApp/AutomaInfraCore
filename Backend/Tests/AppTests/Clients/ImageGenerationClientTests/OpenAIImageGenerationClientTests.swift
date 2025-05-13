@@ -12,7 +12,7 @@ import VaporTesting
 /// Tests for the OpenAI Image Generation Client implementation
 /// These tests verify the functionality of image generation using both DALL-E 2 and DALL-E 3 models
 @Suite("OpenAI Image Generation Client Tests")
-struct OpenAIImageGenerationClientTests: ImageGenerationClientTestSuite {
+internal struct OpenAIImageGenerationClientTests: ImageGenerationClientTestSuite {
     /// Tests successful image generation using DALL-E 2
     /// Verifies that the client can generate images and return valid base64-encoded results
     /// - Throws: Any errors that occur during the test execution, including:

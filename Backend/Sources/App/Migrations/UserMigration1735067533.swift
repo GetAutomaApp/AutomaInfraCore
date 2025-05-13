@@ -8,7 +8,7 @@ import PostgresKit
 import Vapor
 
 /// Migration to create the User schema.
-struct UserMigration1735067533: AsyncMigration {
+internal struct UserMigration1735067533: AsyncMigration {
     public let logger: Logger = .init(label: "UserMigration1735067533")
     /// Prepares the migration by creating the User schema.
     /// - Parameter database: The database instance on which the migration is performed.

@@ -9,7 +9,7 @@ import SwiftUI
 
 /// A preview provider for the VerificationCodeInputComponent
 /// This struct provides SwiftUI previews for the verification code input component
-struct VerificationCodeInputComponentPreviews: PreviewProvider {
+internal struct VerificationCodeInputComponentPreviews: PreviewProvider {
     /// The preview content showing the verification code input component wrapper view
     /// - Returns: A view containing the verification code input component preview
     public static var previews: some View {
@@ -19,7 +19,7 @@ struct VerificationCodeInputComponentPreviews: PreviewProvider {
 
 /// A wrapper view that provides a property editor interface for the VerificationCodeInputComponent
 /// This view allows real-time editing of the component's properties in SwiftUI previews
-struct VerificationCodeInputComponentWrapperView: View {
+internal struct VerificationCodeInputComponentWrapperView: View {
     /// The configuration object for the verification code input component
     /// This observed object contains all customizable properties of the component
     @ObservedObject public var config = VerificationCodeInputComponentConfig()

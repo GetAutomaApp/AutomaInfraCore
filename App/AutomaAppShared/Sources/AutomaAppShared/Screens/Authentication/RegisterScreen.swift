@@ -18,7 +18,7 @@ import SwiftUI
 /// - SMS code sending and verification
 /// - Timeout management for code resending
 /// - Error handling and display
-struct RegisterScreen: View {
+internal struct RegisterScreen: View {
     /// Configuration for the phone number input field
     @StateObject var phoneInputConfig: PhoneNumberTextInputComponentConfig = .init()
 

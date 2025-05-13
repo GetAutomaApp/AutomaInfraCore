@@ -8,7 +8,7 @@ import Metrics
 import Prometheus
 
 /// Service for managing and emitting metrics.
-struct MetricsService {
+internal struct MetricsService {
     /// Global instance of the `MetricsService`.
     public static let global = Self()
 

@@ -7,7 +7,7 @@ import SwiftUI
 
 /// A preview provider for the TextInputComponent that displays various configuration options
 /// and states of the text input component.
-struct TextInputComponentPreviews: PreviewProvider {
+internal struct TextInputComponentPreviews: PreviewProvider {
     /// Returns a view that wraps the TextInputComponent with configuration controls
     public static var previews: some View {
         TextInputComponentWrapperView()
@@ -16,7 +16,7 @@ struct TextInputComponentPreviews: PreviewProvider {
 
 /// A wrapper view that provides a property editor interface for configuring and
 /// previewing the TextInputComponent with various settings and states.
-struct TextInputComponentWrapperView: View {
+internal struct TextInputComponentWrapperView: View {
     /// The configuration object that controls the appearance and behavior of the TextInputComponent
     @ObservedObject public var config = TextInputComponentConfig()
 

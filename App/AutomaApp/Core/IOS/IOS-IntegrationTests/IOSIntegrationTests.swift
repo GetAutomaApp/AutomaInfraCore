@@ -11,7 +11,7 @@ import Testing
 /// This test suite contains unit tests that verify the functionality and behavior
 /// of the iOS app components. It includes tests for core features and utilities.
 @Suite("IOS Tests")
-struct IOSIntegrationTests {
+internal struct IOSIntegrationTests {
     /// Example test case demonstrating basic test structure
     ///
     /// This test provides a template for writing additional test cases using the Testing framework.

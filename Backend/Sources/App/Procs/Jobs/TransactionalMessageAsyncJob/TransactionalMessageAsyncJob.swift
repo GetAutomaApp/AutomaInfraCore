@@ -8,7 +8,7 @@ import Queues
 import Vapor
 
 /// Input payload for the transactional message job.
-struct TransactionalMessageJobInput: Codable {
+internal struct TransactionalMessageJobInput: Codable {
     /// The content of the message.
     public let content: String
     /// The phone number to send the message to.
@@ -16,7 +16,7 @@ struct TransactionalMessageJobInput: Codable {
 }
 
 /// Asynchronous job to send a transactional message.
-struct TransactionalMessageAsyncJob: AsyncJob {
+internal struct TransactionalMessageAsyncJob: AsyncJob {
     public typealias Payload = TransactionalMessageJobInput
 
     /// Processes the job to send a transactional message.

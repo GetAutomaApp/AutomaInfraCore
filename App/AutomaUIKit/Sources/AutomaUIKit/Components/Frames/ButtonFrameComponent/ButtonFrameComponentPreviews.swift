@@ -6,7 +6,7 @@
 import SwiftUI
 
 /// A preview provider for the ButtonFrameComponent
-struct ButtonFrameComponentPreviews: PreviewProvider {
+internal struct ButtonFrameComponentPreviews: PreviewProvider {
     /// Returns a view containing various button frame component previews
     public static var previews: some View {
         ButtonFrameComponentPreviewsView()
@@ -14,7 +14,7 @@ struct ButtonFrameComponentPreviews: PreviewProvider {
 }
 
 /// A view that displays various configurations and examples of ButtonFrameComponent
-struct ButtonFrameComponentPreviewsView: View {
+internal struct ButtonFrameComponentPreviewsView: View {
     /// The configuration object for the button frame component
     @StateObject public var buttonConfig: ButtonFrameComponentConfig = .init()
 
@@ -64,7 +64,7 @@ struct ButtonFrameComponentPreviewsView: View {
 }
 
 /// A view that demonstrates automatic variations of button styles and configurations
-struct AutoButtonVariationsView: View {
+internal struct AutoButtonVariationsView: View {
     /// The configuration controller for the button frame component
     @StateObject public var buttonController: ButtonFrameComponentConfig = .init()
 
