@@ -9,13 +9,13 @@ import Queues
 import Vapor
 
 /// Input payload for the profile picture job.
-internal struct ProfilePictureJobInput: Codable {
+struct ProfilePictureJobInput: Codable {
     /// The user data transfer object.
     public let payload: UserDTO
 }
 
 /// Asynchronous job to create a profile picture.
-internal struct ProfilePictureAsyncJob: AsyncJob {
+struct ProfilePictureAsyncJob: AsyncJob {
     public typealias Payload = ProfilePictureJobInput
 
     /// Processes the job to create a profile picture.

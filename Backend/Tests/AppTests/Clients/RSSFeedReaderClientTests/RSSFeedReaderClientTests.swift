@@ -10,7 +10,7 @@ import VaporTesting
 /// Test suite for the `RSSFeedReaderClient` class.
 /// These tests verify the client's ability to fetch and parse different types of feeds.
 @Suite("RSS Feed Reader Client Tests")
-internal struct RSSFeedReaderClientTests {
+struct RSSFeedReaderClientTests {
     /// Helper method to create a test application instance for each test.
     /// This method handles proper setup and teardown of the application.
     ///
@@ -52,7 +52,7 @@ internal struct RSSFeedReaderClientTests {
             (URL(string: "https://invalid-feed.com"), false),
         ]
     )
-    internal func getFeedItemsWhenFeedExists(url: URL?, feedExists: Bool) async throws {
+    func getFeedItemsWhenFeedExists(url: URL?, feedExists: Bool) async throws {
         guard
             let url
         else {

@@ -14,7 +14,7 @@ import Foundation
 ///
 /// This struct provides methods for user registration, login, and token refresh operations.
 /// It conforms to `BackendControllerInteractor` to utilize common networking functionality.
-internal struct AuthenticationControllerInteractor: BackendControllerInteractor {
+struct AuthenticationControllerInteractor: BackendControllerInteractor {
     /// The base URL for all API requests
     ///
     /// This URL is used as the prefix for all endpoints when making network requests

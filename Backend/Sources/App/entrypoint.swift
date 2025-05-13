@@ -11,7 +11,7 @@ import Vapor
 
 /// The main entry point for the application.
 @main
-internal enum Entrypoint {
+enum Entrypoint {
     /// The main function that initializes and runs the application.
     /// - Throws: Throws an error if the application fails to start or execute.
     public static func main() async throws {

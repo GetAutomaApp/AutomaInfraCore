@@ -6,7 +6,7 @@
 import Fluent
 
 /// Migration to create the Twitter-User-Token schema.
-internal struct TwitterUserTokenMigration1741708919: AsyncMigration {
+struct TwitterUserTokenMigration1741708919: AsyncMigration {
     /// Prepares the migration by creating the Twitter-User-Token schema.
     /// - Parameter database: The database instance on which the migration is performed.
     /// - Throws: Throws an error if the schema creation fails.

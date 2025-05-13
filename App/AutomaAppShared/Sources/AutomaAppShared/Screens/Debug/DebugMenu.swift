@@ -15,7 +15,7 @@ import SwiftUI
 
 /// Represents the available base environment URLs for the application
 /// Used to switch between different API environments
-internal enum BaseEnvironmentUrl: String, CaseIterable {
+enum BaseEnvironmentUrl: String, CaseIterable {
     /// Local development environment
     case localhost = "http://localhost:8080"
     /// Production environment

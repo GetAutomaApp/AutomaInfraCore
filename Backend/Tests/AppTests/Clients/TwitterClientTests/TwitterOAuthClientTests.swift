@@ -10,7 +10,7 @@ import VaporTesting
 /// Test suite for Twitter OAuth functionality
 /// These tests verify the ability to request tokens and generate authentication URLs
 @Suite("Twitter OAuth Tests")
-internal struct TwitterOAuthClientTests: TwitterClientTestSuite {
+struct TwitterOAuthClientTests: TwitterClientTestSuite {
     /// Tests the ability to request an OAuth token
     /// Verifies that the token and token secret are properly generated and contain valid values
     ///
@@ -18,7 +18,7 @@ internal struct TwitterOAuthClientTests: TwitterClientTestSuite {
     ///   - Client initialization errors
     ///   - Token request failures
     @Test("Test Request Token")
-    internal func requestToken() async throws {
+    func requestToken() async throws {
         try await withApp { app in
             // Initialize the Twitter client
             let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
@@ -38,7 +38,7 @@ internal struct TwitterOAuthClientTests: TwitterClientTestSuite {
     ///   - Client initialization errors
     ///   - URL generation failures
     @Test("Make Authenticate URL")
-    internal func makeAuthenticateURL() async throws {
+    func makeAuthenticateURL() async throws {
         try await withApp { app in
             // Initialize the Twitter client
             let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)

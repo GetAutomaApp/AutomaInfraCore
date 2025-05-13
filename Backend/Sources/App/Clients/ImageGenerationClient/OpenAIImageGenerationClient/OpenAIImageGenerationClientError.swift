@@ -7,7 +7,7 @@
 ///
 /// This enum defines specific error cases that the OpenAIImageGenerationClient might encounter
 /// during its operations, such as encoding failures, generation errors, invalid models, and response errors.
-internal enum OpenAIImageGenerationClientError: Error {
+enum OpenAIImageGenerationClientError: Error {
     /// Indicates an error occurred during encoding.
     ///
     /// This error is thrown when the client fails to encode the result or images response.

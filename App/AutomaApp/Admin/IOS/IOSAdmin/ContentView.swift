@@ -9,7 +9,7 @@ import SwiftUI
 ///
 /// This view serves as the root view for the iOS admin application,
 /// currently displaying a basic globe icon with styling.
-internal struct ContentView: View {
+struct ContentView: View {
     /// The body of the view that defines its content and layout
     public var body: some View {
         // Main vertical stack container

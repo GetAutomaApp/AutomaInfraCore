@@ -6,7 +6,7 @@
 import Vapor
 
 /// Controller for testing Firecrawl functionality.
-internal struct FirecrawlTestController: RouteCollection {
+struct FirecrawlTestController: RouteCollection {
     /// Registers routes for Firecrawl test operations.
     /// - Parameter routes: The routes builder to register routes on.
     public func boot(routes: RoutesBuilder) throws {

@@ -8,7 +8,7 @@ import SwiftUI
 
 /// A structure representing the content for a single onboarding screen
 /// - Contains the title, description and background color for the screen
-internal struct OnboardingScreenContent {
+struct OnboardingScreenContent {
     /// The title text to be displayed on the onboarding screen
     public let title: String
 

@@ -8,7 +8,7 @@ import SotoTextract
 import Vapor
 
 /// Service for extracting text from images.
-internal struct TextExtractionService: ~Copyable {
+struct TextExtractionService: ~Copyable {
     /// The Textract client for text extraction.
     public let client: Textract
     /// Logger to log messages

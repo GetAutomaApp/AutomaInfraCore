@@ -5,7 +5,7 @@
 
 import Testing
 
-internal struct IOSAdminIntegrationTests {
+struct IOSAdminIntegrationTests {
     /// Documentation here
     @Test("Test Name Here")
     public func example() throws {

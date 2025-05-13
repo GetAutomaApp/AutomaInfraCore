@@ -7,4 +7,4 @@
 import Testing
 
 @Suite("Text Extraction Service Integration Tests")
-internal struct TextExtractionServiceIntegrationTests {}
+struct TextExtractionServiceIntegrationTests {}

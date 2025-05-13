@@ -9,7 +9,7 @@ import SwiftUI
 // Check if it is macOS
 #if !os(macOS)
     /// A UIViewRepresentable wrapper for PhoneNumberTextField that handles phone number input and validation
-    internal struct PhoneNumberTextFieldView: UIViewRepresentable {
+    struct PhoneNumberTextFieldView: UIViewRepresentable {
         /// The configuration object that contains all the styling and state information
         @ObservedObject public var config: PhoneNumberTextInputComponentConfig
 

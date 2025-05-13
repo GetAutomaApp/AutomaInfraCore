@@ -7,32 +7,32 @@ import DataTypes
 import Foundation
 
 /// The output information of a shell command.
-internal struct ShellOutput {
+struct ShellOutput {
     /// The standard output of the command.
-    internal let stdout: String?
+    let stdout: String?
     /// The standard error output of the command.
-    internal let stderr: String?
+    let stderr: String?
     /// The exit status of the command.
-    internal let exitStatus: Int
+    let exitStatus: Int
     /// A flag indicating whether the command resulted in an error.
-    internal let isError: Bool
+    let isError: Bool
     /// The command that was executed.
-    internal let command: String
+    let command: String
 }
 
 /// Enum representing different operating systems.
-internal enum OperatingSystem {
+enum OperatingSystem {
     case linux
     case macos
     case unknown(value: String)
 }
 
 /// A simple shell wrapper in Swift, to execute shell commands.
-internal struct Shell {
+struct Shell {
     /// The operating system on which the shell is running.
-    internal let operatingSystem: OperatingSystem
+    let operatingSystem: OperatingSystem
     /// The command used to copy text to the clipboard.
-    internal let copyCommand: String
+    let copyCommand: String
 
     /// Initializes a new instance of `Shell`.
     /// - Throws: An error if the operating system cannot be determined.

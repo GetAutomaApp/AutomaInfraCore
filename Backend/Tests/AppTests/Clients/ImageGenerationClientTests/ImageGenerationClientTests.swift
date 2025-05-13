@@ -12,7 +12,7 @@ import VaporTesting
 /// This suite tests different image generation models and ensures they can properly generate images
 /// according to specified parameters like quality, size, and style
 @Suite("ImageGenerationClientTests")
-internal struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
+struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
     /// Tests successful image generation for each image generation client
     /// This test verifies that:
     /// - The client can be initialized properly
@@ -31,7 +31,7 @@ internal struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
             GenerateImageModel.dall_e_2, // will use openai client
         ]
     )
-    internal func generateImageResultSuccess(model: GenerateImageModel) async throws {
+    func generateImageResultSuccess(model: GenerateImageModel) async throws {
         try await withApp { app in
             let totalImagesToGenerate = 1
 

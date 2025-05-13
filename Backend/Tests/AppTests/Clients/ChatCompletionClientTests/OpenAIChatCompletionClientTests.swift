@@ -12,7 +12,7 @@ import VaporTesting
 /// Tests for the OpenAI Chat Completion Client implementation
 /// These tests verify the functionality of chat completion generation using OpenAI models
 @Suite("OpenAI Chat Completion Client Tests")
-internal struct OpenAIChatCompletionClientTests: ChatCompletionClientTestSuite {
+struct OpenAIChatCompletionClientTests: ChatCompletionClientTestSuite {
     /// Tests successful chat completion generation using OpenAI's GPT-4o model
     /// Verifies that the client can generate valid chat completions and return proper metadata
     ///
@@ -26,7 +26,7 @@ internal struct OpenAIChatCompletionClientTests: ChatCompletionClientTestSuite {
     ///   - Network errors
     ///   - Invalid response formats
     @Test("Generate Chat Completion Result Success")
-    internal func generateChatCompletionResultSuccess() async throws {
+    func generateChatCompletionResultSuccess() async throws {
         try await withApp { app in
             let model = ChatCompletionModel.gpt4o
 

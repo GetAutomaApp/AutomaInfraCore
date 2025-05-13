@@ -27,6 +27,6 @@ import Testing
 /// - Important: All test methods should be properly isolated and should clean up any test data
 ///             or state modifications after completion.
 @Suite("AuthenticationControllerInteractorIntegrationTests")
-internal struct AuthenticationControllerInteractorIntegrationTests {
+struct AuthenticationControllerInteractorIntegrationTests {
     // Test methods will be added here to verify different integration scenarios
 }

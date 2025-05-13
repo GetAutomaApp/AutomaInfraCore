@@ -158,7 +158,7 @@ public enum GenerateImageStyle: String, Codable, Sendable {
 ///
 /// This client acts as a facade for different image generation platforms, allowing
 /// the generation of images based on specified query parameters.
-internal struct ImageGenerationClient: ImageGenerationClientBase {
+struct ImageGenerationClient: ImageGenerationClientBase {
     /// Logger instance for tracking operations and errors
     public let logger: Logger
 

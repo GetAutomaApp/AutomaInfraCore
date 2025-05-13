@@ -7,7 +7,7 @@ import Fluent
 
 // swiftlint:disable type_name
 /// Migration to bind JWT tokens to the parent User object.
-internal struct JWTTokenShouldBeBoundToParentUserObjectMigration1735140054: AsyncMigration {
+struct JWTTokenShouldBeBoundToParentUserObjectMigration1735140054: AsyncMigration {
     // swiftlint:enable type_name
     /// Prepares the migration by adding a foreign key constraint to the Jwt-Token schema.
     /// - Parameter database: The database instance on which the migration is performed.

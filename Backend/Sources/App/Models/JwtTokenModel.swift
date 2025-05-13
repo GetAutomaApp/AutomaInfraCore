@@ -85,7 +85,7 @@ public final class JwtTokenModel: Model, @unchecked Sendable {
     /// Creates a `JwtTokenModel` from a `JwtTokenDTO`.
     /// - Parameter dto: The `JwtTokenDTO` to convert.
     /// - Returns: An instance of `JwtTokenModel`.
-    internal static func fromDTO(dto: JwtTokenDTO) -> JwtTokenModel {
+    static func fromDTO(dto: JwtTokenDTO) -> JwtTokenModel {
         JwtTokenModel(
             id: dto.id,
             token: dto.token,

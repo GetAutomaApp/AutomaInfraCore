@@ -6,7 +6,7 @@
 import Fluent
 
 /// Migration to create the user-storage schema.
-internal struct CreateUserStorageItem: AsyncMigration {
+struct CreateUserStorageItem: AsyncMigration {
     /// Prepares the migration by creating the user-storage schema.
     /// - Parameter database: The database instance on which the migration is performed.
     /// - Throws: Throws an error if the schema creation fails.

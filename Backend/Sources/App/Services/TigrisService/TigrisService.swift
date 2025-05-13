@@ -9,7 +9,7 @@ import SotoS3
 import Vapor
 
 /// Service for interacting with Tigris S3 storage.
-internal struct TigrisService: ~Copyable {
+struct TigrisService: ~Copyable {
     /// The S3 client for interacting with Tigris.
     public let client: S3
     /// Logger to log messages
@@ -182,7 +182,7 @@ internal struct TigrisService: ~Copyable {
     }
 
     /// Represents an S3 path with a bucket and key.
-    internal struct S3Path {
+    struct S3Path {
         /// The bucket name.
         public let bucket: String
         /// The key within the bucket.

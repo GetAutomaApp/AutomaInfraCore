@@ -12,7 +12,7 @@ import VaporTesting
 /// Tests for the OpenAI Image Generation Client implementation
 /// These tests verify the functionality of image generation using both DALL-E 2 and DALL-E 3 models
 @Suite("OpenAI Image Generation Client Tests")
-internal struct OpenAIImageGenerationClientTests: ImageGenerationClientTestSuite {
+struct OpenAIImageGenerationClientTests: ImageGenerationClientTestSuite {
     /// Tests successful image generation using DALL-E 2
     /// Verifies that the client can generate images and return valid base64-encoded results
     /// - Throws: Any errors that occur during the test execution, including:
@@ -20,7 +20,7 @@ internal struct OpenAIImageGenerationClientTests: ImageGenerationClientTestSuite
     ///   - Image generation failures
     ///   - Invalid response formats
     @Test("Generate Image Result Success (dalle2)")
-    internal func generateImageResultSuccessDalle2() async throws {
+    func generateImageResultSuccessDalle2() async throws {
         try await withApp { app in
             // Generate an image using DALL-E 2 with specified parameters
             let result = try await generateImage(
@@ -49,7 +49,7 @@ internal struct OpenAIImageGenerationClientTests: ImageGenerationClientTestSuite
     ///   - Image generation failures
     ///   - Invalid response formats
     @Test("Generate Image Result Success (dalle3)")
-    internal func generateImageResultSuccessDalle3() async throws {
+    func generateImageResultSuccessDalle3() async throws {
         try await withApp { app in
             // Initialize the image generation client
             let client = ImageGenerationClient(logger: app.logger)

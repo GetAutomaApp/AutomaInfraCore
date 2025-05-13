@@ -6,7 +6,7 @@
 import Testing
 
 @Suite("Test Integration Tests")
-internal struct TestIntegrationTests {
+struct TestIntegrationTests {
     /// Test Documentation Here
     @Test("Test Print")
     public func testPrint() {

@@ -9,7 +9,7 @@ import OpenAI
 import Vapor
 
 /// Service for managing profile picture generation.
-internal struct ProfilePictureService {
+struct ProfilePictureService {
     /// Logger for logging messages.
     public let logger: Logger
 

@@ -10,7 +10,7 @@ import Vapor
 /// A client for making authenticated requests to the Twitter API.
 /// This client handles posting tweets and other authenticated operations
 /// using a valid Twitter API access token.
-internal struct TwitterAuthenticatedClient: TwitterClientBase {
+struct TwitterAuthenticatedClient: TwitterClientBase {
     /// Logger instance for tracking operations
     public let logger: Logger
 

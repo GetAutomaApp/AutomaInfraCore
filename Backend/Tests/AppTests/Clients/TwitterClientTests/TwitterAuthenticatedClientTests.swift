@@ -11,7 +11,7 @@ import VaporTesting
 /// Test suite for the authenticated Twitter client functionality
 /// These tests verify that operations requiring user authentication work correctly
 @Suite("Twitter Authenticated Client Tests")
-internal struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
+struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
     /// Tests the ability to post a tweet using an authenticated Twitter client
     /// This test verifies that:
     /// - A valid Twitter user token can be retrieved from the database
@@ -25,7 +25,7 @@ internal struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
     ///   - Client initialization errors
     ///   - API request failures
     @Test("Post Tweet")
-    internal func postTweet() async throws {
+    func postTweet() async throws {
         try await withApp { app in
             // Retrieve the test Twitter user token ID from the environment
             let testTwitterUserTokenID = try Environment.getOrThrow("TEST_TWITTER_USER_TOKEN_ID")

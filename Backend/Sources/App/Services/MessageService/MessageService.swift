@@ -15,7 +15,7 @@ import Vapor
 #endif
 
 /// Service for handling message-related operations.
-internal struct MessageService: Decodable {
+struct MessageService: Decodable {
     /// Sends an SMS message to a specified phone number.
     /// - Parameters:
     ///   - phoneNumber: The phone number to send the message to.

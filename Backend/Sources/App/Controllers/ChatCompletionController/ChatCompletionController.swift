@@ -8,7 +8,7 @@ import OpenAI
 import Vapor
 
 /// Controller for handling chat completion requests.
-internal struct ChatCompletionController: RouteCollection {
+struct ChatCompletionController: RouteCollection {
     /// Registers routes for chat completion operations.
     /// - Parameter routes: The routes builder to register routes on.
     public func boot(routes: RoutesBuilder) throws {

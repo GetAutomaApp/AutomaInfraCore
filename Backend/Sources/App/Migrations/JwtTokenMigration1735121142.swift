@@ -6,7 +6,7 @@
 import Fluent
 
 /// Migration to create the Jwt-Token schema.
-internal struct JwtTokenMigration1735121142: AsyncMigration {
+struct JwtTokenMigration1735121142: AsyncMigration {
     /// Prepares the migration by creating the Jwt-Token schema.
     /// - Parameter database: The database instance on which the migration is performed.
     /// - Throws: Throws an error if the schema creation fails.

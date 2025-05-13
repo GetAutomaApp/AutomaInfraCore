@@ -7,7 +7,7 @@ import SwiftUI
 
 /// A preview provider that demonstrates the usage of various font styles from the FontTable
 /// using the fontTableFont modifier.
-internal struct FontTableFontModifierPreviews: PreviewProvider {
+struct FontTableFontModifierPreviews: PreviewProvider {
     /// The preview content showing different font styles
     public static var previews: some View {
         TestView()
@@ -15,7 +15,7 @@ internal struct FontTableFontModifierPreviews: PreviewProvider {
 }
 
 /// A test view that wraps the ContentView for preview purposes
-internal struct TestView: View {
+struct TestView: View {
     /// The body of the test view
     /// - Returns: A view containing the ContentView
     public var body: some View {
@@ -24,7 +24,7 @@ internal struct TestView: View {
 }
 
 /// A view that demonstrates all available font styles from the FontTable
-internal struct ContentView: View {
+struct ContentView: View {
     /// The body of the content view that displays text samples with different font styles
     /// - Returns: A vertical stack of text views with various font styles applied
     public var body: some View {

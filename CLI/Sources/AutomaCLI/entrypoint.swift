@@ -1,4 +1,4 @@
-// entrypoint.swift
+// Entrypoint.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -7,7 +7,7 @@ import Vapor
 
 /// The main entry point for the CLI application.
 @main
-internal enum Entrypoint {
+enum Entrypoint {
     /// The main function that sets up and runs the application.
     public static func main() async throws {
         // Detect the environment and create an application instance

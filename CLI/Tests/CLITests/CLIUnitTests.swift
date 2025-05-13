@@ -9,7 +9,7 @@ import Testing
 // boilerplate code here, not real tests
 
 @Suite("Unit test suite", .serialized)
-internal struct CLIUnitTests {
+struct CLIUnitTests {
     /// A description
     /// - Parameters:
     ///

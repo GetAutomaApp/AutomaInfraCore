@@ -7,7 +7,7 @@ import SwiftUI
 
 /// A preview provider for the IconButtonComponent that displays various configurations and states
 /// of the button in SwiftUI previews.
-internal struct IconButtonComponentPreviews: PreviewProvider {
+struct IconButtonComponentPreviews: PreviewProvider {
     /// The preview content showing different states and configurations of the IconButtonComponent
     public static var previews: some View {
         IconButtonComponentPreviewsView()
@@ -16,7 +16,7 @@ internal struct IconButtonComponentPreviews: PreviewProvider {
 
 /// A view that provides an interactive preview interface for the IconButtonComponent,
 /// allowing real-time manipulation of various button properties and states.
-internal struct IconButtonComponentPreviewsView: View {
+struct IconButtonComponentPreviewsView: View {
     /// Shared configuration object that maintains the state of the button properties
     @StateObject private var sharedConfig = IconButtonComponentConfig()
 

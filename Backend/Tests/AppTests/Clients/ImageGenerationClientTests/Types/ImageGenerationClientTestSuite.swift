@@ -10,7 +10,7 @@ import VaporTesting
 /// Protocol defining common functionality for image generation client test suites
 /// This protocol provides shared test utilities and default values used across different
 /// image generation client implementations
-internal protocol ImageGenerationClientTestSuite {
+protocol ImageGenerationClientTestSuite {
     /// The default prompt to use for image generation tests
     /// This prompt should generate safe, consistent test images
     var defaultPrompt: String { get }
@@ -49,7 +49,7 @@ extension ImageGenerationClientTestSuite {
     /// - Parameter query: The image generation query parameters
     /// - Returns: The generated image result
     /// - Throws: Any errors that occur during the image generation process
-    internal func generateImage(
+    func generateImage(
         app: Application,
         query: GenerateImageQuery
     ) async throws -> GenerateImageResult {

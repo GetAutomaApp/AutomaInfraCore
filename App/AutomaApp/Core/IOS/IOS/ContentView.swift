@@ -21,7 +21,7 @@ import SwiftUI
 /// - User authentication state
 /// - Application update requirements
 /// - User application review status
-internal struct ContentView: View {
+struct ContentView: View {
     /// The environment configuration object containing app state and user authentication information
     @EnvironmentObject public var baseEnvironmentConfig: BaseAppEnvironmentObject
 

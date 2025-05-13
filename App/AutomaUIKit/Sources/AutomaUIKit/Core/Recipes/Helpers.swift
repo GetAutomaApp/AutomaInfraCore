@@ -46,7 +46,7 @@ public extension Color {
 }
 
 /// Internal enum containing helper methods for image manipulation in the design system
-internal enum DesignImages {
+enum DesignImages {
     /// Applies standard icon styling to an image
     /// - Parameter image: The SwiftUI Image to be styled
     /// - Returns: A View with the image styled according to design system specifications
@@ -63,7 +63,7 @@ internal enum DesignImages {
 }
 
 /// Extension to SwiftUI's Image type that adds design system conformance
-internal extension Image {
+extension Image {
     /// Converts the image into an icon conforming to the design system specifications
     /// - Returns: A View containing the image styled as a system icon
     func toIcon() -> some View {

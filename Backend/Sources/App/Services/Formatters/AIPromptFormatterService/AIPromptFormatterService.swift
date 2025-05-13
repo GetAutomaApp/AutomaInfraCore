@@ -8,7 +8,7 @@ import OpenAI
 import Vapor
 
 /// Service for formatting AI prompts for generating profile pictures.
-internal enum AIPromptFormatterService {
+enum AIPromptFormatterService {
     /// Creates a query for generating a profile picture using OpenAI's image generation model.
     /// - Parameter username: The username to be used as a keyword in the prompt.
     /// - Returns: A `GenerateImageQuery` configured with the prompt and image generation settings.

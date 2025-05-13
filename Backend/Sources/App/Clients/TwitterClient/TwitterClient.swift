@@ -10,7 +10,7 @@ import TwitterAPIKit
 import Vapor
 
 /// A protocol defining the base requirements for a Twitter client.
-internal protocol TwitterClientBase {
+protocol TwitterClientBase {
     /// Logger instance for tracking operations.
     var logger: Logger { get }
 
@@ -25,7 +25,7 @@ internal protocol TwitterClientBase {
 }
 
 /// A client for interacting with Twitter API, handling authentication and requests.
-internal struct TwitterClient: TwitterClientBase {
+struct TwitterClient: TwitterClientBase {
     /// Logger instance for tracking operations.
     public let logger: Logger
 

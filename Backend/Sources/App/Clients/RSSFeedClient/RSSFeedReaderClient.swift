@@ -13,7 +13,7 @@ import Vapor
 /// A client for reading and parsing RSS and Atom feeds from URLs.
 /// This client handles fetching feed data, parsing it into appropriate formats,
 /// and converting feed items into a standardized `GenericRSSFeedItem` format.
-internal struct RSSFeedReaderClient {
+struct RSSFeedReaderClient {
     /// Logger instance used for error reporting and debugging.
     public let logger: Logger
 

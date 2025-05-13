@@ -5,7 +5,7 @@
 
 /// Errors that can occur during chat completion operations
 /// These errors represent various failure modes when interacting with AI chat completion services
-internal enum ChatCompletionClientError: Error {
+enum ChatCompletionClientError: Error {
     /// General error during the completion process
     /// This can include network errors, authentication failures, or other API-related issues
     case completionError

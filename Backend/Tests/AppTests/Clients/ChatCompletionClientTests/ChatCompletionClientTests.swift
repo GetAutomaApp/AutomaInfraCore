@@ -10,7 +10,7 @@ import Testing
 /// These tests verify that all chat completion client implementations
 /// can successfully generate chat completions with various models
 @Suite("Chat Completion Client Tests")
-internal struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
+struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
     /// Tests that each chat completion client can successfully create a chat completion
     /// This test is parameterized to run with different models, automatically selecting
     /// the appropriate client implementation based on the model
@@ -26,7 +26,7 @@ internal struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
             ChatCompletionModel.gpt4o, // will use openai client
         ]
     )
-    internal func createChatCompletionSuccess(model: ChatCompletionModel) async throws {
+    func createChatCompletionSuccess(model: ChatCompletionModel) async throws {
         try await withApp { app in
             // Create a query with the test model and default prompt
             let query = ChatCompletionContent(model: model, prompt: defaultPrompt)

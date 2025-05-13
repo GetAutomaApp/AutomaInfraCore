@@ -116,7 +116,7 @@ public func configure(_ app: Application) async throws {
 }
 
 /// Extension for `DatabaseID` to define custom database identifiers.
-internal extension DatabaseID {
+extension DatabaseID {
     /// Primary database identifier.
     static let primary = DatabaseID(string: "primary")
     /// Read-only database identifier.

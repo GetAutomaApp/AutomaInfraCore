@@ -8,7 +8,7 @@ import SwiftUI
 #if !os(macOS)
     /// A preview provider for the PhoneNumberTextInputComponent.
     /// This struct provides SwiftUI previews to visualize the component in different states.
-    internal struct PhoneNumberTextInputComponentPreviews: PreviewProvider {
+    struct PhoneNumberTextInputComponentPreviews: PreviewProvider {
         /// The static previews property required by PreviewProvider protocol.
         /// Returns a view containing the phone number input component preview.
         ///
@@ -20,7 +20,7 @@ import SwiftUI
 
     /// A wrapper view that contains the preview implementation for PhoneNumberTextInputComponent.
     /// This view provides a testing environment for the phone number input component.
-    internal struct PhoneNumberTextInputComponentWrapperView: View {
+    struct PhoneNumberTextInputComponentWrapperView: View {
         /// The body property required by the View protocol.
         /// Configures and displays the phone number input component with default settings.
         ///

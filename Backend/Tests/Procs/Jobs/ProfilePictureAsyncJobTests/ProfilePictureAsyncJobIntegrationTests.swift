@@ -8,11 +8,11 @@ import Testing
 /// Integration tests for the `ProfilePictureAsyncJob`.
 /// These tests verify the job's ability to process profile picture generation tasks.
 @Suite("ProfilePictureAsyncJobIntegrationTests")
-internal struct ProfilePictureAsyncJobIntegrationTests {
+struct ProfilePictureAsyncJobIntegrationTests {
     /// Placeholder test for the profile picture async job.
     /// This test will be implemented with specific scenarios for the job.
     @Test("test name here")
-    internal func testNameHere() {
+    func testNameHere() {
         // Placeholder for test implementation
     }
 }

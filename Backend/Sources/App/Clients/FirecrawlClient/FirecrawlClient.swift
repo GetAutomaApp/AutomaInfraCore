@@ -10,7 +10,7 @@ import Vapor
 ///
 /// This client can bypass captchas and proxies if configured in the microservice.
 /// The microservice is available at: https://github.com/GetAutomaApp/firecrawl-clone
-internal struct FirecrawlClient {
+struct FirecrawlClient {
     /// The HTTP client used for making requests to the Firecrawl microservice.
     private let client: Client
 

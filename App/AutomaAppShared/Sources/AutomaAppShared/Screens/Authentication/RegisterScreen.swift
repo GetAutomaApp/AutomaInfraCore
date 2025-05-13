@@ -18,21 +18,21 @@ import SwiftUI
 /// - SMS code sending and verification
 /// - Timeout management for code resending
 /// - Error handling and display
-internal struct RegisterScreen: View {
+struct RegisterScreen: View {
     /// Configuration for the phone number input field
-    @StateObject internal var phoneInputConfig: PhoneNumberTextInputComponentConfig = .init()
+    @StateObject var phoneInputConfig: PhoneNumberTextInputComponentConfig = .init()
 
     /// Configuration for the verification code input field
-    @StateObject internal var verificationInputConfig: VerificationCodeInputComponentConfig = .init()
+    @StateObject var verificationInputConfig: VerificationCodeInputComponentConfig = .init()
 
     /// Countdown timer for code resending timeout
-    @State internal var timeout: Double = 0
+    @State var timeout: Double = 0
 
     /// Environment configuration containing API base URL and authentication state
-    @EnvironmentObject internal var baseEnvironmentConfig: BaseAppEnvironmentObject
+    @EnvironmentObject var baseEnvironmentConfig: BaseAppEnvironmentObject
 
     /// Authentication controller for handling API requests
-    internal var authInteractor: AuthenticationControllerInteractor {
+    var authInteractor: AuthenticationControllerInteractor {
         .init(baseURL: baseEnvironmentConfig.apiBaseURL)
     }
 
@@ -69,7 +69,7 @@ internal struct RegisterScreen: View {
     /// Displays either:
     /// - Phone number input screen with validation
     /// - Verification code input screen with resend option
-    internal var body: some View {
+    var body: some View {
         VStack {
             if !didSendCode {
                 AuthenticationFormScreenFrame(
@@ -164,7 +164,7 @@ internal struct RegisterScreen: View {
     /// Sends authentication code to the provided phone number
     ///
     /// Handles API response and updates UI state based on the result
-    internal func sendAuthenticationCode() async {
+    func sendAuthenticationCode() async {
         let phoneNumber = phoneInputConfig.phoneNumber
         do {
             let response = try await authInteractor.makeRegisterCodeRequest(
@@ -195,7 +195,7 @@ internal struct RegisterScreen: View {
     /// - Stores authentication tokens in keychain
     /// - Updates login state
     /// - Handles potential errors
-    internal func verifyAuthenticationCode() async {
+    func verifyAuthenticationCode() async {
         let phoneNumber = phoneInputConfig.phoneNumber
         let code = verificationInputConfig.text
 

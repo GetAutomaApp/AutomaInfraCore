@@ -8,9 +8,9 @@ import VaporTesting
 
 /// Protocol defining common functionality for Twitter client test suites
 /// This protocol provides shared test utilities used across different Twitter client implementations
-internal protocol TwitterClientTestSuite {}
+protocol TwitterClientTestSuite {}
 
-internal extension TwitterClientTestSuite {
+extension TwitterClientTestSuite {
     /// Helper function to create and manage a test application instance
     /// Creates a test application, configures the database, runs the provided test closure, and ensures proper cleanup
     ///

@@ -5,7 +5,7 @@
 
 import Vapor
 
-internal extension Environment {
+extension Environment {
     /// Retrieves an environment variable or throws an error if not found.
     /// - Parameter key: The key of the environment variable.
     /// - Returns: The value of the environment variable.
@@ -19,7 +19,7 @@ internal extension Environment {
     }
 }
 
-internal extension Task where Success == Void, Failure == any Error {
+extension Task where Success == Void, Failure == any Error {
     /// Executes a detached task and logs any errors that occur.
     /// - Parameters:
     ///   - destination: The destination for logging.
@@ -67,7 +67,7 @@ public extension Data {
 }
 
 /// Enum representing an error or a message.
-internal enum ErrorOrMessage {
+enum ErrorOrMessage {
     /// Represents an error.
     case error(Error)
     /// Represents a message.

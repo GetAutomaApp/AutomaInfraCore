@@ -16,7 +16,7 @@
 
 /// Deprecated font typealias that will be removed in SwiftGen 7.0
 @available(*, deprecated, renamed: "FontConvertible.Font", message: "This typealias will be removed in SwiftGen 7.0")
-internal typealias Font = FontConvertible.Font
+typealias Font = FontConvertible.Font
 
 // swiftlint:disable superfluous_disable_command file_length implicit_return
 // swiftlint:disable identifier_name line_length type_body_length
@@ -24,9 +24,9 @@ internal typealias Font = FontConvertible.Font
 // MARK: - Fonts
 
 /// Namespace containing all custom font families used in the application
-internal enum FontFamily {
+enum FontFamily {
     /// The Crimson Text font family with its various styles
-    internal enum CrimsonText {
+    enum CrimsonText {
         /// Bold variant of Crimson Text font
         public static let bold = FontConvertible(
             name: "CrimsonText-Bold",
@@ -68,7 +68,7 @@ internal enum FontFamily {
     }
 
     /// The SF Pro Text font family with its various styles
-    internal enum SFProText {
+    enum SFProText {
         /// Bold variant of SF Pro Text font
         public static let bold = FontConvertible(
             name: "SFProText-Bold",
@@ -197,7 +197,7 @@ public extension FontConvertible.Font {
 #if canImport(SwiftUI)
     /// SwiftUI Font extensions for iOS 13 and later
     @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-    internal extension SwiftUI.Font {
+    extension SwiftUI.Font {
         /// Creates a custom SwiftUI Font from a FontConvertible
         /// - Parameters:
         ///   - font: The FontConvertible to create the font from

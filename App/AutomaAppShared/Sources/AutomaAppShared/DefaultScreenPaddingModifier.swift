@@ -15,7 +15,7 @@ import SwiftUI
 /// Text("Hello World")
 ///     .modifier(DefaultScreenPaddingModifier())
 /// ```
-internal struct DefaultScreenPaddingModifier: ViewModifier {
+struct DefaultScreenPaddingModifier: ViewModifier {
     /// Applies the default screen padding modification to the given content
     ///
     /// - Parameter content: The content to which the padding will be applied

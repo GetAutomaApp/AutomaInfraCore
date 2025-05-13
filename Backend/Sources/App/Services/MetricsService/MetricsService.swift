@@ -8,7 +8,7 @@ import Metrics
 import Prometheus
 
 /// Service for managing and emitting metrics.
-internal struct MetricsService {
+struct MetricsService {
     /// Global instance of the `MetricsService`.
     public static let global = Self()
 
@@ -55,7 +55,7 @@ internal struct MetricsService {
 }
 
 /// Enum for managing backend metrics.
-internal enum BackendMetric {
+enum BackendMetric {
     /// Counter for successful verification codes sent.
     public static let totalSuccessfulVerificationCodesSent = MetricsService.global.makeCounter(
         name: "total_verification_codes_sent",

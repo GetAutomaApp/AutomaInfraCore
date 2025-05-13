@@ -8,7 +8,7 @@ import Fluent
 import Vapor
 
 /// Controller for handling app launch-related routes.
-internal struct AppLaunchController: RouteCollection {
+struct AppLaunchController: RouteCollection {
     /// Registers routes for app launch operations.
     /// - Parameter routes: The routes builder to register routes on.
     public func boot(routes: RoutesBuilder) throws {

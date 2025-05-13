@@ -9,7 +9,7 @@ import VaporTesting
 /// Protocol defining common functionality for chat completion client test suites
 /// This protocol provides shared test utilities and methods used across different
 /// chat completion client implementations
-internal protocol ChatCompletionClientTestSuite {
+protocol ChatCompletionClientTestSuite {
     /// The default prompt to use for chat completion tests
     var defaultPrompt: String { get }
 
@@ -43,7 +43,7 @@ extension ChatCompletionClientTestSuite {
     ///   - Application initialization errors
     ///   - Test execution errors
     ///   - Shutdown errors
-    internal func withApp(test: (Application) async throws -> Void) async throws {
+    func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
             try await test(app)
@@ -63,7 +63,7 @@ extension ChatCompletionClientTestSuite {
     ///   - Client initialization errors
     ///   - Network errors
     ///   - Invalid response formats
-    internal func createChat(
+    func createChat(
         app: Application,
         query: ChatCompletionContent
     ) async throws -> ChatCompletionResult {

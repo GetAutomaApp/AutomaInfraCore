@@ -9,7 +9,7 @@ import SwiftUI
 /// Represents the available authentication routes in the onboarding flow
 /// - login: Route to the login screen
 /// - register: Route to the registration screen
-internal enum AuthScreenRoute {
+enum AuthScreenRoute {
     case login
     case register
 }

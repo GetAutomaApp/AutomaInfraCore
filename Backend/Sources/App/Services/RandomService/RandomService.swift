@@ -7,7 +7,7 @@ import Fluent
 import Vapor
 
 /// Service for generating random values.
-internal enum RandomService {
+enum RandomService {
     /// List of animal names.
     public static let animals = [
         "Dog",

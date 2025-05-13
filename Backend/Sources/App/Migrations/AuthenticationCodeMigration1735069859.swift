@@ -6,7 +6,7 @@
 import Fluent
 
 /// Migration to create the Authentication-Code schema.
-internal struct AuthenticationCodeMigration1735069859: AsyncMigration {
+struct AuthenticationCodeMigration1735069859: AsyncMigration {
     /// Prepares the migration by creating the Authentication-Code schema.
     /// - Parameter database: The database instance on which the migration is performed.
     /// - Throws: Throws an error if the schema creation fails.
