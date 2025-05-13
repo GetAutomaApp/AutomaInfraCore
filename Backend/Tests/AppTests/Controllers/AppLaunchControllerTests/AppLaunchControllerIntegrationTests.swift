@@ -38,7 +38,7 @@ internal struct AppLaunchControllerIntegrationTests {
     /// Placeholder test for checking if a user is accepted.
     /// This test will be implemented when issue 135 is resolved.
     @Test("Is User Accepted")
-    func testRequest() {
+    public func testRequest() {
         // Expect the test to pass with a true value
         #expect(Bool(true))
     }

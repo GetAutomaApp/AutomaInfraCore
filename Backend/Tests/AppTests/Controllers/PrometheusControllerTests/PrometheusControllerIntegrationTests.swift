@@ -37,7 +37,7 @@ internal struct PrometheusControllerIntegrationTests {
     ///
     /// - Throws: Any errors that occur during test execution or request handling.
     @Test("Test Request")
-    func testRequest() async throws {
+    public func testRequest() async throws {
         try await withApp { app in
             // Retrieve the Fly metrics token from the environment
             let token = try Environment.getOrThrow("FLY_METRICS_TOKEN")

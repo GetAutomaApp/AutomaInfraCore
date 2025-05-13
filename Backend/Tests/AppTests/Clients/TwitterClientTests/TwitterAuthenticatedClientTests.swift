@@ -25,7 +25,7 @@ internal struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
     ///   - Client initialization errors
     ///   - API request failures
     @Test("Post Tweet")
-    func postTweet() async throws {
+    public func postTweet() async throws {
         try await withApp { app in
             // Retrieve the test Twitter user token ID from the environment
             let testTwitterUserTokenID = try Environment.getOrThrow("TEST_TWITTER_USER_TOKEN_ID")

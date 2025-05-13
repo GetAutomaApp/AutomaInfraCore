@@ -15,7 +15,7 @@ public protocol ChatCompletionClientBase {
     /// - Parameter query: The chat completion request parameters
     /// - Returns: The generated chat completion result
     /// - Throws: Errors that occur during the chat completion process
-    func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult
+    public func createChat(_ query: ChatCompletionContent) async throws -> ChatCompletionResult
 }
 
 /// Structure representing the content of a chat completion request

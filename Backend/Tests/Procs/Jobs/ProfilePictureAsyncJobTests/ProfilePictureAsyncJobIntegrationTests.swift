@@ -12,7 +12,7 @@ internal struct ProfilePictureAsyncJobIntegrationTests {
     /// Placeholder test for the profile picture async job.
     /// This test will be implemented with specific scenarios for the job.
     @Test("test name here")
-    func testNameHere() {
+    public func testNameHere() {
         // Placeholder for test implementation
     }
 }

@@ -30,7 +30,7 @@ internal class PhoneNumberTextInputComponentTests: XCTestCase {
     ///
     /// - Throws: XCTestError if the test fails
     @MainActor
-    func testIntegration() throws {
+    public func testIntegration() throws {
         // Create a new instance of PhoneNumberTextInputComponent
         let component = PhoneNumberTextInputComponent(config: .init(phoneNumber: "+1", isValid: true))
 

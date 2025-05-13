@@ -31,7 +31,7 @@ public protocol ControllerInteractor {
     ///
     /// - Throws: An error if the request fails to execute
     /// - Returns: An Alamofire DataResponse object containing the response data and any errors
-    func performRequest(
+    public func performRequest(
         endpoint: String,
         method: Alamofire.HTTPMethod,
         headers: Alamofire.HTTPHeaders?,
@@ -110,7 +110,7 @@ public protocol BackendControllerInteractor: ControllerInteractor {
     ///   - decodeTo: The expected type to decode the response into
     ///
     /// - Returns: A BackendControllerResponseOutput containing either the decoded data or an error
-    func decodeResponse<K: Content>(
+    public func decodeResponse<K: Content>(
         _ data: DataResponse<Data?, AFError>,
         _ decodeTo: K.Type
     ) -> BackendControllerResponseOutput<K>

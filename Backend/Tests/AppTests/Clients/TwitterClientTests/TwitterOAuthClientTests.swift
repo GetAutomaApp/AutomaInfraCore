@@ -18,7 +18,7 @@ internal struct TwitterOAuthClientTests: TwitterClientTestSuite {
     ///   - Client initialization errors
     ///   - Token request failures
     @Test("Test Request Token")
-    func requestToken() async throws {
+    public func requestToken() async throws {
         try await withApp { app in
             // Initialize the Twitter client
             let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
@@ -38,7 +38,7 @@ internal struct TwitterOAuthClientTests: TwitterClientTestSuite {
     ///   - Client initialization errors
     ///   - URL generation failures
     @Test("Make Authenticate URL")
-    func makeAuthenticateURL() async throws {
+    public func makeAuthenticateURL() async throws {
         try await withApp { app in
             // Initialize the Twitter client
             let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)

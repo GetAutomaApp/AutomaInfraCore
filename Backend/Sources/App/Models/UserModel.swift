@@ -124,7 +124,7 @@ public final class UserModel: Model, @unchecked Sendable {
     /// Creates a `UserModel` from a `UserDTO`.
     /// - Parameter dto: The `UserDTO` to convert.
     /// - Returns: An instance of `UserModel`.
-    static func fromDTO(dto: UserDTO) -> UserModel {
+    public static func fromDTO(dto: UserDTO) -> UserModel {
         UserModel(
             id: dto.id,
             username: dto.username,

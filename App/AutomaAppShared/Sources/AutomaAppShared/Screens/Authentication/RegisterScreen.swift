@@ -164,7 +164,7 @@ internal struct RegisterScreen: View {
     /// Sends authentication code to the provided phone number
     ///
     /// Handles API response and updates UI state based on the result
-    func sendAuthenticationCode() async {
+    public func sendAuthenticationCode() async {
         let phoneNumber = phoneInputConfig.phoneNumber
         do {
             let response = try await authInteractor.makeRegisterCodeRequest(
@@ -195,7 +195,7 @@ internal struct RegisterScreen: View {
     /// - Stores authentication tokens in keychain
     /// - Updates login state
     /// - Handles potential errors
-    func verifyAuthenticationCode() async {
+    public func verifyAuthenticationCode() async {
         let phoneNumber = phoneInputConfig.phoneNumber
         let code = verificationInputConfig.text
 

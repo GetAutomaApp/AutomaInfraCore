@@ -63,7 +63,7 @@ internal enum DesignImages {
 }
 
 /// Extension to SwiftUI's Image type that adds design system conformance
-extension Image {
+public extension Image {
     /// Converts the image into an icon conforming to the design system specifications
     /// - Returns: A View containing the image styled as a system icon
     func toIcon() -> some View {

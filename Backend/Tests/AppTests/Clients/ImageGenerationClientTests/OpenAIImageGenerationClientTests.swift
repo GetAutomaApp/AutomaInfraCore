@@ -20,7 +20,7 @@ internal struct OpenAIImageGenerationClientTests: ImageGenerationClientTestSuite
     ///   - Image generation failures
     ///   - Invalid response formats
     @Test("Generate Image Result Success (dalle2)")
-    func generateImageResultSuccessDalle2() async throws {
+    public func generateImageResultSuccessDalle2() async throws {
         try await withApp { app in
             // Generate an image using DALL-E 2 with specified parameters
             let result = try await generateImage(
@@ -49,7 +49,7 @@ internal struct OpenAIImageGenerationClientTests: ImageGenerationClientTestSuite
     ///   - Image generation failures
     ///   - Invalid response formats
     @Test("Generate Image Result Success (dalle3)")
-    func generateImageResultSuccessDalle3() async throws {
+    public func generateImageResultSuccessDalle3() async throws {
         try await withApp { app in
             // Initialize the image generation client
             let client = ImageGenerationClient(logger: app.logger)

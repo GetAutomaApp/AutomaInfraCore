@@ -197,7 +197,7 @@ public extension FontConvertible.Font {
 #if canImport(SwiftUI)
     /// SwiftUI Font extensions for iOS 13 and later
     @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
-    extension SwiftUI.Font {
+    public extension SwiftUI.Font {
         /// Creates a custom SwiftUI Font from a FontConvertible
         /// - Parameters:
         ///   - font: The FontConvertible to create the font from

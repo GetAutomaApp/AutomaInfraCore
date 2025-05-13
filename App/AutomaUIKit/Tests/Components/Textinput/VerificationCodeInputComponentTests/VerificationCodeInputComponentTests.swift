@@ -26,7 +26,7 @@ internal class VerificationCodeInputComponentTests: XCTestCase {
     ///
     /// - Throws: XCTest assertions if the component fails to initialize properly
     @MainActor
-    func testIntegration() throws {
+    public func testIntegration() throws {
         // Create a new instance of the verification code input component
         let component = VerificationCodeInputComponent(config: .init(separatorIcon: .arrowRight))
 

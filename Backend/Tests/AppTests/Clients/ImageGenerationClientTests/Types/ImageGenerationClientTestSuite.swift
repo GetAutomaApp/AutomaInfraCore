@@ -49,7 +49,7 @@ extension ImageGenerationClientTestSuite {
     /// - Parameter query: The image generation query parameters
     /// - Returns: The generated image result
     /// - Throws: Any errors that occur during the image generation process
-    func generateImage(
+    public func generateImage(
         app: Application,
         query: GenerateImageQuery
     ) async throws -> GenerateImageResult {

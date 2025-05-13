@@ -26,7 +26,7 @@ internal struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
             ChatCompletionModel.gpt4o, // will use openai client
         ]
     )
-    func createChatCompletionSuccess(model: ChatCompletionModel) async throws {
+    public func createChatCompletionSuccess(model: ChatCompletionModel) async throws {
         try await withApp { app in
             // Create a query with the test model and default prompt
             let query = ChatCompletionContent(model: model, prompt: defaultPrompt)

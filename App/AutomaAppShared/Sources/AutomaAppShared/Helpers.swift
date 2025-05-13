@@ -42,7 +42,7 @@ public class KeychainHelper {
     /// Retrieves a string value from the keychain for the specified key
     /// - Parameter key: The keychain key to retrieve the value for
     /// - Returns: The string value if it exists, nil otherwise
-    static func get(for key: KeyChainKeys) -> String? {
+    public static func get(for key: KeyChainKeys) -> String? {
         try? keychain.string(forKey: key.rawValue)
     }
 
@@ -52,7 +52,7 @@ public class KeychainHelper {
     ///   - value: The string value to store
     /// - Returns: Boolean indicating whether the operation was successful
     @discardableResult
-    static func set(for key: KeyChainKeys, value: String) -> Bool {
+    public static func set(for key: KeyChainKeys, value: String) -> Bool {
         (
             try? keychain.set(value, forKey: key.rawValue)
         ) != nil
@@ -60,7 +60,7 @@ public class KeychainHelper {
 
     /// Deletes the value associated with the specified key from the keychain
     /// - Parameter key: The keychain key whose value should be deleted
-    static func delete(for key: KeyChainKeys) {
+    public static func delete(for key: KeyChainKeys) {
         try? keychain.deleteItem(forKey: key.rawValue)
     }
 
