@@ -9,7 +9,7 @@ import VaporTesting
 /// Protocol defining common functionality for chat completion client test suites
 /// This protocol provides shared test utilities and methods used across different
 /// chat completion client implementations
-protocol ChatCompletionClientTestSuite {
+internal protocol ChatCompletionClientTestSuite {
     /// The default prompt to use for chat completion tests
     var defaultPrompt: String { get }
 

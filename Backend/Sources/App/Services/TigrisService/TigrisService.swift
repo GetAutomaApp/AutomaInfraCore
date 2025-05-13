@@ -182,7 +182,7 @@ internal struct TigrisService: ~Copyable {
     }
 
     /// Represents an S3 path with a bucket and key.
-    struct S3Path {
+    public struct S3Path {
         /// The bucket name.
         public let bucket: String
         /// The key within the bucket.

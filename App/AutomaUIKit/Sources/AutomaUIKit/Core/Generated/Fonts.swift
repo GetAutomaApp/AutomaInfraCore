@@ -16,7 +16,7 @@
 
 /// Deprecated font typealias that will be removed in SwiftGen 7.0
 @available(*, deprecated, renamed: "FontConvertible.Font", message: "This typealias will be removed in SwiftGen 7.0")
-typealias Font = FontConvertible.Font
+public typealias Font = FontConvertible.Font
 
 // swiftlint:disable superfluous_disable_command file_length implicit_return
 // swiftlint:disable identifier_name line_length type_body_length

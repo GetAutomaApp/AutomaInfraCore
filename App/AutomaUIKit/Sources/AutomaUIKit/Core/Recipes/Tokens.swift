@@ -78,7 +78,7 @@ public struct DesignPadding: Sendable {
 }
 
 /// Protocol defining requirements for design icons
-protocol DesignIcon {
+internal protocol DesignIcon {
     /// The associated type that conforms to View protocol
     associatedtype Content: View
     /// The image representation of the icon

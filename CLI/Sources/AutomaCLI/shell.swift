@@ -1,4 +1,4 @@
-// shell.swift
+// Shell.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -9,15 +9,15 @@ import Foundation
 /// The output information of a shell command.
 internal struct ShellOutput {
     /// The standard output of the command.
-    let stdout: String?
+    public let stdout: String?
     /// The standard error output of the command.
-    let stderr: String?
+    public let stderr: String?
     /// The exit status of the command.
-    let exitStatus: Int
+    public let exitStatus: Int
     /// A flag indicating whether the command resulted in an error.
-    let isError: Bool
+    public let isError: Bool
     /// The command that was executed.
-    let command: String
+    public let command: String
 }
 
 /// Enum representing different operating systems.
@@ -30,9 +30,9 @@ internal enum OperatingSystem {
 /// A simple shell wrapper in Swift, to execute shell commands.
 internal struct Shell {
     /// The operating system on which the shell is running.
-    let operatingSystem: OperatingSystem
+    public let operatingSystem: OperatingSystem
     /// The command used to copy text to the clipboard.
-    let copyCommand: String
+    public let copyCommand: String
 
     /// Initializes a new instance of `Shell`.
     /// - Throws: An error if the operating system cannot be determined.
