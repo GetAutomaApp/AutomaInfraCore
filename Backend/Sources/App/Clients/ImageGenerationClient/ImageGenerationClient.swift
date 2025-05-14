@@ -20,7 +20,7 @@ public protocol ImageGenerationClientBase {
     /// - Parameter query: The query containing generation parameters like prompt, model, etc.
     /// - Returns: A `GenerateImageResult` containing the generated images and metadata.
     /// - Throws: An error if the image generation fails.
-    public func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult
+    func generateImage(_ query: GenerateImageQuery) async throws -> GenerateImageResult
 }
 
 /// A structure representing the query parameters for image generation.

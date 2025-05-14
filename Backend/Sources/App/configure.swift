@@ -126,12 +126,12 @@ public extension DatabaseID {
 /// Extension for `Request` to provide database access.
 public extension Request {
     /// Provides write access to the database.
-    dbWrite: Database {
+    var dbWrite: Database {
         db(.readOnly)
     }
 
     /// Provides read-only access to the database.
-    dbReadOnly: Database {
+    var dbReadOnly: Database {
         db(.readOnly)
     }
 }
