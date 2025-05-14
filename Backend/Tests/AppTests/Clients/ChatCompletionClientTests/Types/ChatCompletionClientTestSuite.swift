@@ -20,7 +20,7 @@ internal protocol ChatCompletionClientTestSuite {
     /// - Parameter query: The chat completion request parameters
     /// - Returns: The generated chat completion result
     /// - Throws: Any errors that occur during the chat completion process
-    public func createChat(app: Application, query: ChatCompletionContent) async throws
+    func createChat(app: Application, query: ChatCompletionContent) async throws
         -> ChatCompletionResult
 }
 
