@@ -7,39 +7,61 @@ import DataTypes
 import Fluent
 import Vapor
 
-final class UserModel: Model, @unchecked Sendable {
-    static let schema = "User"
+/// Model representing a user.
+public final class UserModel: Model, @unchecked Sendable {
+    public static let schema = "User"
 
+    /// Unique identifier for the user.
     @ID(key: .id)
-    var id: UUID?
+    public var id: UUID?
 
+    /// The username of the user.
     @Field(key: "username")
-    var username: String
+    public var username: String
 
+    /// The phone number of the user.
     @Field(key: "phone_number")
-    var phoneNumber: String
+    public var phoneNumber: String
 
+    /// The Instagram handle of the user.
     @OptionalField(key: "instagram_handle")
-    var instagramHandle: String?
+    public var instagramHandle: String?
 
+    /// The profile picture key of the user.
     @OptionalField(key: "profile_picture_key")
-    var profilePictureKey: String?
+    public var profilePictureKey: String?
 
+    /// Timestamp when the user was created.
     @Timestamp(key: "created_at", on: .create)
-    var createdAt: Date?
+    public var createdAt: Date?
 
+    /// Timestamp when the user was last updated.
     @Timestamp(key: "updated_at", on: .update)
-    var updatedAt: Date?
+    public var updatedAt: Date?
 
+    /// Timestamp when the user was deleted.
     @Timestamp(key: "deleted_at", on: .delete)
-    var deletedAt: Date?
+    public var deletedAt: Date?
 
+    /// Indicates if the user has accepted terms.
     @Field(key: "accepted")
-    var accepted: Bool
+    public var accepted: Bool
 
-    init() {}
+    /// Initializes a new instance of `UserModel`.
+    public init() {}
 
-    init(
+    /// Initializes a new instance of `UserModel` with the provided parameters.
+    /// - Parameters:
+    ///   - id: Unique identifier for the user.
+    ///   - username: The username of the user.
+    ///   - phoneNumber: The phone number of the user.
+    ///   - instagramHandle: The Instagram handle of the user.
+    ///   - profilePictureKey: The profile picture key of the user.
+    ///   - createdAt: Timestamp when the user was created.
+    ///   - updatedAt: Timestamp when the user was last updated.
+    ///   - deletedAt: Timestamp when the user was deleted.
+    ///   - accepted: Indicates if the user has accepted terms.
+    public init(
         id: UUID? = nil,
         username: String,
         phoneNumber: String,
@@ -61,15 +83,26 @@ final class UserModel: Model, @unchecked Sendable {
         self.accepted = accepted
     }
 
-    func toDTO() -> UserDTO {
+    /// Converts the model to a `UserDTO`.
+    /// - Returns: An instance of `UserDTO`.
+    public func toDTO(logger: Logger) throws -> UserDTO {
         let profilePictureUrl: String?
         do {
-            guard let profilePictureKey else {
-                // TODO: Log here as well (not as important, but good to have)
+            guard
+                let profilePictureKey
+            else {
+                let userId = try requireID().uuidString
+                logger.error(
+                    "Profile picture key is nil, could not convert user model to DTO.",
+                    metadata: [
+                        "to": .string("\(String(describing: Self.self)).\(#function)"),
+                        "user_id": .string(userId),
+                    ]
+                )
                 throw URLError(.badURL)
             }
 
-            profilePictureUrl = try TigrisService().getTigrisUrl(profilePictureKey)
+            profilePictureUrl = try TigrisService(logger: logger).getTigrisUrl(profilePictureKey)
         } catch {
             profilePictureUrl = nil
         }
@@ -88,7 +121,10 @@ final class UserModel: Model, @unchecked Sendable {
         )
     }
 
-    static func fromDTO(dto: UserDTO) -> UserModel {
+    /// Creates a `UserModel` from a `UserDTO`.
+    /// - Parameter dto: The `UserDTO` to convert.
+    /// - Returns: An instance of `UserModel`.
+    public static func fromDTO(dto: UserDTO) -> UserModel {
         UserModel(
             id: dto.id,
             username: dto.username,
@@ -97,5 +133,9 @@ final class UserModel: Model, @unchecked Sendable {
             profilePictureKey: dto.profilePictureKey,
             accepted: dto.accepted
         )
+    }
+
+    deinit {
+        return
     }
 }

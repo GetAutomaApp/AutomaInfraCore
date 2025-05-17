@@ -6,40 +6,74 @@
 import AutomaUIKit
 import SwiftUI
 
-struct OnboardingScreenContent {
-    let title: String
-    let description: String
-    let background: Color = DesignTokens.colors.primary
+/// A structure representing the content for a single onboarding screen
+/// - Contains the title, description and background color for the screen
+internal struct OnboardingScreenContent {
+    /// The title text to be displayed on the onboarding screen
+    public let title: String
+
+    /// The description text providing more detail about the feature
+    public let description: String
+
+    /// The background color of the onboarding screen
+    public let background: Color = DesignTokens.colors.primary
 }
 
+/// A view that presents the onboarding experience when a user first opens the app
+/// - Displays a series of screens introducing key features and functionality
+/// - Handles navigation between onboarding screens and to registration
 public struct OnboardingScreen: View {
-    @ObservedObject var titleConfig: InfoPairComponentConfig = .init()
-    @ObservedObject var progressIndicatorConfig: ProgressIndicatorComponentConfig = .init()
-    @ObservedObject var iconButtonConfig: IconButtonComponentConfig = .init()
-    @State var shouldShowApplyScreen: Bool = false
+    /// Configuration for the title and description display
+    @ObservedObject public var titleConfig: InfoPairComponentConfig = .init()
+
+    /// Configuration for the progress indicator showing current position in onboarding flow
+    @ObservedObject public var progressIndicatorConfig: ProgressIndicatorComponentConfig = .init()
+
+    /// Configuration for the navigation button
+    @ObservedObject public var iconButtonConfig: IconButtonComponentConfig = .init()
+
+    /// State controlling whether to show the application screen
+    @State public var shouldShowApplyScreen: Bool = false
+
+    /// State controlling whether to show the registration screen
     @State private var shouldShowRegisterScreen: Bool = false
 
-    let onboardingScreenContent: [OnboardingScreenContent] = [
+    /// Array of content for each onboarding screen
+    private let onboardingScreenContent: [OnboardingScreenContent] = [
         .init(
             title: "Create & manage profiles",
-            description: "Automa provides a platform to create and manage social media accounts seamlessly with our integrated tools."
+            description: """
+            Automa provides a platform to create and manage social media accounts \
+            seamlessly with our integrated tools.
+            """
         ),
         .init(
             title: "Earn & manage profits",
-            description: "Automa has a robust set of tools that can be leveraged to help you earn an income from your newly found fame."
+            description: """
+            Automa has a robust set of tools that can be leveraged to help you earn \
+            an income from your newly found fame.
+            """
         ),
         .init(
             title: "AI that generates content",
-            description: "Automa automatically creates high quality content via our robust AI technology, that automates everything."
+            description: """
+            Automa automatically creates high quality content via our robust AI technology, \
+            that automates everything.
+            """
         ),
         .init(
             title: "Exclusive Community",
-            description: "Automa is built on community, trust and friendship. With recurring events, success stories and more!"
+            description: """
+            Automa is built on community, trust and friendship. With recurring events, \
+            success stories and more!"
+            """
         ),
     ]
 
+    /// Initializes a new onboarding screen
     public init() {}
 
+    /// The main view body that manages navigation between different screens
     public var body: some View {
         if shouldShowRegisterScreen {
             RegisterScreen()
@@ -50,14 +84,16 @@ public struct OnboardingScreen: View {
         }
     }
 
+    /// Generates the main onboarding view with title, description and navigation controls
+    /// - Returns: A view containing the onboarding content and navigation elements
     @ViewBuilder
     private func generateOnboardingView() -> some View {
         OnboardingScreenFrame(
             titleContent: {
-                InfoPairComponent(config: titleConfig, onSelfAppear: { config in
+                InfoPairComponent(config: titleConfig) { config in
                     config.title = onboardingScreenContent[0].title
                     config.description = onboardingScreenContent[0].description
-                })
+                }
                 .animation(
                     .bouncy,
                     value: progressIndicatorConfig.currentStep
@@ -73,14 +109,15 @@ public struct OnboardingScreen: View {
                     onSelfAppear: { _ in
                         iconButtonConfig.variant = .circle
                         iconButtonConfig.icon = .arrowRight
-                    }
-                ) {
-                    handleOnboardingNextScreen()
-                }
+                    },
+                    action: handleOnboardingNextScreen
+                )
             }
         )
     }
 
+    /// Generates the application view shown after completing the onboarding flow
+    /// - Returns: A view containing the application information and continue button
     @ViewBuilder
     private func generateApplyView() -> some View {
         OnboardingScreenFrame(
@@ -89,7 +126,10 @@ public struct OnboardingScreen: View {
                     config.title = "Apply to Join"
                     config
                         .description =
-                        "We are a closed community, accepting the highest quality candidates only. If you are ambitious, click next!"
+                        """
+                        We are a closed community, accepting the highest quality candidates only. \
+                        If you are ambitious, click next!
+                        """
                 }
             },
             footerContent: {
@@ -103,7 +143,10 @@ public struct OnboardingScreen: View {
         ).animation(.bouncy, value: progressIndicatorConfig.currentStep)
     }
 
-    func handleOnboardingNextScreen() {
+    /// Handles navigation to the next screen in the onboarding flow
+    /// - Updates the progress indicator and content when moving between screens
+    /// - Triggers transition to application screen when onboarding is complete
+    public func handleOnboardingNextScreen() {
         if progressIndicatorConfig.currentStep == onboardingScreenContent.count {
             shouldShowApplyScreen = true
             return

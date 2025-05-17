@@ -10,7 +10,7 @@ import Testing
 /// These tests verify that all chat completion client implementations
 /// can successfully generate chat completions with various models
 @Suite("Chat Completion Client Tests")
-struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
+internal struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
     /// Tests that each chat completion client can successfully create a chat completion
     /// This test is parameterized to run with different models, automatically selecting
     /// the appropriate client implementation based on the model
@@ -26,7 +26,7 @@ struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
             ChatCompletionModel.gpt4o, // will use openai client
         ]
     )
-    func createChatCompletionSuccess(model: ChatCompletionModel) async throws {
+    public func createChatCompletionSuccess(model: ChatCompletionModel) async throws {
         try await withApp { app in
             // Create a query with the test model and default prompt
             let query = ChatCompletionContent(model: model, prompt: defaultPrompt)
@@ -35,11 +35,11 @@ struct ChatCompletionClientTests: ChatCompletionClientTestSuite {
             let result = try await createChat(app: app, query: query)
 
             // Verify the result contains a non-empty message
-            #expect(result.message.count > 0, "Message should not be empty")
+            #expect(!result.message.isEmpty, "Message should not be empty")
             #expect(result.message.count < maxTokens * 4, "Message should not be bigger than max tokens")
 
             // Verify the result contains metadata
-            #expect(result.metadata.count > 0, "Metadata should not be empty")
+            #expect(!result.metadata.isEmpty, "Metadata should not be empty")
         }
     }
 }

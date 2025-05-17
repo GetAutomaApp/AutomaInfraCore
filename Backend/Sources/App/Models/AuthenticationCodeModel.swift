@@ -7,30 +7,47 @@ import DataTypes
 import Fluent
 import Vapor
 
-final class AuthenticationCodeModel: Model, @unchecked Sendable {
-    static let schema = "Authentication-Code"
+/// Model representing an authentication code.
+public final class AuthenticationCodeModel: Model, @unchecked Sendable {
+    public static let schema = "Authentication-Code"
 
+    /// Unique identifier for the authentication code.
     @ID(key: .id)
-    var id: UUID?
+    public var id: UUID?
 
+    /// The authentication code.
     @Field(key: "code")
-    var code: String
+    public var code: String
 
+    /// The phone number associated with the authentication code.
     @Field(key: "phone_number")
-    var phoneNumber: String
+    public var phoneNumber: String
 
+    /// Timestamp when the authentication code was created.
     @Timestamp(key: "created_at", on: .create)
-    var createdAt: Date?
+    public var createdAt: Date?
 
+    /// Timestamp when the authentication code was last updated.
     @Timestamp(key: "updated_at", on: .update)
-    var updatedAt: Date?
+    public var updatedAt: Date?
 
+    /// Timestamp when the authentication code was deleted.
     @Timestamp(key: "deleted_at", on: .delete)
-    var deletedAt: Date?
+    public var deletedAt: Date?
 
-    init() {}
+    /// Initializes a new instance of `AuthenticationCodeModel`.
+    public init() {}
 
-    init(
+    /// Initializes a new instance of `AuthenticationCodeModel` with the provided parameters.
+    /// - Parameters:
+    ///   - id: Unique identifier for the authentication code.
+    ///   - code: The authentication code.
+    ///   - phoneNumber: The phone number associated with the authentication code.
+    ///   - createdAt: Timestamp when the authentication code was created.
+    ///   - updatedAt: Timestamp when the authentication code was last updated.
+    ///   - deletedAt: Timestamp when the authentication code was deleted.
+    /// - Throws: Throws an error if the phone number is invalid.
+    public init(
         id: UUID? = nil,
         code: String,
         phoneNumber: String,
@@ -48,7 +65,10 @@ final class AuthenticationCodeModel: Model, @unchecked Sendable {
         self.deletedAt = deletedAt
     }
 
-    func toDTO() throws -> AuthenticationCodeDTO {
+    /// Converts the model to a `AuthenticationCodeDTO`.
+    /// - Returns: An instance of `AuthenticationCodeDTO`.
+    /// - Throws: Throws an error if conversion fails.
+    public func toDTO() throws -> AuthenticationCodeDTO {
         try AuthenticationCodeDTO(
             id: id,
             phoneNumber: phoneNumber,
@@ -59,12 +79,22 @@ final class AuthenticationCodeModel: Model, @unchecked Sendable {
         )
     }
 
-    static func fromDTO(dto: AuthenticationCodeDTO) throws -> AuthenticationCodeModel {
-        let model = try AuthenticationCodeModel(
-            id: dto.id, code: dto.code, phoneNumber: dto.phoneNumber, createdAt: dto.createdAt,
+    /// Creates an `AuthenticationCodeModel` from a `AuthenticationCodeDTO`.
+    /// - Parameter dto: The `AuthenticationCodeDTO` to convert.
+    /// - Returns: An instance of `AuthenticationCodeModel`.
+    /// - Throws: Throws an error if conversion fails.
+    public static func fromDTO(dto: AuthenticationCodeDTO) throws -> AuthenticationCodeModel {
+        try AuthenticationCodeModel(
+            id: dto.id,
+            code: dto.code,
+            phoneNumber: dto.phoneNumber,
+            createdAt: dto.createdAt,
             updatedAt: dto.updatedAt,
             deletedAt: dto.deletedAt
         )
-        return model
+    }
+
+    deinit {
+        return
     }
 }

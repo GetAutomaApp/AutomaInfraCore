@@ -5,16 +5,25 @@
 
 import Fluent
 
-struct JWTTokenShouldBeBoundToParentUserObjectMigration1735140054: AsyncMigration {
-    func prepare(on database: Database) async throws {
+// swiftlint:disable type_name
+/// Migration to bind JWT tokens to the parent User object.
+internal struct JWTTokenShouldBeBoundToParentUserObjectMigration1735140054: AsyncMigration {
+    // swiftlint:enable type_name
+    /// Prepares the migration by adding a foreign key constraint to the Jwt-Token schema.
+    /// - Parameter database: The database instance on which the migration is performed.
+    /// - Throws: Throws an error if the schema update fails.
+    public func prepare(on database: Database) async throws {
         try await database.schema("Jwt-Token")
-            .foreignKey("user_id", references: "User", "id", onDelete: .cascade)
-            .update()
+            .foreignKey("user_id", references: "User", "id", onDelete: .cascade) // Add a foreign key constraint
+            .update() // Update the schema
     }
 
-    func revert(on database: Database) async throws {
+    /// Reverts the migration by removing the foreign key constraint from the Jwt-Token schema.
+    /// - Parameter database: The database instance on which the migration is reverted.
+    /// - Throws: Throws an error if the schema update fails.
+    public func revert(on database: Database) async throws {
         try await database.schema("Jwt-Token")
-            .deleteForeignKey(name: "user_id")
-            .update()
+            .deleteForeignKey(name: "user_id") // Remove the foreign key constraint
+            .update() // Update the schema
     }
 }

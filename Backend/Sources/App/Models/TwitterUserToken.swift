@@ -7,36 +7,56 @@ import DataTypes
 import Fluent
 import Vapor
 
-final class TwitterUserToken: Model, @unchecked Sendable {
-    static let schema = "Twitter-User-Token"
+/// Model representing a Twitter user token.
+public final class TwitterUserToken: Model, @unchecked Sendable {
+    public static let schema = "Twitter-User-Token"
 
+    /// Unique identifier for the Twitter user token.
     @ID(key: .id)
-    var id: UUID?
+    public var id: UUID?
 
+    /// The access token for the Twitter user.
     @Field(key: "access_token")
-    var accessToken: String
+    public var accessToken: String
 
+    /// The OAuth verifier for the Twitter user.
     @Field(key: "oauth_verifier")
-    var oauthVerifier: String
+    public var oauthVerifier: String
 
+    /// The secret access token for the Twitter user.
     @Field(key: "secret_access_token")
-    var secretAccessToken: String
+    public var secretAccessToken: String
 
+    /// The OAuth token associated with the Twitter user token.
     @OptionalParent(key: "oauth_token_id")
-    var oauthToken: TwitterOAuthToken?
+    public var oauthToken: TwitterOAuthToken?
 
+    /// Timestamp when the Twitter user token was created.
     @Timestamp(key: "created_at", on: .create)
-    var createdAt: Date?
+    public var createdAt: Date?
 
+    /// Timestamp when the Twitter user token was last updated.
     @Timestamp(key: "updated_at", on: .update)
-    var updatedAt: Date?
+    public var updatedAt: Date?
 
+    /// Timestamp when the Twitter user token was deleted.
     @Timestamp(key: "deleted_at", on: .delete)
-    var deletedAt: Date?
+    public var deletedAt: Date?
 
-    init() {}
+    /// Initializes a new instance of `TwitterUserToken`.
+    public init() {}
 
-    init(
+    /// Initializes a new instance of `TwitterUserToken` with the provided parameters.
+    /// - Parameters:
+    ///   - id: Unique identifier for the Twitter user token.
+    ///   - accessToken: The access token for the Twitter user.
+    ///   - secretAccessToken: The secret access token for the Twitter user.
+    ///   - oauthVerifier: The OAuth verifier for the Twitter user.
+    ///   - oauthTokenID: The OAuth token ID associated with the Twitter user token.
+    ///   - createdAt: Timestamp when the Twitter user token was created.
+    ///   - updatedAt: Timestamp when the Twitter user token was last updated.
+    ///   - deletedAt: Timestamp when the Twitter user token was deleted.
+    public init(
         id: UUID? = nil,
         accessToken: String,
         secretAccessToken: String,
@@ -56,7 +76,9 @@ final class TwitterUserToken: Model, @unchecked Sendable {
         $oauthToken.id = oauthTokenID
     }
 
-    func toDTO() -> TwitterUserTokenDTO {
+    /// Converts the model to a `TwitterUserTokenDTO`.
+    /// - Returns: An instance of `TwitterUserTokenDTO`.
+    public func toDTO() -> TwitterUserTokenDTO {
         .init(
             id: id,
             createdAt: createdAt,
@@ -67,5 +89,9 @@ final class TwitterUserToken: Model, @unchecked Sendable {
             oauthVerifier: oauthVerifier,
             oauthTokenID: $oauthToken.id
         )
+    }
+
+    deinit {
+        return
     }
 }

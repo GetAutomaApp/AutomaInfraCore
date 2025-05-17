@@ -26,13 +26,13 @@ LINK: [FIGMA](https://www.figma.com/design/x5MkR0UFRMUkp0eiAXVbmy/AutomaUIKit?no
 #### How to use this component
 This component can be used extremely simply by using the 1 initializer that is currently active.
 ```swift
-@ObservableObject var config = ProgressIndicatorComponentConfig()
+@ObservableObject public var config = ProgressIndicatorComponentConfig()
 ...
 ProgressIndicatorComponent(config: config, onSelfAppear: ((config) -> Void)?)
 ```
 
 #### Experimenting
-The UI library provides many preview files which all contain a suffix `_Previews` to allow you to experiment with them. The Specific preview file for testing the `ProgressIndicatorComponent` can be found at `Sources/AutomaUIKit/Components/Indicators/ProgressIndicatorComponent/ProgressIndicatorComponent_Previews.swift`
+The UI library provides many preview files which all contain a suffix `Previews` to allow you to experiment with them. The Specific preview file for testing the `ProgressIndicatorComponent` can be found at `Sources/AutomaUIKit/Components/Indicators/ProgressIndicatorComponent/ProgressIndicatorComponentPreviews.swift`
 
 ## Props/Parameters
 | Property | Type | Description |

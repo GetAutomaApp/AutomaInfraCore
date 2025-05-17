@@ -1,7 +1,7 @@
 // swift-tools-version:6.0
 import PackageDescription
 
-let package = Package(
+public let package = Package(
     name: "Backend",
     platforms: [
         .macOS(.v15),
@@ -76,7 +76,7 @@ let package = Package(
     swiftLanguageModes: [.v5]
 )
 
-var swiftSettings: [SwiftSetting] {
+public var swiftSettings: [SwiftSetting] {
     [
         .enableUpcomingFeature("DisableOutwardActorInference"),
         .enableExperimentalFeature("StrictConcurrency"),

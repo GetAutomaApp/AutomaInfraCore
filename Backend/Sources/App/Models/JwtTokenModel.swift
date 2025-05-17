@@ -7,33 +7,50 @@ import DataTypes
 import Fluent
 import Vapor
 
-final class JwtTokenModel: Model, @unchecked Sendable {
-    static let schema = "Jwt-Token"
+/// Model representing a JWT token.
+public final class JwtTokenModel: Model, @unchecked Sendable {
+    public init() {}
 
+    public static let schema = "Jwt-Token"
+
+    /// Unique identifier for the JWT token.
     @ID(key: .id)
-    var id: UUID?
+    public var id: UUID?
 
+    /// The JWT token string.
     @Field(key: "token")
-    var token: String
+    public var token: String
 
+    /// The user ID associated with the JWT token.
     @Field(key: "user_id")
-    var userId: UUID
+    public var userId: UUID
 
+    /// The subject of the JWT token.
     @Enum(key: "subject")
-    var subject: JWTTokenSubject
+    public var subject: JWTTokenSubject
 
+    /// Timestamp when the JWT token was created.
     @Timestamp(key: "created_at", on: .create)
-    var createdAt: Date?
+    public var createdAt: Date?
 
+    /// Timestamp when the JWT token was last updated.
     @Timestamp(key: "updated_at", on: .update)
-    var updatedAt: Date?
+    public var updatedAt: Date?
 
+    /// Timestamp when the JWT token was deleted.
     @Timestamp(key: "deleted_at", on: .delete)
-    var deletedAt: Date?
+    public var deletedAt: Date?
 
-    init() {}
-
-    init(
+    /// Initializes a new instance of `JwtTokenMod` with the provided parameters.
+    /// - Parameters:
+    ///   - id: Unique identifier for the JWT token.
+    ///   - token: The JWT token string.
+    ///   - userId: The user ID associated with the JWT token.
+    ///   - subject: The subject of the JWT token.
+    ///   - createdAt: Timestamp when the JWT token was created.
+    ///   - updatedAt: Timestamp when the JWT token was last updated.
+    ///   - deletedAt: Timestamp when the JWT token was deleted.
+    public init(
         id: UUID? = nil,
         token: String,
         userId: UUID,
@@ -51,7 +68,9 @@ final class JwtTokenModel: Model, @unchecked Sendable {
         self.deletedAt = deletedAt
     }
 
-    func toDTO() -> JwtTokenDTO {
+    /// Converts the model to a `JwtTokenDTO`.
+    /// - Returns: An instance of `JwtTokenDTO`.
+    public func toDTO() -> JwtTokenDTO {
         .init(
             id: id,
             token: token,
@@ -63,11 +82,22 @@ final class JwtTokenModel: Model, @unchecked Sendable {
         )
     }
 
-    static func fromDTO(dto: JwtTokenDTO) -> JwtTokenModel {
-        let model = JwtTokenModel(
-            id: dto.id, token: dto.token, userId: dto.userId, subject: dto.subject, createdAt: dto.createdAt,
-            updatedAt: dto.updatedAt, deletedAt: dto.deletedAt
+    /// Creates a `JwtTokenModel` from a `JwtTokenDTO`.
+    /// - Parameter dto: The `JwtTokenDTO` to convert.
+    /// - Returns: An instance of `JwtTokenModel`.
+    public static func fromDTO(dto: JwtTokenDTO) -> JwtTokenModel {
+        JwtTokenModel(
+            id: dto.id,
+            token: dto.token,
+            userId: dto.userId,
+            subject: dto.subject,
+            createdAt: dto.createdAt,
+            updatedAt: dto.updatedAt,
+            deletedAt: dto.deletedAt
         )
-        return model
+    }
+
+    deinit {
+        return
     }
 }

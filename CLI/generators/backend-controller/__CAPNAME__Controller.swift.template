@@ -1,8 +1,8 @@
 import Fluent
 import Vapor
 
-struct __CAPNAME__Controller: RouteCollection {
-    func boot(routes: RoutesBuilder) throws {
+internal struct __CAPNAME__Controller: RouteCollection {
+    public func boot(routes: RoutesBuilder) throws {
         let __CAPNAME_HASKELL__Route = routes.grouped("__CAPNAME_DASHED__")
 
         __CAPNAME_HASKELL__Route.get("request", use: request)
@@ -12,7 +12,7 @@ struct __CAPNAME__Controller: RouteCollection {
 
 
     @Sendable
-    func request(req: Request) async throws -> HTTPStatus {
+    public func request(req: Request) async throws -> HTTPStatus {
         return .noContent
     }
 }

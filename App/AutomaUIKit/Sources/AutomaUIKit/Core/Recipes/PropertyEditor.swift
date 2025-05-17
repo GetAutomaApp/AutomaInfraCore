@@ -6,28 +6,34 @@
 import SwiftUI
 
 /**
- The AnyKeyPath struct represents a type reased keypath whicih both has getter & setter methods.
+ The AnyKeyPath struct represents a type erased keypath which both has getter & setter methods.
  This wrapper aims to simplify the usage of most types by allowing you to if/else over them.
 
  This struct does the following:
- - Has an initiializer to manually initialize all properties
+ - Has an initializer to manually initialize all properties
  - Provides an initializer to initialize the code via a KeyPath
  */
-struct AnyKeyPath<TheObservedObject, TheValueType> {
-    let label: String
-    let get: (TheObservedObject) -> TheValueType
-    let set: (inout TheObservedObject, TheValueType) -> Void
-    let type: Any.Type
+public struct AnyKeyPath<TheObservedObject, TheValueType> {
+    /// The display label for the property in the UI
+    public let label: String
 
-    // MARK: - 1. First initializer. Initialize this struct by providing a writable keypath
+    /// A closure that retrieves the value from the observed object
+    public let get: (TheObservedObject) -> TheValueType
 
+    /// A closure that sets a new value on the observed object
+    public let set: (inout TheObservedObject, TheValueType) -> Void
+
+    /// The type information for the property
+    public let type: Any.Type
+
+    // swiftlint:disable force_cast
     /**
-     Initializes an `AnyKeyPath` where the `get` and `set` properties makes use of KeyPath syntax
+     Initializes an `AnyKeyPath` where the `get` and `set` properties makes use of KeyPath syntax.
 
-      - Parameter label: The friendly **label** you want to represent to the user in the UI
-      - Parameter keyPath: A `WritableKeyPath` reference from an `ObservableObject`
-      */
-    init<ObservableWrappedValueType>(
+     - Parameter label: The friendly label you want to represent to the user in the UI
+     - Parameter keyPath: A `WritableKeyPath` reference from an `ObservableObject`
+     */
+    public init<ObservableWrappedValueType>(
         _ label: String,
         keyPath: WritableKeyPath<TheObservedObject, ObservableWrappedValueType>
     ) where ObservableWrappedValueType: Any {
@@ -39,21 +45,25 @@ struct AnyKeyPath<TheObservedObject, TheValueType> {
         }
         type = ObservableWrappedValueType.self
     }
+    // swiftlint:enable force_cast
 }
 
 /**
- Renders a SwiftUI view to edit a property by slider or text input.
+ A SwiftUI view that provides a slider and text input interface for editing numeric values.
 
- - Parameter value: A binding to the `CGFloat` Value being edited.
- - Parameter label: The label being renered out on the client.
- - Parameter max: The maximum that the `value` property is allowed to be.
+ This view combines a slider for visual value adjustment with a text field for direct numeric input.
  */
-struct PaddingSliderInput: View {
-    @Binding var value: CGFloat
-    let label: String
-    let max: CGFloat = 30
+private struct PaddingSliderInput: View {
+    /// The binding to the value being edited
+    @Binding public var value: CGFloat
 
-    var body: some View {
+    /// The label displayed next to the slider
+    public let label: String
+
+    /// The maximum allowed value for the slider
+    public let max: CGFloat = 30
+
+    public var body: some View {
         HStack {
             Text("\(label):")
             Slider(value: $value, in: 0 ... max, step: 1)
@@ -70,12 +80,15 @@ struct PaddingSliderInput: View {
 }
 
 /**
- Renders a SwiftUI view to edit edge insets via a binding to that value.
- */
-struct PaddingEditor: View {
-    @Binding var edgeInsets: EdgeInsets
+ A SwiftUI view that provides an interface for editing EdgeInsets values.
 
-    var body: some View {
+ This view presents sliders for adjusting top, leading, bottom, and trailing edge inset values.
+ */
+public struct PaddingEditor: View {
+    /// The binding to the EdgeInsets value being edited
+    @Binding public var edgeInsets: EdgeInsets
+
+    public var body: some View {
         VStack(spacing: 16) {
             PaddingSliderInput(value: $edgeInsets.top, label: "Top")
             PaddingSliderInput(value: $edgeInsets.leading, label: "Left")
@@ -86,10 +99,16 @@ struct PaddingEditor: View {
     }
 }
 
-struct CGSizeEdtior: View {
-    @Binding var cgSize: CGSize
+/**
+ A SwiftUI view that provides an interface for editing CGSize values.
 
-    var body: some View {
+ This view presents sliders for adjusting width and height values.
+ */
+internal struct CGSizeEdtior: View {
+    /// The binding to the CGSize value being edited
+    @Binding public var cgSize: CGSize
+
+    public var body: some View {
         HStack {
             PaddingSliderInput(value: $cgSize.width, label: "W")
             Spacer()
@@ -99,16 +118,20 @@ struct CGSizeEdtior: View {
 }
 
 /**
- Renders a SwiftUI Segmented Picker allowing you to switch between enum values.
+ A SwiftUI view that provides a segmented picker interface for enum values.
 
- - Parameter value: The Enum value you want to keep in sync.
- - Parameter cases: All the cases that you want to allow the editor to switch to.
+ This view allows switching between different cases of a String-based enum using a segmented control.
+
+ - Note: Supports special handling for DesignIcons enum values
  */
-struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View where E.RawValue == String {
-    @Binding var value: E
-    let cases: [E]
+public struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View where E.RawValue == String {
+    /// The binding to the enum value being edited
+    @Binding public var value: E
 
-    var body: some View {
+    /// The array of enum cases to display as options
+    public let cases: [E]
+
+    public var body: some View {
         Picker("Select", selection: $value) {
             ForEach(cases, id: \.self) { variant in
                 if let variant = variant as? DesignIcons {
@@ -120,32 +143,36 @@ struct EnumPropertyView<E: CaseIterable & RawRepresentable & Hashable>: View whe
         }.pickerStyle(.segmented)
     }
 
-    func isDesignIcon(_ t: some Any) -> Bool {
-        t is DesignIcons
+    /**
+     Checks if a given type is a DesignIcon.
+
+     - Parameter type: The type to check
+     - Returns: True if the type is a DesignIcon, false otherwise
+     */
+    private func isDesignIcon(_ type: some Any) -> Bool {
+        type is DesignIcons
     }
 }
 
 /**
- Renders a SwiftUI view which allows you to modify various properties on a StateObject / ObservableObject.
+ A SwiftUI view that provides a comprehensive property editing interface.
 
- - Parameter object: The ObservableObject you want this `PropertyEditor` to modify.
- - Parameter properties: All the properties you want rendered out from the **object** parameter.
- - Parameter viewwer: A SwiftUI view closure to render out any additional content.
+ This view creates a form-based editor for modifying properties of an ObservableObject,
+ supporting various property types including strings, numbers, booleans, colors, and more.
 
- Notes:
- - Never pass an AnyKeyPath referencing another ObservableObject. Reference each property separately.
- - Supported types are listed in the description of the `propertyRow` method of this struct
- - All Enums, and extra items should be passed into the `viewer` property
-
- This method currently isn't perfect but it does reduce the code duplication by 10 fold.
+ - Note: Properties must be passed individually, not as nested ObservableObjects
  */
-struct PropertyEditor<T: ObservableObject, Content: View>: View {
-    @ObservedObject var object: T
-    let properties: [[AnyKeyPath<T, Any>]]
+public struct PropertyEditor<T: ObservableObject, Content: View>: View {
+    /// The object whose properties are being edited
+    @ObservedObject public var object: T
 
-    @ViewBuilder let viewer: () -> Content
+    /// A 2D array of property keypaths to edit
+    public let properties: [[AnyKeyPath<T, Any>]]
 
-    var body: some View {
+    /// A closure that returns additional custom content to display
+    @ViewBuilder public let viewer: () -> Content
+
+    public var body: some View {
         VStack {
             viewer().padding()
 
@@ -161,19 +188,25 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
         }.preferredColorScheme(.dark)
     }
 
+    // swiftlint:disable force_cast
     /**
-     Builds a SwiftUI View for a form element which modifies its property.
+     Creates an appropriate editing interface based on the property type.
 
-     - Parameter property: The `AnyKeyPath` object you want to generate a row for.
+     This method handles the following types:
+     - String: Text field
+     - Int: Stepper
+     - Bool: Toggle
+     - Double: Slider
+     - EdgeInsets: Custom editor
+     - CGFloat: Custom slider
+     - Color: Color picker
+     - CGSize: Custom size editor
 
-     Supported Types: Strings, Integers, Booleans, Doubles, CGFloats, EdgeInsets, Colors
-     Types Coming Soon: Arrays (Generic), Dictionaries
-
-     TODO: Add support for specifying modifications in the AnyKeyPath initializer
+     - Parameter property: The property keypath to create an editor for
+     - Returns: A SwiftUI view appropriate for editing the property type
      */
     @ViewBuilder
-    func propertyRow(for property: AnyKeyPath<T, Any>) -> some View {
-        // TODO: Handle nested Observable Objects
+    private func propertyRow(for property: AnyKeyPath<T, Any>) -> some View {
         if property.type == String.self {
             let value = property.get(object) as! String
             HStack {
@@ -233,11 +266,16 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
             ))
         } else if property.type == CGFloat.self {
             let value = property.get(object) as! CGFloat
-            PaddingSliderInput(value: Binding(get: { value }, set: { newValue in
-                var mutableObject = object
-                property.set(&mutableObject, newValue)
-            }),
-            label: property.label)
+            PaddingSliderInput(
+                value: Binding(
+                    get: { value },
+                    set: { newValue in
+                        var mutableObject = object
+                        property.set(&mutableObject, newValue)
+                    }
+                ),
+                label: property.label
+            )
         } else if property.type == Color.self {
             let value = property.get(object) as! Color
             ColorPicker("\(property.label):", selection: Binding(get: {
@@ -259,4 +297,5 @@ struct PropertyEditor<T: ObservableObject, Content: View>: View {
             Text("\(property.label)")
         }
     }
+    // swiftlint:enable force_cast
 }

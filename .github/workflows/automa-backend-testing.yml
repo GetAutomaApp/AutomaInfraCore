@@ -5,6 +5,25 @@ on:
     paths:
       - 'Backend/**/*.swift'
 
+env:
+  FLY_METRICS_TOKEN: ${{ secrets.TEST_FLY_METRICS_TOKEN }}
+  PRIMARY_POSTGRES_URL:  ${{ secrets.TEST_PRIMARY_POSTGRES_URL }}
+  REGIONAL_POSTGRES_URL:  ${{ secrets.TEST_REGIONAL_POSTGRES_URL }}
+  JWT_ENCRYPTION_SECRET:  ${{ secrets.TEST_JWT_ENCRYPTION_SECRET }}
+  DISCORD_APP_EVENTS_URL:  ${{ secrets.TEST_DISCORD_APP_EVENTS_URL }}
+  OPENAI_API_KEY:  ${{ secrets.TEST_OPENAI_API_KEY }}
+  ENVIRONMENT:  ${{ secrets.TEST_ENVIRONMENT }}
+  BACKEND_URL:  ${{ secrets.TEST_BACKEND_URL }}
+  LOG_LEVEL:  ${{ secrets.TEST_LOG_LEVEL }}
+  TWITTER_API_APP_KEY:  ${{ secrets.TEST_TWITTER_API_APP_KEY }}
+  TWITTER_API_APP_SECRET_KEY:  ${{ secrets.TEST_TWITTER_API_APP_SECRET_KEY }}
+  TWITTER_ACCESS_TOKEN:  ${{ secrets.TEST_TWITTER_ACCESS_TOKEN }}
+  TWITTER_SECRET_TOKEN:  ${{ secrets.TEST_TWITTER_SECRET_TOKEN }}
+  TEST_TWITTER_USER_TOKEN_ID:  ${{ secrets.TEST_TEST_TWITTER_USER_TOKEN_ID }}
+  TEST_CONTROLLERS_KEY:  ${{ secrets.TEST_TEST_CONTROLLERS_KEY }}
+  PROMETHEUS_PORT:  ${{ secrets.TEST_PROMETHEUS_PORT }}
+  PROMETHEUS_BASE_URL:  ${{ secrets.TEST_PROMETHEUS_BASE_URL }}
+
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
@@ -22,7 +41,6 @@ jobs:
           working-directory: "./Backend"
           swift_test_extra_args: "--filter '.*UnitTests.*'"
 
-
   integration-tests:
     runs-on: ubuntu-latest
     steps:
@@ -32,7 +50,7 @@ jobs:
         with:
            swift-version: "6.1"
 
-      - name: Run Unit Tests
+      - name: Run Integration Tests
         uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
           compose: "true"

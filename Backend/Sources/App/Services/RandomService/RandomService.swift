@@ -6,8 +6,10 @@
 import Fluent
 import Vapor
 
-enum RandomService {
-    static let animals = [
+/// Service for generating random values.
+internal enum RandomService {
+    /// List of animal names.
+    public static let animals = [
         "Dog",
         "Cat",
         "Bird",
@@ -23,7 +25,8 @@ enum RandomService {
         "Hedgehog",
     ]
 
-    static let objects = [
+    /// List of object names.
+    public static let objects = [
         "Chair",
         "Table",
         "Spoon",
@@ -40,7 +43,8 @@ enum RandomService {
         "Doodle",
     ]
 
-    static let adjectives = [
+    /// List of adjectives.
+    public static let adjectives = [
         "Whimsical",
         "Cute",
         "Adorable",
@@ -64,7 +68,8 @@ enum RandomService {
         "Chirpy",
     ]
 
-    static let moods = [
+    /// List of moods.
+    public static let moods = [
         "Snappy",
         "Sunny",
         "Quirky",
@@ -77,25 +82,35 @@ enum RandomService {
         "Friendly",
     ]
 
-    static let allWords = adjectives + moods + animals + objects
+    /// Combined list of all words.
+    public static let allWords = adjectives + moods + animals + objects
 
-    static func randomUsername() -> String {
+    /// Generates a random username.
+    /// - Returns: A string representing a random username.
+    public static func randomUsername() -> String {
+        // swiftlint:disable force_unwrapping
         let mood = moods.randomElement()!
         let adjective = adjectives.randomElement()!
         let object = objects.randomElement()!
+        // swiftlint:enable force_unwrapping
 
+        // Generate a random UUID and take the first 4 characters
+
+        // swiftlint:disable force_unwrapping
         let randomAppend = UUID().uuidString.split(separator: "-").first!.prefix(4)
+        // swiftlint:enable force_unwrapping
 
-        let username = "\(mood)\(adjective)\(object)\(randomAppend)"
-
-        return username
+        return "\(mood)\(adjective)\(object)\(randomAppend)"
     }
 
-    static func randomCode() -> String {
+    /// Generates a random code.
+    /// - Returns: A string representing a random code.
+    public static func randomCode() -> String {
+        // swiftlint:disable force_unwrapping
         let first = allWords.randomElement()!.lowercased()
         let second = allWords.randomElement()!.lowercased()
+        // swiftlint:enable force_unwrapping
 
-        let code = "\(first)-\(second)"
-        return code
+        return "\(first)-\(second)"
     }
 }
