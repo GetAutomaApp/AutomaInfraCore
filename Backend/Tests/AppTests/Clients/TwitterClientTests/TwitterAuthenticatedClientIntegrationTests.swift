@@ -1,4 +1,4 @@
-// TwitterAuthenticatedClientTests.swift
+// TwitterAuthenticatedClientIntegrationTests.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -40,15 +40,25 @@ internal struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
                 return
             }
 
-            // Query the database for the Twitter user token
-            guard
-                let token = try await TwitterUserToken.query(on: app.db)
-                .filter(\.$id == twitterUserTokenID)
-                .first()
-            else {
-                // Ensure the token is found in the database
-                try #require(Bool(false), "Failed to find Twitter User Token.")
-                return
+            do {
+                // Query the database for the Twitter user token
+                guard
+                    let token = try await TwitterUserToken.query(on: app.db)
+                    .filter(\.$id == twitterUserTokenID)
+                    .first()
+                else {
+                    // Ensure the token is found in the database
+                    try #require(Bool(false), "Failed to find Twitter User Token.")
+                    return
+                }
+            } catch {
+                app.logger.error(
+                    "Failed to query twitter user token on database.",
+                    metadata: [
+                        "to": .string("\(String(describing: Self.self)).\(#function)"),
+                        "error": .string(String(reflecting: error))
+                    ]
+                )
             }
 
             // Create an authenticated Twitter client with the token
