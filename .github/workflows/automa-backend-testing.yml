@@ -39,7 +39,7 @@ jobs:
         uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
           compose: "false"
-          working-directory: "./Backend"
+          working-directory: "Backend"
           swift_test_extra_args: "--filter '.*UnitTests.*'"
 
   integration-tests:
@@ -55,6 +55,6 @@ jobs:
         uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
           compose: "true"
-          working-directory: "./Backend"
+          working-directory: "Backend"
           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
           docker_compose_extra_args: "--scale api_dev=0 --scale worker_dev=0"
