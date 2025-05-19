@@ -4,6 +4,7 @@
 // All rights reserved.
 
 import Vapor
+import Fluent
 
 public extension Environment {
     /// Retrieves an environment variable or throws an error if not found.
@@ -72,4 +73,33 @@ internal enum ErrorOrMessage {
     case error(Error)
     /// Represents a message.
     case message(String)
+}
+
+/// Useful extensions for UUID to remove code duplication
+public extension UUID {
+    /// Unwrap the UUID from a string and return it, or throw an error if nil
+    /// - Parameters:
+    ///   - uuidString: the UUID string to convert to a UUID
+    ///   - callback: callback function to call right before throwing an error if result is nil
+    ///
+    /// - Throws: Abort
+    /// - Returns: `UUID`, the unwrapped value
+    static func unwrap(_ uuidString: String, _ callback: () throws -> Void) throws -> UUID {
+        guard
+            let uuid = UUID(uuidString: uuidString)
+        else {
+            try callback()
+            throw Abort(.internalServerError)
+        }
+        return uuid
+    }
+}
+
+public extension Model {
+    static func doesExist(id: UUID, on database: any Database) async throws -> Bool {
+        try await Self
+            .query(on: database)
+            .filter("id", .equal, id)
+            .count() > 0
+    }
 }

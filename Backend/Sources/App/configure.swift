@@ -45,6 +45,9 @@ public func configureDatabase(
 
     // Perform automatic database migration
     try await app.autoMigrate()
+
+    let seeder = DatabaseSeeder(app: app)
+    try await seeder.seed()
 }
 
 /// Configures the application.
@@ -133,5 +136,68 @@ public extension Request {
     /// Provides read-only access to the database.
     var dbReadOnly: Database {
         db(.readOnly)
+    }
+}
+
+/// Seed database with necessary data to run tests
+public struct DatabaseSeeder {
+    /// The main application
+    public let app: Application
+
+    /// Seed database
+    public func seed() async throws {
+        app.logger.info(
+            "Seeding database.",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+            ]
+        )
+        try await seedTwitterTokens()
+    }
+
+    /// Seed a single `TwitterUserToken` `TwitterOAuthToken` so that the post tweet tests have tokens of an account to
+    /// post to.
+    private func seedTwitterTokens() async throws {
+        let oauthTokenID = try UUID.unwrap("cc27b4c0-3f7d-4b56-9bc0-7b69d5e84dd6") {
+            app.logger.error(
+                "Could not convert seed oauth token ID to UUID, this should never happen.",
+                metadata: [
+                    "to": .string("seedDatabase")
+                ]
+            )
+        }
+
+        if try await TwitterOAuthToken.doesExist(id: oauthTokenID, on: app.db) {
+            return
+        }
+
+        try await TwitterOAuthToken(
+            id: oauthTokenID,
+            oauthToken: "buf3NwAAAAABzwgpAAABlucYrjg",
+            oauthTokenSecret: "aQfxpLSgjAVItP1YOt8z76lw6rZCoql6",
+            oauthCallbackConfirmed: true
+        )
+        .create(on: app.db)
+
+        let userTokenID = try UUID.unwrap("df2f5fc3-29f0-4db6-8ac5-617f0fbb99e9") {
+            app.logger.error(
+                "Could not convert seed user token ID to UUID, this should never happen.",
+                metadata: [
+                    "to": .string("seedDatabase")
+                ]
+            )
+        }
+
+        if try await TwitterUserToken.doesExist(id: userTokenID, on: app.db) {
+            return
+        }
+
+        try await TwitterUserToken(
+            id: userTokenID,
+            accessToken: "1859607209115619328-zJItUeikeKz0kTIVBHxzJqoZIm2WU3",
+            secretAccessToken: "02AjnKy6YX7O0XhKtFuRhpOW5jhwxZC3ZFFW5vT7WHaLz",
+            oauthVerifier: "XJwcVmY9IQ9CEpTPHGvTt3Ym99mXyTvj",
+            oauthTokenID: oauthTokenID
+        ).create(on: app.db)
     }
 }
