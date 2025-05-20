@@ -59,6 +59,7 @@ internal struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
                         "error": .string(String(reflecting: error))
                     ]
                 )
+                throw error
             }
 
             // Create an authenticated Twitter client with the token
@@ -66,7 +67,8 @@ internal struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
                 logger: app.logger,
                 client: app.client,
                 database: app.db
-            ).authenticated(token: token.toDTO())
+            )
+            .authenticated(token: token.toDTO())
 
             // Generate a random message and post a tweet
             let message = UUID().uuidString
