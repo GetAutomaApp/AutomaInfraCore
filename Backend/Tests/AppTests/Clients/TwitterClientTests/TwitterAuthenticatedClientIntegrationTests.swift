@@ -10,7 +10,7 @@ import VaporTesting
 
 /// Test suite for the authenticated Twitter client functionality
 /// These tests verify that operations requiring user authentication work correctly
-@Suite("Twitter Authenticated Client Tests")
+@Suite("TwitterAuthenticatedClientTests")
 internal struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
     /// Tests the ability to post a tweet using an authenticated Twitter client
     /// This test verifies that:
@@ -40,6 +40,7 @@ internal struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
                 return
             }
 
+            var userTokenForTweetPost: TwitterUserToken
             do {
                 // Query the database for the Twitter user token
                 guard
@@ -51,6 +52,7 @@ internal struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
                     try #require(Bool(false), "Failed to find Twitter User Token.")
                     return
                 }
+                userTokenForTweetPost = token
             } catch {
                 app.logger.error(
                     "Failed to query twitter user token on database.",
@@ -68,7 +70,7 @@ internal struct TwitterAuthenticatedClientTests: TwitterClientTestSuite {
                 client: app.client,
                 database: app.db
             )
-            .authenticated(token: token.toDTO())
+            .authenticated(token: userTokenForTweetPost.toDTO())
 
             // Generate a random message and post a tweet
             let message = UUID().uuidString
