@@ -158,7 +158,7 @@ public struct DatabaseSeeder {
     /// Seed a single `TwitterUserToken` `TwitterOAuthToken` so that the post tweet tests have tokens of an account to
     /// post to.
     private func seedTwitterTokens() async throws {
-        let oauthTokenID = try UUID.unwrap("cc27b4c0-3f7d-4b56-9bc0-7b69d5e84dd6") {
+        let oauthTokenID = try UUID.unwrapFromString("cc27b4c0-3f7d-4b56-9bc0-7b69d5e84dd6") {
             app.logger.error(
                 "Could not convert seed oauth token ID to UUID, this should never happen.",
                 metadata: [
@@ -179,7 +179,7 @@ public struct DatabaseSeeder {
         )
         .create(on: app.db)
 
-        let userTokenID = try UUID.unwrap("df2f5fc3-29f0-4db6-8ac5-617f0fbb99e9") {
+        let userTokenID = try UUID.unwrapFromString("df2f5fc3-29f0-4db6-8ac5-617f0fbb99e9") {
             app.logger.error(
                 "Could not convert seed user token ID to UUID, this should never happen.",
                 metadata: [

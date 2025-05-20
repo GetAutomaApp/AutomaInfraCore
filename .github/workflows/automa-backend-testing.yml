@@ -1,6 +1,5 @@
 name: Run `AutomaBackend` Tests
 
-# Small change
 on:
   pull_request:
     paths:

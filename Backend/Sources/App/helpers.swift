@@ -3,8 +3,8 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
-import Vapor
 import Fluent
+import Vapor
 
 public extension Environment {
     /// Retrieves an environment variable or throws an error if not found.
@@ -84,7 +84,7 @@ public extension UUID {
     ///
     /// - Throws: Abort
     /// - Returns: `UUID`, the unwrapped value
-    static func unwrap(_ uuidString: String, _ callback: () throws -> Void) throws -> UUID {
+    static func unwrapFromString(_ uuidString: String, _ callback: () throws -> Void) throws -> UUID {
         guard
             let uuid = UUID(uuidString: uuidString)
         else {
@@ -97,8 +97,7 @@ public extension UUID {
 
 public extension Model {
     static func doesExist(id: UUID, on database: any Database) async throws -> Bool {
-        try await Self
-            .query(on: database)
+        try await query(on: database)
             .filter("id", .equal, id)
             .count() > 0
     }
