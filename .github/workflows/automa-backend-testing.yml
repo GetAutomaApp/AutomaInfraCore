@@ -39,8 +39,8 @@ jobs:
         id: cache-build-restore
         uses: actions/cache/restore@v4
         with:
-          key: unit-tests-deploy-cache-${{ hashFiles('./Backend/Package.resolved') }}
-          path: ./Backend/.build
+          key: unit-tests-deploy-cache-${{ hashFiles('Backend/Package.resolved') }}
+          path: Backend/.build
 
       - name: Build Backend
         id: build-backend
@@ -51,21 +51,21 @@ jobs:
         id: cache-build-save-one
         uses: actions/cache/save@v4
         with:
-          path: ./Backend/.build
+          path: Backend/.build
           key: ${{ steps.cache-build-restore.outputs.cache-primary-key }}
 
       - name: Run Unit Tests
         uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
           compose: "false"
-          working-directory: "./Backend"
+          working-directory: "Backend"
           swift_test_extra_args: "--filter '.*UnitTests.*'"
 
       - name: Save Build Cache
         id: cache-build-save
         uses: actions/cache/save@v4
         with:
-          path: ./Backend/.build
+          path: Backend/.build
           key: ${{ steps.cache-build-restore.outputs.cache-primary-key }}
 
   integration-tests:
@@ -82,8 +82,8 @@ jobs:
         id: cache-build-restore
         uses: actions/cache/restore@v4
         with:
-          key: integration-tests-deploy-cache-${{ hashFiles('./Backend/Package.resolved') }}
-          path: ./Backend/.build
+          key: integration-tests-deploy-cache-${{ hashFiles('Backend/Package.resolved') }}
+          path: Backend/.build
 
       - name: Build Backend
         id: build-backend
@@ -94,14 +94,14 @@ jobs:
         id: cache-build-save-one
         uses: actions/cache/save@v4
         with:
-          path: ./Backend/.build
+          path: Backend/.build
           key: ${{ steps.cache-build-restore.outputs.cache-primary-key }}
 
       - name: Run Integration Tests
         uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
           compose: "true"
-          working-directory: "./Backend"
+          working-directory: "Backend"
           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
           docker_compose_extra_args: "--scale api_dev=0 --scale worker_dev=0"
           required_healthy_services_docker_compose: '["postgres", "localstack"]'
@@ -110,5 +110,5 @@ jobs:
         id: cache-build-save
         uses: actions/cache/save@v4
         with:
-          path: ./Backend/.build
+          path: Backend/.build
           key: ${{ steps.cache-build-restore.outputs.cache-primary-key }}
