@@ -82,5 +82,3 @@ public var swiftSettings: [SwiftSetting] {
         .enableExperimentalFeature("StrictConcurrency"),
     ]
 }
-
-// small change change change change change
