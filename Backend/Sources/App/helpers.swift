@@ -96,6 +96,13 @@ public extension UUID {
 }
 
 public extension Model {
+    /// Checks if there is a model that exist with the expected ID
+    /// - Parameters:
+    ///   - id: `UUID`, the ID to look for
+    ///   - database: The database where the record is to be expected
+    ///
+    /// - Throws: An error when there is an issue querying the database
+    /// - Returns: `Bool`, true if there is a record with the ID, false if not
     static func doesExist(id: UUID, on database: any Database) async throws -> Bool {
         try await query(on: database)
             .filter("id", .equal, id)
