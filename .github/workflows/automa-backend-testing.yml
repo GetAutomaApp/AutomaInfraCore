@@ -48,6 +48,7 @@ jobs:
           compose: "false"
           working-directory: "./Backend"
           swift_test_extra_args: "--filter '.*UnitTests.*'"
+          required_healthy_services_docker_compose: '["postgres", "localstack"]'
 
       - name: Save Build Cache
         id: cache-build-save
