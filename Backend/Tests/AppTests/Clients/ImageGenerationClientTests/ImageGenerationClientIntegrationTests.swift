@@ -1,4 +1,4 @@
-// ImageGenerationClientTests.swift
+// ImageGenerationClientIntegrationTests.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -11,8 +11,8 @@ import VaporTesting
 /// Test suite for verifying the functionality of image generation clients
 /// This suite tests different image generation models and ensures they can properly generate images
 /// according to specified parameters like quality, size, and style
-@Suite("ImageGenerationClientTests")
-internal struct ImageGenerationClientTests: ImageGenerationClientTestSuite {
+@Suite("ImageGenerationClientIntegrationTests")
+internal struct ImageGenerationClientIntegrationTests: ImageGenerationClientTestSuite {
     /// Tests successful image generation for each image generation client
     /// This test verifies that:
     /// - The client can be initialized properly

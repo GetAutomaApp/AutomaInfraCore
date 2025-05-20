@@ -9,7 +9,7 @@ import VaporTesting
 
 /// Integration tests for the `AppLaunchController`.
 /// These tests verify the controller's ability to handle requests and interact with the database.
-@Suite("App Launch Controller Integration Tests")
+@Suite("AppLaunchControllerIntegrationTests")
 internal struct AppLaunchControllerIntegrationTests {
     /// Helper method to create a test application instance for each test.
     /// This method handles proper setup and teardown of the application.
@@ -38,7 +38,7 @@ internal struct AppLaunchControllerIntegrationTests {
     /// Placeholder test for checking if a user is accepted.
     /// This test will be implemented when issue 135 is resolved.
     @Test("Is User Accepted")
-    public func testRequest() {
+    public func request() {
         // Expect the test to pass with a true value
         #expect(Bool(true))
     }
