@@ -39,7 +39,7 @@ jobs:
         id: cache-build-restore
         uses: actions/cache/restore@v4
         with:
-          key: unit-tests-deploy-cache-${{ hashFiles('Backend/Package.resolved') }}
+          key: unit-tests-build-cache-${{ hashFiles('Backend/Package.resolved') }}
           path: Backend/.build
 
       - name: Build Backend
@@ -82,7 +82,7 @@ jobs:
         id: cache-build-restore
         uses: actions/cache/restore@v4
         with:
-          key: integration-tests-deploy-cache-${{ hashFiles('Backend/Package.resolved') }}
+          key: integration-tests-build-cache-${{ hashFiles('Backend/Package.resolved') }}
           path: Backend/.build
 
       - name: Build Backend
