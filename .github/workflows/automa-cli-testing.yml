@@ -23,7 +23,7 @@ jobs:
             path: CLI/.build
 
       - name: Run SwiftTesting
-        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        uses: GetAutomaApp/opensource-actions/swifttesting@simon/testing-building
         with:
           compose: "false"
           working-directory: "./CLI"
