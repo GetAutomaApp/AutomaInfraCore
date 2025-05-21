@@ -15,6 +15,13 @@ jobs:
         with:
           swift-version: "6.1"
 
+      - name: Restore Build Cache
+        id: cache-build
+        uses: actions/cache@v3
+        with:
+            key: cli-tests-cache-${{ hashFiles('CLI/Package.resolved') }}-${{ github.ref_name }}
+            path: CLI/.build
+
       - name: Run SwiftTesting
         uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
