@@ -1,8 +1,6 @@
 // swift-tools-version:6.1
 import PackageDescription
 
-/// The package configuration for the AutomaCLI project.
-/// This configuration defines the package name, platforms, dependencies, and targets.
 public let package = Package(
     name: "AutomaCLI",
     platforms: [
