@@ -34,25 +34,12 @@ jobs:
         with:
            swift-version: "6.1"
 
-      # TODO: remove the following three steps once tests works fully
       - name: Restore Build Cache
         id: cache-build-restore
         uses: actions/cache/restore@v4
         with:
           key: unit-tests-build-cache-${{ hashFiles('Backend/Package.resolved') }}
           path: Backend/.build
-
-      - name: Build Backend
-        id: build-backend
-        shell: bash
-        run: cd Backend ; swift build
-        
-      - name: Save Build Cache
-        id: cache-build-save-one
-        uses: actions/cache/save@v4
-        with:
-          path: Backend/.build
-          key: ${{ steps.cache-build-restore.outputs.cache-primary-key }}
 
       - name: Run Unit Tests
         uses: GetAutomaApp/opensource-actions/swifttesting@main
@@ -77,25 +64,12 @@ jobs:
         with:
            swift-version: "6.1"
 
-      # TODO: remove the following three steps once tests works fully
       - name: Restore Build Cache
         id: cache-build-restore
         uses: actions/cache/restore@v4
         with:
           key: integration-tests-build-cache-${{ hashFiles('Backend/Package.resolved') }}
           path: Backend/.build
-
-      - name: Build Backend
-        id: build-backend
-        shell: bash
-        run: cd Backend ; swift build
-
-      - name: Save Build Cache
-        id: cache-build-save-one
-        uses: actions/cache/save@v4
-        with:
-          path: Backend/.build
-          key: ${{ steps.cache-build-restore.outputs.cache-primary-key }}
 
       - name: Run Integration Tests
         uses: GetAutomaApp/opensource-actions/swifttesting@main
