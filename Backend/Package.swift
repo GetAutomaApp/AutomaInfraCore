@@ -11,7 +11,8 @@ public let package = Package(
         .package(url: "https://github.com/vapor/vapor.git", from: "4.113.2"),
         // 🗄 An ORM for SQL and NoSQL databases.
         .package(url: "https://github.com/vapor/fluent.git", from: "4.12.0"),
-        .package(url: "https://github.com/GetAutomaApp/TwitterAPIKit", from: "0.2.4"),
+        // .package(url: "https://github.com/GetAutomaApp/TwitterAPIKit", from: "0.2.4"),
+        .package(url: "https://github.com/GetAutomaApp/TwitterAPIKit", branch: "main"),
         // 🐘 Fluent driver for Postgres.
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.10.0"),
         // 🍃 An expressive, performant, and extensible templating language built for Swift.

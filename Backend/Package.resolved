@@ -1,5 +1,5 @@
 {
-  "originHash" : "922710a61cde461e772b9deab9508b13833e1bdf0dfeb1b5cf80d8214cf123c8",
+  "originHash" : "0a91c54e7061c1c7f7e114a326ad96650d07a8dd462e1ad1ba9ca4e61c9d9af9",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -420,8 +420,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/GetAutomaApp/TwitterAPIKit",
       "state" : {
-        "revision" : "4a3f38cfeb233044b49bd0e1876638c1b20a7850",
-        "version" : "0.2.4"
+        "branch" : "main",
+        "revision" : "a790298d12b220c41315752e1b12d560c08c9b54"
       }
     },
     {
