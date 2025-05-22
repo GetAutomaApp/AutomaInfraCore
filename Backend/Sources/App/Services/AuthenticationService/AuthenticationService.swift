@@ -18,7 +18,7 @@ public struct AuthenticationService {
     /// The logger for logging messages.
     public let logger: Logger
     /// Helper for authentication service operations.
-    public let helper: AuthenticationServiceHelper
+    private let helper: AuthenticationServiceHelper
 
     /// Initializes a new instance of `AuthenticationService`.
     /// - Parameters:
@@ -128,7 +128,7 @@ public struct AuthenticationService {
             ]
         )
 
-        let distance = try helper.getDistance()
+        let distance = try await helper.getDistance()
         let dateToCheck = Date()
 
         // Check if a recent code was sent
@@ -154,14 +154,14 @@ public struct AuthenticationService {
                 codeModelId: codeModelId
             )
         } catch let error as GenericErrors {
-            try helper.handleAuthCodeNotSent(
+            try await helper.handleAuthCodeNotSent(
                 code: code,
                 phoneNumber: phoneNumber,
                 codeModelId: codeModelId,
                 error: error
             )
         } catch {
-            try helper.handleAuthCodeNotSent(
+            try await helper.handleAuthCodeNotSent(
                 code: code,
                 phoneNumber: phoneNumber,
                 codeModelId: codeModelId,
@@ -300,17 +300,11 @@ public struct AuthenticationService {
             ]
         )
 
-        // Delete old tokens for the user
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            group.addTask {
-                try await helper.deleteOldTokens(userId: userId, subject: .refresh)
-            }
-            group.addTask {
-                try await helper.deleteOldTokens(userId: userId, subject: .access)
-            }
+        let concurrencySafeHelper = AuthenticationServiceHelper(writeDb: writeDb, readDb: readDb, logger: logger)
+        async let deleteRefresh: () = concurrencySafeHelper.deleteOldTokens(userId: userId, subject: .refresh)
+        async let deleteAccess: () = concurrencySafeHelper.deleteOldTokens(userId: userId, subject: .access)
 
-            try await group.waitForAll()
-        }
+        let _ = try await (deleteRefresh, deleteAccess)
     }
 
     /// Checks if a user exists by phone number.
