@@ -103,8 +103,8 @@ jobs:
           compose: "true"
           working-directory: "Backend"
           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
-          docker_compose_extra_args: "--scale api_dev=0 --scale worker_dev=0"
           required_healthy_services_docker_compose: '["postgres", "localstack"]'
+          compose_services_to_startup: '["postgres", "localstack"]'
 
       - name: Save Build Cache
         id: cache-build-save
