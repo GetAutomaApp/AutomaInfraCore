@@ -20,7 +20,7 @@ internal struct AppLaunchControllerIntegrationTests {
         let app = try await Application.make(.testing)
         do {
             // Configure the database for the application
-            try await configureDatabase(app: app)
+            try await DatabaseConfigurator(app: app).configureDatabases()
             // Register the `AppLaunchController` with the application
             try app.register(collection: AppLaunchController())
             // Execute the test closure with the application instance
@@ -38,7 +38,7 @@ internal struct AppLaunchControllerIntegrationTests {
     /// Placeholder test for checking if a user is accepted.
     /// This test will be implemented when issue 135 is resolved.
     @Test("Is User Accepted")
-    public func testRequest() {
+    public func request() {
         // Expect the test to pass with a true value
         #expect(Bool(true))
     }

@@ -23,7 +23,7 @@ extension TwitterClientTestSuite {
     public func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
-            try await configureDatabase(app: app)
+            try await DatabaseConfigurator(app: app).configureDatabases()
             try await test(app)
         } catch {
             try await app.asyncShutdown()

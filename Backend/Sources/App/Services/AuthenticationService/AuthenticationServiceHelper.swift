@@ -10,13 +10,19 @@ import Queues
 import Vapor
 
 /// Helper struct for authentication service operations.
-public struct AuthenticationServiceHelper {
+actor AuthenticationServiceHelper {
     /// The database for writing operations.
     public let writeDb: Database
     /// The database for reading operations.
     public let readDb: Database
     /// The logger for logging messages.
     public let logger: Logger
+    
+    init(writeDb: Database, readDb: Database, logger: Logger) {
+        self.writeDb = writeDb
+        self.readDb = readDb
+        self.logger = logger
+    }
 
     /// Validates and deletes an authentication code.
     /// - Parameters:

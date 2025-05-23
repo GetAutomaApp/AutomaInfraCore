@@ -4,6 +4,7 @@
 // All rights reserved.
 
 import Vapor
+import Fluent
 
 public extension Environment {
     /// Retrieves an environment variable or throws an error if not found.
@@ -72,4 +73,25 @@ internal enum ErrorOrMessage {
     case error(Error)
     /// Represents a message.
     case message(String)
+}
+
+/// Extension for `DatabaseID` to define custom database identifiers.
+public extension DatabaseID {
+    /// Primary database identifier.
+    static let primary = DatabaseID(string: "primary")
+    /// Read-only database identifier.
+    static let readOnly = DatabaseID(string: "readOnly")
+}
+
+/// Extension for `Request` to provide database access.
+public extension Request {
+    /// Provides write access to the database.
+    var dbWrite: Database {
+        db(.readOnly)
+    }
+
+    /// Provides read-only access to the database.
+    var dbReadOnly: Database {
+        db(.readOnly)
+    }
 }
