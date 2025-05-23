@@ -34,12 +34,11 @@ internal struct AppConfigurator {
     }
 
     private func registerQueues() {
-        if ["local", "testing"].contains(environment) {
+        if ["local", "testing"].contains(environment) == false {
             app.asyncCommands.use(QueuesCommand(application: app), as: "vapor-queues")
         }
     }
 
-    // name for function that will run configuration only when database urls are found in environment
     private func configureWhenDatabaseURLsAvailable() async throws {
         try await DatabaseConfigurator(app: app).configureDatabases()
         try registerControllers()
@@ -90,11 +89,11 @@ public struct DatabaseConfigurator {
 
     private func registerDatabases() throws {
         try app.databases.use(.postgres(
-            url: DatabaseURLs.primary.get()
+            url: DatabaseURLs.primary.get(),
         ), as: .primary)
 
         try app.databases.use(.postgres(
-            url: DatabaseURLs.regional.get()
+            url: DatabaseURLs.regional.get(),
         ), as: .readOnly)
     }
 
