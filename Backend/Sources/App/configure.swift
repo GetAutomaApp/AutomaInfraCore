@@ -19,7 +19,7 @@ internal struct AppConfigurator {
     private let environment = Environment.get("ENVIRONMENT") ?? "local"
     private let primaryDatabaseURL: String? = try? DatabaseURLs.primary.get()
     private let regionalDatabaseURL: String? = try? DatabaseURLs.regional.get()
-    
+
     public func configure() async throws {
         registerMiddleware()
         registerQueues()
@@ -27,7 +27,6 @@ internal struct AppConfigurator {
         if hasDatabaseURLs {
             try await configureWhenDatabaseURLsAvailable()
         }
-        
     }
 
     private func registerMiddleware() {
@@ -39,7 +38,7 @@ internal struct AppConfigurator {
             app.asyncCommands.use(QueuesCommand(application: app), as: "vapor-queues")
         }
     }
-    
+
     // name for function that will run configuration only when database urls are found in environment
     private func configureWhenDatabaseURLsAvailable() async throws {
         try await DatabaseConfigurator(app: app).configureDatabases()
@@ -49,7 +48,7 @@ internal struct AppConfigurator {
         addJobsToQueue()
         configureServer()
     }
-    
+
     private func registerControllers() throws {
         try app.register(collection: AuthenticationController())
         try app.register(collection: AppLaunchController())
@@ -58,24 +57,23 @@ internal struct AppConfigurator {
         try app.register(collection: FirecrawlTestController())
         try app.register(collection: PrometheusController())
     }
-    
+
     private func addAuthenticationJWTKey() async throws {
         let encryptionSecret = try Environment.getOrThrow("JWT_ENCRYPTION_SECRET")
         await app.jwt.keys.add(hmac: .init(stringLiteral: encryptionSecret), digestAlgorithm: .sha256)
     }
-    
+
     private func configureQueues() {
         app.queues.use(.fluent(useSoftDeletes: true))
         app.queues.configuration.workerCount = 1
         app.queues.configuration.refreshInterval = .seconds(5)
-
     }
-    
+
     private func addJobsToQueue() {
         app.queues.add(TransactionalMessageAsyncJob())
         app.queues.add(ProfilePictureAsyncJob())
     }
-    
+
     private func configureServer() {
         app.http.server.configuration.responseCompression = .enabled
     }
