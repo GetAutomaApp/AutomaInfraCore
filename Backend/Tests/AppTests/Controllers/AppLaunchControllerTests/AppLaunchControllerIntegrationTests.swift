@@ -20,7 +20,7 @@ internal struct AppLaunchControllerIntegrationTests {
         let app = try await Application.make(.testing)
         do {
             // Configure the database for the application
-            try await configureDatabase(app: app)
+            try await DatabaseConfigurator(app: app).configureDatabases()
             // Register the `AppLaunchController` with the application
             try app.register(collection: AppLaunchController())
             // Execute the test closure with the application instance
