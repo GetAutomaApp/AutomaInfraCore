@@ -43,7 +43,7 @@ public final class UserModel: Model, @unchecked Sendable {
     @Timestamp(key: "deleted_at", on: .delete)
     public var deletedAt: Date?
 
-    /// Indicates if the user has accepted terms.
+    /// Indicates if the users application was accepted
     @Field(key: "accepted")
     public var accepted: Bool
 

@@ -12,7 +12,7 @@ internal struct AddAcceptedColumnMigration1740658649: AsyncMigration {
     /// - Throws: Throws an error if the schema update fails.
     public func prepare(on database: Database) async throws {
         try await database.schema("User")
-            .field("accepted", .bool) // Add the 'accepted' field of type boolean
+            .field("accepted", .bool, .required) // Add the 'accepted' field of type boolean
             .update() // Apply the update to the schema
     }
 
