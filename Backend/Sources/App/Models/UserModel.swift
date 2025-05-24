@@ -60,7 +60,7 @@ public final class UserModel: Model, @unchecked Sendable {
     ///   - createdAt: Timestamp when the user was created.
     ///   - updatedAt: Timestamp when the user was last updated.
     ///   - deletedAt: Timestamp when the user was deleted.
-    ///   - accepted: Indicates if the user has accepted terms.
+    ///   - accepted: Indicates if the user has accepted terms. Defaults to false
     public init(
         id: UUID? = nil,
         username: String,
@@ -70,7 +70,7 @@ public final class UserModel: Model, @unchecked Sendable {
         createdAt: Date? = nil,
         updatedAt: Date? = nil,
         deletedAt: Date? = nil,
-        accepted: Bool
+        accepted: Bool = false
     ) {
         self.id = id
         self.username = username
