@@ -74,6 +74,10 @@ internal struct IOSApp: App {
                 .onTapGesture(count: 5) {
                     #if DEBUG
                         baseConfig.isDebugMenuActive = true
+                    #else
+                        if baseConfig.isTestflight {
+                            baseConfig.isDebugMenuActive = true
+                        }
                     #endif
                 }
                 .task(onAppOpen)
