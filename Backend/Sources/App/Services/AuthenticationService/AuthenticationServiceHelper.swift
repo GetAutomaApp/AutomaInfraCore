@@ -11,42 +11,32 @@ import Vapor
 
 /// Helper struct for authentication service operations.
 actor AuthenticationServiceHelper {
-    /// The database for writing operations.
     public let writeDb: Database
-    /// The database for reading operations.
     public let readDb: Database
-    /// The logger for logging messages.
     public let logger: Logger
-    
-    init(writeDb: Database, readDb: Database, logger: Logger) {
+    private let messageService: MessageService
+
+    init(writeDb: Database, readDb: Database, logger: Logger, messageService: MessageService) {
         self.writeDb = writeDb
         self.readDb = readDb
         self.logger = logger
+        self.messageService = messageService
     }
 
-    /// Validates and deletes an authentication code.
-    /// - Parameters:
-    ///   - phoneNumber: The phone number associated with the code.
-    ///   - code: The authentication code to validate.
-    /// - Throws: Throws an error if validation fails.
-    public func getValidateAndDeleteCode(phoneNumber: String, code: String) async throws {
-        // Log the start of code validation
+    public func validateAndDeleteCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws {
         logger.info(
             "Starting validation of authentication code",
             metadata: [
-                "phoneNumber": .string(phoneNumber),
-                "code": .string(code),
-                "to": .string("AuthenticationService.getValidateAndDeleteCode"),
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "authCodePayload": .string(String(reflecting: authCodePayload))
             ]
         )
-
-        let messageService = MessageService()
 
         // Query the valid code by phone number and code
         let validCode = try await AuthenticationCodeModel
             .query(on: readDb)
-            .filter(\.$phoneNumber == phoneNumber)
-            .filter(\.$code == code.lowercased())
+            .filter(\.$phoneNumber == authCodePayload.phoneNumber)
+            .filter(\.$code == authCodePayload.code.lowercased())
             .first()
 
         guard let validCode else {
@@ -55,8 +45,7 @@ actor AuthenticationServiceHelper {
                 "Authentication code is invalid",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "code": .string(code),
-                    "phoneNumber": .string(phoneNumber),
+                    "authCodePayload": .string(String(reflecting: authCodePayload)),
                     "validCode": .string(String(describing: validCode)),
                 ]
             )
@@ -68,16 +57,15 @@ actor AuthenticationServiceHelper {
             "Authentication code is valid",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "code": .string(code),
-                "phoneNumber": .string(phoneNumber),
+                "authCodePayload": .string(String(reflecting: authCodePayload)),
                 "validCode": .string(String(reflecting: validCode)),
             ]
         )
 
         // Send a Discord webhook event for valid code
         try messageService.sendDiscordWebhookAppEvent(
-            input: phoneNumber,
-            event: "submitted valid code `\(code)`",
+            input: authCodePayload.phoneNumber,
+            event: "submitted valid code `\(authCodePayload.code)`",
             logger: logger
         )
 

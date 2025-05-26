@@ -37,11 +37,7 @@ internal struct AuthenticationController: RouteCollection {
     public func registerCode(req: Request) async throws -> AuthenticationCodeResponseDTO {
         let dto = try req.content.decode(PhoneNumberPayloadDTO.self)
 
-        let authService = AuthenticationService(
-            writeDb: req.dbWrite,
-            readDb: req.dbReadOnly,
-            logger: req.logger
-        )
+        let authService = RootAuthenticationService(.init(writeDb: req.dbWrite, readDb: req.dbReadOnly, logger: req.logger))
 
         if try await authService.doesUserExist(phoneNumber: dto.phoneNumber) {
             throw GenericErrors.userAlreadyExists
@@ -59,16 +55,13 @@ internal struct AuthenticationController: RouteCollection {
     @Sendable
     public func register(req: Request) async throws -> AuthenticationTokensPayloadDTO {
         let dto = try req.content.decode(AuthPhoneCodePayloadDTO.self)
-        let authService = AuthenticationService(
-            writeDb: req.dbWrite,
-            readDb: req.dbReadOnly,
-            logger: req.logger
-        )
+        let authService = RootAuthenticationService(.init(writeDb: req.dbWrite, readDb: req.dbReadOnly, logger: req.logger))
+
         if try await authService.doesUserExist(phoneNumber: dto.phoneNumber) {
             throw GenericErrors.userAlreadyExists
         }
 
-        return try await authService.register(payload: dto, signer: req.jwt, queue: req.queue)
+        return try await authService.register(.init(authCodePayload: dto, signer: req.jwt, queue: req.queue))
     }
 
     /// Sends a login code to the user's phone number.
@@ -79,12 +72,8 @@ internal struct AuthenticationController: RouteCollection {
     public func loginCode(req: Request) async throws -> AuthenticationCodeResponseDTO {
         let dto = try req.content.decode(PhoneNumberPayloadDTO.self)
 
-        let authService = AuthenticationService(
-            writeDb: req.dbWrite,
-            readDb: req.dbReadOnly,
-            logger: req.logger
-        )
-
+        let authService = RootAuthenticationService(.init(writeDb: req.dbWrite, readDb: req.dbReadOnly, logger: req.logger))
+        
         if try await !(authService.doesUserExist(phoneNumber: dto.phoneNumber)) {
             throw GenericErrors.userNotFound
         }
@@ -102,11 +91,7 @@ internal struct AuthenticationController: RouteCollection {
     public func login(req: Request) async throws -> AuthenticationTokensPayloadDTO {
         let dto = try req.content.decode(AuthPhoneCodePayloadDTO.self)
 
-        let authService = AuthenticationService(
-            writeDb: req.dbWrite,
-            readDb: req.dbReadOnly,
-            logger: req.logger
-        )
+        let authService = RootAuthenticationService(.init(writeDb: req.dbWrite, readDb: req.dbReadOnly, logger: req.logger))
 
         return try await authService.login(payload: dto, signer: req.jwt)
     }
@@ -132,11 +117,7 @@ internal struct AuthenticationController: RouteCollection {
             throw GenericErrors.invalidToken
         }
 
-        let authService = AuthenticationService(
-            writeDb: req.dbWrite,
-            readDb: req.dbReadOnly,
-            logger: req.logger
-        )
+        let authService = RootAuthenticationService(.init(writeDb: req.dbWrite, readDb: req.dbReadOnly, logger: req.logger))
 
         do {
             let refreshedAccessToken = try await authService.refreshToken(
@@ -163,11 +144,7 @@ internal struct AuthenticationController: RouteCollection {
 
         do {
             if let userId {
-                let authService = AuthenticationService(
-                    writeDb: req.dbWrite,
-                    readDb: req.dbReadOnly,
-                    logger: req.logger
-                )
+                let authService = RootAuthenticationService(.init(writeDb: req.dbWrite, readDb: req.dbReadOnly, logger: req.logger))
 
                 try await authService.logout(userId: userId)
             } else {

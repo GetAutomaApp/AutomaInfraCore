@@ -89,11 +89,11 @@ public struct DatabaseConfigurator {
 
     private func registerDatabases() throws {
         try app.databases.use(.postgres(
-            url: DatabaseURLs.primary.get(),
+            url: DatabaseURLs.primary.get()
         ), as: .primary)
 
         try app.databases.use(.postgres(
-            url: DatabaseURLs.regional.get(),
+            url: DatabaseURLs.regional.get()
         ), as: .readOnly)
     }
 
