@@ -10,6 +10,7 @@ import Queues
 import QueuesFluentDriver
 import Vapor
 
+
 public func configure(_ app: Application) async throws {
     try await AppConfigurator(app: app).configure()
 }

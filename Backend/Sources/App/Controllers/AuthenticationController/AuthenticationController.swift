@@ -90,10 +90,9 @@ internal struct AuthenticationController: RouteCollection {
     @Sendable
     public func login(req: Request) async throws -> AuthenticationTokensPayloadDTO {
         let dto = try req.content.decode(AuthPhoneCodePayloadDTO.self)
-
         let authService = RootAuthenticationService(.init(writeDb: req.dbWrite, readDb: req.dbReadOnly, logger: req.logger))
 
-        return try await authService.login(payload: dto, signer: req.jwt)
+        return try await authService.login(.init(authCodePayload: dto, signer: req.jwt))
     }
 
     /// Refreshes the user's access token.

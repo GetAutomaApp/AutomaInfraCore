@@ -9,7 +9,6 @@ import JWT
 import Queues
 import Vapor
 
-
 public struct RootAuthenticationService: AuthenticationService {
     var config: any AuthenticationServiceConfig
     let helper: AuthenticationServiceHelper
@@ -17,13 +16,33 @@ public struct RootAuthenticationService: AuthenticationService {
 
     init(_ config: RootAuthenticationServiceConfig) {
         self.config = config
-        
-        helper = .init(writeDb: config.writeDb, readDb: config.readDb, logger: config.logger, messageService: messageService)
+
+        helper = .init(
+            writeDb: config.writeDb,
+            readDb: config.readDb,
+            logger: config.logger,
+            messageService: messageService
+        )
+    }
+
+    func register(_ payload: UserRegistrationPayload) async throws -> AuthenticationTokensPayloadDTO {
+        var registrator = UserRegistrationService(.init(
+            writeDb: config.writeDb,
+            readDb: config.readDb,
+            logger: config.logger,
+            payload: payload
+        ))
+        return try await registrator.register()
     }
     
-    func register(_ payload: UserRegistrationPayload) async throws -> AuthenticationTokensPayloadDTO  {
-        var registrator = UserRegistrationService(.init(writeDb: self.config.writeDb, readDb: self.config.readDb, logger: self.config.logger, payload: payload))
-        return try await registrator.register()
+    func login(_ payload: UserLoginPayload) async throws -> AuthenticationTokensPayloadDTO {
+        let loginService = UserLoginService(.init(
+            writeDb: config.writeDb,
+            readDb: config.readDb,
+            logger: config.logger,
+            payload: payload
+        ))
+        return try await loginService.login()
     }
 
     public func sendAuthCode(phoneNumber: String, queue: Queue) async throws -> AuthenticationCodeResponseDTO {
@@ -45,10 +64,10 @@ public struct RootAuthenticationService: AuthenticationService {
         // Check if a recent code was sent
         if
             let mostRecentCodeSent = try await AuthenticationCodeModel
-                .query(on: config.readDb)
-                .filter(\.$createdAt > dateToCheck.addingTimeInterval(-distance))
-                .filter(\.$phoneNumber == phoneNumber)
-                .first()
+            .query(on: config.readDb)
+            .filter(\.$createdAt > dateToCheck.addingTimeInterval(-distance))
+            .filter(\.$phoneNumber == phoneNumber)
+            .first()
         {
             let timeout = distance - (mostRecentCodeSent.createdAt?.distance(to: dateToCheck) ?? distance)
             return .init(success: timeout == 0, timeout: timeout)
@@ -80,65 +99,6 @@ public struct RootAuthenticationService: AuthenticationService {
             )
         }
         throw Abort(.internalServerError)
-    }
-
-    // 3. Login
-    /// Logs in a user with a phone number and code.
-    /// - Parameters:
-    ///   - payload: The payload containing phone number and code.
-    ///   - signer: The JWT signer.
-    /// - Returns: An `AuthenticationTokensPayloadDTO` containing authentication tokens.
-    /// - Throws: Throws an error if login fails.
-    public func login(
-        payload: AuthPhoneCodePayloadDTO,
-        signer: Request.JWT
-    ) async throws -> AuthenticationTokensPayloadDTO {
-        // Validate and delete the authentication code
-        try await helper.validateAndDeleteCode(payload)
-
-        // Query the user by phone number
-        let user = try await UserModel
-            .query(on: config.readDb)
-            .filter(
-                \.$phoneNumber == payload.phoneNumber
-            )
-            .first()
-
-        if let user, let userId = user.id?.uuidString {
-            // Send a Discord webhook event for login
-            try messageService
-                .sendDiscordWebhookAppEvent(
-                    input: "\(payload.phoneNumber) - \(user.username)",
-                    event: "logging in with code: `\(payload.code)`",
-                    logger: config.logger
-                )
-
-            // Log the user login
-            config.logger.info(
-                "Logging in user",
-                metadata: [
-                    "to": .string("AuthenticationService.login"),
-                    "userId": .string(userId),
-                    "username": .string(user.username),
-                ]
-            )
-
-            // Create and return authentication tokens
-            return try await helper.createAuthenticationTokensPayload(
-                userId: userId,
-                signer: signer
-            )
-        } else {
-            // Log the error for non-existent user
-            config.logger.error(
-                "Can't login non-existent user",
-                metadata: [
-                    "to": .string("AuthenticationService.login"),
-                    "phoneNumber": .string(payload.phoneNumber),
-                ]
-            )
-            throw GenericErrors.userNotFound
-        }
     }
 
     // 4. Refresh Token
@@ -248,84 +208,6 @@ public struct RootAuthenticationService: AuthenticationService {
     }
 }
 
-internal struct UserRegistrationService: AuthenticationService {
-    var config: UserRegistrationConfig
-    let helper: AuthenticationServiceHelper
-    let messageService = MessageService()
-    let identifier: UserIdentifier
-    var user: UserModel
-
-    public init(_ config: UserRegistrationConfig) {
-        self.config = config
-        self.helper = .init(writeDb: config.writeDb, readDb: config.readDb, logger: config.logger, messageService: messageService)
-        self.identifier = Self.generateNewUserIdentifier()
-        self.user = Self.createUserModel(identifier: identifier, config: config)
-    }
-
-    public mutating func register() async throws -> AuthenticationTokensPayloadDTO {
-        try await helper.validateAndDeleteCode(config.payload.authCodePayload)
-
-        try await generateUserProfilePicture(&user)
-        try sendTelemetryDataOnRegistrationSuccess()
-
-        return try await helper.createAuthenticationTokensPayload(
-            userId: identifier.id.uuidString,
-            signer: config.payload.signer
-        )
-    }
-
-    private func sendTelemetryDataOnRegistrationSuccess() throws {
-        BackendMetric.totalUsersCreated.increment()
-
-        config.logger.info(
-            "Successfully Registered User",
-            metadata: [
-                "to": .string("AuthenticationService.register"),
-                "userIdentifier": .string(String(reflecting: identifier))
-            ]
-        )
-
-        try messageService
-            .sendDiscordWebhookAppEvent(
-                input: "\(config.payload.authCodePayload.phoneNumber) - \(identifier.id)",
-                event: "created an account with \(identifier.name)",
-                logger: config.logger
-            )
-    }
-
-    private static func createUserModel(identifier: UserIdentifier, config: UserRegistrationConfig) -> UserModel {
-        UserModel(
-            id: identifier.id,
-            username: identifier.name,
-            phoneNumber: config.payload.authCodePayload.phoneNumber,
-            accepted: false
-        )
-    }
-
-    private func generateUserProfilePicture(_ user: inout UserModel) async throws {
-        let userDTO = try user.toDTO(logger: config.logger)
-        let profilePictureKey = try ProfilePictureService(logger: config.logger).generateImageKey(for: userDTO)
-
-        try await config.payload.queue.dispatch(ProfilePictureAsyncJob.self, .init(payload: userDTO))
-
-        user.profilePictureKey = profilePictureKey
-
-        try await user.save(on: config.writeDb)
-    }
-
-    private static func generateNewUserIdentifier() -> UserIdentifier {
-        .init(
-            name: RandomService.randomUsername(),
-            id: UUID()
-        )
-    }
-
-    internal struct UserIdentifier: Content {
-        let name: String
-        let id: UUID
-    }
-}
-
 internal protocol AuthenticationService {
     var helper: AuthenticationServiceHelper { get }
     var messageService: MessageService { get }
@@ -342,17 +224,3 @@ internal struct RootAuthenticationServiceConfig: AuthenticationServiceConfig {
     let readDb: Database
     let logger: Logger
 }
-
-struct UserRegistrationConfig: AuthenticationServiceConfig {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
-    let payload: UserRegistrationPayload
-}
-
-struct UserRegistrationPayload {
-    let authCodePayload: AuthPhoneCodePayloadDTO
-    let signer: Request.JWT
-    let queue: Queue
-}
-
