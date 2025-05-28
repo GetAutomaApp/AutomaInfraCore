@@ -1,21 +1,18 @@
-//
-//  UserLoginService.swift
-//  Backend
-//
-//  Created by William Ferns on 2025/05/26.
-//
+// UserLoginService.swift
+// Copyright (c) 2025 GetAutomaApp
+// All source code and related assets are the property of GetAutomaApp.
+// All rights reserved.
 
 import DataTypes
-import Vapor
 import Fluent
 import JWT
+import Vapor
 
 internal struct UserLoginService: AuthenticationService {
     var helper: AuthenticationServiceHelper
     let config: UserLoginConfig
-
     var messageService = MessageService()
-    
+
     init(_ config: UserLoginConfig) {
         self.config = config
         helper = .init(
@@ -25,55 +22,73 @@ internal struct UserLoginService: AuthenticationService {
             messageService: messageService
         )
     }
-    
+
     func login() async throws -> AuthenticationTokensPayloadDTO {
-        let authCodePayload = config.payload.authCodePayload
-        // Validate and delete the authentication code
-        try await helper.validateAndDeleteCode(authCodePayload)
+        try await validateAuthCode()
 
-        // Query the user by phone number
-        let user = try await UserModel
-            .query(on: config.readDb)
-            .filter(
-                \.$phoneNumber == authCodePayload.phoneNumber
-            )
-            .first()
-
-        if let user, let userId = user.id?.uuidString {
-            // Send a Discord webhook event for login
-            try messageService
-                .sendDiscordWebhookAppEvent(
-                    input: "\(authCodePayload.phoneNumber) - \(user.username)",
-                    event: "logging in with code: `\(authCodePayload.code)`",
-                    logger: config.logger
-                )
-
-            // Log the user login
-            config.logger.info(
-                "Logging in user",
-                metadata: [
-                    "to": .string("AuthenticationService.login"),
-                    "userId": .string(userId),
-                    "username": .string(user.username),
-                ]
-            )
-
-            // Create and return authentication tokens
-            return try await helper.createAuthenticationTokensPayload(
-                userId: userId,
-                signer: config.payload.signer
-            )
-        } else {
-            // Log the error for non-existent user
-            config.logger.error(
-                "Can't login non-existent user",
-                metadata: [
-                    "to": .string("AuthenticationService.login"),
-                    "config": .string(String(describing: config.payload)),
-                ]
-            )
+        guard let user = try await findUser() else {
+            logMissingUserError()
             throw GenericErrors.userNotFound
         }
+
+        return try await completeLogin(for: user)
+    }
+
+    // MARK: - Private Helpers
+
+    private func validateAuthCode() async throws {
+        try await helper.validateAndDeleteCode(config.payload.authCodePayload)
+    }
+
+    private func findUser() async throws -> UserModel? {
+        try await UserModel
+            .query(on: config.readDb)
+            .filter(\.$phoneNumber == config.payload.authCodePayload.phoneNumber)
+            .first()
+    }
+
+    private func completeLogin(for user: UserModel) async throws -> AuthenticationTokensPayloadDTO {
+        guard let userId = user.id?.uuidString else {
+            config.logger.error("User model has no ID")
+            throw GenericErrors.userNotFound
+        }
+
+        try await sendLoginWebhook(for: user)
+        logUserLogin(userId: userId, username: user.username)
+
+        return try await helper.createAuthenticationTokensPayload(
+            userId: userId,
+            signer: config.payload.signer
+        )
+    }
+
+    private func sendLoginWebhook(for user: UserModel) async throws {
+        try messageService.sendDiscordWebhookAppEvent(
+            input: "\(config.payload.authCodePayload.phoneNumber) - \(user.username)",
+            event: "logging in with code: `\(config.payload.authCodePayload.code)`",
+            logger: config.logger
+        )
+    }
+
+    private func logUserLogin(userId: String, username: String) {
+        config.logger.info(
+            "Logging in user",
+            metadata: [
+                "to": .string("AuthenticationService.login"),
+                "userId": .string(userId),
+                "username": .string(username),
+            ]
+        )
+    }
+
+    private func logMissingUserError() {
+        config.logger.error(
+            "Can't login non-existent user",
+            metadata: [
+                "to": .string("AuthenticationService.login"),
+                "config": .string(String(describing: config.payload)),
+            ]
+        )
     }
 }
 
