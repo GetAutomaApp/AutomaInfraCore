@@ -23,6 +23,19 @@ actor AuthenticationServiceHelper {
     }
 
     public func validateAndDeleteCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws {
+        try messageService.sendDiscordWebhookAppEvent(
+            input: authCodePayload.phoneNumber,
+            event: "submitted valid code `\(authCodePayload.code)`",
+            logger: logger
+        )
+
+        let validCode = try await getAndValidateCode(authCodePayload)
+        try await validCode.delete(on: writeDb)
+    }
+
+    private func getAndValidateCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws
+        -> AuthenticationCodeModel
+    {
         logger.info(
             "Starting validation of authentication code",
             metadata: [
@@ -31,19 +44,22 @@ actor AuthenticationServiceHelper {
             ]
         )
 
-        let validCode = try await AuthenticationCodeModel
-            .query(on: readDb)
-            .filter(\.$phoneNumber == authCodePayload.phoneNumber)
-            .filter(\.$code == authCodePayload.code.lowercased())
-            .first()
+        let authCode = try await getAuthCode(authCodePayload)
+        return try validateAndReturnAuthCode(authCode, payload: authCodePayload)
+    }
 
-        guard let validCode else {
+    private func validateAndReturnAuthCode(
+        _ authCode: AuthenticationCodeModel?,
+        payload authCodePayload: AuthPhoneCodePayloadDTO
+    ) throws -> AuthenticationCodeModel {
+        guard
+            let validCode = authCode
+        else {
             logger.error(
                 "Authentication code is invalid",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "authCodePayload": .string(String(reflecting: authCodePayload)),
-                    "validCode": .string(String(describing: validCode)),
+                    "authCodePayload": .string(String(reflecting: authCodePayload))
                 ]
             )
             throw GenericErrors.invalidCode
@@ -58,13 +74,15 @@ actor AuthenticationServiceHelper {
             ]
         )
 
-        try messageService.sendDiscordWebhookAppEvent(
-            input: authCodePayload.phoneNumber,
-            event: "submitted valid code `\(authCodePayload.code)`",
-            logger: logger
-        )
+        return validCode
+    }
 
-        try await validCode.delete(on: writeDb)
+    private func getAuthCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws -> AuthenticationCodeModel? {
+        try await AuthenticationCodeModel
+            .query(on: readDb)
+            .filter(\.$phoneNumber == authCodePayload.phoneNumber)
+            .filter(\.$code == authCodePayload.code.lowercased())
+            .first()
     }
 
     public func codeDeletionTime() -> Date {
