@@ -26,6 +26,8 @@ public class BaseAppEnvironmentObject: ObservableObject {
 
     /// Indicates whether the application requires an update
     @Published public var shouldUpdateApp: Bool = false
+    
+    @Published public var isTestflight: Bool = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
 
     /// The base URL for API requests, persisted using AppStorage
     /// Defaults to the sandbox environment
