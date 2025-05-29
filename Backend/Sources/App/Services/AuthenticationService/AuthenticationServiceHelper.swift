@@ -17,15 +17,22 @@ actor AuthenticationServiceHelper {
         self.config = config
     }
 
+    // TODO: refactor all helper methods and public method to
+    // to `AuthenticationCodeValidator`, ave `authCodePayload`
+    // as a struct property.
     public func validateAndDeleteCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws {
-        try messageService.sendDiscordWebhookAppEvent(
-            input: authCodePayload.phoneNumber,
-            event: "submitted valid code `\(authCodePayload.code)`",
-            logger: config.logger
-        )
+        try sendTelemetryDataOnValidateAndDeleteCodeAttempt(authCodePayload)
 
         let validCode = try await getAndValidateCode(authCodePayload)
         try await validCode.delete(on: config.writeDb)
+    }
+
+    private func sendTelemetryDataOnValidateAndDeleteCodeAttempt(_ authCodePayload: AuthPhoneCodePayloadDTO) throws {
+        try messageService.sendDiscordWebhookAppEvent(
+            input: authCodePayload.phoneNumber,
+            event: "submitted authentication code to validate `\(authCodePayload.code)`",
+            logger: config.logger
+        )
     }
 
     private func getAndValidateCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws
@@ -50,16 +57,19 @@ actor AuthenticationServiceHelper {
         guard
             let validCode = authCode
         else {
-            config.logger.error(
-                "Authentication code is invalid",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "authCodePayload": .string(String(reflecting: authCodePayload))
-                ]
-            )
+            logInvalidCodeError(authCodePayload)
             throw GenericErrors.invalidCode
         }
 
+        logValidCode(code: validCode, payload: authCodePayload)
+
+        return validCode
+    }
+
+    private func logValidCode(
+        code validCode: AuthenticationCodeModel,
+        payload authCodePayload: AuthPhoneCodePayloadDTO
+    ) {
         config.logger.info(
             "Authentication code is valid",
             metadata: [
@@ -68,8 +78,16 @@ actor AuthenticationServiceHelper {
                 "validCode": .string(String(reflecting: validCode)),
             ]
         )
+    }
 
-        return validCode
+    private func logInvalidCodeError(_ authCodePayload: AuthPhoneCodePayloadDTO) {
+        config.logger.error(
+            "Authentication code is invalid",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "authCodePayload": .string(String(reflecting: authCodePayload))
+            ]
+        )
     }
 
     private func getAuthCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws -> AuthenticationCodeModel? {
@@ -84,6 +102,7 @@ actor AuthenticationServiceHelper {
         Date().addingTimeInterval(15 * 60)
     }
 
+    // TODO: refactor
     public func generateAccessToken(
         userId: String,
         expiresIn: TimeInterval,
@@ -119,6 +138,7 @@ actor AuthenticationServiceHelper {
         return signedToken
     }
 
+    // TODO: refactor
     public func deleteOldTokens(
         userId: UUID,
         subject: JWTTokenSubject,
@@ -157,6 +177,7 @@ actor AuthenticationServiceHelper {
         }
     }
 
+    // TODO: refactor
     public func createAuthenticationTokensPayload(
         userId: String,
         signer: Request.JWT
@@ -169,6 +190,8 @@ actor AuthenticationServiceHelper {
             ]
         )
 
+        // TODO: remove all `messageService` init, use just
+        // top level property.
         let messageService = MessageService()
 
         let accessToken = try await generateAccessToken(
@@ -208,6 +231,7 @@ actor AuthenticationServiceHelper {
         return tokensPayload
     }
 
+    // TODO: refactor name and code to be cleaner
     public func getDistance() throws -> Double {
         let distanceRawValue = try Environment.getOrThrow("AUTHENTICATION_CODE_DISTANCE")
 
@@ -226,6 +250,7 @@ actor AuthenticationServiceHelper {
         return distance
     }
 
+    // TODO: refactor
     public func sendAuthCode(
         queue: Queue,
         code: String,
@@ -267,6 +292,8 @@ actor AuthenticationServiceHelper {
         return .init(success: true, timeout: 60)
     }
 
+    // TODO: cleanup, don't throw error at top level
+    // (have name be `logAuthCodeNotSent`)
     public func handleAuthCodeNotSent(
         code: String,
         phoneNumber: String,
@@ -287,6 +314,7 @@ actor AuthenticationServiceHelper {
         throw error
     }
 
+    // TODO: remove method, use above method instead of this one
     public func handleAuthCodeNotSent(
         code: String,
         phoneNumber: String,
