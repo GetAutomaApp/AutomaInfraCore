@@ -16,12 +16,7 @@ public struct RootAuthenticationService: AuthenticationService {
 
     init(_ config: RootAuthenticationServiceConfig) {
         self.config = config
-        helper = .init(
-            writeDb: config.writeDb,
-            readDb: config.readDb,
-            logger: config.logger,
-            messageService: messageService
-        )
+        helper = .init(.init(writeDb: config.writeDb, readDb: config.readDb, logger: config.logger))
     }
 
     func register(_ payload: UserRegistrationPayload) async throws -> AuthenticationTokensPayloadDTO {
@@ -83,12 +78,11 @@ public struct RootAuthenticationService: AuthenticationService {
         try await sendLogoutEvent(userId: userId)
         logLogout(userId: userId)
 
-        let concurrencySafeHelper = AuthenticationServiceHelper(
+        let concurrencySafeHelper: AuthenticationServiceHelper = .init(.init(
             writeDb: config.writeDb,
             readDb: config.readDb,
-            logger: config.logger,
-            messageService: messageService
-        )
+            logger: config.logger
+        ))
 
         async let deleteRefresh: () = concurrencySafeHelper.deleteOldTokens(userId: userId, subject: .refresh)
         async let deleteAccess: () = concurrencySafeHelper.deleteOldTokens(userId: userId, subject: .access)

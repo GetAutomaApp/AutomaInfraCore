@@ -4,10 +4,10 @@
 // All rights reserved.
 
 import DataTypes
-import Vapor
 import Fluent
 import JWT
 import Queues
+import Vapor
 
 internal struct UserRegistrationService: AuthenticationService {
     var config: UserRegistrationConfig
@@ -18,12 +18,7 @@ internal struct UserRegistrationService: AuthenticationService {
 
     public init(_ config: UserRegistrationConfig) {
         self.config = config
-        helper = .init(
-            writeDb: config.writeDb,
-            readDb: config.readDb,
-            logger: config.logger,
-            messageService: messageService
-        )
+        helper = .init(.init(writeDb: config.writeDb, readDb: config.readDb, logger: config.logger))
         identifier = Self.generateNewUserIdentifier()
         user = Self.createUserModel(identifier: identifier, config: config)
     }

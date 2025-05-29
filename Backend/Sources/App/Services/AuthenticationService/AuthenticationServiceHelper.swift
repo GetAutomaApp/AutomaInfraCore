@@ -10,33 +10,28 @@ import Queues
 import Vapor
 
 actor AuthenticationServiceHelper {
-    public let writeDb: Database
-    public let readDb: Database
-    public let logger: Logger
-    private let messageService: MessageService
+    private let config: AuthenticationServiceHelperConfig
+    private let messageService = MessageService()
 
-    init(writeDb: Database, readDb: Database, logger: Logger, messageService: MessageService) {
-        self.writeDb = writeDb
-        self.readDb = readDb
-        self.logger = logger
-        self.messageService = messageService
+    init(_ config: AuthenticationServiceHelperConfig) {
+        self.config = config
     }
 
     public func validateAndDeleteCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws {
         try messageService.sendDiscordWebhookAppEvent(
             input: authCodePayload.phoneNumber,
             event: "submitted valid code `\(authCodePayload.code)`",
-            logger: logger
+            logger: config.logger
         )
 
         let validCode = try await getAndValidateCode(authCodePayload)
-        try await validCode.delete(on: writeDb)
+        try await validCode.delete(on: config.writeDb)
     }
 
     private func getAndValidateCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws
         -> AuthenticationCodeModel
     {
-        logger.info(
+        config.logger.info(
             "Starting validation of authentication code",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
@@ -55,7 +50,7 @@ actor AuthenticationServiceHelper {
         guard
             let validCode = authCode
         else {
-            logger.error(
+            config.logger.error(
                 "Authentication code is invalid",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
@@ -65,7 +60,7 @@ actor AuthenticationServiceHelper {
             throw GenericErrors.invalidCode
         }
 
-        logger.info(
+        config.logger.info(
             "Authentication code is valid",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
@@ -79,7 +74,7 @@ actor AuthenticationServiceHelper {
 
     private func getAuthCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws -> AuthenticationCodeModel? {
         try await AuthenticationCodeModel
-            .query(on: readDb)
+            .query(on: config.readDb)
             .filter(\.$phoneNumber == authCodePayload.phoneNumber)
             .filter(\.$code == authCodePayload.code.lowercased())
             .first()
@@ -119,7 +114,7 @@ actor AuthenticationServiceHelper {
             userId: userId,
             subject: subject,
             deletedAt: expiresAt
-        ).create(on: writeDb)
+        ).create(on: config.writeDb)
 
         return signedToken
     }
@@ -129,7 +124,7 @@ actor AuthenticationServiceHelper {
         subject: JWTTokenSubject,
         skip: Int? = nil
     ) async throws {
-        logger.info(
+        config.logger.info(
             "Deleting old tokens",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
@@ -139,7 +134,7 @@ actor AuthenticationServiceHelper {
             ]
         )
 
-        var query = JwtTokenModel.query(on: writeDb)
+        var query = JwtTokenModel.query(on: config.writeDb)
             .filter(\.$userId == userId)
             .filter(\.$subject == subject)
             .sort(\.$createdAt, .descending)
@@ -151,8 +146,8 @@ actor AuthenticationServiceHelper {
         let tokensToDelete = try await query.all()
 
         for token in tokensToDelete {
-            try await token.delete(on: writeDb)
-            logger.info(
+            try await token.delete(on: config.writeDb)
+            config.logger.info(
                 "Deleted token",
                 metadata: [
                     "to": .string("AuthenticationService.deleteOldTokens"),
@@ -166,7 +161,7 @@ actor AuthenticationServiceHelper {
         userId: String,
         signer: Request.JWT
     ) async throws -> AuthenticationTokensPayloadDTO {
-        logger.info(
+        config.logger.info(
             "Creating authentication tokens payload",
             metadata: [
                 "to": .string("AuthenticationService.createAuthenticationTokensPayload"),
@@ -194,7 +189,7 @@ actor AuthenticationServiceHelper {
             refreshToken: refreshToken
         )
 
-        logger.info(
+        config.logger.info(
             "Successfully created authentication tokens payload",
             metadata: [
                 "to": .string("AuthenticationService.createAuthenticationTokensPayload"),
@@ -207,7 +202,7 @@ actor AuthenticationServiceHelper {
         try messageService.sendDiscordWebhookAppEvent(
             input: userId,
             event: "generated tokens: `access: \(accessToken.count)` `refresh: \(refreshToken.count)`",
-            logger: logger
+            logger: config.logger
         )
 
         return tokensPayload
@@ -219,7 +214,7 @@ actor AuthenticationServiceHelper {
         guard
             let distance = Double(distanceRawValue)
         else {
-            logger.error(
+            config.logger.error(
                 "Could not convert AUTHENTICATION_CODE_DISTANCE raw value to Double.",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
@@ -255,9 +250,9 @@ actor AuthenticationServiceHelper {
             deletedAt: codeDeletionTime()
         )
 
-        try await codeModel.save(on: writeDb)
+        try await codeModel.save(on: config.writeDb)
 
-        logger.info(
+        config.logger.info(
             "Sent verification code to user",
             metadata: [
                 "to": .string("AuthenticationService.sendAuthCode"),
@@ -279,7 +274,7 @@ actor AuthenticationServiceHelper {
         error: GenericErrors
     ) throws {
         BackendMetric.totalFailedVerificationCodesSent.increment()
-        logger.error(
+        config.logger.error(
             "Couldn't sent verification code to user",
             metadata: [
                 "to": .string("AuthenticationService.sendAuthCode"),
@@ -299,7 +294,7 @@ actor AuthenticationServiceHelper {
         error: any Error
     ) throws {
         BackendMetric.totalFailedVerificationCodesSent.increment()
-        logger.error(
+        config.logger.error(
             "Couldn't sent verification code to user",
             metadata: [
                 "to": .string("AuthenticationService.sendAuthCode"),
@@ -311,4 +306,10 @@ actor AuthenticationServiceHelper {
         )
         throw GenericErrors.unknownError
     }
+}
+
+struct AuthenticationServiceHelperConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
 }

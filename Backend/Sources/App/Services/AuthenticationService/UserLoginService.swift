@@ -15,12 +15,7 @@ internal struct UserLoginService: AuthenticationService {
 
     init(_ config: UserLoginConfig) {
         self.config = config
-        helper = .init(
-            writeDb: config.writeDb,
-            readDb: config.readDb,
-            logger: config.logger,
-            messageService: messageService
-        )
+        helper = .init(.init(writeDb: config.writeDb, readDb: config.readDb, logger: config.logger))
     }
 
     func login() async throws -> AuthenticationTokensPayloadDTO {
