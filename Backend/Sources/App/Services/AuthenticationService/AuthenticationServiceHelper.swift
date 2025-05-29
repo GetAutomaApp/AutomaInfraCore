@@ -17,89 +17,18 @@ actor AuthenticationServiceHelper {
         self.config = config
     }
 
-    // TODO: refactor all helper methods and public method to
-    // to `AuthenticationCodeValidator`, ave `authCodePayload`
-    // as a struct property.
-    public func validateAndDeleteCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws {
-        try sendTelemetryDataOnValidateAndDeleteCodeAttempt(authCodePayload)
-
-        let validCode = try await getAndValidateCode(authCodePayload)
-        try await validCode.delete(on: config.writeDb)
-    }
-
-    private func sendTelemetryDataOnValidateAndDeleteCodeAttempt(_ authCodePayload: AuthPhoneCodePayloadDTO) throws {
-        try messageService.sendDiscordWebhookAppEvent(
-            input: authCodePayload.phoneNumber,
-            event: "submitted authentication code to validate `\(authCodePayload.code)`",
-            logger: config.logger
-        )
-    }
-
-    private func getAndValidateCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws
-        -> AuthenticationCodeModel
-    {
-        config.logger.info(
-            "Starting validation of authentication code",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "authCodePayload": .string(String(reflecting: authCodePayload))
-            ]
-        )
-
-        let authCode = try await getAuthCode(authCodePayload)
-        return try validateAndReturnAuthCode(authCode, payload: authCodePayload)
-    }
-
-    private func validateAndReturnAuthCode(
-        _ authCode: AuthenticationCodeModel?,
-        payload authCodePayload: AuthPhoneCodePayloadDTO
-    ) throws -> AuthenticationCodeModel {
-        guard
-            let validCode = authCode
-        else {
-            logInvalidCodeError(authCodePayload)
-            throw GenericErrors.invalidCode
-        }
-
-        logValidCode(code: validCode, payload: authCodePayload)
-
-        return validCode
-    }
-
-    private func logValidCode(
-        code validCode: AuthenticationCodeModel,
-        payload authCodePayload: AuthPhoneCodePayloadDTO
-    ) {
-        config.logger.info(
-            "Authentication code is valid",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "authCodePayload": .string(String(reflecting: authCodePayload)),
-                "validCode": .string(String(reflecting: validCode)),
-            ]
-        )
-    }
-
-    private func logInvalidCodeError(_ authCodePayload: AuthPhoneCodePayloadDTO) {
-        config.logger.error(
-            "Authentication code is invalid",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "authCodePayload": .string(String(reflecting: authCodePayload))
-            ]
-        )
-    }
-
-    private func getAuthCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws -> AuthenticationCodeModel? {
-        try await AuthenticationCodeModel
-            .query(on: config.readDb)
-            .filter(\.$phoneNumber == authCodePayload.phoneNumber)
-            .filter(\.$code == authCodePayload.code.lowercased())
-            .first()
-    }
-
     public func codeDeletionTime() -> Date {
         Date().addingTimeInterval(15 * 60)
+    }
+
+    public func validateAndDeleteCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws {
+        let validator = AuthenticationCodeValidator(
+            .init(
+                writeDb: config.writeDb, readDb: config.readDb, logger: config.logger
+            ),
+            authCodePayload: authCodePayload
+        )
+        try await validator.validateAndDeleteCode()
     }
 
     // TODO: refactor
@@ -333,6 +262,93 @@ actor AuthenticationServiceHelper {
             ]
         )
         throw GenericErrors.unknownError
+    }
+}
+
+internal struct AuthenticationCodeValidator {
+    private let config: AuthenticationServiceHelperConfig
+    private let authCodePayload: AuthPhoneCodePayloadDTO
+    private let messageService = MessageService()
+
+    init(_ config: AuthenticationServiceHelperConfig, authCodePayload: AuthPhoneCodePayloadDTO) {
+        self.config = config
+        self.authCodePayload = authCodePayload
+    }
+
+    public func validateAndDeleteCode() async throws {
+        try sendTelemetryDataOnValidateAndDeleteCodeAttempt()
+
+        let validCode = try await getAndValidateCode()
+        try await validCode.delete(on: config.writeDb)
+    }
+
+    private func sendTelemetryDataOnValidateAndDeleteCodeAttempt() throws {
+        try messageService.sendDiscordWebhookAppEvent(
+            input: authCodePayload.phoneNumber,
+            event: "submitted authentication code to validate `\(authCodePayload.code)`",
+            logger: config.logger
+        )
+    }
+
+    private func getAndValidateCode() async throws
+        -> AuthenticationCodeModel
+    {
+        config.logger.info(
+            "Starting validation of authentication code",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "authCodePayload": .string(String(reflecting: authCodePayload))
+            ]
+        )
+
+        let authCode = try await getAuthCode()
+        return try validateAndReturnAuthCode(authCode)
+    }
+
+    private func validateAndReturnAuthCode(
+        _ authCode: AuthenticationCodeModel?
+    ) throws -> AuthenticationCodeModel {
+        guard
+            let validCode = authCode
+        else {
+            logInvalidCodeError()
+            throw GenericErrors.invalidCode
+        }
+
+        logValidCode(code: validCode)
+
+        return validCode
+    }
+
+    private func logValidCode(
+        code validCode: AuthenticationCodeModel
+    ) {
+        config.logger.info(
+            "Authentication code is valid",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "authCodePayload": .string(String(reflecting: authCodePayload)),
+                "validCode": .string(String(reflecting: validCode)),
+            ]
+        )
+    }
+
+    private func logInvalidCodeError() {
+        config.logger.error(
+            "Authentication code is invalid",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "authCodePayload": .string(String(reflecting: authCodePayload))
+            ]
+        )
+    }
+
+    private func getAuthCode() async throws -> AuthenticationCodeModel? {
+        try await AuthenticationCodeModel
+            .query(on: config.readDb)
+            .filter(\.$phoneNumber == authCodePayload.phoneNumber)
+            .filter(\.$code == authCodePayload.code.lowercased())
+            .first()
     }
 }
 
