@@ -17,10 +17,6 @@ actor AuthenticationServiceHelper {
         self.config = config
     }
 
-    public func codeDeletionTime() -> Date {
-        Date().addingTimeInterval(15 * 60)
-    }
-
     public func validateAndDeleteCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws {
         let validator = AuthenticationCodeValidator(
             .init(
@@ -65,6 +61,10 @@ actor AuthenticationServiceHelper {
         ).create(on: config.writeDb)
 
         return signedToken
+    }
+
+    private func codeDeletionTime() -> Date {
+        Date().addingTimeInterval(15 * 60)
     }
 
     // TODO: refactor

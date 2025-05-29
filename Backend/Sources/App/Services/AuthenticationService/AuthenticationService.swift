@@ -132,6 +132,7 @@ public struct RootAuthenticationService: AuthenticationService {
         return distance - (recentCode.createdAt?.distance(to: dateToCheck) ?? distance)
     }
 
+    // TODO: This method does more than one thing. Refactor.
     private func sendOrHandleAuthCode(
         phoneNumber: String,
         queue: Queue,
