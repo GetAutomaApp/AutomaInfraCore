@@ -27,38 +27,11 @@ actor AuthenticationServiceHelper {
         try await validator.validateAndDeleteCode()
     }
 
-    // TODO: refactor
-    public func generateAccessToken(
-        userId: UUID,
-        expiresIn: TimeInterval,
-        type subject: JWTTokenSubject,
-        signer: Request.JWT
-    ) async throws -> String {
-        let expiresAt = Date().addingTimeInterval(expiresIn)
-        let token = JWTTokenPayload(
-            subject: subject,
-            expiration: .init(value: expiresAt),
-            userId: userId.uuidString,
-            tokenId: UUID()
-        )
-
-        let signedToken = try await signer.sign(token)
-
-        try await deleteOldTokens(userId: userId, subject: subject, skip: 5)
-
-        let tokenId = UUID()
-
-        try await JwtTokenModel(
-            id: tokenId,
-            token: signedToken,
-            userId: userId,
-            subject: subject,
-            deletedAt: expiresAt
-        ).create(on: config.writeDb)
-
-        return signedToken
+    public func resetAccessToken(_ config: AccessTokenResetterConfig) {
+        try await AccessTokenResetter(config).reset()
     }
 
+    // TODO: refactor
     private func codeDeletionTime() -> Date {
         Date().addingTimeInterval(15 * 60)
     }
@@ -289,14 +262,6 @@ internal struct AuthenticationCodeValidator {
     private func getAndValidateCode() async throws
         -> AuthenticationCodeModel
     {
-        config.logger.info(
-            "Starting validation of authentication code",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "authCodePayload": .string(String(reflecting: authCodePayload))
-            ]
-        )
-
         let authCode = try await getAuthCode()
         return try validateAndReturnAuthCode(authCode)
     }
@@ -304,6 +269,8 @@ internal struct AuthenticationCodeValidator {
     private func validateAndReturnAuthCode(
         _ authCode: AuthenticationCodeModel?
     ) throws -> AuthenticationCodeModel {
+        logValidateCodeStart()
+
         guard
             let validCode = authCode
         else {
@@ -314,6 +281,16 @@ internal struct AuthenticationCodeValidator {
         logValidCode(code: validCode)
 
         return validCode
+    }
+
+    private func logValidateCodeStart() {
+        config.logger.info(
+            "Starting validation of authentication code",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "authCodePayload": .string(String(reflecting: authCodePayload))
+            ]
+        )
     }
 
     private func logValidCode(
@@ -352,4 +329,51 @@ struct AuthenticationServiceHelperConfig: AuthenticationServiceConfig {
     let writeDb: Database
     let readDb: Database
     let logger: Logger
+}
+
+internal struct AccessTokenResetter {
+    private let config: AccessTokenResetterConfig
+    private let expiresAt: Date
+
+    init(_ config: AccessTokenResetterConfig) {
+        self.config = config
+        expiresAt = Date().addingTimeInterval(config.expiresIn)
+    }
+
+    public func reset() async throws -> String {
+        let signedToken = getSignedToken()
+        try await deleteOldTokens(userId: userId, subject: subject, skip: 5)
+        try await createAuthToken(fromSignedToken: signedToken)
+        return signedToken
+    }
+
+    private func createAuthToken(fromSignedToken signedToken: String) async throws {
+        try await JwtTokenModel(
+            id: UUID(),
+            token: signedToken,
+            userId: config.userId,
+            subject: config.subject,
+            deletedAt: expiresAt
+        ).create(on: config.writeDb)
+    }
+
+    private func getSignedToken() async throws -> String {
+        try await config.signer.sign()
+    }
+
+    private func createTokenToSign() -> JWTTokenPayload {
+        JWTTokenPayload(
+            subject: config.subject,
+            expiration: .init(value: expiresAt),
+            userId: config.userId.uuidString,
+            tokenId: UUID()
+        )
+    }
+}
+
+internal struct AccessTokenResetterConfig {
+    let userId: UUID
+    let expiresIn: TimeInterval
+    let type: JWTTokenSubject
+    let signer: Request.JWT
 }
