@@ -43,13 +43,16 @@ internal struct UserLoginService: AuthenticationService {
     }
 
     private func completeLogin(for user: UserModel) async throws -> AuthenticationTokensPayloadDTO {
-        guard let userId = user.id?.uuidString else {
+        let userId: UUID
+        do {
+            userId = try user.requireID()
+        } catch {
             config.logger.error("User model has no ID")
             throw GenericErrors.userNotFound
         }
 
         try await sendLoginWebhook(for: user)
-        logUserLogin(userId: userId, username: user.username)
+        logUserLogin(userId: userId.uuidString, username: user.username)
 
         return try await helper.createAuthenticationTokensPayload(
             userId: userId,

@@ -29,15 +29,11 @@ actor AuthenticationServiceHelper {
 
     // TODO: refactor
     public func generateAccessToken(
-        userId: String,
+        userId: UUID,
         expiresIn: TimeInterval,
         type subject: JWTTokenSubject,
         signer: Request.JWT
     ) async throws -> String {
-        guard let userId = UUID(uuidString: userId) else {
-            throw GenericErrors.invalidUserId
-        }
-
         let expiresAt = Date().addingTimeInterval(expiresIn)
         let token = JWTTokenPayload(
             subject: subject,
@@ -108,14 +104,14 @@ actor AuthenticationServiceHelper {
 
     // TODO: refactor
     public func createAuthenticationTokensPayload(
-        userId: String,
+        userId: UUID,
         signer: Request.JWT
     ) async throws -> AuthenticationTokensPayloadDTO {
         config.logger.info(
             "Creating authentication tokens payload",
             metadata: [
                 "to": .string("AuthenticationService.createAuthenticationTokensPayload"),
-                "userId": .string(userId),
+                "userId": .string(userId.uuidString),
             ]
         )
 
@@ -145,14 +141,14 @@ actor AuthenticationServiceHelper {
             "Successfully created authentication tokens payload",
             metadata: [
                 "to": .string("AuthenticationService.createAuthenticationTokensPayload"),
-                "userId": .string(userId),
+                "userId": .string(userId.uuidString),
                 "accessTokenLength": .string("\(accessToken.count)"),
                 "refreshTokenLength": .string("\(refreshToken.count)"),
             ]
         )
 
         try messageService.sendDiscordWebhookAppEvent(
-            input: userId,
+            input: userId.uuidString,
             event: "generated tokens: `access: \(accessToken.count)` `refresh: \(refreshToken.count)`",
             logger: config.logger
         )

@@ -30,7 +30,7 @@ internal struct UserRegistrationService: AuthenticationService {
         try sendTelemetryDataOnRegistrationSuccess()
 
         return try await helper.createAuthenticationTokensPayload(
-            userId: identifier.id.uuidString,
+            userId: identifier.id,
             signer: config.payload.signer
         )
     }

@@ -57,10 +57,10 @@ public struct RootAuthenticationService: AuthenticationService {
         )
     }
 
-    public func refreshToken(userId: String, signer: Request.JWT) async throws -> String {
+    public func refreshToken(userId: UUID, signer: Request.JWT) async throws -> String {
         do {
-            try await sendRefreshEvent(userId: userId)
-            logRefresh(userId: userId)
+            try await sendRefreshEvent(userId: userId.uuidString)
+            logRefresh(userId: userId.uuidString)
 
             return try await helper.generateAccessToken(
                 userId: userId,
