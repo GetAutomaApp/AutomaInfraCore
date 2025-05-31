@@ -38,71 +38,27 @@ actor AuthenticationServiceHelper {
     }
 
     public func deleteOldTokens(_ payload: DeleteOldAccessTokensPayload) async throws {
-        try await OldAccessTokenDeleter(.init(
+        try await OldAccessTokenDeleter(
+            .init(writeDb: config.writeDb,
+                  readDb: config.readDb,
+                  logger: config.logger,
+                  payload: payload)
+        ).deleteOldTokens()
+    }
+
+    public func createAuthenticationTokensPayload(_ payload: CreateAuthenticationTokensPayload) async throws
+        -> AuthenticationTokensPayloadDTO
+    {
+        try await AuthenticationTokensPayloadCreator(.init(
             writeDb: config.writeDb,
             readDb: config.readDb,
             logger: config.logger,
             payload: payload
-        )).deleteOldTokens()
+        )).create()
     }
 
-    // TODO: refactor
     private func codeDeletionTime() -> Date {
         Date().addingTimeInterval(15 * 60)
-    }
-
-    // TODO: refactor
-    public func createAuthenticationTokensPayload(
-        userId: UUID,
-        signer: Request.JWT
-    ) async throws -> AuthenticationTokensPayloadDTO {
-        config.logger.info(
-            "Creating authentication tokens payload",
-            metadata: [
-                "to": .string("AuthenticationService.createAuthenticationTokensPayload"),
-                "userId": .string(userId.uuidString),
-            ]
-        )
-
-        // TODO: remove all `messageService` init, use just
-        // top level property.
-        let messageService = MessageService()
-
-        let accessToken = try await resetAccessToken(
-            .init(
-                userId: userId,
-                expiresIn: 86_400,
-                subject: .access,
-                signer: signer
-            )
-        )
-
-        let refreshToken = try await resetAccessToken(
-            .init(userId: userId, expiresIn: 31_536_000, subject: .refresh, signer: signer)
-        )
-
-        let tokensPayload: AuthenticationTokensPayloadDTO = .init(
-            accessToken: accessToken,
-            refreshToken: refreshToken
-        )
-
-        config.logger.info(
-            "Successfully created authentication tokens payload",
-            metadata: [
-                "to": .string("AuthenticationService.createAuthenticationTokensPayload"),
-                "userId": .string(userId.uuidString),
-                "accessTokenLength": .string("\(accessToken.count)"),
-                "refreshTokenLength": .string("\(refreshToken.count)"),
-            ]
-        )
-
-        try messageService.sendDiscordWebhookAppEvent(
-            input: userId.uuidString,
-            event: "generated tokens: `access: \(accessToken.count)` `refresh: \(refreshToken.count)`",
-            logger: config.logger
-        )
-
-        return tokensPayload
     }
 
     // TODO: refactor name and code to be cleaner
@@ -426,4 +382,99 @@ internal struct OldAccessTokenDeleterConfig: AuthenticationServiceConfig {
     let readDb: Database
     let logger: Logger
     let payload: DeleteOldAccessTokensPayload
+}
+
+internal struct AuthenticationTokensPayloadCreator {
+    private let config: AuthenticationTokensPayloadCreatorConfig
+    private let messageService = MessageService()
+
+    init(_ config: AuthenticationTokensPayloadCreatorConfig) {
+        self.config = config
+    }
+
+    public func create(
+    ) async throws -> AuthenticationTokensPayloadDTO {
+        logCreateStart()
+        let tokensPayload = try await createTokensPayload()
+        try sendTelemetryDataOnCreateSuccess(payload: tokensPayload)
+
+        return tokensPayload
+    }
+
+    private func sendTelemetryDataOnCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) throws {
+        logCreateSuccess(payload: tokensPayload)
+        try alertCreateSuccess(payload: tokensPayload)
+    }
+
+    private func alertCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) throws {
+        try messageService.sendDiscordWebhookAppEvent(
+            input: config.payload.userId.uuidString,
+            event: "generated tokens: `access: \(tokensPayload.accessToken.count)` `refresh: \(tokensPayload.refreshToken.count)`",
+            logger: config.logger
+        )
+    }
+
+    private func logCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) {
+        config.logger.info(
+            "Successfully created authentication tokens payload",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "userId": .string(config.payload.userId.uuidString),
+                "accessTokenLength": .string("\(tokensPayload.accessToken.count)"),
+                "refreshTokenLength": .string("\(tokensPayload.refreshToken.count)"),
+            ]
+        )
+    }
+
+    private func createTokensPayload() async throws -> AuthenticationTokensPayloadDTO {
+        try await .init(
+            accessToken: resetAccessToken(subject: .access),
+            refreshToken: resetAccessToken(subject: .refresh)
+        )
+    }
+
+    private func resetAccessToken(subject: JWTTokenSubject) async throws -> String {
+        try await AccessTokenResetter(.init(
+            writeDb: config.writeDb,
+            readDb: config.readDb,
+            logger: config.logger,
+            payload: .init(
+                userId: config.payload.userId,
+                expiresIn: getExpiresInFromSubject(subject),
+                subject: subject,
+                signer: config.payload.signer
+            )
+        )).reset()
+    }
+
+    private func getExpiresInFromSubject(_ subject: JWTTokenSubject) -> TimeInterval {
+        switch subject {
+        case .refresh:
+            31_536_000
+        default:
+            86_400
+        }
+    }
+
+    private func logCreateStart() {
+        config.logger.info(
+            "Creating authentication tokens payload",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "userId": .string(config.payload.userId.uuidString),
+            ]
+        )
+    }
+}
+
+internal struct AuthenticationTokensPayloadCreatorConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
+    let payload: CreateAuthenticationTokensPayload
+}
+
+internal struct CreateAuthenticationTokensPayload {
+    let userId: UUID
+    let signer: Request.JWT
 }

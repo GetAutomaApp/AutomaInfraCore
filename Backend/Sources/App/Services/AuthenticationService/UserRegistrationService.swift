@@ -29,10 +29,10 @@ internal struct UserRegistrationService: AuthenticationService {
         try await generateUserProfilePicture(&user)
         try sendTelemetryDataOnRegistrationSuccess()
 
-        return try await helper.createAuthenticationTokensPayload(
+        return try await helper.createAuthenticationTokensPayload(.init(
             userId: identifier.id,
             signer: config.payload.signer
-        )
+        ))
     }
 
     private func sendTelemetryDataOnRegistrationSuccess() throws {

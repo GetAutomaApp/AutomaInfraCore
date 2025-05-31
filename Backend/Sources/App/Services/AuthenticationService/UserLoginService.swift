@@ -54,10 +54,7 @@ internal struct UserLoginService: AuthenticationService {
         try await sendLoginWebhook(for: user)
         logUserLogin(userId: userId.uuidString, username: user.username)
 
-        return try await helper.createAuthenticationTokensPayload(
-            userId: userId,
-            signer: config.payload.signer
-        )
+        return try await helper.createAuthenticationTokensPayload(.init(userId: userId, signer: config.payload.signer))
     }
 
     private func sendLoginWebhook(for user: UserModel) async throws {
