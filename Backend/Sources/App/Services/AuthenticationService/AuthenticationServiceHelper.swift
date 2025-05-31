@@ -27,52 +27,28 @@ actor AuthenticationServiceHelper {
         try await validator.validateAndDeleteCode()
     }
 
-    public func resetAccessToken(_ config: AccessTokenResetterConfig) {
-        try await AccessTokenResetter(config).reset()
+    public func resetAccessToken(_ payload: ResetAccessCodePayload) async throws -> String {
+        try await AccessTokenResetter(.init(
+            writeDb: config.writeDb,
+            readDb: config.readDb,
+            logger: config.logger,
+            payload: payload
+        ))
+        .reset()
+    }
+
+    public func deleteOldTokens(_ payload: DeleteOldAccessTokensPayload) async throws {
+        try await OldAccessTokenDeleter(.init(
+            writeDb: config.writeDb,
+            readDb: config.readDb,
+            logger: config.logger,
+            payload: payload
+        )).deleteOldTokens()
     }
 
     // TODO: refactor
     private func codeDeletionTime() -> Date {
         Date().addingTimeInterval(15 * 60)
-    }
-
-    // TODO: refactor
-    public func deleteOldTokens(
-        userId: UUID,
-        subject: JWTTokenSubject,
-        skip: Int? = nil
-    ) async throws {
-        config.logger.info(
-            "Deleting old tokens",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "userId": .string(userId.uuidString),
-                "subject": .string(String(reflecting: subject)),
-                "skip": .string(String(reflecting: skip)),
-            ]
-        )
-
-        var query = JwtTokenModel.query(on: config.writeDb)
-            .filter(\.$userId == userId)
-            .filter(\.$subject == subject)
-            .sort(\.$createdAt, .descending)
-
-        if let skip {
-            query = query.range(skip...)
-        }
-
-        let tokensToDelete = try await query.all()
-
-        for token in tokensToDelete {
-            try await token.delete(on: config.writeDb)
-            config.logger.info(
-                "Deleted token",
-                metadata: [
-                    "to": .string("AuthenticationService.deleteOldTokens"),
-                    "tokenId": .string(token.id?.uuidString ?? "unknown"),
-                ]
-            )
-        }
     }
 
     // TODO: refactor
@@ -92,17 +68,17 @@ actor AuthenticationServiceHelper {
         // top level property.
         let messageService = MessageService()
 
-        let accessToken = try await generateAccessToken(
-            userId: userId,
-            expiresIn: 86_400,
-            type: .access,
-            signer: signer
+        let accessToken = try await resetAccessToken(
+            .init(
+                userId: userId,
+                expiresIn: 86_400,
+                subject: .access,
+                signer: signer
+            )
         )
-        let refreshToken = try await generateAccessToken(
-            userId: userId,
-            expiresIn: 31_536_000,
-            type: .refresh,
-            signer: signer
+
+        let refreshToken = try await resetAccessToken(
+            .init(userId: userId, expiresIn: 31_536_000, subject: .refresh, signer: signer)
         )
 
         let tokensPayload: AuthenticationTokensPayloadDTO = .init(
@@ -331,18 +307,30 @@ struct AuthenticationServiceHelperConfig: AuthenticationServiceConfig {
     let logger: Logger
 }
 
+internal struct DeleteOldAccessTokensPayload {
+    let userId: UUID
+    let subject: JWTTokenSubject
+}
+
 internal struct AccessTokenResetter {
     private let config: AccessTokenResetterConfig
     private let expiresAt: Date
 
     init(_ config: AccessTokenResetterConfig) {
         self.config = config
-        expiresAt = Date().addingTimeInterval(config.expiresIn)
+        expiresAt = Date().addingTimeInterval(config.payload.expiresIn)
     }
 
     public func reset() async throws -> String {
-        let signedToken = getSignedToken()
-        try await deleteOldTokens(userId: userId, subject: subject, skip: 5)
+        let signedToken = try await getSignedToken()
+        try await OldAccessTokenDeleter(
+            .init(
+                writeDb: config.writeDb,
+                readDb: config.readDb,
+                logger: config.logger,
+                payload: .init(userId: config.payload.userId, subject: config.payload.subject)
+            )
+        ).deleteOldTokens(skip: 5)
         try await createAuthToken(fromSignedToken: signedToken)
         return signedToken
     }
@@ -351,29 +339,91 @@ internal struct AccessTokenResetter {
         try await JwtTokenModel(
             id: UUID(),
             token: signedToken,
-            userId: config.userId,
-            subject: config.subject,
+            userId: config.payload.userId,
+            subject: config.payload.subject,
             deletedAt: expiresAt
         ).create(on: config.writeDb)
     }
 
     private func getSignedToken() async throws -> String {
-        try await config.signer.sign()
+        try await config.payload.signer.sign(createTokenToSign())
     }
 
     private func createTokenToSign() -> JWTTokenPayload {
         JWTTokenPayload(
-            subject: config.subject,
+            subject: config.payload.subject,
             expiration: .init(value: expiresAt),
-            userId: config.userId.uuidString,
+            userId: config.payload.userId.uuidString,
             tokenId: UUID()
         )
     }
 }
 
-internal struct AccessTokenResetterConfig {
+internal struct AccessTokenResetterConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
+    let payload: ResetAccessCodePayload
+}
+
+internal struct ResetAccessCodePayload {
     let userId: UUID
     let expiresIn: TimeInterval
-    let type: JWTTokenSubject
+    let subject: JWTTokenSubject
     let signer: Request.JWT
+}
+
+internal struct OldAccessTokenDeleter {
+    let config: OldAccessTokenDeleterConfig
+
+    init(_ config: OldAccessTokenDeleterConfig) {
+        self.config = config
+    }
+
+    // TODO: refactor
+    public func deleteOldTokens(
+        skip: Int? = nil
+    ) async throws {
+        let subject = config.payload.subject
+        let userId = config.payload.userId
+
+        config.logger.info(
+            "Deleting old tokens",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "userId": .string(userId.uuidString),
+                "subject": .string(String(reflecting: subject)),
+                "skip": .string(String(reflecting: skip)),
+            ]
+        )
+
+        var query = JwtTokenModel.query(on: config.writeDb)
+            .filter(\.$userId == userId)
+            .filter(\.$subject == subject)
+            .sort(\.$createdAt, .descending)
+
+        if let skip {
+            query = query.range(skip...)
+        }
+
+        let tokensToDelete = try await query.all()
+
+        for token in tokensToDelete {
+            try await token.delete(on: config.writeDb)
+            config.logger.info(
+                "Deleted token",
+                metadata: [
+                    "to": .string("AuthenticationService.deleteOldTokens"),
+                    "tokenId": .string(token.id?.uuidString ?? "unknown"),
+                ]
+            )
+        }
+    }
+}
+
+internal struct OldAccessTokenDeleterConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
+    let payload: DeleteOldAccessTokensPayload
 }

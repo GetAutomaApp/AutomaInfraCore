@@ -62,11 +62,10 @@ public struct RootAuthenticationService: AuthenticationService {
             try await sendRefreshEvent(userId: userId.uuidString)
             logRefresh(userId: userId.uuidString)
 
-            return try await helper.generateAccessToken(
-                userId: userId,
-                expiresIn: 86_400,
-                type: .access,
-                signer: signer
+            return try await helper.resetAccessToken(
+                .init(
+                    userId: userId, expiresIn: 86_400, subject: .access, signer: signer
+                )
             )
         } catch {
             BackendMetric.totalFailedTokensRefreshed.increment()
@@ -84,8 +83,8 @@ public struct RootAuthenticationService: AuthenticationService {
             logger: config.logger
         ))
 
-        async let deleteRefresh: () = concurrencySafeHelper.deleteOldTokens(userId: userId, subject: .refresh)
-        async let deleteAccess: () = concurrencySafeHelper.deleteOldTokens(userId: userId, subject: .access)
+        async let deleteRefresh: () = concurrencySafeHelper.deleteOldTokens(.init(userId: userId, subject: .refresh))
+        async let deleteAccess: () = concurrencySafeHelper.deleteOldTokens(.init(userId: userId, subject: .access))
 
         _ = try await (deleteRefresh, deleteAccess)
     }
