@@ -41,7 +41,7 @@ internal struct UserRegistrationService: AuthenticationService {
         config.logger.info(
             "Successfully Registered User",
             metadata: [
-                "to": .string("AuthenticationService.register"),
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "userIdentifier": .string(String(reflecting: identifier))
             ]
         )
@@ -67,7 +67,7 @@ internal struct UserRegistrationService: AuthenticationService {
         let userDTO = try user.toDTO(logger: config.logger)
         let profilePictureKey = try ProfilePictureService(logger: config.logger).generateImageKey(for: userDTO)
 
-        try await config.payload.queue.dispatch(ProfilePictureAsyncJob.self, .init(payload: userDTO))
+        try await config.queue.dispatch(ProfilePictureAsyncJob.self, .init(payload: userDTO))
 
         user.profilePictureKey = profilePictureKey
 
@@ -87,15 +87,15 @@ internal struct UserRegistrationService: AuthenticationService {
     }
 }
 
-struct UserRegistrationConfig: AuthenticationServiceConfig {
+internal struct UserRegistrationConfig: AuthenticationServiceConfig {
     let writeDb: Database
     let readDb: Database
     let logger: Logger
+    let queue: Queue
     let payload: UserRegistrationPayload
 }
 
-struct UserRegistrationPayload {
+internal struct UserRegistrationPayload {
     let authCodePayload: AuthPhoneCodePayloadDTO
     let signer: Request.JWT
-    let queue: Queue
 }

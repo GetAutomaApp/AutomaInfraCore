@@ -86,11 +86,13 @@ actor AuthenticationServiceHelper {
         )
     }
 
-    public func sendAuthCode(_ payload: SendAuthCodePayload) async throws -> AuthenticationCodeResponseDTO {
+    public func sendAuthCode(_ payload: SendAuthCodePayload, queue: Queue) async throws -> AuthenticationCodeResponseDTO
+    {
         try await AuthCodeSender(.init(
             writeDb: config.writeDb,
             readDb: config.writeDb,
             logger: config.logger,
+            queue: queue,
             payload: payload
         )).send()
     }
@@ -477,12 +479,12 @@ internal struct AuthCodeSenderConfig: AuthenticationServiceConfig {
     let writeDb: Database
     let readDb: Database
     let logger: Logger
+    let queue: Queue
     let payload: SendAuthCodePayload
 }
 
 // TODO: Put queues and other similar Vapor structs with logger (not in payload)
 internal struct SendAuthCodePayload {
-    let queue: Queue
     let code: String
     let phoneNumber: String
     let codeModelId: UUID
@@ -530,7 +532,7 @@ internal struct AuthCodeSender {
     }
 
     private func startSendCodeJob() async throws {
-        try await config.payload.queue.dispatch(
+        try await config.queue.dispatch(
             TransactionalMessageAsyncJob.self,
             .init(
                 content: MessageFormatterService

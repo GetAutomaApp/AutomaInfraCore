@@ -19,11 +19,12 @@ public struct RootAuthenticationService: AuthenticationService {
         helper = .init(.init(writeDb: config.writeDb, readDb: config.readDb, logger: config.logger))
     }
 
-    func register(_ payload: UserRegistrationPayload) async throws -> AuthenticationTokensPayloadDTO {
+    func register(_ payload: UserRegistrationPayload, queue: Queue) async throws -> AuthenticationTokensPayloadDTO {
         var registrator = UserRegistrationService(.init(
             writeDb: config.writeDb,
             readDb: config.readDb,
             logger: config.logger,
+            queue: queue,
             payload: payload
         ))
         return try await registrator.register()
@@ -139,12 +140,14 @@ public struct RootAuthenticationService: AuthenticationService {
         codeModelId: UUID
     ) async throws -> AuthenticationCodeResponseDTO {
         do {
-            return try await helper.sendAuthCode(.init(
-                queue: queue,
-                code: code,
-                phoneNumber: phoneNumber,
-                codeModelId: codeModelId
-            ))
+            return try await helper.sendAuthCode(
+                .init(
+                    code: code,
+                    phoneNumber: phoneNumber,
+                    codeModelId: codeModelId
+                ),
+                queue: queue
+            )
         } catch let error as GenericErrors {
             await helper.sendTelemetryDataOnAuthCodeSendFail(
                 code: code,

@@ -69,7 +69,7 @@ internal struct AuthenticationController: RouteCollection {
             throw GenericErrors.userAlreadyExists
         }
 
-        return try await authService.register(.init(authCodePayload: dto, signer: req.jwt, queue: req.queue))
+        return try await authService.register(.init(authCodePayload: dto, signer: req.jwt), queue: req.queue)
     }
 
     /// Sends a login code to the user's phone number.
