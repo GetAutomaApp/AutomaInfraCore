@@ -57,10 +57,6 @@ actor AuthenticationServiceHelper {
         )).create()
     }
 
-    private func codeDeletionTime() -> Date {
-        Date().addingTimeInterval(15 * 60)
-    }
-
     public func getCodeRateLimit() throws -> Double {
         try castCodeRateLimitToNumber(getRateLimitString())
     }
@@ -90,46 +86,13 @@ actor AuthenticationServiceHelper {
         )
     }
 
-    // TODO: refactor
-    public func sendAuthCode(
-        queue: Queue,
-        code: String,
-        phoneNumber: String,
-        codeModelId: UUID
-    ) async throws -> AuthenticationCodeResponseDTO {
-        try await queue.dispatch(
-            TransactionalMessageAsyncJob.self,
-            .init(
-                content: MessageFormatterService
-                    .craftVerificationCodeMessage(
-                        code: code
-                    ),
-                toPhoneNumber: phoneNumber
-            )
-        )
-
-        let codeModel = try AuthenticationCodeModel(
-            id: codeModelId,
-            code: code,
-            phoneNumber: phoneNumber,
-            deletedAt: codeDeletionTime()
-        )
-
-        try await codeModel.save(on: config.writeDb)
-
-        config.logger.info(
-            "Sent verification code to user",
-            metadata: [
-                "to": .string("AuthenticationService.sendAuthCode"),
-                "phoneNumber": .string(phoneNumber),
-                "code": .string(code),
-                "codeId": .string(codeModelId.uuidString),
-            ]
-        )
-
-        BackendMetric.totalSuccessfulVerificationCodesSent.increment()
-
-        return .init(success: true, timeout: 60)
+    public func sendAuthCode(_ payload: SendAuthCodePayload) async throws -> AuthenticationCodeResponseDTO {
+        try await AuthCodeSender(.init(
+            writeDb: config.writeDb,
+            readDb: config.writeDb,
+            logger: config.logger,
+            payload: payload
+        )).send()
     }
 
     // TODO: cleanup, don't throw error at top level
@@ -144,7 +107,7 @@ actor AuthenticationServiceHelper {
         config.logger.error(
             "Couldn't sent verification code to user",
             metadata: [
-                "to": .string("AuthenticationService.sendAuthCode"),
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "phoneNumber": .string(phoneNumber),
                 "code": .string(code),
                 "codeId": .string(codeModelId.uuidString),
@@ -165,7 +128,7 @@ actor AuthenticationServiceHelper {
         config.logger.error(
             "Couldn't sent verification code to user",
             metadata: [
-                "to": .string("AuthenticationService.sendAuthCode"),
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "phoneNumber": .string(phoneNumber),
                 "code": .string(code),
                 "codeId": .string(codeModelId.uuidString),
@@ -487,4 +450,78 @@ internal struct AuthenticationTokensPayloadCreatorConfig: AuthenticationServiceC
 internal struct CreateAuthenticationTokensPayload {
     let userId: UUID
     let signer: Request.JWT
+}
+
+internal struct AuthCodeSenderConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
+    let payload: SendAuthCodePayload
+}
+
+// TODO: Put queues and other similar Vapor structs with logger (not in payload)
+internal struct SendAuthCodePayload {
+    let queue: Queue
+    let code: String
+    let phoneNumber: String
+    let codeModelId: UUID
+}
+
+internal struct AuthCodeSender {
+    private let config: AuthCodeSenderConfig
+
+    init(_ config: AuthCodeSenderConfig) {
+        self.config = config
+    }
+
+    public func send() async throws -> AuthenticationCodeResponseDTO {
+        try await startSendCodeJob()
+        try await createAuthCodeModel()
+        sendTelemetryDataOnSendSuccess()
+        return sendSuccess()
+    }
+
+    private func sendSuccess() -> AuthenticationCodeResponseDTO {
+        .init(success: true, timeout: 60)
+    }
+
+    private func sendTelemetryDataOnSendSuccess() {
+        config.logger.info(
+            "Sent verification code to user",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "phoneNumber": .string(config.payload.phoneNumber),
+                "code": .string(config.payload.code),
+                "codeId": .string(config.payload.codeModelId.uuidString),
+            ]
+        )
+
+        BackendMetric.totalSuccessfulVerificationCodesSent.increment()
+    }
+
+    private func createAuthCodeModel() async throws {
+        try await AuthenticationCodeModel(
+            id: config.payload.codeModelId,
+            code: config.payload.code,
+            phoneNumber: config.payload.phoneNumber,
+            deletedAt: getCodeDeletionTime()
+        ).save(on: config.writeDb)
+    }
+
+    private func startSendCodeJob() async throws {
+        try await config.payload.queue.dispatch(
+            TransactionalMessageAsyncJob.self,
+            .init(
+                content: MessageFormatterService
+                    .craftVerificationCodeMessage(
+                        code: config.payload.code
+                    ),
+                toPhoneNumber: config.payload.phoneNumber
+            )
+        )
+    }
+
+    private func getCodeDeletionTime() -> Date {
+        Date().addingTimeInterval(15 * 60)
+    }
 }

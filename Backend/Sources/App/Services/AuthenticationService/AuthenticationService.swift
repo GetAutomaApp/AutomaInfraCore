@@ -108,7 +108,7 @@ public struct RootAuthenticationService: AuthenticationService {
         config.logger.info(
             "Sending verification code to user",
             metadata: [
-                "to": .string("AuthenticationService.sendAuthCode"),
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "phoneNumber": .string(phoneNumber),
                 "code": .string(code),
             ]
@@ -139,12 +139,12 @@ public struct RootAuthenticationService: AuthenticationService {
         codeModelId: UUID
     ) async throws -> AuthenticationCodeResponseDTO {
         do {
-            return try await helper.sendAuthCode(
+            return try await helper.sendAuthCode(.init(
                 queue: queue,
                 code: code,
                 phoneNumber: phoneNumber,
                 codeModelId: codeModelId
-            )
+            ))
         } catch let error as GenericErrors {
             try await helper.handleAuthCodeNotSent(
                 code: code,

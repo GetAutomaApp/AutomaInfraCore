@@ -181,7 +181,7 @@ internal struct AuthenticationController: RouteCollection {
             req.logger.error(
                 "Failed to logout user out",
                 metadata: [
-                    "to": .string("AuthenticationController.logout"),
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "error": .string("\(error.localizedDescription)"),
                 ]
             )
