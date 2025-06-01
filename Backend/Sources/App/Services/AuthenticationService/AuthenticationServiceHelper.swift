@@ -17,12 +17,11 @@ actor AuthenticationServiceHelper {
         self.config = config
     }
 
-    public func validateAndDeleteCode(_ authCodePayload: AuthPhoneCodePayloadDTO) async throws {
+    public func validateAndDeleteCode(_ payload: AuthPhoneCodePayloadDTO) async throws {
         let validator = AuthenticationCodeValidator(
             .init(
-                writeDb: config.writeDb, readDb: config.readDb, logger: config.logger
-            ),
-            authCodePayload: authCodePayload
+                writeDb: config.writeDb, readDb: config.readDb, logger: config.logger, payload: payload
+            )
         )
         try await validator.validateAndDeleteCode()
     }
@@ -61,31 +60,6 @@ actor AuthenticationServiceHelper {
         try castCodeRateLimitToNumber(getRateLimitString())
     }
 
-    private func getRateLimitString() throws -> String {
-        // TODO: make env variable more descriptive (update local env files, obsidian, gh jobs, and all deployed envs)
-        try Environment.getOrThrow("AUTHENTICATION_CODE_DISTANCE")
-    }
-
-    private func castCodeRateLimitToNumber(_ rateLimitString: String) throws -> Double {
-        guard
-            let rateLimitNumber = Double(rateLimitString)
-        else {
-            logCodeRateLimitNotCasted(rateLimit: rateLimitString)
-            throw Abort(.internalServerError)
-        }
-        return rateLimitNumber
-    }
-
-    private func logCodeRateLimitNotCasted(rateLimit: String) {
-        config.logger.error(
-            "Could not convert AUTHENTICATION_CODE_DISTANCE raw value to Double.",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "distance_raw_value": .string(rateLimit),
-            ]
-        )
-    }
-
     public func sendAuthCode(_ payload: SendAuthCodePayload, queue: Queue) async throws -> AuthenticationCodeResponseDTO
     {
         try await AuthCodeSender(.init(
@@ -115,16 +89,44 @@ actor AuthenticationServiceHelper {
             ]
         )
     }
+
+    private func getRateLimitString() throws -> String {
+        try Environment.getOrThrow("AUTHENTICATION_CODE_RATE_LIMIT")
+    }
+
+    private func castCodeRateLimitToNumber(_ rateLimitString: String) throws -> Double {
+        guard
+            let rateLimitNumber = Double(rateLimitString)
+        else {
+            logCodeRateLimitNotCasted(rateLimit: rateLimitString)
+            throw Abort(.internalServerError)
+        }
+        return rateLimitNumber
+    }
+
+    private func logCodeRateLimitNotCasted(rateLimit: String) {
+        config.logger.error(
+            "Could not convert AUTHENTICATION_CODE_DISTANCE raw value to Double.",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "distance_raw_value": .string(rateLimit),
+            ]
+        )
+    }
+}
+
+struct AuthenticationServiceHelperConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
 }
 
 internal struct AuthenticationCodeValidator {
-    private let config: AuthenticationServiceHelperConfig
-    private let authCodePayload: AuthPhoneCodePayloadDTO
+    private let config: AuthenticationCodeValidatorConfig
     private let messageService = MessageService()
 
-    init(_ config: AuthenticationServiceHelperConfig, authCodePayload: AuthPhoneCodePayloadDTO) {
+    init(_ config: AuthenticationCodeValidatorConfig) {
         self.config = config
-        self.authCodePayload = authCodePayload
     }
 
     public func validateAndDeleteCode() async throws {
@@ -136,8 +138,8 @@ internal struct AuthenticationCodeValidator {
 
     private func sendTelemetryDataOnValidateAndDeleteCodeAttempt() throws {
         try messageService.sendDiscordWebhookAppEvent(
-            input: authCodePayload.phoneNumber,
-            event: "submitted authentication code to validate `\(authCodePayload.code)`",
+            input: config.payload.phoneNumber,
+            event: "submitted authentication code to validate `\(config.payload.code)`",
             logger: config.logger
         )
     }
@@ -171,7 +173,7 @@ internal struct AuthenticationCodeValidator {
             "Starting validation of authentication code",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "authCodePayload": .string(String(reflecting: authCodePayload))
+                "authCodePayload": .string(String(reflecting: config.payload))
             ]
         )
     }
@@ -183,7 +185,7 @@ internal struct AuthenticationCodeValidator {
             "Authentication code is valid",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "authCodePayload": .string(String(reflecting: authCodePayload)),
+                "authCodePayload": .string(String(reflecting: config.payload)),
                 "validCode": .string(String(reflecting: validCode)),
             ]
         )
@@ -194,7 +196,7 @@ internal struct AuthenticationCodeValidator {
             "Authentication code is invalid",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "authCodePayload": .string(String(reflecting: authCodePayload))
+                "authCodePayload": .string(String(reflecting: config.payload))
             ]
         )
     }
@@ -202,32 +204,17 @@ internal struct AuthenticationCodeValidator {
     private func getAuthCode() async throws -> AuthenticationCodeModel? {
         try await AuthenticationCodeModel
             .query(on: config.readDb)
-            .filter(\.$phoneNumber == authCodePayload.phoneNumber)
-            .filter(\.$code == authCodePayload.code.lowercased())
+            .filter(\.$phoneNumber == config.payload.phoneNumber)
+            .filter(\.$code == config.payload.code.lowercased())
             .first()
     }
 }
 
-struct AuthenticationServiceHelperConfig: AuthenticationServiceConfig {
+internal struct AuthenticationCodeValidatorConfig: AuthenticationServiceConfig {
     let writeDb: Database
     let readDb: Database
     let logger: Logger
-}
-
-internal struct DeleteOldAccessTokensPayload {
-    let userId: UUID
-    let subject: JWTTokenSubject
-    let totalNewestTokensToSkip: Int?
-
-    init(
-        userId: UUID,
-        subject: JWTTokenSubject,
-        totalNewestTokensToSkip: Int? = nil
-    ) {
-        self.userId = userId
-        self.subject = subject
-        self.totalNewestTokensToSkip = totalNewestTokensToSkip
-    }
+    let payload: AuthPhoneCodePayloadDTO
 }
 
 internal struct AccessTokenResetter {
@@ -380,6 +367,22 @@ internal struct OldAccessTokenDeleterConfig: AuthenticationServiceConfig {
     let payload: DeleteOldAccessTokensPayload
 }
 
+internal struct DeleteOldAccessTokensPayload {
+    let userId: UUID
+    let subject: JWTTokenSubject
+    let totalNewestTokensToSkip: Int?
+
+    init(
+        userId: UUID,
+        subject: JWTTokenSubject,
+        totalNewestTokensToSkip: Int? = nil
+    ) {
+        self.userId = userId
+        self.subject = subject
+        self.totalNewestTokensToSkip = totalNewestTokensToSkip
+    }
+}
+
 internal struct AuthenticationTokensPayloadCreator {
     private let config: AuthenticationTokensPayloadCreatorConfig
     private let messageService = MessageService()
@@ -475,21 +478,6 @@ internal struct CreateAuthenticationTokensPayload {
     let signer: Request.JWT
 }
 
-internal struct AuthCodeSenderConfig: AuthenticationServiceConfig {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
-    let queue: Queue
-    let payload: SendAuthCodePayload
-}
-
-// TODO: Put queues and other similar Vapor structs with logger (not in payload)
-internal struct SendAuthCodePayload {
-    let code: String
-    let phoneNumber: String
-    let codeModelId: UUID
-}
-
 internal struct AuthCodeSender {
     private let config: AuthCodeSenderConfig
 
@@ -547,4 +535,18 @@ internal struct AuthCodeSender {
     private func getCodeDeletionTime() -> Date {
         Date().addingTimeInterval(15 * 60)
     }
+}
+
+internal struct AuthCodeSenderConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
+    let queue: Queue
+    let payload: SendAuthCodePayload
+}
+
+internal struct SendAuthCodePayload {
+    let code: String
+    let phoneNumber: String
+    let codeModelId: UUID
 }
