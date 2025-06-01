@@ -61,23 +61,33 @@ actor AuthenticationServiceHelper {
         Date().addingTimeInterval(15 * 60)
     }
 
-    // TODO: refactor name and code to be cleaner
-    public func getDistance() throws -> Double {
-        let distanceRawValue = try Environment.getOrThrow("AUTHENTICATION_CODE_DISTANCE")
+    public func getCodeRateLimit() throws -> Double {
+        try castCodeRateLimitToNumber(getRateLimitString())
+    }
 
+    private func getRateLimitString() throws -> String {
+        // TODO: make env variable more descriptive (update local env files, obsidian, gh jobs, and all deployed envs)
+        try Environment.getOrThrow("AUTHENTICATION_CODE_DISTANCE")
+    }
+
+    private func castCodeRateLimitToNumber(_ rateLimitString: String) throws -> Double {
         guard
-            let distance = Double(distanceRawValue)
+            let rateLimitNumber = Double(rateLimitString)
         else {
-            config.logger.error(
-                "Could not convert AUTHENTICATION_CODE_DISTANCE raw value to Double.",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "distance_raw_value": .string(distanceRawValue),
-                ]
-            )
+            logCodeRateLimitNotCasted(rateLimit: rateLimitString)
             throw Abort(.internalServerError)
         }
-        return distance
+        return rateLimitNumber
+    }
+
+    private func logCodeRateLimitNotCasted(rateLimit: String) {
+        config.logger.error(
+            "Could not convert AUTHENTICATION_CODE_DISTANCE raw value to Double.",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "distance_raw_value": .string(rateLimit),
+            ]
+        )
     }
 
     // TODO: refactor

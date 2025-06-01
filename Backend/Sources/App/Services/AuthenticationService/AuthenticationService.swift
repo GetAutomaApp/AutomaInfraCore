@@ -116,7 +116,7 @@ public struct RootAuthenticationService: AuthenticationService {
     }
 
     private func existingCodeTimeout(phoneNumber: String) async throws -> TimeInterval? {
-        let distance = try await helper.getDistance()
+        let distance = try await helper.getCodeRateLimit()
         let dateToCheck = Date()
 
         guard let recentCode = try await AuthenticationCodeModel
