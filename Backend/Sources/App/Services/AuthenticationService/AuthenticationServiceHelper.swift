@@ -97,33 +97,12 @@ actor AuthenticationServiceHelper {
 
     // TODO: cleanup, don't throw error at top level
     // (have name be `logAuthCodeNotSent`)
-    public func handleAuthCodeNotSent(
-        code: String,
-        phoneNumber: String,
-        codeModelId: UUID,
-        error: GenericErrors
-    ) throws {
-        BackendMetric.totalFailedVerificationCodesSent.increment()
-        config.logger.error(
-            "Couldn't sent verification code to user",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "phoneNumber": .string(phoneNumber),
-                "code": .string(code),
-                "codeId": .string(codeModelId.uuidString),
-                "error": .string(error.rawValue),
-            ]
-        )
-        throw error
-    }
-
-    // TODO: remove method, use above method instead of this one
-    public func handleAuthCodeNotSent(
+    public func sendTelemetryDataOnAuthCodeSendFail(
         code: String,
         phoneNumber: String,
         codeModelId: UUID,
         error: any Error
-    ) throws {
+    ) {
         BackendMetric.totalFailedVerificationCodesSent.increment()
         config.logger.error(
             "Couldn't sent verification code to user",
@@ -135,7 +114,6 @@ actor AuthenticationServiceHelper {
                 "error": .string(error.localizedDescription),
             ]
         )
-        throw GenericErrors.unknownError
     }
 }
 

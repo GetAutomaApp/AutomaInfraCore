@@ -146,21 +146,22 @@ public struct RootAuthenticationService: AuthenticationService {
                 codeModelId: codeModelId
             ))
         } catch let error as GenericErrors {
-            try await helper.handleAuthCodeNotSent(
+            await helper.sendTelemetryDataOnAuthCodeSendFail(
                 code: code,
                 phoneNumber: phoneNumber,
                 codeModelId: codeModelId,
                 error: error
             )
+            throw error
         } catch {
-            try await helper.handleAuthCodeNotSent(
+            await helper.sendTelemetryDataOnAuthCodeSendFail(
                 code: code,
                 phoneNumber: phoneNumber,
                 codeModelId: codeModelId,
                 error: error
             )
+            throw GenericErrors.unknownError
         }
-        throw Abort(.internalServerError)
     }
 
     private func sendRefreshEvent(userId: String) async throws {
