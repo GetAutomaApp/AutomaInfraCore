@@ -18,12 +18,11 @@ actor AuthenticationServiceHelper {
     }
 
     public func validateAndDeleteCode(_ payload: AuthPhoneCodePayloadDTO) async throws {
-        let validator = AuthenticationCodeValidator(
+        try await AuthenticationCodeValidator(
             .init(
                 writeDb: config.writeDb, readDb: config.readDb, logger: config.logger, payload: payload
             )
-        )
-        try await validator.validateAndDeleteCode()
+        ).validateAndDeleteCode()
     }
 
     public func resetAccessToken(_ payload: ResetAccessCodePayload) async throws -> String {
@@ -45,6 +44,17 @@ actor AuthenticationServiceHelper {
         ).deleteOldTokens()
     }
 
+    public func sendAuthCode(_ payload: SendAuthCodePayload, queue: Queue) async throws -> AuthenticationCodeResponseDTO
+    {
+        try await AuthCodeSender(.init(
+            writeDb: config.writeDb,
+            readDb: config.writeDb,
+            logger: config.logger,
+            queue: queue,
+            payload: payload
+        )).send()
+    }
+
     public func createAuthenticationTokensPayload(_ payload: CreateAuthenticationTokensPayload) async throws
         -> AuthenticationTokensPayloadDTO
     {
@@ -58,36 +68,6 @@ actor AuthenticationServiceHelper {
 
     public func getCodeRateLimit() throws -> Double {
         try castCodeRateLimitToNumber(getRateLimitString())
-    }
-
-    public func sendAuthCode(_ payload: SendAuthCodePayload, queue: Queue) async throws -> AuthenticationCodeResponseDTO
-    {
-        try await AuthCodeSender(.init(
-            writeDb: config.writeDb,
-            readDb: config.writeDb,
-            logger: config.logger,
-            queue: queue,
-            payload: payload
-        )).send()
-    }
-
-    public func sendTelemetryDataOnAuthCodeSendFail(
-        code: String,
-        phoneNumber: String,
-        codeModelId: UUID,
-        error: any Error
-    ) {
-        BackendMetric.totalFailedVerificationCodesSent.increment()
-        config.logger.error(
-            "Couldn't sent verification code to user",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "phoneNumber": .string(phoneNumber),
-                "code": .string(code),
-                "codeId": .string(codeModelId.uuidString),
-                "error": .string(error.localizedDescription),
-            ]
-        )
     }
 
     private func getRateLimitString() throws -> String {
@@ -110,6 +90,25 @@ actor AuthenticationServiceHelper {
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "distance_raw_value": .string(rateLimit),
+            ]
+        )
+    }
+
+    public func sendTelemetryDataOnAuthCodeSendFail(
+        code: String,
+        phoneNumber: String,
+        codeModelId: UUID,
+        error: any Error
+    ) {
+        BackendMetric.totalFailedVerificationCodesSent.increment()
+        config.logger.error(
+            "Couldn't sent verification code to user",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "phoneNumber": .string(phoneNumber),
+                "code": .string(code),
+                "codeId": .string(codeModelId.uuidString),
+                "error": .string(error.localizedDescription),
             ]
         )
     }

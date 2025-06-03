@@ -21,6 +21,44 @@ internal struct OldAccessTokenDeleter {
         try await deleteTokens(getTokensToDelete())
     }
 
+    private func logDeleteOldTokensStart() {
+        config.logger.info(
+            "Deleting old tokens",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "userId": .string(config.payload.userId.uuidString),
+                "subject": .string(String(reflecting: config.payload.subject)),
+                "skip": .string(String(reflecting: config.payload.totalNewestTokensToSkip)),
+            ]
+        )
+    }
+
+    private func getTokensToDelete() async throws -> [JwtTokenModel] {
+        try await getQueryForTokensToDelete().all()
+    }
+
+    private func getQueryForTokensToDelete() -> QueryBuilder<JwtTokenModel> {
+        var query = getQueryForAllTokensInDescendingOrder()
+        if let totalNewestTokensToSkip = config.payload.totalNewestTokensToSkip {
+            query = skipSomeNewestTokens(amount: totalNewestTokensToSkip, fromQuery: query)
+        }
+        return query
+    }
+
+    private func getQueryForAllTokensInDescendingOrder() -> QueryBuilder<JwtTokenModel> {
+        JwtTokenModel.query(on: config.writeDb)
+            .filter(\.$userId == config.payload.userId)
+            .filter(\.$subject == config.payload.subject)
+            .sort(\.$createdAt, .descending)
+    }
+
+    private func skipSomeNewestTokens(
+        amount: Int,
+        fromQuery query: QueryBuilder<JwtTokenModel>
+    ) -> QueryBuilder<JwtTokenModel> {
+        query.range(amount...)
+    }
+
     private func deleteTokens(_ tokens: [JwtTokenModel]) async throws {
         try await withThrowingTaskGroup(of: Void.self) { group in
             for token in tokens {
@@ -44,44 +82,6 @@ internal struct OldAccessTokenDeleter {
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "tokenId": .string(id.uuidString)
-            ]
-        )
-    }
-
-    private func getTokensToDelete() async throws -> [JwtTokenModel] {
-        try await getQueryForTokensToDelete().all()
-    }
-
-    private func getQueryForTokensToDelete() -> QueryBuilder<JwtTokenModel> {
-        var query = getQueryForAllTokensInDescendingOrder()
-        if let totalNewestTokensToSkip = config.payload.totalNewestTokensToSkip {
-            query = skipSomeNewestTokens(amount: totalNewestTokensToSkip, fromQuery: query)
-        }
-        return query
-    }
-
-    private func skipSomeNewestTokens(
-        amount: Int,
-        fromQuery query: QueryBuilder<JwtTokenModel>
-    ) -> QueryBuilder<JwtTokenModel> {
-        query.range(amount...)
-    }
-
-    private func getQueryForAllTokensInDescendingOrder() -> QueryBuilder<JwtTokenModel> {
-        JwtTokenModel.query(on: config.writeDb)
-            .filter(\.$userId == config.payload.userId)
-            .filter(\.$subject == config.payload.subject)
-            .sort(\.$createdAt, .descending)
-    }
-
-    private func logDeleteOldTokensStart() {
-        config.logger.info(
-            "Deleting old tokens",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "userId": .string(config.payload.userId.uuidString),
-                "subject": .string(String(reflecting: config.payload.subject)),
-                "skip": .string(String(reflecting: config.payload.totalNewestTokensToSkip)),
             ]
         )
     }

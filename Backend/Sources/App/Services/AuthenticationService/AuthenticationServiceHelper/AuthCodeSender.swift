@@ -23,8 +23,30 @@ internal struct AuthCodeSender {
         return sendSuccess()
     }
 
-    private func sendSuccess() -> AuthenticationCodeResponseDTO {
-        .init(success: true, timeout: 60)
+    private func startSendCodeJob() async throws {
+        try await config.queue.dispatch(
+            TransactionalMessageAsyncJob.self,
+            .init(
+                content: MessageFormatterService
+                    .craftVerificationCodeMessage(
+                        code: config.payload.code
+                    ),
+                toPhoneNumber: config.payload.phoneNumber
+            )
+        )
+    }
+
+    private func createAuthCodeModel() async throws {
+        try await AuthenticationCodeModel(
+            id: config.payload.codeModelId,
+            code: config.payload.code,
+            phoneNumber: config.payload.phoneNumber,
+            deletedAt: getCodeDeletionTime()
+        ).save(on: config.writeDb)
+    }
+
+    private func getCodeDeletionTime() -> Date {
+        Date().addingTimeInterval(15 * 60)
     }
 
     private func sendTelemetryDataOnSendSuccess() {
@@ -41,30 +63,8 @@ internal struct AuthCodeSender {
         BackendMetric.totalSuccessfulVerificationCodesSent.increment()
     }
 
-    private func createAuthCodeModel() async throws {
-        try await AuthenticationCodeModel(
-            id: config.payload.codeModelId,
-            code: config.payload.code,
-            phoneNumber: config.payload.phoneNumber,
-            deletedAt: getCodeDeletionTime()
-        ).save(on: config.writeDb)
-    }
-
-    private func startSendCodeJob() async throws {
-        try await config.queue.dispatch(
-            TransactionalMessageAsyncJob.self,
-            .init(
-                content: MessageFormatterService
-                    .craftVerificationCodeMessage(
-                        code: config.payload.code
-                    ),
-                toPhoneNumber: config.payload.phoneNumber
-            )
-        )
-    }
-
-    private func getCodeDeletionTime() -> Date {
-        Date().addingTimeInterval(15 * 60)
+    private func sendSuccess() -> AuthenticationCodeResponseDTO {
+        .init(success: true, timeout: 60)
     }
 }
 

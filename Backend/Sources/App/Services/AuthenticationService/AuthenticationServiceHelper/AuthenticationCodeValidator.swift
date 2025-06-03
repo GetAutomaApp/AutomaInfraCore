@@ -37,6 +37,14 @@ internal struct AuthenticationCodeValidator {
         return try validateAndReturnAuthCode(authCode)
     }
 
+    private func getAuthCode() async throws -> AuthenticationCodeModel? {
+        try await AuthenticationCodeModel
+            .query(on: config.readDb)
+            .filter(\.$phoneNumber == config.payload.phoneNumber)
+            .filter(\.$code == config.payload.code.lowercased())
+            .first()
+    }
+
     private func validateAndReturnAuthCode(
         _ authCode: AuthenticationCodeModel?
     ) throws -> AuthenticationCodeModel {
@@ -61,6 +69,16 @@ internal struct AuthenticationCodeValidator {
         )
     }
 
+    private func logInvalidCodeError() {
+        config.logger.error(
+            "Authentication code is invalid",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "authCodePayload": .string(String(reflecting: config.payload))
+            ]
+        )
+    }
+
     private func logValidCode(
         code validCode: AuthenticationCodeModel
     ) {
@@ -72,24 +90,6 @@ internal struct AuthenticationCodeValidator {
                 "validCode": .string(String(reflecting: validCode)),
             ]
         )
-    }
-
-    private func logInvalidCodeError() {
-        config.logger.error(
-            "Authentication code is invalid",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "authCodePayload": .string(String(reflecting: config.payload))
-            ]
-        )
-    }
-
-    private func getAuthCode() async throws -> AuthenticationCodeModel? {
-        try await AuthenticationCodeModel
-            .query(on: config.readDb)
-            .filter(\.$phoneNumber == config.payload.phoneNumber)
-            .filter(\.$code == config.payload.code.lowercased())
-            .first()
     }
 }
 

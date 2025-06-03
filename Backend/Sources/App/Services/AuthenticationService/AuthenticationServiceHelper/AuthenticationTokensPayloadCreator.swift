@@ -20,33 +20,19 @@ internal struct AuthenticationTokensPayloadCreator {
     public func create(
     ) async throws -> AuthenticationTokensPayloadDTO {
         logCreateStart()
+
         let tokensPayload = try await createTokensPayload()
         try sendTelemetryDataOnCreateSuccess(payload: tokensPayload)
 
         return tokensPayload
     }
 
-    private func sendTelemetryDataOnCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) throws {
-        logCreateSuccess(payload: tokensPayload)
-        try alertCreateSuccess(payload: tokensPayload)
-    }
-
-    private func alertCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) throws {
-        try messageService.sendDiscordWebhookAppEvent(
-            input: config.payload.userId.uuidString,
-            event: "generated tokens: `access: \(tokensPayload.accessToken.count)` `refresh: \(tokensPayload.refreshToken.count)`",
-            logger: config.logger
-        )
-    }
-
-    private func logCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) {
+    private func logCreateStart() {
         config.logger.info(
-            "Successfully created authentication tokens payload",
+            "Creating authentication tokens payload",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "userId": .string(config.payload.userId.uuidString),
-                "accessTokenLength": .string("\(tokensPayload.accessToken.count)"),
-                "refreshTokenLength": .string("\(tokensPayload.refreshToken.count)"),
             ]
         )
     }
@@ -81,13 +67,28 @@ internal struct AuthenticationTokensPayloadCreator {
         }
     }
 
-    private func logCreateStart() {
+    private func sendTelemetryDataOnCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) throws {
+        logCreateSuccess(payload: tokensPayload)
+        try alertCreateSuccess(payload: tokensPayload)
+    }
+
+    private func logCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) {
         config.logger.info(
-            "Creating authentication tokens payload",
+            "Successfully created authentication tokens payload",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "userId": .string(config.payload.userId.uuidString),
+                "accessTokenLength": .string("\(tokensPayload.accessToken.count)"),
+                "refreshTokenLength": .string("\(tokensPayload.refreshToken.count)"),
             ]
+        )
+    }
+
+    private func alertCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) throws {
+        try messageService.sendDiscordWebhookAppEvent(
+            input: config.payload.userId.uuidString,
+            event: "generated tokens: `access: \(tokensPayload.accessToken.count)` `refresh: \(tokensPayload.refreshToken.count)`",
+            logger: config.logger
         )
     }
 }

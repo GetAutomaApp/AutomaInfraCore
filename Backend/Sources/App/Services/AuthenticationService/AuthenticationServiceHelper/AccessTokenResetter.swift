@@ -36,16 +36,6 @@ internal struct AccessTokenResetter {
         return signedToken
     }
 
-    private func createAuthToken(fromSignedToken signedToken: String) async throws {
-        try await JwtTokenModel(
-            id: UUID(),
-            token: signedToken,
-            userId: config.payload.userId,
-            subject: config.payload.subject,
-            deletedAt: expiresAt
-        ).create(on: config.writeDb)
-    }
-
     private func getSignedToken() async throws -> String {
         try await config.payload.signer.sign(createTokenToSign())
     }
@@ -57,6 +47,16 @@ internal struct AccessTokenResetter {
             userId: config.payload.userId.uuidString,
             tokenId: UUID()
         )
+    }
+
+    private func createAuthToken(fromSignedToken signedToken: String) async throws {
+        try await JwtTokenModel(
+            id: UUID(),
+            token: signedToken,
+            userId: config.payload.userId,
+            subject: config.payload.subject,
+            deletedAt: expiresAt
+        ).create(on: config.writeDb)
     }
 }
 
