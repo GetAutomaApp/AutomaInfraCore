@@ -131,9 +131,7 @@ internal struct AuthenticationCodeValidator {
 
     public func validateAndDeleteCode() async throws {
         try sendTelemetryDataOnValidateAndDeleteCodeAttempt()
-
-        let validCode = try await getAndValidateCode()
-        try await validCode.delete(on: config.writeDb)
+        try await getAndValidateCode().delete(on: config.writeDb)
     }
 
     private func sendTelemetryDataOnValidateAndDeleteCodeAttempt() throws {
@@ -155,16 +153,13 @@ internal struct AuthenticationCodeValidator {
         _ authCode: AuthenticationCodeModel?
     ) throws -> AuthenticationCodeModel {
         logValidateCodeStart()
-
         guard
             let validCode = authCode
         else {
             logInvalidCodeError()
             throw GenericErrors.invalidCode
         }
-
         logValidCode(code: validCode)
-
         return validCode
     }
 
