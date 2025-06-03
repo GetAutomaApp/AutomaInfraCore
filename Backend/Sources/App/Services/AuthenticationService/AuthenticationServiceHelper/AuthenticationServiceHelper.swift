@@ -17,22 +17,23 @@ actor AuthenticationServiceHelper {
         self.config = config
     }
 
+    public func sendAuthCode(_ payload: SendAuthCodePayload, queue: Queue) async throws -> AuthenticationCodeResponseDTO
+    {
+        try await AuthCodeSender(.init(
+            writeDb: config.writeDb,
+            readDb: config.writeDb,
+            logger: config.logger,
+            queue: queue,
+            payload: payload
+        )).send()
+    }
+
     public func validateAndDeleteCode(_ payload: AuthPhoneCodePayloadDTO) async throws {
         try await AuthenticationCodeValidator(
             .init(
                 writeDb: config.writeDb, readDb: config.readDb, logger: config.logger, payload: payload
             )
         ).validateAndDeleteCode()
-    }
-
-    public func resetAccessToken(_ payload: ResetAccessCodePayload) async throws -> String {
-        try await AccessTokenResetter(.init(
-            writeDb: config.writeDb,
-            readDb: config.readDb,
-            logger: config.logger,
-            payload: payload
-        ))
-        .reset()
     }
 
     public func deleteOldTokens(_ payload: DeleteOldAccessTokensPayload) async throws {
@@ -44,15 +45,14 @@ actor AuthenticationServiceHelper {
         ).deleteOldTokens()
     }
 
-    public func sendAuthCode(_ payload: SendAuthCodePayload, queue: Queue) async throws -> AuthenticationCodeResponseDTO
-    {
-        try await AuthCodeSender(.init(
+    public func resetAccessToken(_ payload: ResetAccessCodePayload) async throws -> String {
+        try await AccessTokenResetter(.init(
             writeDb: config.writeDb,
-            readDb: config.writeDb,
+            readDb: config.readDb,
             logger: config.logger,
-            queue: queue,
             payload: payload
-        )).send()
+        ))
+        .reset()
     }
 
     public func createAuthenticationTokensPayload(_ payload: CreateAuthenticationTokensPayload) async throws

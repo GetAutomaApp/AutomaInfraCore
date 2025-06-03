@@ -107,8 +107,6 @@ internal struct MessageService: Decodable {
         )
     }
 
-    // MARK: - Private Helpers
-
     private func createSNSClient() throws -> SNS {
         let clientAuth = try AWSClient(
             credentialProvider: .static(

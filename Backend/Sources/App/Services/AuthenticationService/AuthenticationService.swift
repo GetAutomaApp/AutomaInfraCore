@@ -40,6 +40,22 @@ public struct RootAuthenticationService: AuthenticationService {
         return try await loginService.login()
     }
 
+    public func logout(userId: UUID) async throws {
+        try await sendLogoutEvent(userId: userId)
+        logLogout(userId: userId)
+
+        let concurrencySafeHelper: AuthenticationServiceHelper = .init(.init(
+            writeDb: config.writeDb,
+            readDb: config.readDb,
+            logger: config.logger
+        ))
+
+        async let deleteRefresh: () = concurrencySafeHelper.deleteOldTokens(.init(userId: userId, subject: .refresh))
+        async let deleteAccess: () = concurrencySafeHelper.deleteOldTokens(.init(userId: userId, subject: .access))
+
+        _ = try await (deleteRefresh, deleteAccess)
+    }
+
     public func sendAuthCode(phoneNumber: String, queue: Queue) async throws -> AuthenticationCodeResponseDTO {
         let code = RandomService.randomCode()
         logAuthCodeAttempt(phoneNumber: phoneNumber, code: code)
@@ -74,22 +90,6 @@ public struct RootAuthenticationService: AuthenticationService {
         }
     }
 
-    public func logout(userId: UUID) async throws {
-        try await sendLogoutEvent(userId: userId)
-        logLogout(userId: userId)
-
-        let concurrencySafeHelper: AuthenticationServiceHelper = .init(.init(
-            writeDb: config.writeDb,
-            readDb: config.readDb,
-            logger: config.logger
-        ))
-
-        async let deleteRefresh: () = concurrencySafeHelper.deleteOldTokens(.init(userId: userId, subject: .refresh))
-        async let deleteAccess: () = concurrencySafeHelper.deleteOldTokens(.init(userId: userId, subject: .access))
-
-        _ = try await (deleteRefresh, deleteAccess)
-    }
-
     public func doesUserExist(phoneNumber: String) async throws -> Bool {
         do {
             let exists = try await checkUserExists(phoneNumber: phoneNumber)
@@ -102,8 +102,6 @@ public struct RootAuthenticationService: AuthenticationService {
             throw Abort(.internalServerError)
         }
     }
-
-    // MARK: - Private Helpers
 
     private func logAuthCodeAttempt(phoneNumber: String, code: String) {
         config.logger.info(

@@ -178,8 +178,6 @@ public extension BackendControllerInteractor {
         return decodeResponse(data.data, decodeTo)
     }
 
-    // Private helper methods
-
     /// Decodes raw data into a BackendControllerResponseOutput
     ///
     /// - Parameters:

@@ -29,8 +29,6 @@ internal struct UserLoginService: AuthenticationService {
         return try await completeLogin(for: user)
     }
 
-    // MARK: - Private Helpers
-
     private func validateAuthCode() async throws {
         try await helper.validateAndDeleteCode(config.payload.authCodePayload)
     }
