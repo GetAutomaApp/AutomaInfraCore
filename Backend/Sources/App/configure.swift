@@ -10,6 +10,7 @@ import Queues
 import QueuesFluentDriver
 import Vapor
 
+
 public func configure(_ app: Application) async throws {
     try await AppConfigurator(app: app).configure()
 }
@@ -89,11 +90,11 @@ public struct DatabaseConfigurator {
 
     private func registerDatabases() throws {
         try app.databases.use(.postgres(
-            url: DatabaseURLs.primary.get(),
+            url: DatabaseURLs.primary.get()
         ), as: .primary)
 
         try app.databases.use(.postgres(
-            url: DatabaseURLs.regional.get(),
+            url: DatabaseURLs.regional.get()
         ), as: .readOnly)
     }
 

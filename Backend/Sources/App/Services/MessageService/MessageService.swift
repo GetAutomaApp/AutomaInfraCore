@@ -6,7 +6,6 @@
 import DataTypes
 import Fluent
 import Foundation
-
 import SotoSNS
 import Vapor
 
@@ -14,144 +13,57 @@ import Vapor
     import FoundationNetworking
 #endif
 
-/// Service for handling message-related operations.
 internal struct MessageService: Decodable {
-    /// Sends an SMS message to a specified phone number.
-    /// - Parameters:
-    ///   - phoneNumber: The phone number to send the message to.
-    ///   - message: The content of the message.
-    ///   - logger: The logger for logging messages.
-    /// - Returns: The message ID if the message is sent successfully.
-    /// - Throws: Throws an error if sending the message fails.
+    // MARK: - Public API
+
     public func sendSmS(
         to phoneNumber: String,
         message: String,
         logger: Logger
     ) async throws -> String {
         do {
-            let clientAuth = try AWSClient(
-                credentialProvider: .static(
-                    accessKeyId: Environment.getOrThrow("AWS_ACCESS_KEY_ID"),
-                    secretAccessKey: Environment.getOrThrow("AWS_SECRET_ACCESS_KEY")
-                )
-            )
+            let snsClient = try createSNSClient()
+            let output = try await snsClient.publish(.init(message: message, phoneNumber: phoneNumber))
 
-            let region = try Environment.getOrThrow("AWS_DEFAULT_REGION")
-            let client = SNS(client: clientAuth, region: .other(region))
+            try await logSmsSentEvent(to: phoneNumber, message: message, logger: logger)
 
-            // Publish the message to the specified phone number
-            let output = try await client.publish(.init(message: message, phoneNumber: phoneNumber))
-
-            // Send a Discord webhook event for the message
-            try sendDiscordWebhookAppEvent(
-                input: "random -> \(phoneNumber)",
-                event: "sending message: `\(message)`",
-                logger: logger
-            )
-
-            if let messageId = output.messageId {
-                // Log the successful sending of the message
-                logger.info(
-                    "Sent sms message to user",
-                    metadata: [
-                        "to": .string("MessageService.sendSmS"),
-                        "messageId": .string(messageId),
-                        "phoneNumber": .string(phoneNumber),
-                        "message": .string(message),
-                        "sequenceNumber": .string(output.sequenceNumber ?? ""),
-                    ]
-                )
-                BackendMetric.totalTextMessagesSent.increment()
-                return messageId
-            } else {
-                // Log the failure to send the message
-                logger.error(
-                    "Failed to send message to user",
-                    metadata: [
-                        "to": .string("MessageService.sendSmS"),
-                        "phoneNumber": .string(phoneNumber),
-                        "message": .string(message),
-                    ]
-                )
-                throw GenericErrors.smsMessageFailed
-            }
+            return try extractMessageId(from: output, phoneNumber: phoneNumber, message: message, logger: logger)
         } catch {
-            // Log the error for failed message sending
-            logger.error(
-                "Failed to send message",
-                metadata: [
-                    "to": .string("MessageService.sendSmS"),
-                    "phoneNumber": .string(phoneNumber),
-                    "message": .string(message),
-                    "error": .string(error.localizedDescription),
-                ]
-            )
-            BackendMetric.totalTextMessagesSentFailed.increment()
+            handleSmsError(error, to: phoneNumber, message: message, logger: logger)
             throw error
         }
     }
 
-    /// Sends a Discord webhook message.
-    /// - Parameters:
-    ///   - webhookURL: The URL of the webhook to send the message to.
-    ///   - message: The message to send.
-    ///   - logger: The logger for logging messages.
-    /// - Throws: Throws an error if sending the webhook message fails.
-    public func sendWebhookMessage(webhookURL: URL, message: DiscordWebhookMessage, logger: Logger) async throws {
+    public func sendWebhookMessage(
+        webhookURL: URL,
+        message: DiscordWebhookMessage,
+        logger: Logger
+    ) async throws {
         BackendMetric.totalDiscordWebhookMessagesSent.increment()
 
-        if try Environment.getOrThrow("ENVIRONMENT") == "local" {
-            return
-        }
+        guard try Environment.getOrThrow("ENVIRONMENT") != "local" else { return }
 
         do {
-            let encoder = JSONEncoder()
-            let jsonData = try encoder.encode(message)
-
-            var request = URLRequest(url: webhookURL)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = jsonData
-
-            // Send the request and receive the response
+            let request = try buildWebhookRequest(url: webhookURL, message: message)
             let (data, response) = try await URLSession.shared.data(for: request)
 
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 204 {
-                throw GenericErrors.discordWebhookMessageFailed
-            }
+            try validateWebhookResponse(response, data: data)
 
-            // Log the successful sending of the webhook message
-            logger.info(
-                "Sent Discord webhook message successfully",
-                metadata: [
-                    "to": .string("MessageService.sendWebhookMessage"),
-                    "webhook": .string(webhookURL.absoluteString),
-                    "response": .string(String(data: data, encoding: .utf8) ?? ""),
-                ]
-            )
-
+            logger.info("Sent Discord webhook message successfully", metadata: [
+                "to": .string("MessageService.sendWebhookMessage"),
+                "webhook": .string(webhookURL.absoluteString),
+                "response": .string(String(data: data, encoding: .utf8) ?? "")
+            ])
         } catch {
-            // Log the error for failed webhook message sending
-            logger.error(
-                "Failed to send Discord webhook message",
-                metadata: [
-                    "to": .string("MessageService.sendWebhookMessage"),
-                    "webhook": .string(webhookURL.absoluteString),
-                    "error": .string(error.localizedDescription),
-                ]
-            )
+            logger.error("Failed to send Discord webhook message", metadata: [
+                "to": .string("MessageService.sendWebhookMessage"),
+                "webhook": .string(webhookURL.absoluteString),
+                "error": .string(error.localizedDescription)
+            ])
             throw GenericErrors.discordWebhookMessageFailed
         }
     }
 
-    /// Sends a Discord webhook event for application events.
-    /// - Parameters:
-    ///   - input: The input string for the event.
-    ///   - event: The event description.
-    ///   - imageUrl: Optional URL for an image to include in the event.
-    ///   - logger: The logger for logging messages.
-    ///   - withUrl: The URL of the webhook to send the event to.
-    /// - Throws: Throws an error if sending the webhook event fails.
     public func sendDiscordWebhookAppEvent(
         input: String,
         event: String,
@@ -159,76 +71,146 @@ internal struct MessageService: Decodable {
         logger: Logger,
         withUrl: URL? = nil
     ) throws {
-        var withUrlUnwrapped: URL?
-        guard
-            let withUrl
-        else {
-            guard let
-                url = try URL(string: Environment.getOrThrow("DISCORD_APP_EVENTS_URL"))
-            else {
-                logger.error(
-                    "Could not send discord webhook, because 'withUrl' is nil.",
-                    metadata: [
-                        "to": .string("\(String(describing: Self.self)).\(#function)"),
-                        "event": .string(event),
-                        "input": .string(input),
-                    ]
-                )
-                throw Abort(.internalServerError)
-            }
-            withUrlUnwrapped = url
-            return
-        }
-        guard let
-            withUrlUnwrapped
-        else {
-            withUrlUnwrapped = withUrl
+        guard let url = try resolveWebhookURL(override: withUrl, logger: logger, input: input, event: event) else {
             return
         }
 
         Task.detachedLogOnError(destination: "MessageService.sendDiscordWebhookAppEvent", logger: logger) {
             try await sendWebhookMessage(
-                webhookURL: withUrlUnwrapped,
-                message: MessageFormatterService
-                    .craftUserEventDiscordWebhookMessage(
-                        input: input,
-                        event: event,
-                        imageUrl: imageUrl
-                    ),
+                webhookURL: url,
+                message: MessageFormatterService.craftUserEventDiscordWebhookMessage(
+                    input: input,
+                    event: event,
+                    imageUrl: imageUrl
+                ),
                 logger: logger
             )
         }
     }
 
-    /// Sends a Discord alert for critical errors.
-    /// - Parameters:
-    ///   - alertTitle: The title of the alert.
-    ///   - error: The error that occurred.
-    ///   - logger: The logger for logging messages.
-    /// - Throws: Throws an error if sending the alert fails.
     public func sendDiscordAlert(
         alertTitle: String,
         error: Error,
         logger: Logger
     ) throws {
         guard
-            let withUrl = try URL(string: Environment.getOrThrow("DISCORD_AUTOMA_ALERTS_WEBHOOK_URL"))
+            let webhookUrl = try URL(string: Environment.getOrThrow("DISCORD_AUTOMA_ALERTS_WEBHOOK_URL"))
         else {
-            logger.error(
-                "Could not send discord webhook, because 'withUrl' is nil.",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "alert_title": .string(alertTitle),
-                ]
-            )
-            throw Abort(.internalServerError)
+            throwWebhookURLError(logger: logger, title: alertTitle)
         }
 
         try sendDiscordWebhookAppEvent(
             input: "Critical Error Occurred - \(alertTitle)",
             event: "\(error) - \(error.localizedDescription)",
             logger: logger,
-            withUrl: withUrl
+            withUrl: webhookUrl
+        )
+    }
+
+    // MARK: - Private Helpers
+
+    private func createSNSClient() throws -> SNS {
+        let clientAuth = try AWSClient(
+            credentialProvider: .static(
+                accessKeyId: Environment.getOrThrow("AWS_ACCESS_KEY_ID"),
+                secretAccessKey: Environment.getOrThrow("AWS_SECRET_ACCESS_KEY")
+            )
+        )
+        let region = try Environment.getOrThrow("AWS_DEFAULT_REGION")
+        return SNS(client: clientAuth, region: .other(region))
+    }
+
+    private func extractMessageId(
+        from output: SNS.PublishResponse,
+        phoneNumber: String,
+        message: String,
+        logger: Logger
+    ) throws -> String {
+        guard let messageId = output.messageId else {
+            logger.error("Failed to send message to user", metadata: [
+                "to": .string("MessageService.sendSmS"),
+                "phoneNumber": .string(phoneNumber),
+                "message": .string(message),
+            ])
+            throw GenericErrors.smsMessageFailed
+        }
+
+        logger.info("Sent SMS message to user", metadata: [
+            "to": .string("MessageService.sendSmS"),
+            "messageId": .string(messageId),
+            "phoneNumber": .string(phoneNumber),
+            "message": .string(message),
+            "sequenceNumber": .string(output.sequenceNumber ?? "")
+        ])
+        BackendMetric.totalTextMessagesSent.increment()
+
+        return messageId
+    }
+
+    private func handleSmsError(
+        _ error: Error,
+        to phoneNumber: String,
+        message: String,
+        logger: Logger
+    ) {
+        logger.error("Failed to send message", metadata: [
+            "to": .string("MessageService.sendSmS"),
+            "phoneNumber": .string(phoneNumber),
+            "message": .string(message),
+            "error": .string(error.localizedDescription)
+        ])
+        BackendMetric.totalTextMessagesSentFailed.increment()
+    }
+
+    private func buildWebhookRequest(url: URL, message: DiscordWebhookMessage) throws -> URLRequest {
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONEncoder().encode(message)
+        return request
+    }
+
+    private func validateWebhookResponse(_ response: URLResponse, data _: Data) throws {
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 204 {
+            throw GenericErrors.discordWebhookMessageFailed
+        }
+    }
+
+    private func resolveWebhookURL(
+        override: URL?,
+        logger: Logger,
+        input: String,
+        event: String
+    ) throws -> URL? {
+        if let url = override {
+            return url
+        }
+
+        guard let fallbackUrl = try? URL(string: Environment.getOrThrow("DISCORD_APP_EVENTS_URL")) else {
+            logger.error("Could not resolve Discord webhook URL", metadata: [
+                "to": .string("MessageService.sendDiscordWebhookAppEvent"),
+                "event": .string(event),
+                "input": .string(input)
+            ])
+            throw Abort(.internalServerError)
+        }
+
+        return fallbackUrl
+    }
+
+    private func throwWebhookURLError(logger: Logger, title: String) -> Never {
+        logger.error("Could not resolve Discord webhook URL", metadata: [
+            "to": .string("MessageService.sendDiscordAlert"),
+            "alert_title": .string(title)
+        ])
+        fatalError("Invalid webhook URL") // Or throw Abort(.internalServerError)
+    }
+
+    private func logSmsSentEvent(to phoneNumber: String, message: String, logger: Logger) async throws {
+        try sendDiscordWebhookAppEvent(
+            input: "random -> \(phoneNumber)",
+            event: "sending message: `\(message)`",
+            logger: logger
         )
     }
 }
