@@ -34,12 +34,12 @@ jobs:
         with:
            swift-version: "6.1"
 
-      - name: Restore Build Cache
-        id: cache-build-restore
-        uses: actions/cache/restore@v4
+      - uses: actions/cache@v4
         with:
-          key: unit-tests-build-cache-${{ hashFiles('Backend/Package.resolved') }}
-          path: Backend/.build
+          path: .build
+          key: ${{ runner.os }}-backend-unittests-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
 
       - name: Run Unit Tests
         uses: GetAutomaApp/opensource-actions/swifttesting@main
@@ -47,13 +47,6 @@ jobs:
           compose: "false"
           working-directory: "Backend"
           swift_test_extra_args: "--filter '.*UnitTests.*'"
-
-      - name: Save Build Cache
-        id: cache-build-save
-        uses: actions/cache/save@v4
-        with:
-          path: Backend/.build
-          key: ${{ steps.cache-build-restore.outputs.cache-primary-key }}
 
   integration-tests:
     runs-on: ubuntu-latest
@@ -64,12 +57,12 @@ jobs:
         with:
            swift-version: "6.1"
 
-      - name: Restore Build Cache
-        id: cache-build-restore
-        uses: actions/cache/restore@v4
+      - uses: actions/cache@v4
         with:
-          key: integration-tests-build-cache-${{ hashFiles('Backend/Package.resolved') }}
-          path: Backend/.build
+          path: .build
+          key: ${{ runner.os }}-backend-integrationtests-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
 
       - name: Run Integration Tests
         uses: GetAutomaApp/opensource-actions/swifttesting@main
@@ -79,10 +72,3 @@ jobs:
           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
           required_healthy_services_docker_compose: '["postgres", "localstack"]'
           compose_services_to_startup: '["postgres", "localstack"]'
-
-      - name: Save Build Cache
-        id: cache-build-save
-        uses: actions/cache/save@v4
-        with:
-          path: Backend/.build
-          key: ${{ steps.cache-build-restore.outputs.cache-primary-key }}
