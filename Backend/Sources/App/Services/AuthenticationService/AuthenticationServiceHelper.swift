@@ -9,369 +9,539 @@ import JWT
 import Queues
 import Vapor
 
-/// Helper struct for authentication service operations.
 actor AuthenticationServiceHelper {
-    /// The database for writing operations.
-    public let writeDb: Database
-    /// The database for reading operations.
-    public let readDb: Database
-    /// The logger for logging messages.
-    public let logger: Logger
-    
-    init(writeDb: Database, readDb: Database, logger: Logger) {
-        self.writeDb = writeDb
-        self.readDb = readDb
-        self.logger = logger
+    private let config: AuthenticationServiceHelperConfig
+    private let messageService = MessageService()
+
+    init(_ config: AuthenticationServiceHelperConfig) {
+        self.config = config
     }
 
-    /// Validates and deletes an authentication code.
-    /// - Parameters:
-    ///   - phoneNumber: The phone number associated with the code.
-    ///   - code: The authentication code to validate.
-    /// - Throws: Throws an error if validation fails.
-    public func getValidateAndDeleteCode(phoneNumber: String, code: String) async throws {
-        // Log the start of code validation
-        logger.info(
-            "Starting validation of authentication code",
-            metadata: [
-                "phoneNumber": .string(phoneNumber),
-                "code": .string(code),
-                "to": .string("AuthenticationService.getValidateAndDeleteCode"),
-            ]
-        )
-
-        let messageService = MessageService()
-
-        // Query the valid code by phone number and code
-        let validCode = try await AuthenticationCodeModel
-            .query(on: readDb)
-            .filter(\.$phoneNumber == phoneNumber)
-            .filter(\.$code == code.lowercased())
-            .first()
-
-        guard let validCode else {
-            // Log the error for invalid code
-            logger.error(
-                "Authentication code is invalid",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "code": .string(code),
-                    "phoneNumber": .string(phoneNumber),
-                    "validCode": .string(String(describing: validCode)),
-                ]
-            )
-            throw GenericErrors.invalidCode
-        }
-
-        // Log the valid code
-        logger.info(
-            "Authentication code is valid",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "code": .string(code),
-                "phoneNumber": .string(phoneNumber),
-                "validCode": .string(String(reflecting: validCode)),
-            ]
-        )
-
-        // Send a Discord webhook event for valid code
-        try messageService.sendDiscordWebhookAppEvent(
-            input: phoneNumber,
-            event: "submitted valid code `\(code)`",
-            logger: logger
-        )
-
-        // Delete the valid code from the database
-        try await validCode.delete(on: writeDb)
-    }
-
-    /// Returns the code deletion time.
-    /// - Returns: A `Date` representing the code deletion time.
-    public func codeDeletionTime() -> Date {
-        Date().addingTimeInterval(15 * 60) // Code expires after 15 minutes
-    }
-
-    /// Generates an access token for a user.
-    /// - Parameters:
-    ///   - userId: The user ID.
-    ///   - expiresIn: The expiration time for the token.
-    ///   - subject: The subject of the token.
-    ///   - signer: The JWT signer.
-    /// - Returns: A signed JWT token string.
-    /// - Throws: Throws an error if token generation fails.
-    public func generateAccessToken(
-        userId: String,
-        expiresIn: TimeInterval,
-        type subject: JWTTokenSubject,
-        signer: Request.JWT
-    ) async throws -> String {
-        guard let userId = UUID(uuidString: userId) else {
-            throw GenericErrors.invalidUserId
-        }
-
-        let expiresAt = Date().addingTimeInterval(expiresIn)
-        let token = JWTTokenPayload(
-            subject: subject,
-            expiration: .init(value: expiresAt),
-            userId: userId.uuidString,
-            tokenId: UUID()
-        )
-
-        // Sign the token using the JWT signer
-        let signedToken = try await signer.sign(token)
-
-        // Delete old tokens for the user
-        try await deleteOldTokens(userId: userId, subject: subject, skip: 5)
-
-        let tokenId = UUID()
-
-        // Save the new token to the database
-        try await JwtTokenModel(
-            id: tokenId,
-            token: signedToken,
-            userId: userId,
-            subject: subject,
-            deletedAt: expiresAt
-        ).create(on: writeDb)
-
-        return signedToken
-    }
-
-    /// Deletes old tokens for a user.
-    /// - Parameters:
-    ///   - userId: The user ID.
-    ///   - subject: The subject of the tokens to delete.
-    ///   - skip: The number of tokens to skip before deleting.
-    /// - Throws: Throws an error if token deletion fails.
-    public func deleteOldTokens(
-        userId: UUID,
-        subject: JWTTokenSubject,
-        skip: Int? = nil
-    ) async throws {
-        // Log the start of token deletion
-        logger.info(
-            "Deleting old tokens",
-            metadata: [
-                "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "userId": .string(userId.uuidString),
-                "subject": .string(String(reflecting: subject)),
-                "skip": .string(String(reflecting: skip)),
-            ]
-        )
-
-        var query = JwtTokenModel.query(on: writeDb)
-            .filter(\.$userId == userId)
-            .filter(\.$subject == subject)
-            .sort(\.$createdAt, .descending)
-
-        if let skip {
-            query = query.range(skip...)
-        }
-
-        // Retrieve tokens to delete
-        let tokensToDelete = try await query.all()
-
-        for token in tokensToDelete {
-            // Delete each token
-            try await token.delete(on: writeDb)
-            logger.info(
-                "Deleted token",
-                metadata: [
-                    "to": .string("AuthenticationService.deleteOldTokens"),
-                    "tokenId": .string(token.id?.uuidString ?? "unknown"),
-                ]
-            )
-        }
-    }
-
-    /// Creates an authentication tokens payload.
-    /// - Parameters:
-    ///   - userId: The user ID.
-    ///   - signer: The JWT signer.
-    /// - Returns: An `AuthenticationTokensPayloadDTO` containing access and refresh tokens.
-    /// - Throws: Throws an error if token creation fails.
-    public func createAuthenticationTokensPayload(
-        userId: String,
-        signer: Request.JWT
-    ) async throws -> AuthenticationTokensPayloadDTO {
-        // Log the start of tokens payload creation
-        logger.info(
-            "Creating authentication tokens payload",
-            metadata: [
-                "to": .string("AuthenticationService.createAuthenticationTokensPayload"),
-                "userId": .string(userId),
-            ]
-        )
-
-        let messageService = MessageService()
-
-        // Generate access and refresh tokens
-        let accessToken = try await generateAccessToken(
-            userId: userId,
-            expiresIn: 86_400,
-            type: .access,
-            signer: signer
-        )
-        let refreshToken = try await generateAccessToken(
-            userId: userId,
-            expiresIn: 31_536_000,
-            type: .refresh,
-            signer: signer
-        )
-
-        let tokensPayload: AuthenticationTokensPayloadDTO = .init(
-            accessToken: accessToken,
-            refreshToken: refreshToken
-        )
-
-        // Log the successful creation of tokens payload
-        logger.info(
-            "Successfully created authentication tokens payload",
-            metadata: [
-                "to": .string("AuthenticationService.createAuthenticationTokensPayload"),
-                "userId": .string(userId),
-                "accessTokenLength": .string("\(accessToken.count)"),
-                "refreshTokenLength": .string("\(refreshToken.count)"),
-            ]
-        )
-
-        // Send a Discord webhook event for tokens creation
-        try messageService.sendDiscordWebhookAppEvent(
-            input: userId,
-            event: "generated tokens: `access: \(accessToken.count)` `refresh: \(refreshToken.count)`",
-            logger: logger
-        )
-
-        return tokensPayload
-    }
-
-    /// Retrieves the distance for authentication code validation.
-    /// - Returns: A `Double` representing the distance.
-    /// - Throws: Throws an error if retrieval fails.
-    public func getDistance() throws -> Double {
-        let distanceRawValue = try Environment.getOrThrow("AUTHENTICATION_CODE_DISTANCE")
-
-        guard
-            let distance = Double(distanceRawValue)
-        else {
-            // Log the error for conversion failure
-            logger.error(
-                "Could not convert AUTHENTICATION_CODE_DISTANCE raw value to Double.",
-                metadata: [
-                    "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "distance_raw_value": .string(distanceRawValue),
-                ]
-            )
-            throw Abort(.internalServerError)
-        }
-        return distance
-    }
-
-    /// Sends an authentication code to a user.
-    /// - Parameters:
-    ///   - queue: The queue for dispatching jobs.
-    ///   - code: The authentication code to send.
-    ///   - phoneNumber: The phone number to send the code to.
-    ///   - codeModelId: The ID of the code model.
-    /// - Returns: An `AuthenticationCodeResponseDTO` indicating success and timeout.
-    /// - Throws: Throws an error if sending the code fails.
-    public func sendAuthCode(
-        queue: Queue,
-        code: String,
-        phoneNumber: String,
-        codeModelId: UUID
-    ) async throws -> AuthenticationCodeResponseDTO {
-        // Dispatch a job to send the authentication code
-        try await queue.dispatch(
-            TransactionalMessageAsyncJob.self,
+    public func validateAndDeleteCode(_ payload: AuthPhoneCodePayloadDTO) async throws {
+        let validator = AuthenticationCodeValidator(
             .init(
-                content: MessageFormatterService
-                    .craftVerificationCodeMessage(
-                        code: code
-                    ),
-                toPhoneNumber: phoneNumber
+                writeDb: config.writeDb, readDb: config.readDb, logger: config.logger, payload: payload
             )
         )
-
-        let codeModel = try AuthenticationCodeModel(
-            id: codeModelId,
-            code: code,
-            phoneNumber: phoneNumber,
-            deletedAt: codeDeletionTime()
-        )
-
-        // Save the code model to the database
-        try await codeModel.save(on: writeDb)
-
-        // Log the successful sending of the code
-        logger.info(
-            "Sent verification code to user",
-            metadata: [
-                "to": .string("AuthenticationService.sendAuthCode"),
-                "phoneNumber": .string(phoneNumber),
-                "code": .string(code),
-                "codeId": .string(codeModelId.uuidString),
-            ]
-        )
-
-        BackendMetric.totalSuccessfulVerificationCodesSent.increment()
-
-        return .init(success: true, timeout: 60)
+        try await validator.validateAndDeleteCode()
     }
 
-    /// Handles the case where an authentication code was not sent due to a specific error.
-    /// - Parameters:
-    ///   - code: The authentication code.
-    ///   - phoneNumber: The phone number to send the code to.
-    ///   - codeModelId: The ID of the code model.
-    ///   - error: The specific error that occurred.
-    /// - Throws: Throws the provided error.
-    public func handleAuthCodeNotSent(
-        code: String,
-        phoneNumber: String,
-        codeModelId: UUID,
-        error: GenericErrors
-    ) throws {
-        BackendMetric.totalFailedVerificationCodesSent.increment()
-        // Log the error for failed code sending
-        logger.error(
-            "Couldn't sent verification code to user",
-            metadata: [
-                "to": .string("AuthenticationService.sendAuthCode"),
-                "phoneNumber": .string(phoneNumber),
-                "code": .string(code),
-                "codeId": .string(codeModelId.uuidString),
-                "error": .string(error.rawValue),
-            ]
-        )
-        throw error
+    public func resetAccessToken(_ payload: ResetAccessCodePayload) async throws -> String {
+        try await AccessTokenResetter(.init(
+            writeDb: config.writeDb,
+            readDb: config.readDb,
+            logger: config.logger,
+            payload: payload
+        ))
+        .reset()
     }
 
-    /// Handles the case where an authentication code was not sent due to an unknown error.
-    /// - Parameters:
-    ///   - code: The authentication code.
-    ///   - phoneNumber: The phone number to send the code to.
-    ///   - codeModelId: The ID of the code model.
-    ///   - error: The unknown error that occurred.
-    /// - Throws: Throws a generic unknown error.
-    public func handleAuthCodeNotSent(
+    public func deleteOldTokens(_ payload: DeleteOldAccessTokensPayload) async throws {
+        try await OldAccessTokenDeleter(
+            .init(writeDb: config.writeDb,
+                  readDb: config.readDb,
+                  logger: config.logger,
+                  payload: payload)
+        ).deleteOldTokens()
+    }
+
+    public func createAuthenticationTokensPayload(_ payload: CreateAuthenticationTokensPayload) async throws
+        -> AuthenticationTokensPayloadDTO
+    {
+        try await AuthenticationTokensPayloadCreator(.init(
+            writeDb: config.writeDb,
+            readDb: config.readDb,
+            logger: config.logger,
+            payload: payload
+        )).create()
+    }
+
+    public func getCodeRateLimit() throws -> Double {
+        try castCodeRateLimitToNumber(getRateLimitString())
+    }
+
+    public func sendAuthCode(_ payload: SendAuthCodePayload, queue: Queue) async throws -> AuthenticationCodeResponseDTO
+    {
+        try await AuthCodeSender(.init(
+            writeDb: config.writeDb,
+            readDb: config.writeDb,
+            logger: config.logger,
+            queue: queue,
+            payload: payload
+        )).send()
+    }
+
+    public func sendTelemetryDataOnAuthCodeSendFail(
         code: String,
         phoneNumber: String,
         codeModelId: UUID,
         error: any Error
-    ) throws {
+    ) {
         BackendMetric.totalFailedVerificationCodesSent.increment()
-        // Log the error for failed code sending
-        logger.error(
+        config.logger.error(
             "Couldn't sent verification code to user",
             metadata: [
-                "to": .string("AuthenticationService.sendAuthCode"),
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "phoneNumber": .string(phoneNumber),
                 "code": .string(code),
                 "codeId": .string(codeModelId.uuidString),
                 "error": .string(error.localizedDescription),
             ]
         )
-        throw GenericErrors.unknownError
     }
+
+    private func getRateLimitString() throws -> String {
+        try Environment.getOrThrow("AUTHENTICATION_CODE_RATE_LIMIT")
+    }
+
+    private func castCodeRateLimitToNumber(_ rateLimitString: String) throws -> Double {
+        guard
+            let rateLimitNumber = Double(rateLimitString)
+        else {
+            logCodeRateLimitNotCasted(rateLimit: rateLimitString)
+            throw Abort(.internalServerError)
+        }
+        return rateLimitNumber
+    }
+
+    private func logCodeRateLimitNotCasted(rateLimit: String) {
+        config.logger.error(
+            "Could not convert AUTHENTICATION_CODE_DISTANCE raw value to Double.",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "distance_raw_value": .string(rateLimit),
+            ]
+        )
+    }
+}
+
+struct AuthenticationServiceHelperConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
+}
+
+internal struct AuthenticationCodeValidator {
+    private let config: AuthenticationCodeValidatorConfig
+    private let messageService = MessageService()
+
+    init(_ config: AuthenticationCodeValidatorConfig) {
+        self.config = config
+    }
+
+    public func validateAndDeleteCode() async throws {
+        try sendTelemetryDataOnValidateAndDeleteCodeAttempt()
+        try await getAndValidateCode().delete(on: config.writeDb)
+    }
+
+    private func sendTelemetryDataOnValidateAndDeleteCodeAttempt() throws {
+        try messageService.sendDiscordWebhookAppEvent(
+            input: config.payload.phoneNumber,
+            event: "submitted authentication code to validate `\(config.payload.code)`",
+            logger: config.logger
+        )
+    }
+
+    private func getAndValidateCode() async throws
+        -> AuthenticationCodeModel
+    {
+        let authCode = try await getAuthCode()
+        return try validateAndReturnAuthCode(authCode)
+    }
+
+    private func validateAndReturnAuthCode(
+        _ authCode: AuthenticationCodeModel?
+    ) throws -> AuthenticationCodeModel {
+        logValidateCodeStart()
+        guard
+            let validCode = authCode
+        else {
+            logInvalidCodeError()
+            throw GenericErrors.invalidCode
+        }
+        logValidCode(code: validCode)
+        return validCode
+    }
+
+    private func logValidateCodeStart() {
+        config.logger.info(
+            "Starting validation of authentication code",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "authCodePayload": .string(String(reflecting: config.payload))
+            ]
+        )
+    }
+
+    private func logValidCode(
+        code validCode: AuthenticationCodeModel
+    ) {
+        config.logger.info(
+            "Authentication code is valid",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "authCodePayload": .string(String(reflecting: config.payload)),
+                "validCode": .string(String(reflecting: validCode)),
+            ]
+        )
+    }
+
+    private func logInvalidCodeError() {
+        config.logger.error(
+            "Authentication code is invalid",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "authCodePayload": .string(String(reflecting: config.payload))
+            ]
+        )
+    }
+
+    private func getAuthCode() async throws -> AuthenticationCodeModel? {
+        try await AuthenticationCodeModel
+            .query(on: config.readDb)
+            .filter(\.$phoneNumber == config.payload.phoneNumber)
+            .filter(\.$code == config.payload.code.lowercased())
+            .first()
+    }
+}
+
+internal struct AuthenticationCodeValidatorConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
+    let payload: AuthPhoneCodePayloadDTO
+}
+
+internal struct AccessTokenResetter {
+    private let config: AccessTokenResetterConfig
+    private let expiresAt: Date
+
+    init(_ config: AccessTokenResetterConfig) {
+        self.config = config
+        expiresAt = Date().addingTimeInterval(config.payload.expiresIn)
+    }
+
+    public func reset() async throws -> String {
+        let signedToken = try await getSignedToken()
+        try await OldAccessTokenDeleter(
+            .init(
+                writeDb: config.writeDb,
+                readDb: config.readDb,
+                logger: config.logger,
+                payload: .init(
+                    userId: config.payload.userId,
+                    subject: config.payload.subject,
+                    totalNewestTokensToSkip: 5
+                )
+            )
+        ).deleteOldTokens()
+        try await createAuthToken(fromSignedToken: signedToken)
+        return signedToken
+    }
+
+    private func createAuthToken(fromSignedToken signedToken: String) async throws {
+        try await JwtTokenModel(
+            id: UUID(),
+            token: signedToken,
+            userId: config.payload.userId,
+            subject: config.payload.subject,
+            deletedAt: expiresAt
+        ).create(on: config.writeDb)
+    }
+
+    private func getSignedToken() async throws -> String {
+        try await config.payload.signer.sign(createTokenToSign())
+    }
+
+    private func createTokenToSign() -> JWTTokenPayload {
+        JWTTokenPayload(
+            subject: config.payload.subject,
+            expiration: .init(value: expiresAt),
+            userId: config.payload.userId.uuidString,
+            tokenId: UUID()
+        )
+    }
+}
+
+internal struct AccessTokenResetterConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
+    let payload: ResetAccessCodePayload
+}
+
+internal struct ResetAccessCodePayload {
+    let userId: UUID
+    let expiresIn: TimeInterval
+    let subject: JWTTokenSubject
+    let signer: Request.JWT
+}
+
+internal struct OldAccessTokenDeleter {
+    let config: OldAccessTokenDeleterConfig
+
+    init(_ config: OldAccessTokenDeleterConfig) {
+        self.config = config
+    }
+
+    public func deleteOldTokens() async throws {
+        logDeleteOldTokensStart()
+        try await deleteTokens(getTokensToDelete())
+    }
+
+    private func deleteTokens(_ tokens: [JwtTokenModel]) async throws {
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for token in tokens {
+                group.addTask {
+                    try await deleteToken(token)
+                }
+            }
+
+            try await group.waitForAll()
+        }
+    }
+
+    private func deleteToken(_ token: JwtTokenModel) async throws {
+        try await token.delete(on: config.writeDb)
+        try logDeleteTokenSuccess(id: token.requireID())
+    }
+
+    private func logDeleteTokenSuccess(id: UUID) {
+        config.logger.info(
+            "Deleted token",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "tokenId": .string(id.uuidString)
+            ]
+        )
+    }
+
+    private func getTokensToDelete() async throws -> [JwtTokenModel] {
+        try await getQueryForTokensToDelete().all()
+    }
+
+    private func getQueryForTokensToDelete() -> QueryBuilder<JwtTokenModel> {
+        var query = getQueryForAllTokensInDescendingOrder()
+        if let totalNewestTokensToSkip = config.payload.totalNewestTokensToSkip {
+            query = skipSomeNewestTokens(amount: totalNewestTokensToSkip, fromQuery: query)
+        }
+        return query
+    }
+
+    private func skipSomeNewestTokens(
+        amount: Int,
+        fromQuery query: QueryBuilder<JwtTokenModel>
+    ) -> QueryBuilder<JwtTokenModel> {
+        query.range(amount...)
+    }
+
+    private func getQueryForAllTokensInDescendingOrder() -> QueryBuilder<JwtTokenModel> {
+        JwtTokenModel.query(on: config.writeDb)
+            .filter(\.$userId == config.payload.userId)
+            .filter(\.$subject == config.payload.subject)
+            .sort(\.$createdAt, .descending)
+    }
+
+    private func logDeleteOldTokensStart() {
+        config.logger.info(
+            "Deleting old tokens",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "userId": .string(config.payload.userId.uuidString),
+                "subject": .string(String(reflecting: config.payload.subject)),
+                "skip": .string(String(reflecting: config.payload.totalNewestTokensToSkip)),
+            ]
+        )
+    }
+}
+
+internal struct OldAccessTokenDeleterConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
+    let payload: DeleteOldAccessTokensPayload
+}
+
+internal struct DeleteOldAccessTokensPayload {
+    let userId: UUID
+    let subject: JWTTokenSubject
+    let totalNewestTokensToSkip: Int?
+
+    init(
+        userId: UUID,
+        subject: JWTTokenSubject,
+        totalNewestTokensToSkip: Int? = nil
+    ) {
+        self.userId = userId
+        self.subject = subject
+        self.totalNewestTokensToSkip = totalNewestTokensToSkip
+    }
+}
+
+internal struct AuthenticationTokensPayloadCreator {
+    private let config: AuthenticationTokensPayloadCreatorConfig
+    private let messageService = MessageService()
+
+    init(_ config: AuthenticationTokensPayloadCreatorConfig) {
+        self.config = config
+    }
+
+    public func create(
+    ) async throws -> AuthenticationTokensPayloadDTO {
+        logCreateStart()
+        let tokensPayload = try await createTokensPayload()
+        try sendTelemetryDataOnCreateSuccess(payload: tokensPayload)
+
+        return tokensPayload
+    }
+
+    private func sendTelemetryDataOnCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) throws {
+        logCreateSuccess(payload: tokensPayload)
+        try alertCreateSuccess(payload: tokensPayload)
+    }
+
+    private func alertCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) throws {
+        try messageService.sendDiscordWebhookAppEvent(
+            input: config.payload.userId.uuidString,
+            event: "generated tokens: `access: \(tokensPayload.accessToken.count)` `refresh: \(tokensPayload.refreshToken.count)`",
+            logger: config.logger
+        )
+    }
+
+    private func logCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) {
+        config.logger.info(
+            "Successfully created authentication tokens payload",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "userId": .string(config.payload.userId.uuidString),
+                "accessTokenLength": .string("\(tokensPayload.accessToken.count)"),
+                "refreshTokenLength": .string("\(tokensPayload.refreshToken.count)"),
+            ]
+        )
+    }
+
+    private func createTokensPayload() async throws -> AuthenticationTokensPayloadDTO {
+        try await .init(
+            accessToken: resetAccessToken(subject: .access),
+            refreshToken: resetAccessToken(subject: .refresh)
+        )
+    }
+
+    private func resetAccessToken(subject: JWTTokenSubject) async throws -> String {
+        try await AccessTokenResetter(.init(
+            writeDb: config.writeDb,
+            readDb: config.readDb,
+            logger: config.logger,
+            payload: .init(
+                userId: config.payload.userId,
+                expiresIn: getExpiresInFromSubject(subject),
+                subject: subject,
+                signer: config.payload.signer
+            )
+        )).reset()
+    }
+
+    private func getExpiresInFromSubject(_ subject: JWTTokenSubject) -> TimeInterval {
+        switch subject {
+        case .refresh:
+            31_536_000
+        default:
+            86_400
+        }
+    }
+
+    private func logCreateStart() {
+        config.logger.info(
+            "Creating authentication tokens payload",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "userId": .string(config.payload.userId.uuidString),
+            ]
+        )
+    }
+}
+
+internal struct AuthenticationTokensPayloadCreatorConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
+    let payload: CreateAuthenticationTokensPayload
+}
+
+internal struct CreateAuthenticationTokensPayload {
+    let userId: UUID
+    let signer: Request.JWT
+}
+
+internal struct AuthCodeSender {
+    private let config: AuthCodeSenderConfig
+
+    init(_ config: AuthCodeSenderConfig) {
+        self.config = config
+    }
+
+    public func send() async throws -> AuthenticationCodeResponseDTO {
+        try await startSendCodeJob()
+        try await createAuthCodeModel()
+        sendTelemetryDataOnSendSuccess()
+        return sendSuccess()
+    }
+
+    private func sendSuccess() -> AuthenticationCodeResponseDTO {
+        .init(success: true, timeout: 60)
+    }
+
+    private func sendTelemetryDataOnSendSuccess() {
+        config.logger.info(
+            "Sent verification code to user",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)"),
+                "phoneNumber": .string(config.payload.phoneNumber),
+                "code": .string(config.payload.code),
+                "codeId": .string(config.payload.codeModelId.uuidString),
+            ]
+        )
+
+        BackendMetric.totalSuccessfulVerificationCodesSent.increment()
+    }
+
+    private func createAuthCodeModel() async throws {
+        try await AuthenticationCodeModel(
+            id: config.payload.codeModelId,
+            code: config.payload.code,
+            phoneNumber: config.payload.phoneNumber,
+            deletedAt: getCodeDeletionTime()
+        ).save(on: config.writeDb)
+    }
+
+    private func startSendCodeJob() async throws {
+        try await config.queue.dispatch(
+            TransactionalMessageAsyncJob.self,
+            .init(
+                content: MessageFormatterService
+                    .craftVerificationCodeMessage(
+                        code: config.payload.code
+                    ),
+                toPhoneNumber: config.payload.phoneNumber
+            )
+        )
+    }
+
+    private func getCodeDeletionTime() -> Date {
+        Date().addingTimeInterval(15 * 60)
+    }
+}
+
+internal struct AuthCodeSenderConfig: AuthenticationServiceConfig {
+    let writeDb: Database
+    let readDb: Database
+    let logger: Logger
+    let queue: Queue
+    let payload: SendAuthCodePayload
+}
+
+internal struct SendAuthCodePayload {
+    let code: String
+    let phoneNumber: String
+    let codeModelId: UUID
 }

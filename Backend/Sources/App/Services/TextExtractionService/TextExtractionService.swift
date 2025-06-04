@@ -47,7 +47,7 @@ internal struct TextExtractionService: ~Copyable {
                 "Response text block is empty.",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "response": .string(String(describing: response)),
+                    "response": .string(String(reflecting: response)),
                 ]
             )
             throw Abort(.internalServerError)
