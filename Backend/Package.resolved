@@ -1,5 +1,5 @@
 {
-  "originHash" : "6b7a0075eff9a6741e21a049c0cdf78cc17ce513ff2c7f5471b2e57f4a6a99f4",
+  "originHash" : "d13804ea7c44a751fd4702373bfe9722b5691dd71277016ad9a6ced0fc00cb1c",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -35,6 +35,15 @@
       "state" : {
         "revision" : "742f624a998cba2a9e653d9b1e91ad3f3a5dff6b",
         "version" : "4.15.2"
+      }
+    },
+    {
+      "identity" : "fakery",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GetAutomaApp/Fakery",
+      "state" : {
+        "branch" : "master",
+        "revision" : "f68f2ceaaf6782db234e4cbcd5f06dbeeb91af7e"
       }
     },
     {

@@ -4,6 +4,7 @@
 // All rights reserved.
 
 @testable import App
+import Fakery
 import Fluent
 import Testing
 import VaporTesting
@@ -73,7 +74,7 @@ internal struct TwitterAuthenticatedClientIntegrationTests: TwitterClientTestSui
             .authenticated(token: userTokenForTweetPost.toDTO())
 
             // Generate a random message and post a tweet
-            let message = UUID().uuidString
+            let message = Faker().lorem.paragraph()
             let response = try await client.postTweet(message: message)
             // Ensure the response contains the expected message
             #expect(response.data.text == message, "Tweet message should match")
