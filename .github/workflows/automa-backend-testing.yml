@@ -72,3 +72,4 @@ jobs:
           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
           required_healthy_services_docker_compose: '["postgres", "localstack"]'
           compose_services_to_startup: '["postgres", "localstack"]'
+          

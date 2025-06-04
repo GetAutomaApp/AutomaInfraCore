@@ -10,6 +10,18 @@ import Queues
 import QueuesFluentDriver
 import Vapor
 
+// TODO:
+// 1. Delete 3 compose services and their volumes
+// 2. Start up the 3 compose services: docker-compose up postgres localstack worker_dev -d
+// 3. Build app (`swift build`) and run migrations (`swift run App migrate --yes`)
+// 4. Run app (`swift run App`)
+// 5. Run tests (`swift test -Xswiftc -warnings-as-errors --filter '.*IntegrationTests.*'`)
+// 6. Tests should work, because the user token gets created. if not, debug why and fix it
+// 7. Delete user token id and oauth token id variables in all envs except for .env.testing
+// 8. Update/create `TEST_TWITTER_OAUTH_TOKEN_ID` and `TEST_TWITTER_USER_TOKEN_ID` as Github secrets
+// 9. Create a new optional argument in `swifttesting` to run a command right before running the tests
+//  (right after all the required services are healthy - add worker_dev as a required service as well).
+// 10. Update `automa-backend-testing.yml` to run migrations before running tests (`swift run App migrate --yes`)
 
 public func configure(_ app: Application) async throws {
     try await AppConfigurator(app: app).configure()
@@ -86,7 +98,6 @@ public struct DatabaseConfigurator {
         try registerDatabases()
         addMigrations()
         try await app.autoMigrate()
-        try await DatabaseSeeder(app: app).seed()
     }
 
     private func registerDatabases() throws {
@@ -134,7 +145,8 @@ public struct DatabaseSeeder {
     /// Seed a single `TwitterUserToken` `TwitterOAuthToken` so that the post tweet tests have tokens of an account to
     /// post to.
     private func seedTwitterTokens() async throws {
-        let oauthTokenID = try UUID.unwrapFromString("cc27b4c0-3f7d-4b56-9bc0-7b69d5e84dd6") {
+        // TODO: get ID from env
+        let oauthTokenID = try UUID.unwrapFromString(Environment.getOrThrow("TEST_TWITTER_OAUTH_TOKEN_ID")) {
             app.logger.error(
                 "Could not convert seed oauth token ID to UUID, this should never happen.",
                 metadata: [
@@ -143,19 +155,9 @@ public struct DatabaseSeeder {
             )
         }
 
-        if try await TwitterOAuthToken.doesExist(id: oauthTokenID, on: app.db) {
-            return
-        }
+        try await createTwitterOAuthTokenIfNotExist(id: oauthTokenID)
 
-        try await TwitterOAuthToken(
-            id: oauthTokenID,
-            oauthToken: "buf3NwAAAAABzwgpAAABlucYrjg",
-            oauthTokenSecret: "aQfxpLSgjAVItP1YOt8z76lw6rZCoql6",
-            oauthCallbackConfirmed: true
-        )
-        .create(on: app.db)
-
-        let userTokenID = try UUID.unwrapFromString("df2f5fc3-29f0-4db6-8ac5-617f0fbb99e9") {
+        let userTokenID = try UUID.unwrapFromString("TEST_TWITTER_USER_TOKEN_ID") {
             app.logger.error(
                 "Could not convert seed user token ID to UUID, this should never happen.",
                 metadata: [
@@ -164,15 +166,32 @@ public struct DatabaseSeeder {
             )
         }
 
-        if try await TwitterUserToken.doesExist(id: userTokenID, on: app.db) {
+        try await createUserTokenIfNotExist(id: userTokenID, oauthTokenID: oauthTokenID)
+    }
+
+    private func createTwitterOAuthTokenIfNotExist(id: UUID) async throws {
+        if try await TwitterOAuthToken.doesExist(id: id, on: app.db) {
             return
         }
 
+        try await TwitterOAuthToken(
+            id: id,
+            oauthToken: "4Fdi9gAAAAABzwgpAAABlznYxEc",
+            oauthTokenSecret: "8eWirhncJQoO5pQnSjDiuSbHvKsbh0st",
+            oauthCallbackConfirmed: true
+        )
+        .create(on: app.db)
+    }
+
+    private func createUserTokenIfNotExist(id _: UUID, oauthTokenID: UUID) async throws {
+        if try await TwitterUserToken.doesExist(id: userTokenID, on: app.db) {
+            return
+        }
         try await TwitterUserToken(
             id: userTokenID,
-            accessToken: "1859607209115619328-zJItUeikeKz0kTIVBHxzJqoZIm2WU3",
-            secretAccessToken: "02AjnKy6YX7O0XhKtFuRhpOW5jhwxZC3ZFFW5vT7WHaLz",
-            oauthVerifier: "XJwcVmY9IQ9CEpTPHGvTt3Ym99mXyTvj",
+            accessToken: "1930140743508578304-OLUSXEnpgk3pXmom9gyXg4jlYQOtRR",
+            secretAccessToken: "rl9EdJzgUv9aMpUYeO9vHxSOhUk5d71jUydL4CFAHMsXn",
+            oauthVerifier: "gbkH02mARsyXak7VSGyiTKohlcLT6Kea",
             oauthTokenID: oauthTokenID
         ).create(on: app.db)
     }
