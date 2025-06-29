@@ -21,7 +21,7 @@ internal protocol TwitterClientBase {
     var database: Database { get }
 
     /// Twitter API client instance.
-    var twitterClient: TwitterAPIClient { get }
+    var twitterClient: TwitterAPISession { get }
 }
 
 /// A client for interacting with Twitter API, handling authentication and requests.
@@ -42,7 +42,7 @@ internal struct TwitterClient: TwitterClientBase {
     public let callbackURL: URL
 
     /// Twitter API client instance.
-    public let twitterClient: TwitterAPIClient
+    public let twitterClient: TwitterAPISession
 
     /// Consumer key for Twitter API.
     public let consumerKey: String
@@ -70,12 +70,15 @@ internal struct TwitterClient: TwitterClientBase {
         }
         callbackURL = url
 
-        twitterClient = TwitterAPIClient(.oauth10a(.init(
-            consumerKey: consumerKey,
-            consumerSecret: consumerSecret,
-            oauthToken: nil,
-            oauthTokenSecret: nil
-        )))
+        twitterClient = .init(
+            authenticationType:
+                    .oauth10a(
+                        consumerKey: consumerKey,
+                        consumerSecret: consumerSecret,
+                        oauthToken: nil,
+                        oauthTokenSecret: nil
+                    )
+        )
         auth = TwitterOAuthClient(
             logger: logger,
             client: client,
@@ -94,13 +97,12 @@ internal struct TwitterClient: TwitterClientBase {
             client: client,
             database: database,
             twitterClient: .init(
+                authenticationType:
                 .oauth10a(
-                    .init(
                         consumerKey: consumerKey,
                         consumerSecret: consumerSecret,
                         oauthToken: token.accessToken,
                         oauthTokenSecret: token.secretAccessToken
-                    )
                 )
             )
         )

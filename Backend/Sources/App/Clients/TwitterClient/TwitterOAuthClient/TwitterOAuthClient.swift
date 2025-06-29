@@ -278,48 +278,41 @@ internal struct TwitterOAuthClient: TwitterClientBase {
         tokenObject: TwitterOAuthToken,
         oauthVerifier: String
     ) async throws -> Self.TwitterUserTokens {
-        n runners 
         BackendMetric.twitterUserTokensConverted(status: .start).increment()
+        
         let oauthApi = OAuth10aAPI(session: twitterClient)
-        let response = await twitterClient.auth.oauth10a.postOAuthAccessToken(.init(
-            oauthToken: tokenObject.oauthToken,
-            oauthVerifier: oauthVerifier
-        )).responseObject
-
-        // Check for a successful conversion
-        guard let success = response.success else {
-            BackendMetric.twitterUserTokensConverted(status: .fail).increment()
-            let message = "Failed to convert oauth token to user access token and user secret access token."
-
-            guard let error = response.error else {
-                logger.error(
-                    .init(stringLiteral: message),
-                    metadata: [
-                        "to": .string("\(String(describing: Self.self)).\(#function)"),
-                        "tokenObject": .string(tokenObject.description),
-                    ]
+        do {
+            let token = try await oauthApi.postOAuthAccessToken(
+                .init(
+                    oauthToken: tokenObject.oauthToken,
+                    oauthVerifier: oauthVerifier
                 )
-
-                throw TwitterOAuthClientError.unknown(
-                    error: .message(message)
-                )
-            }
-
+            )
+            BackendMetric.twitterUserTokensConverted(status: .success).increment()
+            return .init(accessToken: token.oauthToken, secretAccessToken: token.oauthTokenSecret)
+        } catch let error as TwitterAPIError {
+            let message = "Failed to convert oauth token to user token"
             logger.error(
                 .init(stringLiteral: message),
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "error": .string(String(reflecting: error)),
-                    "tokenObject": .string(tokenObject.description),
                 ]
             )
-
-            throw TwitterOAuthClientError.responseError(error)
+            BackendMetric.twitterUserTokensConverted(status: .fail).increment()
+            throw TwitterOAuthClientError.twitterAPIResponseError(error)
+        } catch let error as TwitterAPIKitError {
+            let message = "Failed to convert oauth token to user token"
+            logger.error(
+                .init(stringLiteral: message),
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "error": .string(String(reflecting: error)),
+                ]
+            )
+            BackendMetric.twitterUserTokensConverted(status: .fail).increment()
+            throw TwitterOAuthClientError.twitterAPIKitResponseError(error)
         }
-
-        BackendMetric.twitterUserTokensConverted(status: .success).increment()
-
-        return .init(accessToken: success.oauthToken, secretAccessToken: success.oauthTokenSecret)
     }
 
     // TODO: Use selenium to login user
