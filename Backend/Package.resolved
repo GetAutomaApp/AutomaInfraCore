@@ -1,5 +1,5 @@
 {
-  "originHash" : "40ddf68b64e05f73523b422361737bd8a8177c905d7b0168bf3deb444771bbf4",
+  "originHash" : "3cbb4a1628e1362b1a2bcd1a7b0bea84fb13a71dbb7e2b5259c4a9d2e3d060ab",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nmdias/FeedKit.git",
       "state" : {
-        "revision" : "256d04ed9e11b086b3c5047b130704851fcf68f0",
-        "version" : "10.0.0-rc.7"
+        "revision" : "03ea968c7741f4feeeacbb6a82ff7320d0953edb",
+        "version" : "10.1.2"
       }
     },
     {
@@ -420,8 +420,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/GetAutomaApp/TwitterAPIKit",
       "state" : {
-        "branch" : "main",
-        "revision" : "bd144c73ac927071bc53aee384d332d7eca4d7a4"
+        "revision" : "242e0f8f498a9080b604c5e6028f2717f109d447",
+        "version" : "1.0.0"
       }
     },
     {

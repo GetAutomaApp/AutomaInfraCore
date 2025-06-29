@@ -17,7 +17,10 @@ internal enum TwitterOAuthClientError: Error {
     case invalidOAuthToken
 
     /// Error returned from Twitter API request.
-    case responseError(TwitterAPIKitError)
+    case twitterAPIKitResponseError(TwitterAPIKitError)
+    
+    /// Error returned from Twitter API request
+    case twitterAPIResponseError(TwitterAPIError)
 
     /// Failed to construct the Twitter authentication URL.
     case unableToMakeAuthenticateURL
