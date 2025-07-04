@@ -50,7 +50,7 @@ internal struct TwitterOAuthClientTests: TwitterClientTestSuite {
 
             // Generate the authentication URL using the token
             let url = try twitterClient.auth.makeAuthenticateURL(tokenObject: token)
-            let expected = "https://api.twitter.com/oauth/authenticate?oauth_token=\(token.oauthToken)"
+            let expected = "https://api.twitter.com/oauth/authorize?oauth_token=\(token.oauthToken)"
 
             // Ensure the generated URL matches the expected format
             #expect(url.absoluteString == expected, "URL should match expected URL")
