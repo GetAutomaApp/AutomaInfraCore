@@ -183,12 +183,12 @@ public struct DatabaseSeeder {
         .create(on: app.db)
     }
 
-    private func createUserTokenIfNotExist(id _: UUID, oauthTokenID: UUID) async throws {
-        if try await TwitterUserToken.doesExist(id: userTokenID, on: app.db) {
+    private func createUserTokenIfNotExist(id: UUID, oauthTokenID: UUID) async throws {
+        if try await TwitterUserToken.doesExist(id: id, on: app.db) {
             return
         }
         try await TwitterUserToken(
-            id: userTokenID,
+            id: id,
             accessToken: "1930140743508578304-OLUSXEnpgk3pXmom9gyXg4jlYQOtRR",
             secretAccessToken: "rl9EdJzgUv9aMpUYeO9vHxSOhUk5d71jUydL4CFAHMsXn",
             oauthVerifier: "gbkH02mARsyXak7VSGyiTKohlcLT6Kea",
