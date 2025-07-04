@@ -24,6 +24,7 @@ extension TwitterClientTestSuite {
         let app = try await Application.make(.testing)
         do {
             try await DatabaseConfigurator(app: app).configureDatabases()
+            try await DatabaseSeeder(app: app).seed()
             try await test(app)
         } catch {
             try await app.asyncShutdown()

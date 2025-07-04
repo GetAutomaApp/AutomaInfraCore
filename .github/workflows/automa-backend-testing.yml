@@ -34,11 +34,18 @@ jobs:
         with:
            swift-version: "6.1"
 
+      - uses: actions/cache@v4
+        with:
+          path: .build
+          key: ${{ runner.os }}-backend-unittests-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
       - name: Run Unit Tests
         uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
           compose: "false"
-          working-directory: "./Backend"
+          working-directory: "Backend"
           swift_test_extra_args: "--filter '.*UnitTests.*'"
 
   integration-tests:
@@ -50,10 +57,19 @@ jobs:
         with:
            swift-version: "6.1"
 
+      - uses: actions/cache@v4
+        with:
+          path: .build
+          key: ${{ runner.os }}-backend-integrationtests-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
       - name: Run Integration Tests
         uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
           compose: "true"
-          working-directory: "./Backend"
+          working-directory: "Backend"
           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
-          docker_compose_extra_args: "--scale api_dev=0 --scale worker_dev=0"
+          required_healthy_services_docker_compose: '["postgres", "localstack"]'
+          compose_services_to_startup: '["postgres", "localstack"]'
+          

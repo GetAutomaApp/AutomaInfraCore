@@ -29,6 +29,7 @@ public let package = Package(
         ),
         .package(url: "https://github.com/nmdias/FeedKit.git", from: "10.0.0-rc.3"),
         .package(url: "https://github.com/GetAutomaApp/swift-retry.git", branch: "main"),
+        .package(url: "https://github.com/GetAutomaApp/Fakery", branch: "master"),
     ],
     targets: [
         .executableTarget(
@@ -69,6 +70,7 @@ public let package = Package(
             dependencies: [
                 .target(name: "App"),
                 .product(name: "VaporTesting", package: "vapor"),
+                .product(name: "Fakery", package: "Fakery"),
             ],
             swiftSettings: swiftSettings
         ),

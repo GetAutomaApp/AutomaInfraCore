@@ -6,5 +6,5 @@
 @testable import App
 import Testing
 
-@Suite("Text Extraction Service Integration Tests")
+@Suite("TextExtractionServiceIntegrationTests")
 internal struct TextExtractionServiceIntegrationTests {}

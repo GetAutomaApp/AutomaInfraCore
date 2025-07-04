@@ -9,7 +9,7 @@ import VaporTesting
 
 /// Integration tests for the `PrometheusController`.
 /// These tests verify the controller's ability to handle requests and return metrics data.
-@Suite("Prometheus Controller Integration Tests")
+@Suite("PrometheusControllerIntegrationTests")
 internal struct PrometheusControllerIntegrationTests {
     /// Helper method to create a test application instance for each test.
     /// This method handles proper setup and teardown of the application.
@@ -37,7 +37,7 @@ internal struct PrometheusControllerIntegrationTests {
     ///
     /// - Throws: Any errors that occur during test execution or request handling.
     @Test("Test Request")
-    public func testRequest() async throws {
+    public func request() async throws {
         try await withApp { app in
             // Retrieve the Fly metrics token from the environment
             let token = try Environment.getOrThrow("FLY_METRICS_TOKEN")
