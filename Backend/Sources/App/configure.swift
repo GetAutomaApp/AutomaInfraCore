@@ -145,23 +145,26 @@ public struct DatabaseSeeder {
     /// Seed a single `TwitterUserToken` `TwitterOAuthToken` so that the post tweet tests have tokens of an account to
     /// post to.
     private func seedTwitterTokens() async throws {
-        // TODO: get ID from env
-        let oauthTokenID = try UUID.unwrapFromString(Environment.getOrThrow("TEST_TWITTER_OAUTH_TOKEN_ID")) {
+        let envTokenId = try Environment.getOrThrow("TEST_TWITTER_OAUTH_TOKEN_ID")
+        let oauthTokenID = try UUID.unwrapFromString(envTokenId) {
             app.logger.error(
                 "Could not convert seed oauth token ID to UUID, this should never happen.",
                 metadata: [
-                    "to": .string("seedDatabase")
+                    "to": .string("seedDatabase"),
+                    "token": .string(envTokenId)
                 ]
             )
         }
 
         try await createTwitterOAuthTokenIfNotExist(id: oauthTokenID)
 
-        let userTokenID = try UUID.unwrapFromString("TEST_TWITTER_USER_TOKEN_ID") {
+        let envUserTokenId = try Environment.getOrThrow("TEST_TWITTER_USER_TOKEN_ID")
+        let userTokenID = try UUID.unwrapFromString(envUserTokenId) {
             app.logger.error(
                 "Could not convert seed user token ID to UUID, this should never happen.",
                 metadata: [
-                    "to": .string("seedDatabase")
+                    "to": .string("seedDatabase"),
+                    "token": .string(envUserTokenId)
                 ]
             )
         }
@@ -176,8 +179,8 @@ public struct DatabaseSeeder {
 
         try await TwitterOAuthToken(
             id: id,
-            oauthToken: "4Fdi9gAAAAABzwgpAAABlznYxEc",
-            oauthTokenSecret: "8eWirhncJQoO5pQnSjDiuSbHvKsbh0st",
+            oauthToken: try Environment.getOrThrow("SEED_TWITTER_OAUTH_TOKEN"),
+            oauthTokenSecret: try Environment.getOrThrow("SEED_TWITTER_OAUTH_TOKEN_SECRET"),
             oauthCallbackConfirmed: true
         )
         .create(on: app.db)
@@ -189,9 +192,9 @@ public struct DatabaseSeeder {
         }
         try await TwitterUserToken(
             id: id,
-            accessToken: "1930140743508578304-OLUSXEnpgk3pXmom9gyXg4jlYQOtRR",
-            secretAccessToken: "rl9EdJzgUv9aMpUYeO9vHxSOhUk5d71jUydL4CFAHMsXn",
-            oauthVerifier: "gbkH02mARsyXak7VSGyiTKohlcLT6Kea",
+            accessToken: try Environment.getOrThrow("SEED_TWITTER_USER_TOKEN"),
+            secretAccessToken: try Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN"),
+            oauthVerifier: try Environment.getOrThrow("SEED_TWITTER_USER_OAUTH_VERIFIER"),
             oauthTokenID: oauthTokenID
         ).create(on: app.db)
     }

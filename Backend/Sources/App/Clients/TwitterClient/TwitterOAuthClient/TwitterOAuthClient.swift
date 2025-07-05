@@ -128,6 +128,7 @@ internal struct TwitterOAuthClient: TwitterClientBase {
         )
         return authenticateURL
     }
+    
 
     /// Converts OAuth tokens to user access tokens after successful authentication.
     ///
