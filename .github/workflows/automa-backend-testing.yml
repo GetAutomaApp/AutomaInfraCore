@@ -74,6 +74,9 @@ jobs:
           path: Backend/.build
           key: ${{ runner.os }}-backend-integrationtests-${{ hashFiles('**/Package.resolved') }}
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+
       - name: Run Integration Tests
         uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
