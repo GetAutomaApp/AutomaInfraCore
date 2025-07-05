@@ -194,7 +194,7 @@ public struct DatabaseSeeder {
             id: id,
             accessToken: try Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN"),
             secretAccessToken: try Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN_SECRET"),
-            oauthVerifier: try Environment.getOrThrow("SEED_TWITTER_USER_OAUTH_VERIFIER"),
+            oauthVerifier: try Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN_VERIFIER"),
             oauthTokenID: oauthTokenID
         ).create(on: app.db)
     }
