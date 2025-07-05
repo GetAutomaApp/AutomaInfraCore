@@ -50,7 +50,7 @@ while IFS= read -r line || [[ -n "$line" ]]; do
     # Remove possible surrounding quotes from the value
     SECRET_VALUE=$(echo "$SECRET_VALUE" | sed -e 's/^"//' -e 's/"$//')
 
-    echo "Processing secret: $SECRET_NAME"
+    echo "Processing secret: $SECRET_NAME $SECRET_VALUE"
 
     # Set the secret using gh secret set
     echo -n "$SECRET_VALUE" | gh secret set "$SECRET_NAME" --repo "$OWNER/$REPO" -b -
