@@ -6,7 +6,8 @@ on:
       - 'Backend/**/*.swift'
 
 env:
-  FLY_METRICS_TOKEN: ${{ secrets.FLY_METRICS_TOKEN }}
+  OWNER: ${{ secrets.OWNER }}
+  REPO: ${{ secrets.REPO }}
   PRIMARY_POSTGRES_URL: ${{ secrets.PRIMARY_POSTGRES_URL }}
   REGIONAL_POSTGRES_URL: ${{ secrets.REGIONAL_POSTGRES_URL }}
   ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
@@ -36,6 +37,7 @@ env:
   BACKEND_URL: ${{ secrets.BACKEND_URL }}
   PROMETHEUS_PORT: ${{ secrets.PROMETHEUS_PORT }}
   PROMETHEUS_BASE_URL: ${{ secrets.PROMETHEUS_BASE_URL }}
+  FLY_METRICS_TOKEN: ${{ secrets.FLY_METRICS_TOKEN }}
   AUTHENTICATION_CODE_RATE_LIMIT: ${{ secrets.AUTHENTICATION_CODE_RATE_LIMIT }}
 
 jobs:

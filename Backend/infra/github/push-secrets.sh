@@ -6,8 +6,14 @@ if ! command -v gh &>/dev/null; then
   exit 1
 fi
 
-# Load GitHub configuration from .github.env
-GITHUB_ENV_FILE=".env.testing"
+# Check if env file is provided as argument
+if [ $# -eq 0 ]; then
+  echo "Usage: $0 <env-file>"
+  echo "Example: $0 .env.local"
+  exit 1
+fi
+
+GITHUB_ENV_FILE="$1"
 
 if [ ! -f "$GITHUB_ENV_FILE" ]; then
   echo "Error: Could not find env file at $GITHUB_ENV_FILE"
@@ -56,3 +62,10 @@ while IFS= read -r line || [[ -n "$line" ]]; do
     fi
   fi
 done <"$GITHUB_ENV_FILE"
+
+echo ""
+echo "Generating env block for GitHub Actions workflow..."
+echo ""
+
+script_dir=$(dirname "$0")
+"$script_dir/generate-env-block.sh" "$GITHUB_ENV_FILE"
