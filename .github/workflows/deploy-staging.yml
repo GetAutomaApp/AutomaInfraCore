@@ -8,21 +8,21 @@ on:
 jobs:
   deploy:
     name: Deploy app
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-32vcpu-ubuntu-2204
     concurrency: deploy-group-staging
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Get Cache
-        uses: actions/cache@v3
+        uses: useblacksmith/cache@v5
         id: backend-build
         with:
           key: deploy-cache-${{ hashFiles('Backend/Package.resolved') }}
           path: Backend/.build
 
       - name: Get CLI Cache
-        uses: actions/cache@v3
+        uses: useblacksmith/cache@v5
         id: cli-build
         with:
           key: deploy-cache-${{ hashFiles('CLI/Package.resolved') }}
