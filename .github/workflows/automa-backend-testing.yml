@@ -26,7 +26,7 @@ env:
 
 jobs:
   unit-tests:
-    runs-on: blacksmith-32vcpu-ubuntu-2404
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v4
 
@@ -42,7 +42,7 @@ jobs:
           swift_test_extra_args: "--filter '.*UnitTests.*'"
 
   integration-tests:
-    runs-on: blacksmith-32vcpu-ubuntu-2404
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@v4
 

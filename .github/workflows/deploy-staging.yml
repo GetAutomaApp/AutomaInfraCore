@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Deploy app
-    runs-on: blacksmith-32vcpu-ubuntu-2204
+    runs-on: blacksmith-4vcpu-ubuntu-2204
     concurrency: deploy-group-staging
     steps:
       - name: Checkout Code
