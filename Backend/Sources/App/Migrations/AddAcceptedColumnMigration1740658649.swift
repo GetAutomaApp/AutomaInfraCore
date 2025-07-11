@@ -19,5 +19,9 @@ internal struct AddAcceptedColumnMigration1740658649: AsyncMigration {
     /// Reverts the migration by removing the 'accepted' column from the User schema.
     /// - Parameter database: The database instance on which the migration is reverted.
     /// - Throws: Throws an error if the schema update fails.
-    public func revert(on _: Database) throws {}
+    public func revert(on database: Database) async throws {
+        try await database.schema("User")
+            .deleteField("accepted")
+            .update()
+    }
 }

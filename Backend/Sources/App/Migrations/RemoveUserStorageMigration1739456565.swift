@@ -17,5 +17,14 @@ internal struct RemoveUserStorageMigration1739456565: AsyncMigration {
     /// Reverts the migration. No action is taken as the schema is deleted.
     /// - Parameter database: The database instance on which the migration is reverted.
     /// - Throws: Throws an error if the schema update fails.
-    public func revert(on _: any FluentKit.Database) throws {}
+    public func revert(on database: Database) async throws {
+        try await database.schema("user-storage")
+            .id()
+            .field("key", .string, .required)
+            .field("value", .string, .required)
+            .field("userId", .uuid)
+            .field("created_at", .datetime)
+            .field("updated_at", .datetime)
+            .create()
+    }
 }
