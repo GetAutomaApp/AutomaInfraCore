@@ -20,7 +20,7 @@ public let package = Package(
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         .package(path: "./DataTypes"),
         .package(url: "https://github.com/vapor/jwt.git", from: "5.1.2"),
-        .package(url: "https://github.com/MacPaw/OpenAI.git", branch: "main"),
+        .package(url: "https://github.com/MacPaw/OpenAI.git", from: "0.4.5"),
         .package(url: "https://github.com/soto-project/soto.git", from: "7.3.0"),
         .package(url: "https://github.com/swift-server/swift-prometheus.git", from: "2.0.0"),
         .package(
