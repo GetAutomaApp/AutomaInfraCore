@@ -20,14 +20,16 @@ extension SerialDbTestSuites {
         ///   - Token request failures
         @Test("Test Request Token")
         public func requestToken() async throws {
-            // Initialize the Twitter client
-            let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
-            // Request an OAuth token
-            let token = try await twitterClient.auth.requestToken()
+            try await withApp { app in
+                // Initialize the Twitter client
+                let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
+                // Request an OAuth token
+                let token = try await twitterClient.auth.requestToken()
 
-            // Ensure the token and token secret have valid lengths
-            #expect(token.oauthToken.count > 5, "OAuth token should have more than 5 characters")
-            #expect(token.oauthTokenSecret.count > 5, "OAuth token secret should have more than 5 characters")
+                // Ensure the token and token secret have valid lengths
+                #expect(token.oauthToken.count > 5, "OAuth token should have more than 5 characters")
+                #expect(token.oauthTokenSecret.count > 5, "OAuth token secret should have more than 5 characters")
+            }
         }
 
         /// Tests the ability to generate an authentication URL
