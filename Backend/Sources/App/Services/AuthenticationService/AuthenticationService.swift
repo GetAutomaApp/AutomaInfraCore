@@ -75,7 +75,7 @@ public struct RootAuthenticationService: AuthenticationService {
     }
 
     public func logout(userId: UUID) async throws {
-        try await sendLogoutEvent(userId: userId)
+        try sendLogoutEvent(userId: userId)
         logLogout(userId: userId)
 
         let concurrencySafeHelper: AuthenticationServiceHelper = .init(.init(

@@ -20,6 +20,10 @@ internal struct AppConfigurator {
     private let primaryDatabaseURL: String? = try? DatabaseURLs.primary.get()
     private let regionalDatabaseURL: String? = try? DatabaseURLs.regional.get()
 
+    public init(app: Application) {
+        self.app = app
+    }
+
     /// Configures the entire application
     public func configure() async throws {
         registerMiddleware()
@@ -81,6 +85,10 @@ internal struct AppConfigurator {
 
 internal struct DatabaseConfigurator {
     private let app: Application
+
+    public init(app: Application) {
+        self.app = app
+    }
 
     /// Registers all migrations
     /// Sets up read & write databases
