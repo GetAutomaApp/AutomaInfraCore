@@ -89,7 +89,7 @@ internal struct OpenAIChatCompletionClient: ChatCompletionClientBase {
                     query: .init(
                         messages: messages,
                         model: model.rawValue,
-                        maxTokens: query.maxTokens
+                        maxCompletionTokens: query.maxCompletionTokens
                     )
                 )
             }

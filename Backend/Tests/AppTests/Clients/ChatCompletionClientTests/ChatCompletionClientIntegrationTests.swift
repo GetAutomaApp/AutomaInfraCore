@@ -36,7 +36,7 @@ internal struct ChatCompletionClientIntegrationTests: ChatCompletionClientTestSu
 
             // Verify the result contains a non-empty message
             #expect(!result.message.isEmpty, "Message should not be empty")
-            #expect(result.message.count < maxTokens * 4, "Message should not be bigger than max tokens")
+            #expect(result.message.count < maxCompletionTokens * 4, "Message should not be bigger than max tokens")
 
             // Verify the result contains metadata
             #expect(!result.metadata.isEmpty, "Metadata should not be empty")

@@ -34,7 +34,7 @@ internal struct OpenAIChatCompletionClientIntegrationTests: ChatCompletionClient
             let metadata = try JSONDecoder().decode(ChatResult.self, from: result.metadata)
 
             #expect(result.message.count > 5, "Generated message should have more than 5 characters")
-            #expect(result.message.count < maxTokens * 4, "Message should not be bigger than max tokens")
+            #expect(result.message.count < maxCompletionTokens * 4, "Message should not be bigger than max tokens")
             #expect(metadata.model.contains(model.rawValue), "Model should be \(model.rawValue)")
         }
     }
