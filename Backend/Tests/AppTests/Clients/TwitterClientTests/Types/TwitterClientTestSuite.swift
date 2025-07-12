@@ -5,6 +5,7 @@
 
 @testable import App
 import VaporTesting
+import Testing
 
 /// Protocol defining common functionality for Twitter client test suites
 /// This protocol provides shared test utilities used across different Twitter client implementations
