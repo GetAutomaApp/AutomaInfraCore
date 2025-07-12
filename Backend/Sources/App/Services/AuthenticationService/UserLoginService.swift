@@ -51,7 +51,7 @@ internal struct UserLoginService: AuthenticationService {
             throw GenericErrors.userNotFound
         }
 
-        try await sendLoginWebhook(for: user)
+        try sendLoginWebhook(for: user)
         logUserLogin(userId: userId.uuidString, username: user.username)
 
         return try await helper.createAuthenticationTokensPayload(.init(userId: userId, signer: config.payload.signer))
