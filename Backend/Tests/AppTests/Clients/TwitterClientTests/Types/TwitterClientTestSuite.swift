@@ -6,6 +6,8 @@
 @testable import App
 import VaporTesting
 
+var initialSetup = false
+
 /// Protocol defining common functionality for Twitter client test suites
 /// This protocol provides shared test utilities used across different Twitter client implementations
 internal protocol TwitterClientTestSuite {}
@@ -23,11 +25,15 @@ extension TwitterClientTestSuite {
     public func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
-            try await DatabaseConfigurator(app: app).configureDatabases()
-            try await DatabaseSeeder(app: app).seed()
+            if !initialSetup {
+                initialSetup = true
+                try await DatabaseConfigurator(app: app).configureDatabases()
+                try await DatabaseSeeder(app: app).seed()
+            }
             try await test(app)
         } catch {
             try await app.asyncShutdown()
+            print("withApp throwing", String(reflecting: error))
             throw error
         }
         try await app.asyncShutdown()

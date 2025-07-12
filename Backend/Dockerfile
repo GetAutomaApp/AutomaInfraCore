@@ -1,7 +1,7 @@
 # ================================
 # Build image
 # ================================
-FROM swift:6.0-jammy AS build
+FROM swift:6.1.0-jammy AS build
 
 # Install OS updates
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
@@ -22,7 +22,7 @@ COPY Package.swift .
 COPY Package.resolved .
 
 COPY DataTypes ./DataTypes
-RUN --mount=type=cache,target=/build/.build swift package resolve 
+RUN --mount=type=cache,target=/build/.build swift package resolve
 # Copy entire repo into container
 COPY . .
 

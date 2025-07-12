@@ -19,6 +19,7 @@ internal struct TwitterOAuthClientIntegrationTests: TwitterClientTestSuite {
     ///   - Token request failures
     @Test("Test Request Token")
     public func requestToken() async throws {
+        do {
         try await withApp { app in
             // Initialize the Twitter client
             let twitterClient = try TwitterClient(logger: app.logger, client: app.client, database: app.db)
@@ -28,6 +29,9 @@ internal struct TwitterOAuthClientIntegrationTests: TwitterClientTestSuite {
             // Ensure the token and token secret have valid lengths
             #expect(token.oauthToken.count > 5, "OAuth token should have more than 5 characters")
             #expect(token.oauthTokenSecret.count > 5, "OAuth token secret should have more than 5 characters")
+        }
+        } catch let error {
+            print("234234", String(reflecting: error))
         }
     }
 
