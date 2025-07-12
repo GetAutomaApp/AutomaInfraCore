@@ -11,6 +11,8 @@ import VaporTesting
 @Suite(.serialized)
 internal struct SerialDbTestSuites {}
 
+internal protocol TwitterClientTestSuite {}
+
 internal struct TwitterClientTestSuite {
     /// Helper function to create and manage a test application instance
     /// Creates a test application, configures the database, runs the provided test closure, and ensures proper cleanup
