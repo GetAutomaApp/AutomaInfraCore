@@ -13,7 +13,7 @@ import VaporTesting
 /// These tests verify that operations requiring user authentication work correctly
 extension SerialDbTestSuites {
     @Suite("TwitterAuthenticatedClientIntegrationTests")
-    struct TwitterAuthenticatedClientIntegrationTests: TwitterClientTestSuite {
+    internal struct TwitterAuthenticatedClientIntegrationTests: TwitterClientTestSuite {
         /// Tests the ability to post a tweet using an authenticated Twitter client
         /// This test verifies that:
         /// - A valid Twitter user token can be retrieved from the database

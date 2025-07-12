@@ -167,7 +167,7 @@ public struct RootAuthenticationService: AuthenticationService {
         }
     }
 
-    private func sendRefreshEvent(userId: String) async throws {
+    private func sendRefreshEvent(userId: String) throws {
         try messageService.sendDiscordWebhookAppEvent(
             input: userId,
             event: "is refreshing their access token",
@@ -185,7 +185,7 @@ public struct RootAuthenticationService: AuthenticationService {
         )
     }
 
-    private func sendLogoutEvent(userId: UUID) async throws {
+    private func sendLogoutEvent(userId: UUID) throws {
         try messageService.sendDiscordWebhookAppEvent(
             input: userId.uuidString,
             event: "is logging out",

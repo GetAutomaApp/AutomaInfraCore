@@ -21,7 +21,7 @@ internal struct TwitterClientTestSuite {
     ///   - Database configuration errors
     ///   - Test execution errors
     ///   - Shutdown errors
-    func withApp(test: (Application) async throws -> Void) async throws {
+    public func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
             try await app.autoRevert()

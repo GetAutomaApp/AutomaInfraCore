@@ -38,8 +38,7 @@ internal struct TwitterAuthenticatedClient: TwitterClientBase {
         // Send the tweet using the Twitter API client
         let request = PostTweetsRequestV2(text: message)
         do {
-            let result = try await twitterClient.send(request)
-            return result
+            return try await twitterClient.send(request)
         } catch let error as TwitterAPIError {
             let message = "Failed to Post Tweet"
             logger.error(

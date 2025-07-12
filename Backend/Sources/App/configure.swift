@@ -10,29 +10,17 @@ import Queues
 import QueuesFluentDriver
 import Vapor
 
-// TODO:
-// 1. Delete 3 compose services and their volumes
-// 2. Start up the 3 compose services: docker-compose up postgres localstack worker_dev -d
-// 3. Build app (`swift build`) and run migrations (`swift run App migrate --yes`)
-// 4. Run app (`swift run App`)
-// 5. Run tests (`swift test -Xswiftc -warnings-as-errors --filter '.*IntegrationTests.*'`)
-// 6. Tests should work, because the user token gets created. if not, debug why and fix it
-// 7. Delete user token id and oauth token id variables in all envs except for .env.testing
-// 8. Update/create `TEST_TWITTER_OAUTH_TOKEN_ID` and `TEST_TWITTER_USER_TOKEN_ID` as Github secrets
-// 9. Create a new optional argument in `swifttesting` to run a command right before running the tests
-//  (right after all the required services are healthy - add worker_dev as a required service as well).
-// 10. Update `automa-backend-testing.yml` to run migrations before running tests (`swift run App migrate --yes`)
-
-public func configure(_ app: Application) async throws {
+internal func configure(_ app: Application) async throws {
     try await AppConfigurator(app: app).configure()
 }
 
-struct AppConfigurator {
-    let app: Application
+internal struct AppConfigurator {
+    private let app: Application
     private let environment = Environment.get("ENVIRONMENT") ?? "local"
     private let primaryDatabaseURL: String? = try? DatabaseURLs.primary.get()
     private let regionalDatabaseURL: String? = try? DatabaseURLs.regional.get()
 
+    /// Configures the entire application
     public func configure() async throws {
         registerMiddleware()
         registerQueues()
@@ -91,9 +79,12 @@ struct AppConfigurator {
     }
 }
 
-public struct DatabaseConfigurator {
-    let app: Application
+internal struct DatabaseConfigurator {
+    private let app: Application
 
+    /// Registers all migrations
+    /// Sets up read & write databases
+    /// Runs autoMigrate command
     public func configureDatabases() async throws {
         try registerDatabases()
         addMigrations()
@@ -201,6 +192,8 @@ public struct DatabaseSeeder {
 }
 
 internal enum DatabaseURLs {
-    static let primary: Result<String, Error> = Result { try Environment.getOrThrow("PRIMARY_POSTGRES_URL") }
-    static let regional: Result<String, Error> = Result { try Environment.getOrThrow("REGIONAL_POSTGRES_URL") }
+   /// primary database url has read & write access
+   public static let primary: Result<String, Error> = Result { try Environment.getOrThrow("PRIMARY_POSTGRES_URL") }
+   /// regional url most likely doesn't have write access, but allows for extremely fast reads
+   public static let regional: Result<String, Error> = Result { try Environment.getOrThrow("REGIONAL_POSTGRES_URL") }
 }

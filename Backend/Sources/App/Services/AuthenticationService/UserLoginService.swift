@@ -57,7 +57,7 @@ internal struct UserLoginService: AuthenticationService {
         return try await helper.createAuthenticationTokensPayload(.init(userId: userId, signer: config.payload.signer))
     }
 
-    private func sendLoginWebhook(for user: UserModel) async throws {
+    private func sendLoginWebhook(for user: UserModel) throws {
         try messageService.sendDiscordWebhookAppEvent(
             input: "\(config.payload.authCodePayload.phoneNumber) - \(user.username)",
             event: "logging in with code: `\(config.payload.authCodePayload.code)`",

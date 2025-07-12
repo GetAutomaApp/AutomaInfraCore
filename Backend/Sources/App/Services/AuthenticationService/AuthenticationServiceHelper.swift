@@ -17,6 +17,7 @@ actor AuthenticationServiceHelper {
         self.config = config
     }
 
+    /// Validates and deletes an authentication code for a given phone number and code.
     public func validateAndDeleteCode(_ payload: AuthPhoneCodePayloadDTO) async throws {
         let validator = AuthenticationCodeValidator(
             .init(
@@ -26,6 +27,7 @@ actor AuthenticationServiceHelper {
         try await validator.validateAndDeleteCode()
     }
 
+    /// Resets and returns a new access token for a user.
     public func resetAccessToken(_ payload: ResetAccessCodePayload) async throws -> String {
         try await AccessTokenResetter(.init(
             writeDb: config.writeDb,
@@ -36,6 +38,7 @@ actor AuthenticationServiceHelper {
         .reset()
     }
 
+    /// Deletes old access tokens for a user and subject.
     public func deleteOldTokens(_ payload: DeleteOldAccessTokensPayload) async throws {
         try await OldAccessTokenDeleter(
             .init(writeDb: config.writeDb,
@@ -45,6 +48,7 @@ actor AuthenticationServiceHelper {
         ).deleteOldTokens()
     }
 
+    /// Creates a new set of access and refresh tokens for a user.
     public func createAuthenticationTokensPayload(_ payload: CreateAuthenticationTokensPayload) async throws
         -> AuthenticationTokensPayloadDTO
     {
@@ -56,10 +60,12 @@ actor AuthenticationServiceHelper {
         )).create()
     }
 
+    /// Returns the authentication code rate limit as a `Double`.
     public func getCodeRateLimit() throws -> Double {
         try castCodeRateLimitToNumber(getRateLimitString())
     }
 
+    /// Sends a verification code to the given phone number and returns the result.
     public func sendAuthCode(_ payload: SendAuthCodePayload, queue: Queue) async throws -> AuthenticationCodeResponseDTO
     {
         try await AuthCodeSender(.init(
@@ -71,6 +77,7 @@ actor AuthenticationServiceHelper {
         )).send()
     }
 
+    /// Reports telemetry if an authentication token didn't send
     public func sendTelemetryDataOnAuthCodeSendFail(
         code: String,
         phoneNumber: String,

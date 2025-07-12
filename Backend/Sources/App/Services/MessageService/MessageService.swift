@@ -206,7 +206,7 @@ internal struct MessageService: Decodable {
         fatalError("Invalid webhook URL") // Or throw Abort(.internalServerError)
     }
 
-    private func logSmsSentEvent(to phoneNumber: String, message: String, logger: Logger) async throws {
+    private func logSmsSentEvent(to phoneNumber: String, message: String, logger: Logger) throws {
         try sendDiscordWebhookAppEvent(
             input: "random -> \(phoneNumber)",
             event: "sending message: `\(message)`",

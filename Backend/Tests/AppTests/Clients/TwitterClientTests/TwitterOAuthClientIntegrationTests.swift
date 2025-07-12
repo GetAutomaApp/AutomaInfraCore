@@ -11,7 +11,7 @@ import VaporTesting
 /// These tests verify the ability to request tokens and generate authentication URLs
 extension SerialDbTestSuites {
     @Suite("TwitterOAuthClientIntegrationTests")
-    struct TwitterOAuthClientIntegrationTests: TwitterClientTestSuite {
+    internal struct TwitterOAuthClientIntegrationTests: TwitterClientTestSuite {
         /// Tests the ability to request an OAuth token
         /// Verifies that the token and token secret are properly generated and contain valid values
         ///
