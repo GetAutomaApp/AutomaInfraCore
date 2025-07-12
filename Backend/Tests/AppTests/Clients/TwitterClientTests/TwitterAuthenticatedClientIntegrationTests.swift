@@ -11,23 +11,23 @@ import VaporTesting
 
 /// Test suite for the authenticated Twitter client functionality
 /// These tests verify that operations requiring user authentication work correctly
-@Suite("TwitterAuthenticatedClientIntegrationTests")
-internal struct TwitterAuthenticatedClientIntegrationTests: TwitterClientTestSuite {
-    /// Tests the ability to post a tweet using an authenticated Twitter client
-    /// This test verifies that:
-    /// - A valid Twitter user token can be retrieved from the database
-    /// - An authenticated client can be created with the token
-    /// - A tweet can be successfully posted
-    /// - The posted tweet contains the expected message
-    ///
-    /// - Throws: Any errors that occur during test execution, including:
-    ///   - Environment variable retrieval errors
-    ///   - Database query errors
-    ///   - Client initialization errors
-    ///   - API request failures
-    @Test("Post Tweet")
-    public func postTweet() async throws {
-        do {
+extension SerialDbTestSuites {
+    @Suite("TwitterAuthenticatedClientIntegrationTests")
+    struct TwitterAuthenticatedClientIntegrationTests: TwitterClientTestSuite {
+        /// Tests the ability to post a tweet using an authenticated Twitter client
+        /// This test verifies that:
+        /// - A valid Twitter user token can be retrieved from the database
+        /// - An authenticated client can be created with the token
+        /// - A tweet can be successfully posted
+        /// - The posted tweet contains the expected message
+        ///
+        /// - Throws: Any errors that occur during test execution, including:
+        ///   - Environment variable retrieval errors
+        ///   - Database query errors
+        ///   - Client initialization errors
+        ///   - API request failures
+        @Test("Post Tweet")
+        public func postTweet() async throws {
             try await withApp { app in
                 // Retrieve the test Twitter user token ID from the environment
                 let testTwitterUserTokenID = try Environment.getOrThrow("TEST_TWITTER_USER_TOKEN_ID")
@@ -80,8 +80,6 @@ internal struct TwitterAuthenticatedClientIntegrationTests: TwitterClientTestSui
                 // Ensure the response contains the expected message
                 #expect(response.data.text == message, "Tweet message should match")
             }
-        } catch let error {
-            print("234234", String(reflecting: error))
         }
     }
 }

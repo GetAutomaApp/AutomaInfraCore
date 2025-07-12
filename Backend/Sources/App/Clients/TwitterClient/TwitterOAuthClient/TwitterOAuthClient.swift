@@ -1,6 +1,4 @@
 // TwitterOAuthClient.swift
-// TwitterOAuthClient.swift
-// TwitterOAuthClient.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -128,7 +126,6 @@ internal struct TwitterOAuthClient: TwitterClientBase {
         )
         return authenticateURL
     }
-    
 
     /// Converts OAuth tokens to user access tokens after successful authentication.
     ///
@@ -280,7 +277,7 @@ internal struct TwitterOAuthClient: TwitterClientBase {
         oauthVerifier: String
     ) async throws -> Self.TwitterUserTokens {
         BackendMetric.twitterUserTokensConverted(status: .start).increment()
-        
+
         let oauthApi = OAuth10aAPI(session: twitterClient)
         do {
             let token = try await oauthApi.postOAuthAccessToken(

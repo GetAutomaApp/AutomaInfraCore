@@ -72,12 +72,12 @@ internal struct TwitterClient: TwitterClientBase {
 
         twitterClient = .init(
             authenticationType:
-                    .oauth10a(
-                        consumerKey: consumerKey,
-                        consumerSecret: consumerSecret,
-                        oauthToken: nil,
-                        oauthTokenSecret: nil
-                    )
+            .oauth10a(
+                consumerKey: consumerKey,
+                consumerSecret: consumerSecret,
+                oauthToken: nil,
+                oauthTokenSecret: nil
+            )
         )
         auth = TwitterOAuthClient(
             logger: logger,
@@ -99,10 +99,10 @@ internal struct TwitterClient: TwitterClientBase {
             twitterClient: .init(
                 authenticationType:
                 .oauth10a(
-                        consumerKey: consumerKey,
-                        consumerSecret: consumerSecret,
-                        oauthToken: token.accessToken,
-                        oauthTokenSecret: token.secretAccessToken
+                    consumerKey: consumerKey,
+                    consumerSecret: consumerSecret,
+                    oauthToken: token.accessToken,
+                    oauthTokenSecret: token.secretAccessToken
                 )
             )
         )

@@ -12,7 +12,7 @@ internal enum TwitterAuthenticatedClientError: Error {
 
     /// Error returned from Twitter API request.
     case twitterAPIKitResponseError(TwitterAPIKitError)
-    
+
     /// Error returned from Twitter API request
     case twitterAPIResponseError(TwitterAPIError)
 }

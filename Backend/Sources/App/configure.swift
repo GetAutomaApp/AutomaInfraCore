@@ -179,8 +179,8 @@ public struct DatabaseSeeder {
 
         try await TwitterOAuthToken(
             id: id,
-            oauthToken: try Environment.getOrThrow("SEED_TWITTER_OAUTH_TOKEN"),
-            oauthTokenSecret: try Environment.getOrThrow("SEED_TWITTER_OAUTH_TOKEN_SECRET"),
+            oauthToken: Environment.getOrThrow("SEED_TWITTER_OAUTH_TOKEN"),
+            oauthTokenSecret: Environment.getOrThrow("SEED_TWITTER_OAUTH_TOKEN_SECRET"),
             oauthCallbackConfirmed: true
         )
         .create(on: app.db)
@@ -192,9 +192,9 @@ public struct DatabaseSeeder {
         }
         try await TwitterUserToken(
             id: id,
-            accessToken: try Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN"),
-            secretAccessToken: try Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN_SECRET"),
-            oauthVerifier: try Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN_VERIFIER"),
+            accessToken: Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN"),
+            secretAccessToken: Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN_SECRET"),
+            oauthVerifier: Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN_VERIFIER"),
             oauthTokenID: oauthTokenID
         ).create(on: app.db)
     }

@@ -11,7 +11,7 @@ import VaporTesting
 @Suite(.serialized)
 internal struct SerialDbTestSuites {}
 
-extension TwitterClientTestSuite {
+public extension TwitterClientTestSuite {
     /// Helper function to create and manage a test application instance
     /// Creates a test application, configures the database, runs the provided test closure, and ensures proper cleanup
     ///
@@ -21,7 +21,7 @@ extension TwitterClientTestSuite {
     ///   - Database configuration errors
     ///   - Test execution errors
     ///   - Shutdown errors
-    public func withApp(test: (Application) async throws -> Void) async throws {
+    func withApp(test: (Application) async throws -> Void) async throws {
         let app = try await Application.make(.testing)
         do {
             try await app.autoRevert()
