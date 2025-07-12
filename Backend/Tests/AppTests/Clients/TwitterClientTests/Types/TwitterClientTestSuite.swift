@@ -11,7 +11,7 @@ import VaporTesting
 @Suite(.serialized)
 internal struct SerialDbTestSuites {}
 
-public extension TwitterClientTestSuite {
+internal struct TwitterClientTestSuite {
     /// Helper function to create and manage a test application instance
     /// Creates a test application, configures the database, runs the provided test closure, and ensures proper cleanup
     ///
@@ -30,7 +30,6 @@ public extension TwitterClientTestSuite {
             try await test(app)
         } catch {
             try await app.asyncShutdown()
-            print("withApp throwing", String(reflecting: error))
             throw error
         }
         try await app.asyncShutdown()
