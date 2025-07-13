@@ -10,16 +10,18 @@ import Queues
 import Vapor
 
 public struct RootAuthenticationService: AuthenticationService {
-    var config: any AuthenticationServiceConfig
-    let helper: AuthenticationServiceHelper
-    let messageService = MessageService()
+    private var config: any AuthenticationServiceConfig
+    private let helper: AuthenticationServiceHelper
+    private let messageService = MessageService()
 
-    init(_ config: RootAuthenticationServiceConfig) {
+    /// Initializes authentication service
+    public init(_ config: RootAuthenticationServiceConfig) {
         self.config = config
         helper = .init(.init(writeDb: config.writeDb, readDb: config.readDb, logger: config.logger))
     }
 
-    func register(_ payload: UserRegistrationPayload, queue: Queue) async throws -> AuthenticationTokensPayloadDTO {
+    /// Register a user
+    public func register(_ payload: UserRegistrationPayload, queue: Queue) async throws -> AuthenticationTokensPayloadDTO {
         var registrator = UserRegistrationService(.init(
             writeDb: config.writeDb,
             readDb: config.readDb,
@@ -30,7 +32,8 @@ public struct RootAuthenticationService: AuthenticationService {
         return try await registrator.register()
     }
 
-    func login(_ payload: UserLoginPayload) async throws -> AuthenticationTokensPayloadDTO {
+    /// Login User
+    public func login(_ payload: UserLoginPayload) async throws -> AuthenticationTokensPayloadDTO {
         let loginService = UserLoginService(.init(
             writeDb: config.writeDb,
             readDb: config.readDb,
@@ -40,6 +43,7 @@ public struct RootAuthenticationService: AuthenticationService {
         return try await loginService.login()
     }
 
+    /// Send authentication code
     public func sendAuthCode(phoneNumber: String, queue: Queue) async throws -> AuthenticationCodeResponseDTO {
         let code = RandomService.randomCode()
         logAuthCodeAttempt(phoneNumber: phoneNumber, code: code)
@@ -58,6 +62,7 @@ public struct RootAuthenticationService: AuthenticationService {
         )
     }
 
+    /// Refresh Token
     public func refreshToken(userId: UUID, signer: Request.JWT) async throws -> String {
         do {
             try sendRefreshEvent(userId: userId.uuidString)
@@ -74,6 +79,7 @@ public struct RootAuthenticationService: AuthenticationService {
         }
     }
 
+    /// Logs user out
     public func logout(userId: UUID) async throws {
         try sendLogoutEvent(userId: userId)
         logLogout(userId: userId)
@@ -90,6 +96,7 @@ public struct RootAuthenticationService: AuthenticationService {
         _ = try await (deleteRefresh, deleteAccess)
     }
 
+    /// CHecks if a user exists based on phone number
     public func doesUserExist(phoneNumber: String) async throws -> Bool {
         do {
             let exists = try await checkUserExists(phoneNumber: phoneNumber)
@@ -223,18 +230,26 @@ public struct RootAuthenticationService: AuthenticationService {
 }
 
 internal protocol AuthenticationService {
-    var helper: AuthenticationServiceHelper { get }
-    var messageService: MessageService { get }
+    /// Helper
+    public var helper: AuthenticationServiceHelper { get }
+    /// Message Service
+    public var messageService: MessageService { get }
 }
 
 internal protocol AuthenticationServiceConfig {
-    var writeDb: Database { get }
-    var readDb: Database { get }
-    var logger: Logger { get }
+   /// Db w/ write access
+   public var writeDb: Database { get }
+   /// Db w/ readonly access
+   public var readDb: Database { get }
+   /// Logger
+   public var logger: Logger { get }
 }
 
 internal struct RootAuthenticationServiceConfig: AuthenticationServiceConfig {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
+    /// Db w/ write access
+    public let writeDb: Database
+    /// Db w/ readonly access
+    public let readDb: Database
+    /// Logger
+    public let logger: Logger
 }

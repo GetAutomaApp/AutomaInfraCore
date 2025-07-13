@@ -14,9 +14,13 @@ internal struct JWTTokenShouldBeBoundToParentUserObjectMigration1735140054: Asyn
     /// - Throws: Throws an error if the schema update fails.
     public func prepare(on database: Database) async throws {
         try await database.schema("Jwt-Token")
-            .foreignKey("user_id", references: "User", "id", onDelete: .cascade,
-                        name: "fk_jwt_token_user_id") // Add a foreign key constraint
-            .update() // Update the schema
+            .foreignKey(
+                "user_id",
+                references: "User",
+                "id", onDelete: .cascade,
+                name: "fk_jwt_token_user_id"
+            ) 
+            .update()
     }
 
     /// Reverts the migration by removing the foreign key constraint from the Jwt-Token schema.
@@ -24,7 +28,7 @@ internal struct JWTTokenShouldBeBoundToParentUserObjectMigration1735140054: Asyn
     /// - Throws: Throws an error if the schema update fails.
     public func revert(on database: Database) async throws {
         try await database.schema("Jwt-Token")
-            .deleteForeignKey(name: "fk_jwt_token_user_id") // Remove the foreign key constraint
-            .update() // Update the schema
+            .deleteForeignKey(name: "fk_jwt_token_user_id")
+            .update()
     }
 }

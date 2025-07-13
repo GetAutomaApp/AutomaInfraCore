@@ -20,6 +20,7 @@ internal struct AppConfigurator {
     private let primaryDatabaseURL: String? = try? DatabaseURLs.primary.get()
     private let regionalDatabaseURL: String? = try? DatabaseURLs.regional.get()
 
+    /// Initializes Application
     public init(app: Application) {
         self.app = app
     }
@@ -86,6 +87,7 @@ internal struct AppConfigurator {
 internal struct DatabaseConfigurator {
     private let app: Application
 
+    /// Initializes DB Configurator
     public init(app: Application) {
         self.app = app
     }

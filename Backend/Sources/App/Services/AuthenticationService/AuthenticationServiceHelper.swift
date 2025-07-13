@@ -42,10 +42,12 @@ internal actor AuthenticationServiceHelper {
     /// Deletes old access tokens for a user and subject.
     public func deleteOldTokens(_ payload: DeleteOldAccessTokensPayload) async throws {
         try await OldAccessTokenDeleter(
-            .init(writeDb: config.writeDb,
-                  readDb: config.readDb,
-                  logger: config.logger,
-                  payload: payload)
+            .init(
+                writeDb: config.writeDb,
+                readDb: config.readDb,
+                logger: config.logger,
+                payload: payload
+            )
         ).deleteOldTokens()
     }
 
@@ -443,7 +445,11 @@ internal struct AuthenticationTokensPayloadCreator {
     private func alertCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) throws {
         try messageService.sendDiscordWebhookAppEvent(
             input: config.payload.userId.uuidString,
-            event: "generated tokens: `access: \(tokensPayload.accessToken.count)` `refresh: \(tokensPayload.refreshToken.count)`",
+            event: """
+            generated tokens:
+                `access: \(tokensPayload.accessToken.count)`
+                `refresh: \(tokensPayload.refreshToken.count)`
+            """,
             logger: config.logger
         )
     }

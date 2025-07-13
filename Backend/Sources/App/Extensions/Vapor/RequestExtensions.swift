@@ -6,11 +6,14 @@
 import Fluent
 import Vapor
 
+/// Extension on rquest to add DB aliases
 public extension Request {
+    /// Write DB
     var dbWrite: Database {
         db(.readOnly)
     }
 
+    /// Read-Only DB
     var dbReadOnly: Database {
         db(.readOnly)
     }

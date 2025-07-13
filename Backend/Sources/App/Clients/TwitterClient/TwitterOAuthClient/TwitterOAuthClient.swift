@@ -67,9 +67,8 @@ internal struct TwitterOAuthClient: TwitterClientBase {
             BackendMetric.twitterOAuthRequest(status: .success).increment()
             return savedToken
         } catch let error as TwitterAPIError {
-            let message = "Failed to obtain request token."
             logger.error(
-                .init(stringLiteral: message),
+                "Failed to obtain request token.",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "error": .string(String(reflecting: error)),
@@ -78,9 +77,8 @@ internal struct TwitterOAuthClient: TwitterClientBase {
             BackendMetric.twitterOAuthRequest(status: .fail).increment()
             throw TwitterOAuthClientError.twitterAPIResponseError(error)
         } catch let error as TwitterAPIKitError {
-            let message = "Failed to obtain request token."
             logger.error(
-                .init(stringLiteral: message),
+                "Failed to obtain request token.",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "error": .string(String(reflecting: error)),
@@ -313,7 +311,6 @@ internal struct TwitterOAuthClient: TwitterClientBase {
         }
     }
 
-    // TODO: Use selenium to login user
     private func loginTwitterUser() throws {}
 
     /// A structure representing the user tokens required for Twitter OAuth authentication.
