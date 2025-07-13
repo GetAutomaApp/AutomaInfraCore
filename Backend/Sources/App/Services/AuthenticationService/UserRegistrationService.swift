@@ -10,12 +10,13 @@ import Queues
 import Vapor
 
 internal struct UserRegistrationService: AuthenticationService {
-    var config: UserRegistrationConfig
-    let helper: AuthenticationServiceHelper
-    let messageService = MessageService()
-    let identifier: UserIdentifier
-    var user: UserModel
+    private var config: UserRegistrationConfig
+    private let helper: AuthenticationServiceHelper
+    private let messageService = MessageService()
+    private let identifier: UserIdentifier
+    private var user: UserModel
 
+    /// Initializes User Registration Service
     public init(_ config: UserRegistrationConfig) {
         self.config = config
         helper = .init(.init(writeDb: config.writeDb, readDb: config.readDb, logger: config.logger))
@@ -23,6 +24,7 @@ internal struct UserRegistrationService: AuthenticationService {
         user = Self.createUserModel(identifier: identifier, config: config)
     }
 
+    /// Registers User & Creates Profile Photo
     public mutating func register() async throws -> AuthenticationTokensPayloadDTO {
         try await helper.validateAndDeleteCode(config.payload.authCodePayload)
 
@@ -82,20 +84,29 @@ internal struct UserRegistrationService: AuthenticationService {
     }
 
     internal struct UserIdentifier: Content {
-        let name: String
-        let id: UUID
+        /// UserName
+        public let name: String
+        /// UserId
+        public let id: UUID
     }
 }
 
 internal struct UserRegistrationConfig: AuthenticationServiceConfig {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
-    let queue: Queue
-    let payload: UserRegistrationPayload
+    /// Db w/ write access
+    public let writeDb: Database
+    /// Db w/ readonly access
+    public let readDb: Database
+    /// Logger
+    public let logger: Logger
+    /// Queue to submit messages & generation stuff to
+    public let queue: Queue
+    /// Payload to register user
+    public let payload: UserRegistrationPayload
 }
 
 internal struct UserRegistrationPayload {
-    let authCodePayload: AuthPhoneCodePayloadDTO
-    let signer: Request.JWT
+    /// Auth code payload
+    public let authCodePayload: AuthPhoneCodePayloadDTO
+    /// Token Signer
+    public let signer: Request.JWT
 }

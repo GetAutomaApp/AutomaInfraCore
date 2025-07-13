@@ -9,16 +9,17 @@ import JWT
 import Vapor
 
 internal struct UserLoginService: AuthenticationService {
-    var helper: AuthenticationServiceHelper
-    let config: UserLoginConfig
-    var messageService = MessageService()
+    private var helper: AuthenticationServiceHelper
+    private let config: UserLoginConfig
+    private var messageService = MessageService()
 
-    init(_ config: UserLoginConfig) {
+    /// INitializes user login service
+    public init(_ config: UserLoginConfig) {
         self.config = config
         helper = .init(.init(writeDb: config.writeDb, readDb: config.readDb, logger: config.logger))
     }
 
-    func login() async throws -> AuthenticationTokensPayloadDTO {
+    public func login() async throws -> AuthenticationTokensPayloadDTO {
         try await validateAuthCode()
 
         guard let user = try await findUser() else {
@@ -87,14 +88,20 @@ internal struct UserLoginService: AuthenticationService {
     }
 }
 
-struct UserLoginPayload {
-    let authCodePayload: AuthPhoneCodePayloadDTO
-    let signer: Request.JWT
+internal struct UserLoginPayload {
+    /// Payload for sending auth token
+    public let authCodePayload: AuthPhoneCodePayloadDTO
+    /// Signer to create JWT tokens
+    public let signer: Request.JWT
 }
 
-struct UserLoginConfig: AuthenticationServiceConfig {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
-    let payload: UserLoginPayload
+internal struct UserLoginConfig: AuthenticationServiceConfig {
+    /// Db w/ write access
+    public let writeDb: Database
+    /// Db w/ readonly access
+    public let readDb: Database
+    /// Logger
+    public let logger: Logger
+    /// Payload to log user in
+    public let payload: UserLoginPayload
 }
