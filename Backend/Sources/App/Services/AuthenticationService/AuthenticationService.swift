@@ -21,7 +21,10 @@ public struct RootAuthenticationService: AuthenticationService {
     }
 
     /// Register a user
-    public func register(_ payload: UserRegistrationPayload, queue: Queue) async throws -> AuthenticationTokensPayloadDTO {
+    public func register(
+        _ payload: UserRegistrationPayload,
+        queue: Queue
+    ) async throws -> AuthenticationTokensPayloadDTO {
         var registrator = UserRegistrationService(.init(
             writeDb: config.writeDb,
             readDb: config.readDb,
@@ -139,7 +142,6 @@ public struct RootAuthenticationService: AuthenticationService {
         return distance - (recentCode.createdAt?.distance(to: dateToCheck) ?? distance)
     }
 
-    // TODO: This method does more than one thing. Refactor.
     private func sendOrHandleAuthCode(
         phoneNumber: String,
         queue: Queue,
@@ -212,9 +214,9 @@ public struct RootAuthenticationService: AuthenticationService {
 
     private func checkUserExists(phoneNumber: String) async throws -> Bool {
         try await UserModel
-            .query(on: config.readDb)
-            .filter(\.$phoneNumber == phoneNumber)
-            .first() != nil
+            .query(on: database)
+            .filter("id", .equal, id)
+            .count() > 0
     }
 
     private func logUserExistenceError(phoneNumber: String, error: Error) {

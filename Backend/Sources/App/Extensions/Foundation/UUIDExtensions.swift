@@ -5,8 +5,10 @@
 
 import Vapor
 
+/// unwrap uuid from string & calls specific callback if error occurs
 public extension UUID {
-    static func unwrapFromString(_ uuidString: String, _ callback: () throws -> Void) throws -> UUID {
+    /// unwrap uuid from string & calls specific callback if error occurs
+    public static func unwrapFromString(_ uuidString: String, _ callback: () throws -> Void) throws -> UUID {
         guard
             let uuid = UUID(uuidString: uuidString)
         else {

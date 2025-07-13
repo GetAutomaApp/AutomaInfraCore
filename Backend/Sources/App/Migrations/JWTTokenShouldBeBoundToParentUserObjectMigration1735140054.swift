@@ -17,7 +17,8 @@ internal struct JWTTokenShouldBeBoundToParentUserObjectMigration1735140054: Asyn
             .foreignKey(
                 "user_id",
                 references: "User",
-                "id", onDelete: .cascade,
+                "id",
+                onDelete: .cascade,
                 name: "fk_jwt_token_user_id"
             ) 
             .update()

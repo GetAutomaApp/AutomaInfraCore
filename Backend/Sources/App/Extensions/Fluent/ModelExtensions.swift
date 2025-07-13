@@ -5,8 +5,10 @@
 
 import Fluent
 
+/// Extension on model to check if a specific row with id exists
 public extension Model {
-    static func doesExist(id: UUID, on database: any Database) async throws -> Bool {
+    /// Extension on model to check if a specific row with id exists
+    public static func doesExist(id: UUID, on database: any Database) async throws -> Bool {
         try await query(on: database)
             .filter("id", .equal, id)
             .count() > 0
