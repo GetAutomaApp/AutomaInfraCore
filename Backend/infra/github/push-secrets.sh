@@ -6,8 +6,14 @@ if ! command -v gh &>/dev/null; then
   exit 1
 fi
 
-# Load GitHub configuration from .github.env
-GITHUB_ENV_FILE=".env.testing"
+# Check if env file is provided as argument
+if [ $# -eq 0 ]; then
+  echo "Usage: $0 <env-file>"
+  echo "Example: $0 .env.local"
+  exit 1
+fi
+
+GITHUB_ENV_FILE="$1"
 
 if [ ! -f "$GITHUB_ENV_FILE" ]; then
   echo "Error: Could not find env file at $GITHUB_ENV_FILE"
@@ -29,30 +35,11 @@ if ! gh auth status &>/dev/null; then
   gh auth login
 fi
 
-# Read .env file and process secrets
-while IFS= read -r line || [[ -n "$line" ]]; do
-  # Skip empty lines and comments
-  if [[ -z "$line" ]] || [[ "$line" =~ ^# ]]; then
-    continue
-  fi
+gh secret set -f "$GITHUB_ENV_FILE" --repo "$OWNER/$REPO"
 
-  # Extract key and value
-  if [[ "$line" =~ ^([^=]+)=(.*)$ ]]; then
-    SECRET_NAME="${BASH_REMATCH[1]}"
-    SECRET_VALUE="${BASH_REMATCH[2]}"
+echo ""
+echo "Generating env block for GitHub Actions workflow..."
+echo ""
 
-    # Remove possible surrounding quotes from the value
-    SECRET_VALUE=$(echo "$SECRET_VALUE" | sed -e 's/^"//' -e 's/"$//')
-
-    echo "Processing secret: $SECRET_NAME"
-
-    # Set the secret using gh secret set
-    echo -n "$SECRET_VALUE" | gh secret set "$SECRET_NAME" --repo "$OWNER/$REPO" -b -
-
-    if [ $? -eq 0 ]; then
-      echo "Secret '$SECRET_NAME' created/updated successfully."
-    else
-      echo "Error: Failed to create/update secret '$SECRET_NAME'."
-    fi
-  fi
-done <"$GITHUB_ENV_FILE"
+script_dir=$(dirname "$0")
+"$script_dir/generate-env-block.sh" "$GITHUB_ENV_FILE"

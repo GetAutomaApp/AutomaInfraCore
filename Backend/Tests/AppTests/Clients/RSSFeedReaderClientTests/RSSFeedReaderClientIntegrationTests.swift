@@ -1,4 +1,4 @@
-// RSSFeedReaderClientTests.swift
+// RSSFeedReaderClientIntegrationTests.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -9,8 +9,8 @@ import VaporTesting
 
 /// Test suite for the `RSSFeedReaderClient` class.
 /// These tests verify the client's ability to fetch and parse different types of feeds.
-@Suite("RSS Feed Reader Client Tests")
-internal struct RSSFeedReaderClientTests {
+@Suite("RSSFeedReaderClientIntegrationTests")
+internal struct RSSFeedReaderClientIntegrationTests {
     /// Helper method to create a test application instance for each test.
     /// This method handles proper setup and teardown of the application.
     ///

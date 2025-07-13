@@ -28,12 +28,12 @@ public struct ChatCompletionContent: Content {
     public let prompt: String
 
     /// The maximum number of tokens to generate in the completion
-    public let maxTokens: Int?
+    public let maxCompletionTokens: Int?
 
-    public init(model: ChatCompletionModel, prompt: String, maxTokens: Int? = nil) {
+    public init(model: ChatCompletionModel, prompt: String, maxCompletionTokens: Int? = nil) {
         self.model = model
         self.prompt = prompt
-        self.maxTokens = maxTokens
+        self.maxCompletionTokens = maxCompletionTokens
     }
 }
 

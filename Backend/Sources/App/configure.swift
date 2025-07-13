@@ -10,17 +10,21 @@ import Queues
 import QueuesFluentDriver
 import Vapor
 
-
-public func configure(_ app: Application) async throws {
+internal func configure(_ app: Application) async throws {
     try await AppConfigurator(app: app).configure()
 }
 
 internal struct AppConfigurator {
-    let app: Application
+    private let app: Application
     private let environment = Environment.get("ENVIRONMENT") ?? "local"
     private let primaryDatabaseURL: String? = try? DatabaseURLs.primary.get()
     private let regionalDatabaseURL: String? = try? DatabaseURLs.regional.get()
 
+    public init(app: Application) {
+        self.app = app
+    }
+
+    /// Configures the entire application
     public func configure() async throws {
         registerMiddleware()
         registerQueues()
@@ -79,9 +83,16 @@ internal struct AppConfigurator {
     }
 }
 
-public struct DatabaseConfigurator {
-    let app: Application
+internal struct DatabaseConfigurator {
+    private let app: Application
 
+    public init(app: Application) {
+        self.app = app
+    }
+
+    /// Registers all migrations
+    /// Sets up read & write databases
+    /// Runs autoMigrate command
     public func configureDatabases() async throws {
         try registerDatabases()
         addMigrations()
@@ -114,7 +125,83 @@ public struct DatabaseConfigurator {
     }
 }
 
+/// Seed database with necessary data to run tests
+public struct DatabaseSeeder {
+    /// The main application
+    public let app: Application
+
+    /// Seed database
+    public func seed() async throws {
+        app.logger.info(
+            "Seeding database.",
+            metadata: [
+                "to": .string("\(String(describing: Self.self)).\(#function)")
+            ]
+        )
+        try await seedTwitterTokens()
+    }
+
+    /// Seed a single `TwitterUserToken` `TwitterOAuthToken` so that the post tweet tests have tokens of an account to
+    /// post to.
+    private func seedTwitterTokens() async throws {
+        let envTokenId = try Environment.getOrThrow("TEST_TWITTER_OAUTH_TOKEN_ID")
+        let oauthTokenID = try UUID.unwrapFromString(envTokenId) {
+            app.logger.error(
+                "Could not convert seed oauth token ID to UUID, this should never happen.",
+                metadata: [
+                    "to": .string("seedDatabase"),
+                    "token": .string(envTokenId)
+                ]
+            )
+        }
+
+        try await createTwitterOAuthTokenIfNotExist(id: oauthTokenID)
+
+        let envUserTokenId = try Environment.getOrThrow("TEST_TWITTER_USER_TOKEN_ID")
+        let userTokenID = try UUID.unwrapFromString(envUserTokenId) {
+            app.logger.error(
+                "Could not convert seed user token ID to UUID, this should never happen.",
+                metadata: [
+                    "to": .string("seedDatabase"),
+                    "token": .string(envUserTokenId)
+                ]
+            )
+        }
+
+        try await createUserTokenIfNotExist(id: userTokenID, oauthTokenID: oauthTokenID)
+    }
+
+    private func createTwitterOAuthTokenIfNotExist(id: UUID) async throws {
+        if try await TwitterOAuthToken.doesExist(id: id, on: app.db) {
+            return
+        }
+
+        try await TwitterOAuthToken(
+            id: id,
+            oauthToken: Environment.getOrThrow("SEED_TWITTER_OAUTH_TOKEN"),
+            oauthTokenSecret: Environment.getOrThrow("SEED_TWITTER_OAUTH_TOKEN_SECRET"),
+            oauthCallbackConfirmed: true
+        )
+        .create(on: app.db)
+    }
+
+    private func createUserTokenIfNotExist(id: UUID, oauthTokenID: UUID) async throws {
+        if try await TwitterUserToken.doesExist(id: id, on: app.db) {
+            return
+        }
+        try await TwitterUserToken(
+            id: id,
+            accessToken: Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN"),
+            secretAccessToken: Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN_SECRET"),
+            oauthVerifier: Environment.getOrThrow("SEED_TWITTER_USER_ACCESS_TOKEN_VERIFIER"),
+            oauthTokenID: oauthTokenID
+        ).create(on: app.db)
+    }
+}
+
 internal enum DatabaseURLs {
-    static let primary: Result<String, Error> = Result { try Environment.getOrThrow("PRIMARY_POSTGRES_URL") }
-    static let regional: Result<String, Error> = Result { try Environment.getOrThrow("REGIONAL_POSTGRES_URL") }
+   /// primary database url has read & write access
+   public static let primary: Result<String, Error> = Result { try Environment.getOrThrow("PRIMARY_POSTGRES_URL") }
+   /// regional url most likely doesn't have write access, but allows for extremely fast reads
+   public static let regional: Result<String, Error> = Result { try Environment.getOrThrow("REGIONAL_POSTGRES_URL") }
 }

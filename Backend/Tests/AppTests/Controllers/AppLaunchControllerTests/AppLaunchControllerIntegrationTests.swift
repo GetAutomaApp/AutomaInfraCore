@@ -9,7 +9,7 @@ import VaporTesting
 
 /// Integration tests for the `AppLaunchController`.
 /// These tests verify the controller's ability to handle requests and interact with the database.
-@Suite("App Launch Controller Integration Tests")
+@Suite("AppLaunchControllerIntegrationTests")
 internal struct AppLaunchControllerIntegrationTests {
     /// Helper method to create a test application instance for each test.
     /// This method handles proper setup and teardown of the application.

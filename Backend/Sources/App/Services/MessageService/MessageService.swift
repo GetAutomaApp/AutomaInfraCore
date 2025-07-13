@@ -25,7 +25,7 @@ internal struct MessageService: Decodable {
             let snsClient = try createSNSClient()
             let output = try await snsClient.publish(.init(message: message, phoneNumber: phoneNumber))
 
-            try await logSmsSentEvent(to: phoneNumber, message: message, logger: logger)
+            try logSmsSentEvent(to: phoneNumber, message: message, logger: logger)
 
             return try extractMessageId(from: output, phoneNumber: phoneNumber, message: message, logger: logger)
         } catch {
@@ -206,7 +206,7 @@ internal struct MessageService: Decodable {
         fatalError("Invalid webhook URL") // Or throw Abort(.internalServerError)
     }
 
-    private func logSmsSentEvent(to phoneNumber: String, message: String, logger: Logger) async throws {
+    private func logSmsSentEvent(to phoneNumber: String, message: String, logger: Logger) throws {
         try sendDiscordWebhookAppEvent(
             input: "random -> \(phoneNumber)",
             event: "sending message: `\(message)`",

@@ -21,7 +21,7 @@ internal struct TwitterAuthenticatedClient: TwitterClientBase {
     public let database: Database
 
     /// Twitter API client instance configured with authentication
-    public let twitterClient: TwitterAPIClient
+    public let twitterClient: TwitterAPISession
 
     /// Posts a new tweet to Twitter with the given message.
     ///
@@ -31,71 +31,36 @@ internal struct TwitterAuthenticatedClient: TwitterClientBase {
     /// - Parameter message: The text content of the tweet to post.
     /// - Returns: A `TwitterPostResponse` containing the posted tweet details.
     /// - Throws: `TwitterAuthenticatedClientError` if the request fails or returns invalid data.
-    public func postTweet(message: String) async throws -> TwitterPostResponse {
+    public func postTweet(message: String) async throws -> PostTweetsRequestV2.Response {
         // Start the backend metric for posting a tweet
         BackendMetric.twitterPostTweet(status: .start).increment()
 
         // Send the tweet using the Twitter API client
-        let result = twitterClient.v2.postTweet(
-            .init(
-                text: message
-            )
-        )
-        // Await the response and decode it into a TwitterPostResponse
-        let response = await result.responseDecodable(type: TwitterPostResponse.self)
-
-        // Check for errors in the response
-        if let error = response.error {
-            // Log and throw an error if the response contains an error
-            BackendMetric.twitterPostTweet(status: .fail).increment()
+        let request = PostTweetsRequestV2(text: message)
+        do {
+            return try await twitterClient.send(request)
+        } catch let error as TwitterAPIError {
+            let message = "Failed to Post Tweet"
             logger.error(
-                "Error decoding tweet response.",
+                .init(stringLiteral: message),
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "message": .string(message),
                     "error": .string(String(reflecting: error)),
                 ]
             )
-            throw TwitterAuthenticatedClientError.responseError(error)
-        }
-
-        // Ensure the response contains the tweet details
-        guard let tweetResponse = response.success else {
             BackendMetric.twitterPostTweet(status: .fail).increment()
+            throw TwitterAuthenticatedClientError.twitterAPIResponseError(error)
+        } catch let error as TwitterAPIKitError {
+            let message = "Failed to Post Tweet"
             logger.error(
-                "Failed to post tweet, response nil.",
+                .init(stringLiteral: message),
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "message": .string(message),
+                    "error": .string(String(reflecting: error)),
                 ]
             )
-            throw TwitterAuthenticatedClientError.responseEmpty
+            BackendMetric.twitterPostTweet(status: .fail).increment()
+            throw TwitterOAuthClientError.twitterAPIKitResponseError(error)
         }
-
-        // Increment the success metric
-        BackendMetric.twitterPostTweet(status: .success).increment()
-
-        // Return the successful tweet response
-        return tweetResponse
     }
-}
-
-/// A structure representing the response from a Twitter post request.
-///
-/// This struct contains the data returned by Twitter after a tweet is posted,
-/// encapsulated in a `TwitterPostResponseData` object.
-public struct TwitterPostResponse: Content {
-    /// The data returned by Twitter, including the tweet's text and ID.
-    public let data: TwitterPostResponseData
-}
-
-/// A structure representing the data of a Twitter post response.
-///
-/// This struct contains the text and ID of the tweet that was posted.
-public struct TwitterPostResponseData: Content {
-    /// The text content of the posted tweet.
-    public let text: String
-
-    /// The unique identifier of the posted tweet.
-    public let id: String
 }

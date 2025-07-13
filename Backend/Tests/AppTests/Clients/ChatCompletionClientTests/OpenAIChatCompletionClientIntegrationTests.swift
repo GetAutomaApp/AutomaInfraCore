@@ -1,4 +1,4 @@
-// OpenAIChatCompletionClientTests.swift
+// OpenAIChatCompletionClientIntegrationTests.swift
 // Copyright (c) 2025 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
@@ -11,8 +11,8 @@ import VaporTesting
 
 /// Tests for the OpenAI Chat Completion Client implementation
 /// These tests verify the functionality of chat completion generation using OpenAI models
-@Suite("OpenAI Chat Completion Client Tests")
-internal struct OpenAIChatCompletionClientTests: ChatCompletionClientTestSuite {
+@Suite("OpenAIChatCompletionClientIntegrationTests")
+internal struct OpenAIChatCompletionClientIntegrationTests: ChatCompletionClientTestSuite {
     /// Tests successful chat completion generation using OpenAI's GPT-4o model
     /// Verifies that the client can generate valid chat completions and return proper metadata
     ///
@@ -34,7 +34,7 @@ internal struct OpenAIChatCompletionClientTests: ChatCompletionClientTestSuite {
             let metadata = try JSONDecoder().decode(ChatResult.self, from: result.metadata)
 
             #expect(result.message.count > 5, "Generated message should have more than 5 characters")
-            #expect(result.message.count < maxTokens * 4, "Message should not be bigger than max tokens")
+            #expect(result.message.count < maxCompletionTokens * 4, "Message should not be bigger than max tokens")
             #expect(metadata.model.contains(model.rawValue), "Model should be \(model.rawValue)")
         }
     }

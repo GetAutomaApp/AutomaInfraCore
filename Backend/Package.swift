@@ -11,7 +11,7 @@ public let package = Package(
         .package(url: "https://github.com/vapor/vapor.git", from: "4.113.2"),
         // 🗄 An ORM for SQL and NoSQL databases.
         .package(url: "https://github.com/vapor/fluent.git", from: "4.12.0"),
-        .package(url: "https://github.com/GetAutomaApp/TwitterAPIKit", branch: "main"),
+        .package(url: "https://github.com/GetAutomaApp/TwitterAPIKit", from: "1.0.0"),
         // 🐘 Fluent driver for Postgres.
         .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.10.0"),
         // 🍃 An expressive, performant, and extensible templating language built for Swift.
@@ -20,7 +20,7 @@ public let package = Package(
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         .package(path: "./DataTypes"),
         .package(url: "https://github.com/vapor/jwt.git", from: "5.1.2"),
-        .package(url: "https://github.com/MacPaw/OpenAI.git", branch: "main"),
+        .package(url: "https://github.com/MacPaw/OpenAI.git", from: "0.4.5"),
         .package(url: "https://github.com/soto-project/soto.git", from: "7.3.0"),
         .package(url: "https://github.com/swift-server/swift-prometheus.git", from: "2.0.0"),
         .package(
@@ -29,6 +29,7 @@ public let package = Package(
         ),
         .package(url: "https://github.com/nmdias/FeedKit.git", from: "10.0.0-rc.3"),
         .package(url: "https://github.com/GetAutomaApp/swift-retry.git", branch: "main"),
+        .package(url: "https://github.com/GetAutomaApp/Fakery", branch: "master"),
     ],
     targets: [
         .executableTarget(
@@ -69,6 +70,7 @@ public let package = Package(
             dependencies: [
                 .target(name: "App"),
                 .product(name: "VaporTesting", package: "vapor"),
+                .product(name: "Fakery", package: "Fakery"),
             ],
             swiftSettings: swiftSettings
         ),

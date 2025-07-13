@@ -14,7 +14,7 @@ internal protocol ChatCompletionClientTestSuite {
     var defaultPrompt: String { get }
 
     /// The maximum number of tokens allowed in a chat completion
-    var maxTokens: Int { get }
+    var maxCompletionTokens: Int { get }
 
     /// Creates a chat completion using the configured client
     /// - Parameter query: The chat completion request parameters
@@ -31,7 +31,7 @@ extension ChatCompletionClientTestSuite {
     }
 
     /// The maximum number of tokens allowed in a chat completion
-    public var maxTokens: Int {
+    public var maxCompletionTokens: Int {
         100
     }
 
@@ -72,7 +72,7 @@ extension ChatCompletionClientTestSuite {
         let queryWithMaxTokens: ChatCompletionContent = .init(
             model: query.model,
             prompt: query.prompt,
-            maxTokens: maxTokens
+            maxCompletionTokens: maxCompletionTokens
         )
 
         return try await client.createChat(queryWithMaxTokens)

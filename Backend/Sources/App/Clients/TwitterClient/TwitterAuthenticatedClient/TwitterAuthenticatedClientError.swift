@@ -10,7 +10,9 @@ internal enum TwitterAuthenticatedClientError: Error {
     /// The Twitter API response was empty or nil when data was expected
     case responseEmpty
 
-    /// An error occurred while processing the Twitter API response
-    /// - Parameter error: The underlying TwitterAPIKit error
-    case responseError(TwitterAPIKitError)
+    /// Error returned from Twitter API request.
+    case twitterAPIKitResponseError(TwitterAPIKitError)
+
+    /// Error returned from Twitter API request
+    case twitterAPIResponseError(TwitterAPIError)
 }

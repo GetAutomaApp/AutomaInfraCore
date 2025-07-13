@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "type": "lldb",
+            "type": "swift",
             "request": "launch",
             "args": [],
             "cwd": "${workspaceFolder:AutomaInfraCore}/Backend",
@@ -10,7 +10,7 @@
             "preLaunchTask": "swift: Build Debug App (Backend)"
         },
         {
-            "type": "lldb",
+            "type": "swift",
             "request": "launch",
             "args": [],
             "cwd": "${workspaceFolder:AutomaInfraCore}/Backend",

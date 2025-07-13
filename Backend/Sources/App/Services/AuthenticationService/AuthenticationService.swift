@@ -60,7 +60,7 @@ public struct RootAuthenticationService: AuthenticationService {
 
     public func refreshToken(userId: UUID, signer: Request.JWT) async throws -> String {
         do {
-            try await sendRefreshEvent(userId: userId.uuidString)
+            try sendRefreshEvent(userId: userId.uuidString)
             logRefresh(userId: userId.uuidString)
 
             return try await helper.resetAccessToken(
@@ -75,7 +75,7 @@ public struct RootAuthenticationService: AuthenticationService {
     }
 
     public func logout(userId: UUID) async throws {
-        try await sendLogoutEvent(userId: userId)
+        try sendLogoutEvent(userId: userId)
         logLogout(userId: userId)
 
         let concurrencySafeHelper: AuthenticationServiceHelper = .init(.init(
@@ -167,7 +167,7 @@ public struct RootAuthenticationService: AuthenticationService {
         }
     }
 
-    private func sendRefreshEvent(userId: String) async throws {
+    private func sendRefreshEvent(userId: String) throws {
         try messageService.sendDiscordWebhookAppEvent(
             input: userId,
             event: "is refreshing their access token",
@@ -185,7 +185,7 @@ public struct RootAuthenticationService: AuthenticationService {
         )
     }
 
-    private func sendLogoutEvent(userId: UUID) async throws {
+    private func sendLogoutEvent(userId: UUID) throws {
         try messageService.sendDiscordWebhookAppEvent(
             input: userId.uuidString,
             event: "is logging out",
