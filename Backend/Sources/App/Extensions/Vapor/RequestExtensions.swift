@@ -7,7 +7,7 @@ import Fluent
 import Vapor
 
 /// Extension on rquest to add DB aliases
-public extension Request {
+internal extension Request {
     /// Write DB
     var dbWrite: Database {
         db(.readOnly)

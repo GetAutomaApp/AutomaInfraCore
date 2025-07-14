@@ -8,7 +8,7 @@ import Vapor
 /// Extension to throw error if we can't find an env value
 internal extension Environment {
     /// Extension to throw error if we can't find an env value
-    public static func getOrThrow(_ key: String) throws -> String {
+    static func getOrThrow(_ key: String) throws -> String {
         guard let value = Environment.get(key) else {
             throw Abort(.notFound, reason: "Value for key \(key) not found")
         }

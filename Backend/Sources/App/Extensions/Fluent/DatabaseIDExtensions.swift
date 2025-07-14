@@ -7,7 +7,7 @@ import Fluent
 
 internal extension DatabaseID {
     /// Id for primary (write / read) database
-    public static let primary = DatabaseID(string: "primary")
+    static let primary = DatabaseID(string: "primary")
     /// Id for the closest geographical readonly database
-    public static let readOnly = DatabaseID(string: "readOnly")
+    static let readOnly = DatabaseID(string: "readOnly")
 }

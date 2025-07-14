@@ -8,7 +8,7 @@ import Vapor
 /// Extension on Task to start a detached task & log raw output
 internal extension Task where Success == Void, Failure == any Error {
     /// Executes & logs success / error on end
-    public static func detachedLogOnError(
+    static func detachedLogOnError(
         destination: String,
         logger: Logger,
         onError: @escaping @Sendable (Error) async throws -> Void = { _ in },
