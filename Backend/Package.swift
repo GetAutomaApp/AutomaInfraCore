@@ -1,6 +1,7 @@
 // swift-tools-version:6.0
 import PackageDescription
 
+/// INitializes Package
 public let package = Package(
     name: "Backend",
     platforms: [
@@ -78,6 +79,7 @@ public let package = Package(
     swiftLanguageModes: [.v5]
 )
 
+/// Default swift settings
 public var swiftSettings: [SwiftSetting] {
     [
         .enableUpcomingFeature("DisableOutwardActorInference"),

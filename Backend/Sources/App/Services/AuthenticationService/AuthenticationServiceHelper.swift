@@ -1,7 +1,7 @@
-// AuthenticationServiceHelper.swift
-// Copyright (c) 2025 GetAutomaApp
-// All source code and related assets are the property of GetAutomaApp.
-// All rights reserved.
+/// AuthenticationServiceHelper.swift
+/// Copyright (c) 2025 GetAutomaApp
+/// All source code and related assets are the property of GetAutomaApp.
+/// All rights reserved.
 
 import DataTypes
 import Fluent
@@ -9,11 +9,12 @@ import JWT
 import Queues
 import Vapor
 
-actor AuthenticationServiceHelper {
+internal actor AuthenticationServiceHelper {
     private let config: AuthenticationServiceHelperConfig
     private let messageService = MessageService()
 
-    init(_ config: AuthenticationServiceHelperConfig) {
+    /// Authentication Service Helpers
+    public init(_ config: AuthenticationServiceHelperConfig) {
         self.config = config
     }
 
@@ -41,10 +42,12 @@ actor AuthenticationServiceHelper {
     /// Deletes old access tokens for a user and subject.
     public func deleteOldTokens(_ payload: DeleteOldAccessTokensPayload) async throws {
         try await OldAccessTokenDeleter(
-            .init(writeDb: config.writeDb,
-                  readDb: config.readDb,
-                  logger: config.logger,
-                  payload: payload)
+            .init(
+                writeDb: config.writeDb,
+                readDb: config.readDb,
+                logger: config.logger,
+                payload: payload
+            )
         ).deleteOldTokens()
     }
 
@@ -122,20 +125,25 @@ actor AuthenticationServiceHelper {
     }
 }
 
-struct AuthenticationServiceHelperConfig: AuthenticationServiceConfig {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
+internal struct AuthenticationServiceHelperConfig: AuthenticationServiceConfig {
+    /// Db Connection w/ Write access
+    public let writeDb: Database
+    /// Db Connection w/ Read-Only access 
+    public let readDb: Database
+    /// Logger 
+    public let logger: Logger
 }
 
 internal struct AuthenticationCodeValidator {
     private let config: AuthenticationCodeValidatorConfig
     private let messageService = MessageService()
 
-    init(_ config: AuthenticationCodeValidatorConfig) {
+    /// Initializes Authentication Code Validation
+    public init(_ config: AuthenticationCodeValidatorConfig) {
         self.config = config
     }
 
+    /// Validates & Deletes Verification code
     public func validateAndDeleteCode() async throws {
         try sendTelemetryDataOnValidateAndDeleteCodeAttempt()
         try await getAndValidateCode().delete(on: config.writeDb)
@@ -213,21 +221,27 @@ internal struct AuthenticationCodeValidator {
 }
 
 internal struct AuthenticationCodeValidatorConfig: AuthenticationServiceConfig {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
-    let payload: AuthPhoneCodePayloadDTO
+    /// DB w/ write access
+    public let writeDb: Database
+    /// DB w/ readonly access
+    public let readDb: Database
+    /// Logger
+    public let logger: Logger
+    /// Payload that will be submitted to auth code validation service
+    public let payload: AuthPhoneCodePayloadDTO
 }
 
 internal struct AccessTokenResetter {
     private let config: AccessTokenResetterConfig
     private let expiresAt: Date
 
-    init(_ config: AccessTokenResetterConfig) {
+    /// Initializes
+    public init(_ config: AccessTokenResetterConfig) {
         self.config = config
         expiresAt = Date().addingTimeInterval(config.payload.expiresIn)
     }
 
+    /// Removes all tokens after the 5 newest tokens
     public func reset() async throws -> String {
         let signedToken = try await getSignedToken()
         try await OldAccessTokenDeleter(
@@ -271,26 +285,37 @@ internal struct AccessTokenResetter {
 }
 
 internal struct AccessTokenResetterConfig: AuthenticationServiceConfig {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
-    let payload: ResetAccessCodePayload
+    /// Db w/ write access
+    public let writeDb: Database
+    /// Db w/ readonly access
+    public let readDb: Database
+    /// Logger
+    public let logger: Logger
+    /// Payload submitted to auth token reset sevice
+    public let payload: ResetAccessCodePayload
 }
 
 internal struct ResetAccessCodePayload {
-    let userId: UUID
-    let expiresIn: TimeInterval
-    let subject: JWTTokenSubject
-    let signer: Request.JWT
+    /// The user for which to expire tokens for
+    public let userId: UUID
+    /// When will the token expire
+    public let expiresIn: TimeInterval
+    /// Subject
+    public let subject: JWTTokenSubject
+    /// JWT Signer Service
+    public let signer: Request.JWT
 }
 
 internal struct OldAccessTokenDeleter {
-    let config: OldAccessTokenDeleterConfig
+    /// Old Access token deleter config
+    public let config: OldAccessTokenDeleterConfig
 
-    init(_ config: OldAccessTokenDeleterConfig) {
+    /// Initializes token deletion service
+    public init(_ config: OldAccessTokenDeleterConfig) {
         self.config = config
     }
 
+    /// Deletes old access tokens
     public func deleteOldTokens() async throws {
         logDeleteOldTokensStart()
         try await deleteTokens(getTokensToDelete())
@@ -363,18 +388,26 @@ internal struct OldAccessTokenDeleter {
 }
 
 internal struct OldAccessTokenDeleterConfig: AuthenticationServiceConfig {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
-    let payload: DeleteOldAccessTokensPayload
+    /// Db w/ write access
+    public let writeDb: Database
+    /// Db w/ readonly access
+    public let readDb: Database
+    /// Logger
+    public let logger: Logger
+    /// Paylaod to submit to old access deletion service
+    public let payload: DeleteOldAccessTokensPayload
 }
 
 internal struct DeleteOldAccessTokensPayload {
-    let userId: UUID
-    let subject: JWTTokenSubject
-    let totalNewestTokensToSkip: Int?
+    /// User id for which to delete tokens for
+    public let userId: UUID
+    /// Subjecth
+    public let subject: JWTTokenSubject
+    /// ASC on date how many tokens to skip
+    public let totalNewestTokensToSkip: Int?
 
-    init(
+    /// init 
+    public init(
         userId: UUID,
         subject: JWTTokenSubject,
         totalNewestTokensToSkip: Int? = nil
@@ -389,10 +422,12 @@ internal struct AuthenticationTokensPayloadCreator {
     private let config: AuthenticationTokensPayloadCreatorConfig
     private let messageService = MessageService()
 
-    init(_ config: AuthenticationTokensPayloadCreatorConfig) {
+    /// Initializes token
+    public init(_ config: AuthenticationTokensPayloadCreatorConfig) {
         self.config = config
     }
 
+    /// Creates authentication token
     public func create(
     ) async throws -> AuthenticationTokensPayloadDTO {
         logCreateStart()
@@ -410,7 +445,11 @@ internal struct AuthenticationTokensPayloadCreator {
     private func alertCreateSuccess(payload tokensPayload: AuthenticationTokensPayloadDTO) throws {
         try messageService.sendDiscordWebhookAppEvent(
             input: config.payload.userId.uuidString,
-            event: "generated tokens: `access: \(tokensPayload.accessToken.count)` `refresh: \(tokensPayload.refreshToken.count)`",
+            event: """
+            generated tokens:
+                `access: \(tokensPayload.accessToken.count)`
+                `refresh: \(tokensPayload.refreshToken.count)`
+            """,
             logger: config.logger
         )
     }
@@ -469,24 +508,32 @@ internal struct AuthenticationTokensPayloadCreator {
 }
 
 internal struct AuthenticationTokensPayloadCreatorConfig: AuthenticationServiceConfig {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
-    let payload: CreateAuthenticationTokensPayload
+    /// Db w/ write access
+    public let writeDb: Database
+    /// Db w/ readonly access
+    public let readDb: Database
+    /// Logger
+    public let logger: Logger
+    /// Create auth token payload
+    public let payload: CreateAuthenticationTokensPayload
 }
 
 internal struct CreateAuthenticationTokensPayload {
-    let userId: UUID
-    let signer: Request.JWT
+    /// User id for which to create a token for
+    public let userId: UUID
+    /// JWT signer
+    public let signer: Request.JWT
 }
 
 internal struct AuthCodeSender {
     private let config: AuthCodeSenderConfig
 
-    init(_ config: AuthCodeSenderConfig) {
+    /// Initializes auth code sender
+    public init(_ config: AuthCodeSenderConfig) {
         self.config = config
     }
 
+    /// Sends authentication token
     public func send() async throws -> AuthenticationCodeResponseDTO {
         try await startSendCodeJob()
         try await createAuthCodeModel()
@@ -540,15 +587,23 @@ internal struct AuthCodeSender {
 }
 
 internal struct AuthCodeSenderConfig: AuthenticationServiceConfig {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
-    let queue: Queue
-    let payload: SendAuthCodePayload
+    /// Db w/ write access
+    public let writeDb: Database
+    /// Db w/ readonly access
+    public let readDb: Database
+    /// Logger
+    public let logger: Logger
+    /// Queue to submit token to
+    public let queue: Queue
+    /// Payload to submit
+    public let payload: SendAuthCodePayload
 }
 
 internal struct SendAuthCodePayload {
-    let code: String
-    let phoneNumber: String
-    let codeModelId: UUID
+    /// Code to send
+    public let code: String
+    /// Phone number to send code to
+    public let phoneNumber: String
+    /// Code ID
+    public let codeModelId: UUID
 }

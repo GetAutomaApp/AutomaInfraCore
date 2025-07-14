@@ -40,11 +40,6 @@ public let package = Package(
             name: "AutomaUIKit",
             dependencies: ["ViewExtractor", "PhoneNumberKit"],
             path: "Sources",
-            exclude: [
-                // Excluded documentation files
-                "AutomaUIKit/Components/Texts/InfoPairComponent/InfoPairComponentDocumentation.md",
-                "AutomaUIKit/Components/Indicators/ProgressIndicatorComponent/ProgressIndicatorComponentDocumentation.md",
-            ],
             resources: [
                 .process("Assets/Fonts"), // Add this to process the font files from the Assets folder
                 // Processed documentation resources

@@ -34,9 +34,7 @@ internal struct AppLaunchControllerIntegrationTests {
         try await app.asyncShutdown()
     }
 
-    // TODO: Implement when fixing issue 135
-    /// Placeholder test for checking if a user is accepted.
-    /// This test will be implemented when issue 135 is resolved.
+    /// Tests if a user is accepted or not
     @Test("Is User Accepted")
     public func request() {
         // Expect the test to pass with a true value

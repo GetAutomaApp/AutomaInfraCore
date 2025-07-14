@@ -207,16 +207,18 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
      */
     @ViewBuilder
     private func propertyRow(for property: AnyKeyPath<T, Any>) -> some View {
+        let setFunc = { newValue in
+            var mutableObject = object
+            property.set(&mutableObject, newValue)
+        }
+
         if property.type == String.self {
             let value = property.get(object) as! String
             HStack {
                 Text("\(property.label):")
                 TextField(property.label, text: Binding(
                     get: { value },
-                    set: { newValue in
-                        var mutableObject = object
-                        property.set(&mutableObject, newValue)
-                    }
+                    set: setFunc
                 ))
             }
         } else if property.type == Int.self {
@@ -225,10 +227,7 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
                 "\(property.label): \(value)",
                 value: Binding(
                     get: { value },
-                    set: { newValue in
-                        var mutableObject = object
-                        property.set(&mutableObject, newValue)
-                    }
+                    set: setFunc
                 ),
                 in: 0 ... 100
             )
@@ -236,20 +235,14 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
             let value = property.get(object) as! Bool
             Toggle("\(property.label): ", isOn: Binding(
                 get: { value },
-                set: { newValue in
-                    var mutableObject = object
-                    property.set(&mutableObject, newValue)
-                }
+                set: setFunc
             ))
         } else if property.type == Double.self {
             let value = property.get(object) as! Double
             Slider(
                 value: Binding(
                     get: { value },
-                    set: { newValue in
-                        var mutableObject = object
-                        property.set(&mutableObject, newValue)
-                    }
+                    set: setFunc
                 ),
                 in: 0 ... 100
             ) {
@@ -259,40 +252,37 @@ public struct PropertyEditor<T: ObservableObject, Content: View>: View {
             let value = property.get(object) as! EdgeInsets
             PaddingEditor(edgeInsets: Binding(
                 get: { value },
-                set: { newValue in
-                    var mutableObject = object
-                    property.set(&mutableObject, newValue)
-                }
+                set: setFunc
             ))
         } else if property.type == CGFloat.self {
             let value = property.get(object) as! CGFloat
             PaddingSliderInput(
                 value: Binding(
                     get: { value },
-                    set: { newValue in
-                        var mutableObject = object
-                        property.set(&mutableObject, newValue)
-                    }
+                    set: setFunc
                 ),
                 label: property.label
             )
         } else if property.type == Color.self {
             let value = property.get(object) as! Color
-            ColorPicker("\(property.label):", selection: Binding(get: {
-                value
-            }, set: { newValue in
-                var mutableObject = object
-                property.set(&mutableObject, newValue)
-            }))
+            ColorPicker(
+                "\(property.label):",
+                selection:
+                Binding(
+                    get: {
+                        value
+                    },
+                    set: setFunc
+                )
+            )
         } else if property.type == CGSize.self {
             let value = property.get(object) as! CGSize
-            CGSizeEdtior(cgSize: Binding(
-                get: { value },
-                set: { newValue in
-                    var mutableObject = object
-                    property.set(&mutableObject, newValue)
-                }
-            ))
+            CGSizeEdtior(
+                cgSize: Binding(
+                    get: { value },
+                    set: setFunc
+                )
+            )
         } else {
             Text("\(property.label)")
         }

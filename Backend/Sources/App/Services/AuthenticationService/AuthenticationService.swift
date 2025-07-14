@@ -9,17 +9,22 @@ import JWT
 import Queues
 import Vapor
 
-public struct RootAuthenticationService: AuthenticationService {
-    var config: any AuthenticationServiceConfig
-    let helper: AuthenticationServiceHelper
-    let messageService = MessageService()
+internal struct RootAuthenticationService: AuthenticationService {
+    private var config: any AuthenticationServiceConfig
+    internal let helper: AuthenticationServiceHelper
+    internal let messageService = MessageService()
 
-    init(_ config: RootAuthenticationServiceConfig) {
+    /// Initializes authentication service
+    public init(_ config: RootAuthenticationServiceConfig) {
         self.config = config
         helper = .init(.init(writeDb: config.writeDb, readDb: config.readDb, logger: config.logger))
     }
 
-    func register(_ payload: UserRegistrationPayload, queue: Queue) async throws -> AuthenticationTokensPayloadDTO {
+    /// Register a user
+    public func register(
+        _ payload: UserRegistrationPayload,
+        queue: Queue
+    ) async throws -> AuthenticationTokensPayloadDTO {
         var registrator = UserRegistrationService(.init(
             writeDb: config.writeDb,
             readDb: config.readDb,
@@ -30,7 +35,8 @@ public struct RootAuthenticationService: AuthenticationService {
         return try await registrator.register()
     }
 
-    func login(_ payload: UserLoginPayload) async throws -> AuthenticationTokensPayloadDTO {
+    /// Login User
+    public func login(_ payload: UserLoginPayload) async throws -> AuthenticationTokensPayloadDTO {
         let loginService = UserLoginService(.init(
             writeDb: config.writeDb,
             readDb: config.readDb,
@@ -40,6 +46,7 @@ public struct RootAuthenticationService: AuthenticationService {
         return try await loginService.login()
     }
 
+    /// Send authentication code
     public func sendAuthCode(phoneNumber: String, queue: Queue) async throws -> AuthenticationCodeResponseDTO {
         let code = RandomService.randomCode()
         logAuthCodeAttempt(phoneNumber: phoneNumber, code: code)
@@ -58,6 +65,7 @@ public struct RootAuthenticationService: AuthenticationService {
         )
     }
 
+    /// Refresh Token
     public func refreshToken(userId: UUID, signer: Request.JWT) async throws -> String {
         do {
             try sendRefreshEvent(userId: userId.uuidString)
@@ -74,6 +82,7 @@ public struct RootAuthenticationService: AuthenticationService {
         }
     }
 
+    /// Logs user out
     public func logout(userId: UUID) async throws {
         try sendLogoutEvent(userId: userId)
         logLogout(userId: userId)
@@ -90,6 +99,7 @@ public struct RootAuthenticationService: AuthenticationService {
         _ = try await (deleteRefresh, deleteAccess)
     }
 
+    /// CHecks if a user exists based on phone number
     public func doesUserExist(phoneNumber: String) async throws -> Bool {
         do {
             let exists = try await checkUserExists(phoneNumber: phoneNumber)
@@ -132,7 +142,6 @@ public struct RootAuthenticationService: AuthenticationService {
         return distance - (recentCode.createdAt?.distance(to: dateToCheck) ?? distance)
     }
 
-    // TODO: This method does more than one thing. Refactor.
     private func sendOrHandleAuthCode(
         phoneNumber: String,
         queue: Queue,
@@ -207,7 +216,7 @@ public struct RootAuthenticationService: AuthenticationService {
         try await UserModel
             .query(on: config.readDb)
             .filter(\.$phoneNumber == phoneNumber)
-            .first() != nil
+            .count() > 0
     }
 
     private func logUserExistenceError(phoneNumber: String, error: Error) {
@@ -223,18 +232,26 @@ public struct RootAuthenticationService: AuthenticationService {
 }
 
 internal protocol AuthenticationService {
+    /// Helper
     var helper: AuthenticationServiceHelper { get }
+    /// Message Service
     var messageService: MessageService { get }
 }
 
 internal protocol AuthenticationServiceConfig {
-    var writeDb: Database { get }
-    var readDb: Database { get }
-    var logger: Logger { get }
+   /// Db w/ write access
+   var writeDb: Database { get }
+   /// Db w/ readonly access
+   var readDb: Database { get }
+   /// Logger
+   var logger: Logger { get }
 }
 
 internal struct RootAuthenticationServiceConfig: AuthenticationServiceConfig {
-    let writeDb: Database
-    let readDb: Database
-    let logger: Logger
+    /// Db w/ write access
+    public let writeDb: Database
+    /// Db w/ readonly access
+    public let readDb: Database
+    /// Logger
+    public let logger: Logger
 }

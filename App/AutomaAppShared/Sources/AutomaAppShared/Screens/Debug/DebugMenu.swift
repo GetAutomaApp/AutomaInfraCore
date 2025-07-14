@@ -106,23 +106,27 @@ public struct DebugMenu: View {
                             config.text = "Set URL"
                         },
                         action: { _ in
-                            let url = URL(string: environmentPickerConfig.text)
-
-                            if let url {
-                                baseEnvironmentConfig.apiBaseURL = url.absoluteString
-                                baseEnvironmentConfig.logout()
-                                baseEnvironmentConfig.isDebugMenuActive = false
-                            } else {
-                                print(
-                                    "HANDLE ERRORS INVALID URL \(environmentPickerConfig.text)"
-                                )
-                            }
+                            self.setBaseEnvUrl()
                         }
                     )
                 }
             }
         }
         Spacer()
+    }
+
+    private func setBaseEnvUrl() {
+        let url = URL(string: environmentPickerConfig.text)
+
+        if let url {
+            baseEnvironmentConfig.apiBaseURL = url.absoluteString
+            baseEnvironmentConfig.logout()
+            baseEnvironmentConfig.isDebugMenuActive = false
+        } else {
+            print(
+                "HANDLE ERRORS INVALID URL \(environmentPickerConfig.text)"
+            )
+        }
     }
 }
 

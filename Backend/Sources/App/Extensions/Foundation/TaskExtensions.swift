@@ -5,7 +5,9 @@
 
 import Vapor
 
-public extension Task where Success == Void, Failure == any Error {
+/// Extension on Task to start a detached task & log raw output
+internal extension Task where Success == Void, Failure == any Error {
+    /// Executes & logs success / error on end
     static func detachedLogOnError(
         destination: String,
         logger: Logger,
