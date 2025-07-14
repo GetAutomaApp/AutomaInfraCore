@@ -215,7 +215,7 @@ public struct RootAuthenticationService: AuthenticationService {
     private func checkUserExists(phoneNumber: String) async throws -> Bool {
         try await UserModel
             .query(on: database)
-            .filter("id", .equal, id)
+            .filter(\$.phoneNumber == phoneNumber)
             .count() > 0
     }
 
