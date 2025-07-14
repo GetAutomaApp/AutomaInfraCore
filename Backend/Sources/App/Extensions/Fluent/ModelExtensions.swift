@@ -6,7 +6,7 @@
 import Fluent
 
 /// Extension on model to check if a specific row with id exists
-public extension Model {
+internal extension Model {
     /// Extension on model to check if a specific row with id exists
     public static func doesExist(id: UUID, on database: any Database) async throws -> Bool {
         try await query(on: database)
