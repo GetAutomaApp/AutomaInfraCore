@@ -9,10 +9,10 @@ import JWT
 import Queues
 import Vapor
 
-public struct RootAuthenticationService: AuthenticationService {
+internal struct RootAuthenticationService: AuthenticationService {
     private var config: any AuthenticationServiceConfig
-    private let helper: AuthenticationServiceHelper
-    private let messageService = MessageService()
+    internal let helper: AuthenticationServiceHelper
+    internal let messageService = MessageService()
 
     /// Initializes authentication service
     public init(_ config: RootAuthenticationServiceConfig) {
@@ -214,8 +214,8 @@ public struct RootAuthenticationService: AuthenticationService {
 
     private func checkUserExists(phoneNumber: String) async throws -> Bool {
         try await UserModel
-            .query(on: database)
-            .filter(\$.phoneNumber == phoneNumber)
+            .query(on: config.readDb)
+            .filter(\.$phoneNumber == phoneNumber)
             .count() > 0
     }
 
@@ -233,18 +233,18 @@ public struct RootAuthenticationService: AuthenticationService {
 
 internal protocol AuthenticationService {
     /// Helper
-    public var helper: AuthenticationServiceHelper { get }
+    var helper: AuthenticationServiceHelper { get }
     /// Message Service
-    public var messageService: MessageService { get }
+    var messageService: MessageService { get }
 }
 
 internal protocol AuthenticationServiceConfig {
    /// Db w/ write access
-   public var writeDb: Database { get }
+   var writeDb: Database { get }
    /// Db w/ readonly access
-   public var readDb: Database { get }
+   var readDb: Database { get }
    /// Logger
-   public var logger: Logger { get }
+   var logger: Logger { get }
 }
 
 internal struct RootAuthenticationServiceConfig: AuthenticationServiceConfig {

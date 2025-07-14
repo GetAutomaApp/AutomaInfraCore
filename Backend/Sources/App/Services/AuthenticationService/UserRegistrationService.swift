@@ -11,8 +11,8 @@ import Vapor
 
 internal struct UserRegistrationService: AuthenticationService {
     private var config: UserRegistrationConfig
-    private let helper: AuthenticationServiceHelper
-    private let messageService = MessageService()
+    internal let helper: AuthenticationServiceHelper
+    internal let messageService = MessageService()
     private let identifier: UserIdentifier
     private var user: UserModel
 

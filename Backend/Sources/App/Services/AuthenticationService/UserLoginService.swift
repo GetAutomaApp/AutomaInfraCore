@@ -9,9 +9,9 @@ import JWT
 import Vapor
 
 internal struct UserLoginService: AuthenticationService {
-    private var helper: AuthenticationServiceHelper
+    internal var helper: AuthenticationServiceHelper
     private let config: UserLoginConfig
-    private var messageService = MessageService()
+    internal var messageService = MessageService()
 
     /// INitializes user login service
     public init(_ config: UserLoginConfig) {
