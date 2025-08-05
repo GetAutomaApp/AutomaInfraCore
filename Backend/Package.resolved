@@ -1,5 +1,5 @@
 {
-  "originHash" : "6358cd7e5e3410ca6c9d19012b8158d9f3dc14e07492356093c18fab54de132e",
+  "originHash" : "7b8a941b94fb4a108a8383b043d97e6c43bde21b0a67426ed07dd90749bf7f15",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -227,6 +227,15 @@
       }
     },
     {
+      "identity" : "swift-any-codable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GetAutomaApp/swift-any-codable.git",
+      "state" : {
+        "revision" : "6dac9cf39f18f5091640fbbcb0590bf3b32728cb",
+        "version" : "1.0.3"
+      }
+    },
+    {
       "identity" : "swift-asn1",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-asn1.git",
@@ -431,6 +440,15 @@
       "state" : {
         "revision" : "a34201439c74b53f0fd71ef11741af7e7caf01e1",
         "version" : "1.4.2"
+      }
+    },
+    {
+      "identity" : "swiftwebdriver",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GetAutomaApp/SwiftWebDriver.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "2497b8d84ae283de4dabc1643d455098321b5322"
       }
     },
     {
