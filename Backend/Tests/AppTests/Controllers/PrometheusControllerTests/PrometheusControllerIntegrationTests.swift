@@ -4,6 +4,7 @@
 // All rights reserved.
 
 @testable import App
+import AutomaUtilities
 import Testing
 import VaporTesting
 
