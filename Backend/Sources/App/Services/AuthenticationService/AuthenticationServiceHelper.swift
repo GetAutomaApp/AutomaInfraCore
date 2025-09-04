@@ -3,6 +3,7 @@
 /// All source code and related assets are the property of GetAutomaApp.
 /// All rights reserved.
 
+import AutomaUtilities
 import DataTypes
 import Fluent
 import JWT
@@ -128,9 +129,9 @@ internal actor AuthenticationServiceHelper {
 internal struct AuthenticationServiceHelperConfig: AuthenticationServiceConfig {
     /// Db Connection w/ Write access
     public let writeDb: Database
-    /// Db Connection w/ Read-Only access 
+    /// Db Connection w/ Read-Only access
     public let readDb: Database
-    /// Logger 
+    /// Logger
     public let logger: Logger
 }
 
@@ -406,7 +407,7 @@ internal struct DeleteOldAccessTokensPayload {
     /// ASC on date how many tokens to skip
     public let totalNewestTokensToSkip: Int?
 
-    /// init 
+    /// init
     public init(
         userId: UUID,
         subject: JWTTokenSubject,

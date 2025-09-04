@@ -3,6 +3,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+import AutomaUtilities
 import Fluent
 import FluentPostgresDriver
 import JWT
@@ -202,8 +203,8 @@ public struct DatabaseSeeder {
 }
 
 internal enum DatabaseURLs {
-   /// primary database url has read & write access
-   public static let primary: Result<String, Error> = Result { try Environment.getOrThrow("PRIMARY_POSTGRES_URL") }
-   /// regional url most likely doesn't have write access, but allows for extremely fast reads
-   public static let regional: Result<String, Error> = Result { try Environment.getOrThrow("REGIONAL_POSTGRES_URL") }
+    /// primary database url has read & write access
+    public static let primary: Result<String, Error> = Result { try Environment.getOrThrow("PRIMARY_POSTGRES_URL") }
+    /// regional url most likely doesn't have write access, but allows for extremely fast reads
+    public static let regional: Result<String, Error> = Result { try Environment.getOrThrow("REGIONAL_POSTGRES_URL") }
 }
