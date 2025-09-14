@@ -202,3 +202,5 @@ wireguard-prod.conf
 
 .swiftlint.yml
 .swiftformat
+
+*.env.*

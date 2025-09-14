@@ -1,0 +1,16 @@
+{
+  "fly" : {
+    "environments" : [
+      "production",
+      "sandbox",
+      "staging"
+    ],
+    "config_files_root" : "Backend/infra/fly"
+  },
+  "actionsSecrets" : {
+    "owner_repo" : "GetAutomaApp/AutomaInfraCore"
+  },
+  "grafana" : {
+    "current_environment" : "automa-grafana"
+  }
+}
