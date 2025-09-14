@@ -27,7 +27,7 @@ jobs:
           path: Backend/.build
 
       - name: Get AutomaCLI 
-        uses: GetAutomaApp/private-actions/get-automacli@main  
+        uses: GetAutomaApp/private-actions/get-automacli@main
         with:
           github_pat: ${{ secrets.GITHUB_PAT }}
 
