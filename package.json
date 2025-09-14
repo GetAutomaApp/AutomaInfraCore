@@ -7,7 +7,7 @@
     "cli:docker": "docker exec -ti backend-app_dev-1 ./.build/aarch64-unknown-linux-gnu/debug/App --env local",
     "prepare:action": "npm install",
     "generate": "npm run cli -- generate",
-    "cli": "cd CLI && swift run AutomaCLI",
+    "cli": "automa",
     "fly:config": "npm run cli -- fly-config",
     "format": "swiftformat .",
     "deploy:backend:sandbox": "npm run fly:config -- ../Backend/infra/fly/fly.toml sandbox | npm run deploy:to:fly",
