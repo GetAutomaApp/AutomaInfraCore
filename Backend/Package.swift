@@ -31,7 +31,7 @@ public let package = Package(
         .package(url: "https://github.com/nmdias/FeedKit.git", from: "10.0.0-rc.3"),
         .package(url: "https://github.com/GetAutomaApp/swift-retry.git", branch: "main"),
         .package(url: "https://github.com/GetAutomaApp/Fakery", branch: "master"),
-        .package(name: "automa-utilities", path: "../../AutomaUtilities"),
+        .package(url: "https://github.com/GetAutomaApp/AutomaUtilities", branch: "main"),
     ],
     targets: [
         .executableTarget(
@@ -54,7 +54,7 @@ public let package = Package(
                 .product(name: "SotoTextract", package: "soto"),
                 .product(name: "FeedKit", package: "FeedKit"),
                 .product(name: "DMRetry", package: "swift-retry"),
-                .product(name: "automa-utilities", package: "AutomaUtilities"),
+                .product(name: "AutomaUtilities", package: "AutomaUtilities"),
             ],
             exclude: [
                 "Documentation.md",
