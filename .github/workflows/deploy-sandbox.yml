@@ -12,6 +12,13 @@ jobs:
     runs-on: blacksmith-4vcpu-ubuntu-2404
     concurrency: deploy-group-sandbox
     steps:
+      - name: Checkout private-actions
+        uses: actions/checkout@v4
+        with:
+          repository: GetAutomaApp/private-actions
+          ref: main
+          token: ${{ secrets.GITHUB_PAT }}
+
       - name: Checkout Code
         uses: actions/checkout@v4
 
