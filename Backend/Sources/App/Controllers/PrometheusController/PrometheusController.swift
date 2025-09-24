@@ -8,6 +8,8 @@ import Fluent
 import Prometheus
 import Vapor
 
+// PrometheusController can be re-used between projects, no need to create a new implementation each time
+
 /// Controller for handling Prometheus metrics requests.
 internal struct PrometheusController: RouteCollection {
     /// Registers routes for Prometheus operations.

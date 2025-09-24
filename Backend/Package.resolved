@@ -1,5 +1,5 @@
 {
-  "originHash" : "fd696153ea81efb825467272117f6b70b5b5fa52dfde9a8035d412d86626d6d3",
+  "originHash" : "1d8db4abc125868abd7c0e97eb84f6246d39ee42a10a5f1676c43785a2426b91",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -26,6 +26,15 @@
       "state" : {
         "revision" : "e048c8ee94967e8d8a1c2ec0e1156d6f7fa34d31",
         "version" : "1.20.0"
+      }
+    },
+    {
+      "identity" : "automautilities",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GetAutomaApp/AutomaUtilities",
+      "state" : {
+        "branch" : "main",
+        "revision" : "5273b2cfe710b81ef52b44eba1b66c6e5cef85c4"
       }
     },
     {

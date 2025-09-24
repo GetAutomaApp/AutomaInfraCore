@@ -7,6 +7,8 @@ import Foundation
 import Metrics
 import Prometheus
 
+// MetricsService can be re-used between projects, no need to create a new implementation each time
+
 /// Service for managing and emitting metrics.
 internal struct MetricsService {
     /// Global instance of the `MetricsService`.
