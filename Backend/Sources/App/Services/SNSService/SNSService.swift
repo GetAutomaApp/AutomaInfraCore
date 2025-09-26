@@ -13,7 +13,7 @@ import Vapor
     import FoundationNetworking
 #endif
 
-internal struct SNSService: Decodable {
+internal struct SNSService {
     private let messageService: MessageService
 
     public init() {
