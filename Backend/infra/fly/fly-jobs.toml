@@ -18,5 +18,5 @@ cpus = 2
 min_machines_running = 1
 
 [metrics]
-port = 8080
-path = "/Prometheus/metrics?auth_token=__FLY_METRICS_TOKEN__"
+port = 6834
+path = "/metrics"
