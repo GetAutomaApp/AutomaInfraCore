@@ -89,14 +89,6 @@ internal enum BackendMetric {
         ]
     )
 
-    /// Counter for Discord webhook messages sent.
-    public static let totalDiscordWebhookMessagesSent = MetricsService.global.makeCounter(
-        name: "total_discord_webhook_messages_sent",
-        labels: [
-            "status": Self.MetricStatus.success.rawValue,
-        ]
-    )
-
     /// Counter for OpenAI image generation requests.
     public static let openAIImageGenerationRequests = MetricsService.global.makeCounter(
         name: "openai_image_generation_requests"
