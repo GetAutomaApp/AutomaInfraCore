@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: ./DevDockerfile
+      secrets:
+        - GITHUB_SSH_AUTHENTICATION_TOKEN
     depends_on:
       postgres:
         condition: service_healthy
@@ -68,3 +70,7 @@ volumes:
     driver: local
   worker_build:
     driver: local
+
+secrets:
+  GITHUB_SSH_AUTHENTICATION_TOKEN:
+    file: ./infra/docker-secrets/GITHUB_SSH_AUTHENTICATION_TOKEN
