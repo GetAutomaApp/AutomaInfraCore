@@ -88,4 +88,7 @@ USER vapor:vapor
 # Let Docker bind to port 8080
 EXPOSE 8080
 
+# Expose PrometheusService server port 
+EXPOSE 6834
+
 CMD /bin/bash -c "eval './App $RUN_COMMAND'"

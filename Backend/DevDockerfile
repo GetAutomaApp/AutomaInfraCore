@@ -12,6 +12,8 @@ WORKDIR /app
 
 EXPOSE 8080
 
+EXPOSE 6834
+
 RUN --mount=type=secret,id=GITHUB_SSH_AUTHENTICATION_TOKEN \
     TOKEN=$(cat /run/secrets/GITHUB_SSH_AUTHENTICATION_TOKEN) && \
     git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "https://github.com/"
