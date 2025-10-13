@@ -21,7 +21,7 @@ jobs:
           key: ${{ runner.os }}-backend-unittests-${{ hashFiles('**/Package.resolved') }}
 
       - name: Run Unit Tests
-        uses: GetAutomaApp/Fpensource-actions/swifttesting@main
+        uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
           compose: "false"
           working-directory: "Backend"
