@@ -1,7 +1,7 @@
 // swift-tools-version:6.0
 import PackageDescription
 
-/// INitializes Package
+/// Initializes Package
 public let package = Package(
     name: "Backend",
     platforms: [

@@ -49,6 +49,7 @@ internal struct AppConfigurator {
     private func configureWhenDatabaseURLsAvailable() async throws {
         try await DatabaseConfigurator(app: app).configureDatabases()
         try registerControllers()
+        try await PrometheusService().startServer()
         try await addAuthenticationJWTKey()
         configureQueues()
         addJobsToQueue()
@@ -61,7 +62,6 @@ internal struct AppConfigurator {
         try app.register(collection: TwitterController())
         try app.register(collection: ChatCompletionController())
         try app.register(collection: FirecrawlTestController())
-        try app.register(collection: PrometheusController())
     }
 
     private func addAuthenticationJWTKey() async throws {

@@ -3,8 +3,7 @@ name: Run `AutomaBackend` Tests
 on:
   pull_request:
     paths:
-      - 'Backend/**/*.swift'
-
+      - "Backend/**/*.swift"
 
 jobs:
   unit-tests:
@@ -14,7 +13,7 @@ jobs:
 
       - uses: SwiftyLab/setup-swift@latest
         with:
-           swift-version: "6.1"
+          swift-version: "6.1"
 
       - uses: useblacksmith/cache@v5
         with:
@@ -27,6 +26,7 @@ jobs:
           compose: "false"
           working-directory: "Backend"
           swift_test_extra_args: "--filter '.*UnitTests.*'"
+          gh_pat: ${{ secrets.GET_AUTOMA_UTILITIES_GH_PAT }}
 
   integration-tests:
     runs-on: blacksmith-4vcpu-ubuntu-2404
@@ -35,13 +35,12 @@ jobs:
 
       - uses: SwiftyLab/setup-swift@latest
         with:
-           swift-version: "6.1"
+          swift-version: "6.1"
 
       - uses: useblacksmith/cache@v5
         with:
           path: Backend/.build
           key: ${{ runner.os }}-backend-integrationtests-${{ hashFiles('**/Package.resolved') }}
-
       - name: Run Integration Tests
         uses: GetAutomaApp/opensource-actions/swifttesting@main
         with:
@@ -50,6 +49,7 @@ jobs:
           swift_test_extra_args: "--filter '.*IntegrationTests.*'"
           required_healthy_services_docker_compose: '["postgres", "localstack"]'
           compose_services_to_startup: '["postgres", "localstack"]'
+          gh_pat: ${{ secrets.GET_AUTOMA_UTILITIES_GH_PAT }}
     env:
       OWNER: ${{ secrets.OWNER }}
       REPO: ${{ secrets.REPO }}

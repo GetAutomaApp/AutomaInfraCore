@@ -11,3 +11,4 @@ db.sqlite
 ! .env.example
 .vscode
 .fly.toml
+infra/docker-secrets/*
