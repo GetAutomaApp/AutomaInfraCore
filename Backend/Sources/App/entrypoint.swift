@@ -4,7 +4,6 @@
 // All rights reserved.
 
 import Logging
-import Metrics
 import NIOCore
 import NIOPosix
 import Vapor

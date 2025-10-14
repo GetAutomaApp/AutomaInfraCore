@@ -3,6 +3,7 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+import AutomaUtilities
 import DataTypes
 import Fluent
 import JWT
@@ -239,12 +240,12 @@ internal protocol AuthenticationService {
 }
 
 internal protocol AuthenticationServiceConfig {
-   /// Db w/ write access
-   var writeDb: Database { get }
-   /// Db w/ readonly access
-   var readDb: Database { get }
-   /// Logger
-   var logger: Logger { get }
+    /// Db w/ write access
+    var writeDb: Database { get }
+    /// Db w/ readonly access
+    var readDb: Database { get }
+    /// Logger
+    var logger: Logger { get }
 }
 
 internal struct RootAuthenticationServiceConfig: AuthenticationServiceConfig {

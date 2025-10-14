@@ -13,8 +13,6 @@ public enum GenericErrors: String, Error, Decodable, Encodable {
     /// Error related to Alamofire networking operations
     case alamofireError
     /// Error when sending a Discord webhook message fails
-    case discordWebhookMessageFailed
-    /// Error when response decoding fails
     case failedToDecodeResponse
     /// Error when response encoding fails
     case failedToEncodeResponse
@@ -61,12 +59,10 @@ public enum GenericErrors: String, Error, Decodable, Encodable {
             "You're Authentication Token is Invalid!"
         case .invalidUserId:
             "You're UserID isn't a valid UUID. We're Investigating"
-        case .discordWebhookMessageFailed:
-            "Sorry, We couldn't send a message through the discord webhook"
         case .smsMessageFailed:
             "We are having some technical difficulties sending sms messages!"
         case .missingImage:
-            ""
+            "Image generation was unsuccessful"
         case .failedToDecodeResponse:
             "An Invalid Response Object was sent down to the client!"
         case .failedToEncodeResponse:

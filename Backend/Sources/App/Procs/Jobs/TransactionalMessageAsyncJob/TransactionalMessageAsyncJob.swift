@@ -25,10 +25,10 @@ internal struct TransactionalMessageAsyncJob: AsyncJob {
     ///   - payload: The input payload containing message data.
     /// - Throws: Throws an error if the message sending fails.
     public func dequeue(_ context: QueueContext, _ payload: TransactionalMessageJobInput) async throws {
-        let messageService = MessageService()
+        let snsService = SNSService()
 
         // Send the SMS message
-        _ = try await messageService
+        _ = try await snsService
             .sendSmS(
                 to: payload.toPhoneNumber,
                 message: payload.content,
