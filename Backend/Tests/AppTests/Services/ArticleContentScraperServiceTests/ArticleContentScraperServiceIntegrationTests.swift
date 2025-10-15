@@ -20,11 +20,11 @@ internal struct ArticleContentScraperServiceIntegrationTests {
         try await app.asyncShutdown()
     }
 
-    @Test("Get Article Content Success")
-    public func getArticleContentSuccess() async throws {
+    @Test("Scrape Article Content Success")
+    public func scrapeArticleContentSuccess() async throws {
         try await withApp { app in
             let article = try await ArticleContentScraperService(client: app.client, logger: app.logger)
-                .getArticle(payload: .init(
+                .scrapeArticle(payload: .init(
                     url: URL.fromString(
                         payload: .init(
                             string: "https://www.digitalocean.com/resources/articles/gpt-5-overview"
