@@ -213,24 +213,6 @@ internal enum BackendMetric {
         ]
     )
 
-    /// Creates a counter to track Firecrawl markdown scraping metrics.
-    /// - Parameters:
-    ///   - status: The status of the scraping.
-    ///   - url: The URL being scraped.
-    /// - Returns: A Prometheus counter for Firecrawl markdown scraping with the given status.
-    public static func firecrawlScrapeMarkdown(
-        status: MetricStatus,
-        url: String
-    ) -> Prometheus.Counter {
-        MetricsService.global.makeCounter(
-            name: "firecrawl_markdown_scraping",
-            labels: [
-                "status": status.rawValue,
-                "url": url,
-            ]
-        )
-    }
-
     /// Creates a counter to track Article Content Scraper Service metrics.
     /// - Parameters:
     ///   - status: The status of the scraping.
