@@ -32,6 +32,7 @@ public let package = Package(
         .package(url: "https://github.com/GetAutomaApp/swift-retry.git", branch: "main"),
         .package(url: "https://github.com/GetAutomaApp/Fakery", branch: "master"),
         .package(url: "https://github.com/GetAutomaApp/AutomaUtilities", branch: "main"),
+        .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.11.1"),
     ],
     targets: [
         .executableTarget(
@@ -55,6 +56,7 @@ public let package = Package(
                 .product(name: "FeedKit", package: "FeedKit"),
                 .product(name: "DMRetry", package: "swift-retry"),
                 .product(name: "AutomaUtilities", package: "AutomaUtilities"),
+                "SwiftSoup"
             ],
             exclude: [
                 "Documentation.md",

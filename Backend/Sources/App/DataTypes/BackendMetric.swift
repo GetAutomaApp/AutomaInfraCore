@@ -230,4 +230,22 @@ internal enum BackendMetric {
             ]
         )
     }
+
+    /// Creates a counter to track Article Content Scraper Service metrics.
+    /// - Parameters:
+    ///   - status: The status of the scraping.
+    ///   - payload: The AutomaWebCore API payload
+    /// - Returns: A Prometheus counter for article content scraping with the given status.
+    public static func scrapeArticleContentCall(
+        status: MetricStatus,
+        payload: AutomaWebCoreAPIEndpointPayload
+    ) -> Prometheus.Counter {
+        MetricsService.global.makeCounter(
+            name: "scrape_article_content",
+            labels: [
+                "status": status.rawValue,
+                "payload": String(reflecting: payload),
+            ]
+        )
+    }
 }
