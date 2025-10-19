@@ -101,6 +101,15 @@
       }
     },
     {
+      "identity" : "flyingfox",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swhitty/FlyingFox.git",
+      "state" : {
+        "revision" : "76b2d2d0eb54f0b53e8b661cc8007c487d94f8da",
+        "version" : "0.25.0"
+      }
+    },
+    {
       "identity" : "jmespath.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jmespath/jmespath.swift.git",
