@@ -4,6 +4,7 @@
 // All rights reserved.
 
 import Logging
+import LoggingLoki
 import NIOCore
 import NIOPosix
 import Vapor
@@ -16,9 +17,27 @@ internal enum Entrypoint {
     public static func main() async throws {
         // Detect the current environment configuration
         var env = try Environment.detect()
+        let environment = Environment.get("ENVIRONMENT") ?? "local"
 
-        // Set up the logging system based on the environment
-        try LoggingSystem.bootstrap(from: &env)
+        if environment == "local" {
+            let processor = LokiLogProcessor(
+                configuration: LokiLogProcessorConfiguration(lokiURL: "http://localhost:3100")
+            )
+
+            let consoleLogger = try getConsoleLogger(from: &env)
+            LoggingSystem.bootstrap { label in
+                MultiplexLogHandler([
+                    consoleLogger,
+                    LokiLogHandler(label: label, processor: processor)
+                ])
+            }
+            Task {
+                try await processor.run()
+            }
+        } else {
+            // Set up the logging system based on the environment
+            try LoggingSystem.bootstrap(from: &env)
+        }
 
         // Create a new application instance with the detected environment
         let app = try await Application.make(env)
@@ -51,4 +70,9 @@ internal enum Entrypoint {
         // Shut down the application after execution
         try await app.asyncShutdown()
     }
+}
+
+internal func getConsoleLogger(from environment: inout Environment) throws -> ConsoleLogger {
+    let level = try Logger.Level.detect(from: &environment)
+    return ConsoleLogger(label: level.rawValue, console: Terminal(), level: level)
 }

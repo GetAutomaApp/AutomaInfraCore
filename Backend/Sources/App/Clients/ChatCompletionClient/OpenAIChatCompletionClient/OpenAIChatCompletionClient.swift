@@ -130,7 +130,7 @@ internal struct OpenAIChatCompletionClient: ChatCompletionClientBase {
 
         // Log usage information
         logger.info(
-            "OpenAI chat completions result metadata",
+            "OpenAI chat completions result usage metadata",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
                 "usage": .string("\(usage)"),
@@ -156,10 +156,10 @@ internal struct OpenAIChatCompletionClient: ChatCompletionClientBase {
         BackendMetric.chatCompletionServiceCall(platform: .openai, model: model, status: .success).increment()
         let metadata = try JSONEncoder().encode(result)
         logger.info(
-            "OpenAI chat completions result metadata",
+            "OpenAI chat completions result full metadata",
             metadata: [
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
-                "metadata": .string(String(describing: metadata)),
+                "metadata": .string(String(reflecting: result)),
             ]
         )
 

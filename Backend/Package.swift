@@ -33,6 +33,7 @@ public let package = Package(
         .package(url: "https://github.com/GetAutomaApp/Fakery", branch: "master"),
         .package(url: "https://github.com/GetAutomaApp/AutomaUtilities", branch: "main"),
         .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.11.1"),
+        .package(url: "https://github.com/lovetodream/swift-log-loki.git", branch: "main"),
     ],
     targets: [
         .executableTarget(
@@ -56,7 +57,8 @@ public let package = Package(
                 .product(name: "FeedKit", package: "FeedKit"),
                 .product(name: "DMRetry", package: "swift-retry"),
                 .product(name: "AutomaUtilities", package: "AutomaUtilities"),
-                "SwiftSoup"
+                "SwiftSoup",
+                .product(name: "LoggingLoki", package: "swift-log-loki"),
             ],
             exclude: [
                 "Documentation.md",
