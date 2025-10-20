@@ -49,7 +49,7 @@ internal struct AppConfigurator {
     private func configureWhenDatabaseURLsAvailable() async throws {
         try await DatabaseConfigurator(app: app).configureDatabases()
         try registerControllers()
-        try await PrometheusService().startServer()
+        try await startPrometheusService()
         try await addAuthenticationJWTKey()
         configureQueues()
         addJobsToQueue()
@@ -61,6 +61,20 @@ internal struct AppConfigurator {
         try app.register(collection: AppLaunchController())
         try app.register(collection: TwitterController())
         try app.register(collection: ChatCompletionController())
+    }
+
+    private func startPrometheusService() async throws {
+        if environment != "local" {
+            try await PrometheusService().startServer()
+            return
+        }
+
+        switch app.environment.appMode {
+        case .queue:
+            try await PrometheusService().startServer(port: 6_835)
+        default:
+            try await PrometheusService().startServer()
+        }
     }
 
     private func addAuthenticationJWTKey() async throws {
