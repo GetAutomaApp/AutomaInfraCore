@@ -8,18 +8,12 @@ import Testing
 import VaporTesting
 
 @Suite("AutomaWebCoreClientIntegrationTests")
-internal struct AutomaWebCoreClientIntegrationTests {
-    public func withApp(test: (Application) async throws -> Void) async throws {
-        let app = try await Application.make(.testing)
-        do {
-            try await test(app)
-        } catch {
-            try await app.asyncShutdown()
-            throw error
-        }
-        try await app.asyncShutdown()
-    }
-
+internal struct AutomaWebCoreClientIntegrationTests: MinimalVaporApplicationTestSuite {
+    /// Tests that getting the HTML of a website using `AutomaWebCoreClient` is a success
+    ///
+    /// - Throws: Any errors that occur during the test execution, including:
+    ///   - Client initialization errors
+    ///   - Network errors
     @Test("Get Website HTML Success")
     public func getWebsiteHTMLSuccess() async throws {
         try await withApp { app in

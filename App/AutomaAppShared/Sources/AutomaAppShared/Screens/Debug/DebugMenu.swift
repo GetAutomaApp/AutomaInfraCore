@@ -106,7 +106,7 @@ public struct DebugMenu: View {
                             config.text = "Set URL"
                         },
                         action: { _ in
-                            self.setBaseEnvUrl()
+                            setBaseEnvUrl()
                         }
                     )
                 }

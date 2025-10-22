@@ -116,7 +116,7 @@ internal struct TigrisService: ~Copyable {
                     body: .init(buffer: content),
                     bucket: path.bucket,
                     contentType: contentType,
-                    expires: expires,
+                    expires: expires?.formatted(),
                     key: path.key,
                     metadata: metadata
                 )
