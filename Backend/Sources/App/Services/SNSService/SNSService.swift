@@ -16,10 +16,20 @@ import Vapor
 internal struct SNSService {
     private let messageService: MessageService
 
+    /// Initialize new SNSService instance
     public init() {
         messageService = MessageService()
     }
 
+    /// Send an SMS to a phone number
+    /// - Parameters:
+    ///   - phoneNumber: Number to send SMS to
+    ///   - message: Message to send as SMS to number
+    ///   - logger: Logger used for creating logs
+    ///
+    /// - Throws: An error creating an SNS client, publishing an SMS, logging send sms event \
+    /// or extracting message identifier
+    /// - Returns: Message identifier as a string
     public func sendSmS(
         to phoneNumber: String,
         message: String,

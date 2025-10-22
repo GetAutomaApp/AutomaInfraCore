@@ -12,6 +12,11 @@ internal struct ArticleContentScraperService {
     internal let client: any Client
     internal let logger: Logger
 
+    /// Scrape and parse an article in the form of a website
+    /// - Parameter payload: AutomaWebCoreAPI payload used for configuring article URL
+    /// and scraping configuration
+    /// - Throws: an error getting website text content or converting website text content to an article
+    /// - Returns: Article, structured data structure representing the article and it's contents
     public func scrapeArticle(payload: AutomaWebCoreAPIEndpointPayload) async throws -> Article {
         sendTelemetryDataOnScrapeArticleStarted(payload)
         let article = try await convertWebsiteTextContentToArticle(
@@ -44,8 +49,7 @@ internal struct ArticleContentScraperService {
         do {
             let jsonString = try await convertWebsiteTextContentToJSON(textContent)
             let jsonData = try websiteContentJSONStringToData(jsonString)
-            let article = try decodeJSONDataToArticle(jsonData)
-            return article
+            return try decodeJSONDataToArticle(jsonData)
         } catch {
             sendTelemetryDataOnConvertWebsiteTextContentToArticleFail(error: error, payload: payload)
             throw ArticleContentScraperServiceError.textToArticleFailed(error: error)
@@ -56,8 +60,7 @@ internal struct ArticleContentScraperService {
         let websiteHTMLString = try await AutomaWebCoreClient(client: client)
             .getWebsiteHTML(payload: payload)
         let parsedWebsiteHTML = try SwiftSoup.parse(websiteHTMLString)
-        let textContent = try parsedWebsiteHTML.text()
-        return textContent
+        return try parsedWebsiteHTML.text()
     }
 
     private func convertWebsiteTextContentToJSON(_ textContent: String) async throws -> String {
@@ -86,7 +89,10 @@ internal struct ArticleContentScraperService {
 
         assert(
             response.starts(with: "{") && response[response.index(before: response.endIndex)] == "}",
-            "chat completion response for converting article website text content to json format doesn't start and end with dictionary keys."
+            """
+            chat completion response for converting article website text content to json format doesn't \
+            start and end with dictionary keys.
+            """
         )
 
         return response
@@ -100,10 +106,12 @@ internal struct ArticleContentScraperService {
             "title": "article title here",
             "author": "article writer/author here",
             "posted_at": "Date article was posted, don't provide 'posted_at' key if value not found",
-            "content_markdown": "**full article content as markdown here**, formatted and well-punctuated; not just a section of it"
+            "content_markdown": "**full article content as markdown here**, formatted and well-punctuated; \
+            not just a section of it"
         }
 
-        Simply return **only a json code snippet without the snippet signs (```)** in the exact format shown above.
+        Simply return **only a json code snippet without the snippet signs (```)** in the exact format \
+        shown above.
 
         Here is the text extracted from the article web page:
         \(textContent)
@@ -116,7 +124,10 @@ internal struct ArticleContentScraperService {
         else {
             throw ArticleContentScraperServiceError.textToArticleFailed(
                 error: Abort(.internalServerError),
-                message: "Converting website content as a json string to type `Data` failed -> results to `nil`"
+                message: """
+                Converting website content as a json string to type `Data` \
+                failed -> results to `nil`
+                """
             )
         }
         return data
@@ -170,10 +181,10 @@ internal struct ArticleContentScraperService {
     }
 
     public struct Article: Content {
-        let title: String
-        let author: String
-        let postedAt: Date?
-        let contentMarkdown: String
+        public let title: String
+        public let author: String
+        public let postedAt: Date?
+        public let contentMarkdown: String
 
         public init(from decoder: any Decoder) throws {
             let values = try decoder.container(keyedBy: CodingKeys.self)
