@@ -34,6 +34,8 @@ services:
     build:
       context: .
       dockerfile: ./DevDockerfile
+      secrets:
+        - GITHUB_SSH_AUTHENTICATION_TOKEN
     depends_on:
       postgres:
         condition: service_healthy
