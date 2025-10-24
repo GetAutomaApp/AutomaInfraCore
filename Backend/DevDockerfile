@@ -10,9 +10,7 @@ RUN npm install -g nodemon && apt-get remove npm -y
 
 WORKDIR /app
 
-EXPOSE 8080
-
-EXPOSE $METRICS_PORT
+EXPOSE 8080 $METRICS_PORT
 
 RUN --mount=type=secret,id=GITHUB_SSH_AUTHENTICATION_TOKEN \
     TOKEN=$(cat /run/secrets/GITHUB_SSH_AUTHENTICATION_TOKEN) && \

@@ -21,7 +21,7 @@ internal enum Entrypoint {
 
         if environment == "local" {
             let processor = LokiLogProcessor(
-                configuration: LokiLogProcessorConfiguration(lokiURL: "http://localhost:3100")
+                configuration: LokiLogProcessorConfiguration(lokiURL: "http://loki:3100")
             )
 
             let consoleLogger = try getConsoleLogger(from: &env)

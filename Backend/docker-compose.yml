@@ -18,10 +18,10 @@ services:
       localstack:
         condition: service_healthy
     environment:
-      RUN_COMMAND: "serve"
+      RUN_COMMAND: "serve --hostname 0.0.0.0"
       METRICS_PORT: "6834"
     ports:
-      - "8080:8080"
+      - "6886:8080"
       - "6834:6834"
     networks:
       - monitoring
