@@ -121,6 +121,7 @@ volumes:
     driver: local
   worker_build:
     driver: local
+  prom_data:
 
 secrets:
   GITHUB_SSH_AUTHENTICATION_TOKEN:
