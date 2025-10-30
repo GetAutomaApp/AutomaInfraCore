@@ -7,6 +7,7 @@ services:
     volumes:
       - ./:/app/
       - /app/.build
+      - api_build:/app/.build
     build:
       context: .
       dockerfile: ./DevDockerfile
@@ -22,7 +23,6 @@ services:
       METRICS_PORT: "6834"
     ports:
       - "6886:8080"
-      - "6834:6834"
     networks:
       - monitoring
       - backend
@@ -31,6 +31,7 @@ services:
     volumes:
       - ./:/app/
       - /app/.build
+      - worker_build:/app/.build
     build:
       context: .
       dockerfile: ./DevDockerfile
