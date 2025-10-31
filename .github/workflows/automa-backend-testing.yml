@@ -42,7 +42,8 @@ jobs:
           path: Backend/.build
           key: ${{ runner.os }}-backend-integrationtests-${{ hashFiles('**/Package.resolved') }}
       - name: Run Integration Tests
-        uses: GetAutomaApp/opensource-actions/swifttesting@main
+        # uses: GetAutomaApp/opensource-actions/swifttesting@main
+        uses: GetAutomaApp/opensource-actions/swifttesting@debug/backend-integration-tests-not-working-prometheus-local-setup-pr
         with:
           compose: "true"
           working-directory: "Backend"
