@@ -29,6 +29,11 @@ internal struct AutomaWebCoreClient {
         let res = try await client.get("\(baseURL.absoluteString)/api") { req in
             try req.content.encode(payload)
         }
-        return try res.content.decode(String.self)
+        do {
+            return try res.content.decode(String.self)
+        } catch {
+            let message = try res.content.decode([String: String].self)
+            throw Abort(.internalServerError, reason: message.debugDescription)
+        }
     }
 }
