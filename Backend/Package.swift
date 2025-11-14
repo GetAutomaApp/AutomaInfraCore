@@ -1,4 +1,4 @@
-// swift-tools-version:6.0
+// swift-tools-version:6.2
 import PackageDescription
 
 /// Initializes Package
@@ -34,6 +34,7 @@ public let package = Package(
         .package(url: "https://github.com/GetAutomaApp/AutomaUtilities", branch: "main"),
         .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.11.1"),
         .package(url: "https://github.com/lovetodream/swift-log-loki.git", branch: "main"),
+        .package(url: "https://github.com/apple/swift-temporal-sdk.git", from: "0.4.0")
     ],
     targets: [
         .executableTarget(

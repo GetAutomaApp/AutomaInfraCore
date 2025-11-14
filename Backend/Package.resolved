@@ -1,5 +1,5 @@
 {
-  "originHash" : "70949b7001f2afbc09ce48fe8e74c79342a0ebb035c9f66150debe1305d29cd3",
+  "originHash" : "bcfbb95bbe37661be0ba4312be4913ea89844607b2721e445cb5b308db2530d6",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -98,6 +98,42 @@
       "state" : {
         "revision" : "76b2d2d0eb54f0b53e8b661cc8007c487d94f8da",
         "version" : "0.25.0"
+      }
+    },
+    {
+      "identity" : "grpc-swift-2",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/grpc/grpc-swift-2.git",
+      "state" : {
+        "revision" : "8bc237c565deb14cd2ffda0b23759bdcdaa244b7",
+        "version" : "2.2.0"
+      }
+    },
+    {
+      "identity" : "grpc-swift-extras",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/grpc/grpc-swift-extras.git",
+      "state" : {
+        "revision" : "f6fc3a28a896cb5e01365758c717a3d56c16a2b2",
+        "version" : "2.1.0"
+      }
+    },
+    {
+      "identity" : "grpc-swift-nio-transport",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/grpc/grpc-swift-nio-transport.git",
+      "state" : {
+        "revision" : "11d1f0917aa30ca50e2c78d216e8ae8c72f42af1",
+        "version" : "2.3.0"
+      }
+    },
+    {
+      "identity" : "grpc-swift-protobuf",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/grpc/grpc-swift-protobuf.git",
+      "state" : {
+        "revision" : "c008d356d9e9c2255602711888bf25b542a30919",
+        "version" : "2.1.1"
       }
     },
     {
@@ -299,6 +335,15 @@
       }
     },
     {
+      "identity" : "swift-configuration",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-configuration.git",
+      "state" : {
+        "revision" : "9d5e40727efd060fb9b41b69932738f478abaa43",
+        "version" : "0.2.0"
+      }
+    },
+    {
       "identity" : "swift-crypto",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
@@ -425,6 +470,15 @@
       }
     },
     {
+      "identity" : "swift-otel-semantic-conventions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-otel/swift-otel-semantic-conventions.git",
+      "state" : {
+        "revision" : "69185e48088c4abdd438b74d332d103431849f63",
+        "version" : "1.38.0"
+      }
+    },
+    {
       "identity" : "swift-prometheus",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-server/swift-prometheus.git",
@@ -479,12 +533,30 @@
       }
     },
     {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax.git",
+      "state" : {
+        "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
+        "version" : "601.0.1"
+      }
+    },
+    {
       "identity" : "swift-system",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-system.git",
       "state" : {
         "revision" : "395a77f0aa927f0ff73941d7ac35f2b46d47c9db",
         "version" : "1.6.3"
+      }
+    },
+    {
+      "identity" : "swift-temporal-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-temporal-sdk.git",
+      "state" : {
+        "revision" : "35235775afe122a2a5e1fd3e400f02d3dc3b6d1b",
+        "version" : "0.4.0"
       }
     },
     {
