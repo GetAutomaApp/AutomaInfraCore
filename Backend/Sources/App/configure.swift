@@ -7,8 +7,7 @@ import AutomaUtilities
 import Fluent
 import FluentPostgresDriver
 import JWT
-import Queues
-import QueuesFluentDriver
+import Temporal
 import Vapor
 
 internal func configure(_ app: Application) async throws {
@@ -29,7 +28,6 @@ internal struct AppConfigurator {
     /// Configures the entire application
     public func configure() async throws {
         registerMiddleware()
-        registerQueues()
         let hasDatabaseURLs = (primaryDatabaseURL != nil) || (regionalDatabaseURL != nil)
         if hasDatabaseURLs {
             try await configureWhenDatabaseURLsAvailable()
@@ -40,19 +38,12 @@ internal struct AppConfigurator {
         app.middleware.use(ErrorStringMiddleware())
     }
 
-    private func registerQueues() {
-        if ["local", "testing"].contains(environment) == false {
-            app.asyncCommands.use(QueuesCommand(application: app), as: "vapor-queues")
-        }
-    }
-
     private func configureWhenDatabaseURLsAvailable() async throws {
         try await DatabaseConfigurator(app: app).configureDatabases()
         try registerControllers()
         try await startPrometheusService()
+        try await setupTemporal()
         try await addAuthenticationJWTKey()
-        configureQueues()
-        addJobsToQueue()
         configureServer()
     }
 
@@ -68,13 +59,7 @@ internal struct AppConfigurator {
             try await PrometheusService().startServer()
             return
         }
-
-        switch app.environment.appMode {
-        case .queue:
-            try await PrometheusService().startServer(port: 6_835)
-        default:
-            try await PrometheusService().startServer()
-        }
+        try await PrometheusService().startServer()
     }
 
     private func addAuthenticationJWTKey() async throws {
@@ -82,15 +67,28 @@ internal struct AppConfigurator {
         await app.jwt.keys.add(hmac: .init(stringLiteral: encryptionSecret), digestAlgorithm: .sha256)
     }
 
-    private func configureQueues() {
-        app.queues.use(.fluent(useSoftDeletes: true))
-        app.queues.configuration.workerCount = 1
-        app.queues.configuration.refreshInterval = .seconds(5)
-    }
+    private func setupTemporal() async throws {
+        let worker = try TemporalWorker(
+            configuration: .init(
+                namespace: "default",
+                taskQueue: "default-queue",
+                instrumentation: .init(serverHostname: "127.0.0.1")
+            ),
+            target: .ipv4(address: "127.0.0.1", port: 7_233),
+            transportSecurity: .plaintext,
+            activityContainers: GreetingActivities(),
+            workflows: [GreetingWorkflow.self],
+            logger: Logger(label: "temporal-worker")
+        )
+        try await withThrowingTaskGroup { group in
+            group.addTask {
+                try await worker.run()
+            }
 
-    private func addJobsToQueue() {
-        app.queues.add(TransactionalMessageAsyncJob())
-        app.queues.add(ProfilePictureAsyncJob())
+            group.addTask {
+                try await app.temporalClient.run()
+            }
+        }
     }
 
     private func configureServer() {
@@ -220,4 +218,15 @@ internal enum DatabaseURLs {
     public static let primary: Result<String, Error> = Result { try Environment.getOrThrow("PRIMARY_POSTGRES_URL") }
     /// regional url most likely doesn't have write access, but allows for extremely fast reads
     public static let regional: Result<String, Error> = Result { try Environment.getOrThrow("REGIONAL_POSTGRES_URL") }
+}
+
+public extension Application {
+    let temporalClient: TemporalClient {
+        try TemporalClient(
+            target: .ipv4(address: "127.0.0.1", port: 7_233),
+            transportSecurity: .plaintext,
+            configuration: .init(instrumentation: .init(serverHostname: "127.0.0.1")),
+            logger: Logger(label: "temporal-client")
+        )
+    }
 }

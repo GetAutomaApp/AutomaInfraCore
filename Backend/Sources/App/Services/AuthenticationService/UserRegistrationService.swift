@@ -18,8 +18,9 @@ internal struct UserRegistrationService: AuthenticationService {
     private var user: UserModel
 
     /// Initializes User Registration Service
-    public init(_ config: UserRegistrationConfig) {
+    public init(_ config: UserRegistrationConfig, temporalClient: TemporalClient) {
         self.config = config
+        self.temporalClient = temporalClient
         helper = .init(.init(writeDb: config.writeDb, readDb: config.readDb, logger: config.logger))
         identifier = Self.generateNewUserIdentifier()
         user = Self.createUserModel(identifier: identifier, config: config)
@@ -70,7 +71,12 @@ internal struct UserRegistrationService: AuthenticationService {
         let userDTO = try user.toDTO(logger: config.logger)
         let profilePictureKey = try ProfilePictureService(logger: config.logger).generateImageKey(for: userDTO)
 
-        try await config.queue.dispatch(ProfilePictureAsyncJob.self, .init(payload: userDTO))
+        Task {
+            try await temporalClient.executeWorkflow(
+                type: CreateProfilePictureWorkflow.self,
+                input: .init(logger: logger, payload: userDTO)
+            )
+        }
 
         user.profilePictureKey = profilePictureKey
 
