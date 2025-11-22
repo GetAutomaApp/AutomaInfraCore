@@ -8,7 +8,7 @@ import Foundation
 import Temporal
 import Vapor
 
-internal struct CreateProfilePictureActivityInput: Codable {
+internal struct CreateProfilePictureActivityInput: Sendable, Codable {
     let payload: UserDTO
 }
 
@@ -19,10 +19,10 @@ internal struct ProfilePictureActivities {
     /// - Parameters:
     ///   - input: The input for creating a profile picture.
     /// - Throws: Throws an error if the profile picture creation fails.
-    @Activity
+    @Sendable @Activity
     public func createPicture(input: CreateProfilePictureActivityInput) async throws {
         let payload = input.payload
-        let logger = Logger("temporal")
+        let logger = Logger(label: "temporal")
         let profilePictureService = ProfilePictureService(logger: logger)
 
         do {

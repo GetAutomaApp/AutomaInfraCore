@@ -583,8 +583,7 @@ internal struct AuthCodeSender {
                         .craftVerificationCodeMessage(
                             code: config.payload.code
                         ),
-                    toPhoneNumber: config.payload.phoneNumber,
-                    logger: config.logger
+                    toPhoneNumber: config.payload.phoneNumber
                 )
             )
         }

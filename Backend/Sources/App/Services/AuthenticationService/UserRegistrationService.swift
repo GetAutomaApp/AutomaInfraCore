@@ -70,11 +70,15 @@ internal struct UserRegistrationService: AuthenticationService {
         let userDTO = try user.toDTO(logger: config.logger)
         let profilePictureKey = try ProfilePictureService(logger: config.logger).generateImageKey(for: userDTO)
 
+        let temporalClient = config.temporalClient
         Task {
-            try await config.temporalClient.executeWorkflow(
+            try await temporalClient.executeWorkflow(
                 type: CreateProfilePictureWorkflow.self,
-                options: .init(id: "create-user-profile-pic-\(userDTO.id)-\(Date())", taskQueue: "default-queue"),
-                input: .init(logger: config.logger, payload: userDTO)
+                options: .init(
+                    id: "create-user-profile-pic-\(userDTO.id?.uuidString ?? userDTO.username)-\(Date())",
+                    taskQueue: "default-queue"
+                ),
+                input: .init(payload: userDTO)
             )
         }
 
