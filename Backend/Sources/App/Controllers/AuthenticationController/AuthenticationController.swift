@@ -5,6 +5,7 @@
 
 import DataTypes
 import Fluent
+import Temporal
 import Vapor
 
 /// Controller for handling authentication-related routes.
@@ -48,7 +49,7 @@ internal struct AuthenticationController: RouteCollection {
         }
 
         return try await authService.sendAuthCode(
-            phoneNumber: dto.phoneNumber, queue: req.queue
+            phoneNumber: dto.phoneNumber, temporalClient: req.temporalClient
         )
     }
 
@@ -69,7 +70,10 @@ internal struct AuthenticationController: RouteCollection {
             throw GenericErrors.userAlreadyExists
         }
 
-        return try await authService.register(.init(authCodePayload: dto, signer: req.jwt), queue: req.queue)
+        return try await authService.register(
+            .init(authCodePayload: dto, signer: req.jwt),
+            temporalClient: req.temporalClient
+        )
     }
 
     /// Sends a login code to the user's phone number.
@@ -91,7 +95,7 @@ internal struct AuthenticationController: RouteCollection {
         }
 
         return try await authService.sendAuthCode(
-            phoneNumber: dto.phoneNumber, queue: req.queue
+            phoneNumber: dto.phoneNumber, temporalClient: req.temporalClient
         )
     }
 

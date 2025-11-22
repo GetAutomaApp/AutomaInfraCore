@@ -8,15 +8,8 @@ import Foundation
 import Temporal
 import Vapor
 
-internal struct CreateProfilePictureActivityInput {
-    let logger: Logger
-    let payload: CreateProfilePictureActivityPayload
-}
-
-/// Input payload for the create profile picture activity.
-internal struct CreateProfilePictureActivityPayload: Codable {
-    /// The user data transfer object.
-    public let payload: UserDTO
+internal struct CreateProfilePictureActivityInput: Codable {
+    let payload: UserDTO
 }
 
 /// Temporal activity for user profile picture creation.
@@ -24,26 +17,26 @@ internal struct CreateProfilePictureActivityPayload: Codable {
 internal struct ProfilePictureActivities {
     /// Create
     /// - Parameters:
-    ///   - payload: The input payload containing user data.
+    ///   - input: The input for creating a profile picture.
     /// - Throws: Throws an error if the profile picture creation fails.
     @Activity
     public func createPicture(input: CreateProfilePictureActivityInput) async throws {
-        let innerPayload = input.payload.payload
-        let logger = input.logger
+        let payload = input.payload
+        let logger = Logger("temporal")
         let profilePictureService = ProfilePictureService(logger: logger)
 
         do {
             // Create a profile picture for the user
             let profilePictureKey = try await profilePictureService.createProfilePicture(
-                for: innerPayload
+                for: payload
             )
             // Log the successful creation of the profile picture
             logger.info(
                 "Profile picture created",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "userId": .string(innerPayload.id?.uuidString ?? ""),
-                    "username": .string(innerPayload.username),
+                    "userId": .string(payload.id?.uuidString ?? ""),
+                    "username": .string(payload.username),
                     "profilePictureKey": .string(profilePictureKey),
                 ]
             )
@@ -56,8 +49,8 @@ internal struct ProfilePictureActivities {
                 "Failed to create profile picture",
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    "userId": .string(innerPayload.id?.uuidString ?? ""),
-                    "username": .string(innerPayload.username),
+                    "userId": .string(payload.id?.uuidString ?? ""),
+                    "username": .string(payload.username),
                     "error": .string(error.localizedDescription),
                     "stackTrace": .string(stackTrace),
                 ]

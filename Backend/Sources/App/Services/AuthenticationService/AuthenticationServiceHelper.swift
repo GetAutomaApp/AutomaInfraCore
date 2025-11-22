@@ -7,7 +7,7 @@ import AutomaUtilities
 import DataTypes
 import Fluent
 import JWT
-import Queues
+import Temporal
 import Vapor
 
 internal actor AuthenticationServiceHelper {
@@ -70,13 +70,14 @@ internal actor AuthenticationServiceHelper {
     }
 
     /// Sends a verification code to the given phone number and returns the result.
-    public func sendAuthCode(_ payload: SendAuthCodePayload, queue: Queue) async throws -> AuthenticationCodeResponseDTO
+    public func sendAuthCode(_ payload: SendAuthCodePayload,
+                             temporalClient: TemporalClient) async throws -> AuthenticationCodeResponseDTO
     {
         try await AuthCodeSender(.init(
             writeDb: config.writeDb,
             readDb: config.writeDb,
             logger: config.logger,
-            queue: queue,
+            temporalClient: temporalClient,
             payload: payload
         )).send()
     }
@@ -570,16 +571,23 @@ internal struct AuthCodeSender {
     }
 
     private func startSendCodeJob() async throws {
-        try await config.queue.dispatch(
-            TransactionalMessageAsyncJob.self,
-            .init(
-                content: MessageFormatterService
-                    .craftVerificationCodeMessage(
-                        code: config.payload.code
-                    ),
-                toPhoneNumber: config.payload.phoneNumber
+        Task {
+            try await config.temporalClient.executeWorkflow(
+                type: SendTransactionalMessageWorkflow.self,
+                options: .init(
+                    id: "send-transactional-message-\(config.payload.codeModelId)",
+                    taskQueue: "default-queue"
+                ),
+                input: .init(
+                    content: MessageFormatterService
+                        .craftVerificationCodeMessage(
+                            code: config.payload.code
+                        ),
+                    toPhoneNumber: config.payload.phoneNumber,
+                    logger: config.logger
+                )
             )
-        )
+        }
     }
 
     private func getCodeDeletionTime() -> Date {
@@ -594,8 +602,8 @@ internal struct AuthCodeSenderConfig: AuthenticationServiceConfig {
     public let readDb: Database
     /// Logger
     public let logger: Logger
-    /// Queue to submit token to
-    public let queue: Queue
+    // Temporal client to execute workflows
+    public let temporalClient: TemporalClient
     /// Payload to submit
     public let payload: SendAuthCodePayload
 }

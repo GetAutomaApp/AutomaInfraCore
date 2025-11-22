@@ -8,7 +8,7 @@ import Temporal
 import Vapor
 
 /// Input payload for send transactional message activity.
-internal struct SendTransactionalMessageActivityInput: Codable {
+internal struct SendTransactionalMessageActivityInput {
     /// The content of the message.
     public let content: String
     /// The phone number to send the message to.
@@ -16,23 +16,23 @@ internal struct SendTransactionalMessageActivityInput: Codable {
 }
 
 /// Activites for sending a transactional message.
-@ActivitiesContainer
+@ActivityContainer
 internal struct TransactionalMessageActivities {
     /// Activity for sending a transactional message.
     /// - Parameters:
-    ///   - payload: The input payload containing message data.
+    ///   - input: The input for sending a transactional message.
     /// - Throws: Throws an error if the message sending fails.
     @Activity
-    public func sendMessage(app: any Application, payload: SendTransactionalMessageActivityInput) async throws {
-        let logger = app.logger
+    public func sendMessage(input: SendTransactionalMessageActivityInput) async throws {
+        let logger = Logger("temporal")
         let snsService = SNSService()
 
         // Send the SMS message
         do {
             _ = try await snsService
                 .sendSmS(
-                    to: payload.toPhoneNumber,
-                    message: payload.content,
+                    to: input.toPhoneNumber,
+                    message: input.content,
                     logger: logger
                 )
         } catch {
@@ -44,7 +44,7 @@ internal struct TransactionalMessageActivities {
                 metadata: [
                     "to": .string("\(String(describing: Self.self)).\(#function)"),
                     "error": .string(error.localizedDescription),
-                    "payload": .string("\(payload.content)"),
+                    "input": .string("\(input.content)"),
                     "stackTrace": .string(stackTrace),
                 ]
             )

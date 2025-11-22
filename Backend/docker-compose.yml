@@ -30,28 +30,6 @@ services:
       - monitoring
       - backend
 
-  worker-dev:
-    volumes:
-      - ./:/app/
-      - /app/.build
-      - worker_build:/app/.build
-    build:
-      context: .
-      dockerfile: ./DevDockerfile
-      secrets:
-        - GITHUB_SSH_AUTHENTICATION_TOKEN
-    depends_on:
-      postgres:
-        condition: service_healthy
-      localstack:
-        condition: service_healthy
-    environment:
-      RUN_COMMAND: "queues"
-      METRICS_PORT: "6835"
-    networks:
-      - monitoring
-      - backend
-
   postgres:
     image: postgres:latest
     container_name: postgres-container

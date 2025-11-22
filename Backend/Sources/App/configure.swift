@@ -76,11 +76,11 @@ internal struct AppConfigurator {
             ),
             target: .ipv4(address: "127.0.0.1", port: 7_233),
             transportSecurity: .plaintext,
-            activityContainers: GreetingActivities(),
-            workflows: [GreetingWorkflow.self],
+            activityContainers: ProfilePictureActivities(),
+            workflows: [CreateProfilePictureWorkflow.self],
             logger: Logger(label: "temporal-worker")
         )
-        try await withThrowingTaskGroup { group in
+        await withThrowingTaskGroup { group in
             group.addTask {
                 try await worker.run()
             }
@@ -131,7 +131,6 @@ internal struct DatabaseConfigurator {
         app.migrations.add(JWTTokenShouldBeBoundToParentUserObjectMigration1735140054())
         app.migrations.add(UserProfileAddProfilePictureMigration1735216565())
         app.migrations.add(UserProfileConvertIdToImageKeyMigration1735294202())
-        app.migrations.add(JobMetadataMigrate())
         app.migrations.add(RemoveUserStorageMigration1739456565())
         app.migrations.add(AddAcceptedColumnMigration1740658649())
         app.migrations.add(TwitterOAuthTokenMigration1741687313())
@@ -220,13 +219,20 @@ internal enum DatabaseURLs {
     public static let regional: Result<String, Error> = Result { try Environment.getOrThrow("REGIONAL_POSTGRES_URL") }
 }
 
-public extension Application {
-    let temporalClient: TemporalClient {
-        try TemporalClient(
+// TODO: refactor extensions to extensions directory
+internal extension Application {
+    var temporalClient: TemporalClient {
+        try! TemporalClient(
             target: .ipv4(address: "127.0.0.1", port: 7_233),
             transportSecurity: .plaintext,
             configuration: .init(instrumentation: .init(serverHostname: "127.0.0.1")),
             logger: Logger(label: "temporal-client")
         )
+    }
+}
+
+internal extension Request {
+    var temporalClient: TemporalClient {
+        application.temporalClient
     }
 }
