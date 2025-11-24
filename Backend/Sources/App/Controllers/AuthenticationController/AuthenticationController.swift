@@ -48,9 +48,30 @@ internal struct AuthenticationController: RouteCollection {
             throw GenericErrors.userAlreadyExists
         }
 
-        return try await authService.sendAuthCode(
-            phoneNumber: dto.phoneNumber, temporalClient: req.temporalClient
-        )
+        return try await useTemporalClient(request: req) { temporalClient in
+            try await authService.sendAuthCode(
+                phoneNumber: dto.phoneNumber,
+                temporalClient: temporalClient
+            )
+        }
+    }
+
+    private func useTemporalClient<T>(
+        request: Request,
+        _ callback: @escaping (TemporalClient) async throws -> T
+    ) async throws -> T {
+        let temporalClient = request.temporalClient
+        return try await withThrowingTaskGroup { group in
+            group.addTask {
+                try await temporalClient.run()
+            }
+
+            try await Task.sleep(for: .seconds(1))
+
+            let result = try await callback(temporalClient)
+            group.cancelAll()
+            return result
+        }
     }
 
     /// Registers a new user with the provided phone number and code.
@@ -70,10 +91,12 @@ internal struct AuthenticationController: RouteCollection {
             throw GenericErrors.userAlreadyExists
         }
 
-        return try await authService.register(
-            .init(authCodePayload: dto, signer: req.jwt),
-            temporalClient: req.temporalClient
-        )
+        return try await useTemporalClient(request: req) { temporalClient in
+            try await authService.register(
+                .init(authCodePayload: dto, signer: req.jwt),
+                temporalClient: temporalClient
+            )
+        }
     }
 
     /// Sends a login code to the user's phone number.
@@ -94,9 +117,11 @@ internal struct AuthenticationController: RouteCollection {
             throw GenericErrors.userNotFound
         }
 
-        return try await authService.sendAuthCode(
-            phoneNumber: dto.phoneNumber, temporalClient: req.temporalClient
-        )
+        return try await useTemporalClient(request: req) { temporalClient in
+            try await authService.sendAuthCode(
+                phoneNumber: dto.phoneNumber, temporalClient: temporalClient
+            )
+        }
     }
 
     /// Logs in a user with the provided phone number and code.

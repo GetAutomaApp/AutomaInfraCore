@@ -25,7 +25,7 @@ internal struct TransactionalMessageActivities {
     @Sendable @Activity
     public func sendMessage(input: SendTransactionalMessageActivityInput) async throws {
         let logger = Logger(label: "temporal")
-        let snsService = SNSService()
+        let snsService = try SNSService()
 
         // Send the SMS message
         do {

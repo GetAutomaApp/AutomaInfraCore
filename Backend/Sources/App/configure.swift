@@ -72,23 +72,22 @@ internal struct AppConfigurator {
             configuration: .init(
                 namespace: "default",
                 taskQueue: "default-queue",
-                instrumentation: .init(serverHostname: "127.0.0.1")
+                instrumentation: .init(serverHostname: "temporal")
             ),
-            target: .ipv4(address: "127.0.0.1", port: 7_233),
+            target: .dns(host: "temporal", port: 7_233),
             transportSecurity: .plaintext,
-            activityContainers: ProfilePictureActivities(),
-            workflows: [CreateProfilePictureWorkflow.self],
+            activities: [
+                ProfilePictureActivities().activities.createPicture,
+                TransactionalMessageActivities().activities.sendMessage
+            ],
+            workflows: [CreateProfilePictureWorkflow.self, SendTransactionalMessageWorkflow.self],
             logger: Logger(label: "temporal-worker")
         )
-        await withThrowingTaskGroup { group in
-            group.addTask {
-                try await worker.run()
-            }
-
-            group.addTask {
-                try await app.temporalClient.run()
-            }
+        Task {
+            try await worker.run()
         }
+        // wait for worker to startup
+        try await Task.sleep(for: .seconds(1))
     }
 
     private func configureServer() {
@@ -223,9 +222,9 @@ internal enum DatabaseURLs {
 internal extension Application {
     var temporalClient: TemporalClient {
         try! TemporalClient(
-            target: .ipv4(address: "127.0.0.1", port: 7_233),
+            target: .dns(host: "temporal", port: 7_233),
             transportSecurity: .plaintext,
-            configuration: .init(instrumentation: .init(serverHostname: "127.0.0.1")),
+            configuration: .init(instrumentation: .init(serverHostname: "temporal")),
             logger: Logger(label: "temporal-client")
         )
     }
