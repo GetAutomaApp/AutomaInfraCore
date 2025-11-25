@@ -17,7 +17,7 @@ import SwiftUI
 /// Used to switch between different API environments
 internal enum BaseEnvironmentUrl: String, CaseIterable {
     /// Local development environment
-    case localhost = "http://localhost:8080"
+    case localhost = "http://localhost:6886"
     /// Production environment
     case production = "https://api-production.getautoma.app"
     /// Sandbox testing environment
