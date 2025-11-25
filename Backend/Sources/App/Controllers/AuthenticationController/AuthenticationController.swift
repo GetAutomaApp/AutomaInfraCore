@@ -61,17 +61,34 @@ internal struct AuthenticationController: RouteCollection {
         _ callback: @escaping (TemporalClient) async throws -> T
     ) async throws -> T {
         let temporalClient = request.temporalClient
-        return try await withThrowingTaskGroup { group in
-            group.addTask {
-                try await temporalClient.run()
-            }
 
+        // Start the Temporal worker in the background
+        let workerTask = Task {
+            do {
+                try await temporalClient.run()
+            } catch {
+                request.logger.error("Temporal worker failed: \(error)")
+                throw error
+            }
+        }
+
+        // Give the worker a moment to start
+        try await Task.sleep(for: .seconds(2))
+
+        var result: T
+        do {
+            // Execute the callback with the client
+            result = try await callback(temporalClient)
+
+            // Give any workflows a moment to start
             try await Task.sleep(for: .seconds(1))
 
-            let result = try await callback(temporalClient)
-            group.cancelAll()
-            return result
+        } catch {
+            request.logger.error("Error in Temporal operation: \(error)")
+            throw error
         }
+        workerTask.cancel()
+        return result
     }
 
     /// Registers a new user with the provided phone number and code.

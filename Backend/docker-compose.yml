@@ -159,6 +159,7 @@ services:
     image: temporalio/auto-setup:${TEMPORAL_VERSION}
     networks:
       - temporal-network
+      - backend
     ports:
       - 7233:7233
     volumes:

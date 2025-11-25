@@ -571,7 +571,7 @@ internal struct AuthCodeSender {
     }
 
     private func startSendCodeJob() async throws {
-        Task {
+        do {
             try await config.temporalClient.executeWorkflow(
                 type: SendTransactionalMessageWorkflow.self,
                 options: .init(
@@ -586,6 +586,23 @@ internal struct AuthCodeSender {
                     toPhoneNumber: config.payload.phoneNumber
                 )
             )
+
+            config.logger.info(
+                "Successfully started workflow",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                ]
+            )
+        } catch {
+            config.logger.error(
+                "Failed to start workflow",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "error": .string(error.localizedDescription),
+                    "phoneNumber": .string(config.payload.phoneNumber)
+                ]
+            )
+            throw error
         }
     }
 
