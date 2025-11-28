@@ -13,12 +13,19 @@ import Vapor
     import FoundationNetworking
 #endif
 
-internal struct SNSService {
+internal class SNSService {
     private let messageService: MessageService
+    private let clientAuth: AWSClient
 
     /// Initialize new SNSService instance
-    public init() {
+    public init() throws {
         messageService = MessageService()
+        clientAuth = try AWSClient(
+            credentialProvider: .static(
+                accessKeyId: Environment.getOrThrow("AWS_ACCESS_KEY_ID"),
+                secretAccessKey: Environment.getOrThrow("AWS_SECRET_ACCESS_KEY")
+            )
+        )
     }
 
     /// Send an SMS to a phone number
@@ -40,7 +47,6 @@ internal struct SNSService {
             let output = try await snsClient.publish(.init(message: message, phoneNumber: phoneNumber))
 
             try logSmsSentEvent(to: phoneNumber, message: message, logger: logger)
-
             return try extractMessageId(from: output, phoneNumber: phoneNumber, message: message, logger: logger)
         } catch {
             handleSmsError(error, to: phoneNumber, message: message, logger: logger)
@@ -49,12 +55,6 @@ internal struct SNSService {
     }
 
     private func createSNSClient() throws -> SNS {
-        let clientAuth = try AWSClient(
-            credentialProvider: .static(
-                accessKeyId: Environment.getOrThrow("AWS_ACCESS_KEY_ID"),
-                secretAccessKey: Environment.getOrThrow("AWS_SECRET_ACCESS_KEY")
-            )
-        )
         let region = try Environment.getOrThrow("AWS_DEFAULT_REGION")
         return SNS(client: clientAuth, region: .other(region))
     }
@@ -107,5 +107,9 @@ internal struct SNSService {
             event: "sending message: `\(message)`",
             logger: logger
         )
+    }
+
+    deinit {
+        try! clientAuth.syncShutdown()
     }
 }
