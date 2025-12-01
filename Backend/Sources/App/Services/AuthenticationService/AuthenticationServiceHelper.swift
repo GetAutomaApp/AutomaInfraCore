@@ -571,41 +571,20 @@ internal struct AuthCodeSender {
     }
 
     private func startSendCodeJob() async throws {
-        Task {
-            do {
-                try await config.temporalClient.executeWorkflow(
-                    type: SendTransactionalMessageWorkflow.self,
-                    options: .init(
-                        id: "send-transactional-message-\(config.payload.codeModelId)",
-                        taskQueue: "default-queue"
+        _ = try await config.temporalClient.startWorkflow(
+            type: SendTransactionalMessageWorkflow.self,
+            options: .init(
+                id: "send-transactional-message-\(config.payload.codeModelId)",
+                taskQueue: "default-queue"
+            ),
+            input: .init(
+                content: MessageFormatterService
+                    .craftVerificationCodeMessage(
+                        code: config.payload.code
                     ),
-                    input: .init(
-                        content: MessageFormatterService
-                            .craftVerificationCodeMessage(
-                                code: config.payload.code
-                            ),
-                        toPhoneNumber: config.payload.phoneNumber
-                    )
-                )
-
-                config.logger.info(
-                    "Successfully started workflow",
-                    metadata: [
-                        "to": .string("\(String(describing: Self.self)).\(#function)"),
-                    ]
-                )
-            } catch {
-                config.logger.error(
-                    "Failed to start workflow",
-                    metadata: [
-                        "to": .string("\(String(describing: Self.self)).\(#function)"),
-                        "error": .string(error.localizedDescription),
-                        "phoneNumber": .string(config.payload.phoneNumber)
-                    ]
-                )
-                throw error
-            }
-        }
+                toPhoneNumber: config.payload.phoneNumber
+            )
+        )
     }
 
     private func getCodeDeletionTime() -> Date {

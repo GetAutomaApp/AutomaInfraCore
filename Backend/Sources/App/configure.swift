@@ -7,31 +7,42 @@ import AutomaUtilities
 import Fluent
 import FluentPostgresDriver
 import JWT
-import Temporal
 import Vapor
 
 internal func configure(_ app: Application) async throws {
-    try await AppConfigurator(app: app).configure()
+    try await AppConfigurator(
+        app: app,
+        config: .init(
+            shouldSetupAPI: true
+        )
+    ).configure()
 }
 
 internal struct AppConfigurator {
     private let app: Application
+    private let config: AppConfiguratorConfig
     private let environment = Environment.get("ENVIRONMENT") ?? "local"
     private let primaryDatabaseURL: String? = try? DatabaseURLs.primary.get()
     private let regionalDatabaseURL: String? = try? DatabaseURLs.regional.get()
 
     /// Initializes Application
-    public init(app: Application) {
+    public init(app: Application, config: AppConfiguratorConfig) {
         self.app = app
+        self.config = config
     }
 
     /// Configures the entire application
     public func configure() async throws {
+        registerCommands()
         registerMiddleware()
         let hasDatabaseURLs = (primaryDatabaseURL != nil) || (regionalDatabaseURL != nil)
         if hasDatabaseURLs {
             try await configureWhenDatabaseURLsAvailable()
         }
+    }
+
+    private func registerCommands() {
+        app.asyncCommands.use(TemporalWorkerCommand(), as: "temporal-worker")
     }
 
     private func registerMiddleware() {
@@ -40,11 +51,13 @@ internal struct AppConfigurator {
 
     private func configureWhenDatabaseURLsAvailable() async throws {
         try await DatabaseConfigurator(app: app).configureDatabases()
-        try registerControllers()
         try await startPrometheusService()
-        try await setupTemporal()
-        try await addAuthenticationJWTKey()
-        configureServer()
+
+        if config.shouldSetupAPI {
+            try registerControllers()
+            try await addAuthenticationJWTKey()
+            configureServer()
+        }
     }
 
     private func registerControllers() throws {
@@ -55,11 +68,7 @@ internal struct AppConfigurator {
     }
 
     private func startPrometheusService() async throws {
-        if environment != "local" {
-            try await PrometheusService().startServer()
-            return
-        }
-        try await PrometheusService().startServer()
+        try await PrometheusService().startServer(port: config.metricsPort)
     }
 
     private func addAuthenticationJWTKey() async throws {
@@ -67,31 +76,18 @@ internal struct AppConfigurator {
         await app.jwt.keys.add(hmac: .init(stringLiteral: encryptionSecret), digestAlgorithm: .sha256)
     }
 
-    private func setupTemporal() async throws {
-        let worker = try TemporalWorker(
-            configuration: .init(
-                namespace: "default",
-                taskQueue: "default-queue",
-                instrumentation: .init(serverHostname: "temporal")
-            ),
-            target: .dns(host: "temporal", port: 7_233),
-            transportSecurity: .plaintext,
-            activities: [
-                ProfilePictureActivities().activities.createPicture,
-                TransactionalMessageActivities().activities.sendMessage
-            ],
-            workflows: [CreateProfilePictureWorkflow.self, SendTransactionalMessageWorkflow.self],
-            logger: Logger(label: "temporal-worker")
-        )
-        Task {
-            try await worker.run()
-        }
-        // wait for worker to startup
-        try await Task.sleep(for: .seconds(1))
-    }
-
     private func configureServer() {
         app.http.server.configuration.responseCompression = .enabled
+    }
+
+    public struct AppConfiguratorConfig {
+        let shouldSetupAPI: Bool
+        let metricsPort: UInt16
+
+        init(shouldSetupAPI: Bool = true, metricsPort: UInt16 = 6_834) {
+            self.shouldSetupAPI = shouldSetupAPI
+            self.metricsPort = metricsPort
+        }
     }
 }
 
@@ -216,22 +212,4 @@ internal enum DatabaseURLs {
     public static let primary: Result<String, Error> = Result { try Environment.getOrThrow("PRIMARY_POSTGRES_URL") }
     /// regional url most likely doesn't have write access, but allows for extremely fast reads
     public static let regional: Result<String, Error> = Result { try Environment.getOrThrow("REGIONAL_POSTGRES_URL") }
-}
-
-// TODO: refactor extensions to extensions directory
-internal extension Application {
-    var temporalClient: TemporalClient {
-        try! TemporalClient(
-            target: .dns(host: "temporal", port: 7_233),
-            transportSecurity: .plaintext,
-            configuration: .init(instrumentation: .init(serverHostname: "temporal")),
-            logger: Logger(label: "temporal-client")
-        )
-    }
-}
-
-internal extension Request {
-    var temporalClient: TemporalClient {
-        application.temporalClient
-    }
 }

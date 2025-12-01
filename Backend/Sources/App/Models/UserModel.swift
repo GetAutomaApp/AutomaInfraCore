@@ -86,25 +86,10 @@ public final class UserModel: Model, @unchecked Sendable {
     /// Converts the model to a `UserDTO`.
     /// - Returns: An instance of `UserDTO`.
     public func toDTO(logger: Logger) throws -> UserDTO {
-        let profilePictureUrl: String?
-        do {
-            guard
-                let profilePictureKey
-            else {
-                let userId = try requireID().uuidString
-                logger.error(
-                    "Profile picture key is nil, could not convert user model to DTO.",
-                    metadata: [
-                        "to": .string("\(String(describing: Self.self)).\(#function)"),
-                        "user_id": .string(userId),
-                    ]
-                )
-                throw URLError(.badURL)
-            }
-
-            profilePictureUrl = try TigrisService(logger: logger).getTigrisUrl(profilePictureKey)
-        } catch {
-            profilePictureUrl = nil
+        let profilePictureUrl: String? = if let profilePictureKey {
+            try TigrisService(logger: logger).getTigrisUrl(profilePictureKey)
+        } else {
+            nil
         }
 
         return .init(

@@ -29,6 +29,29 @@ services:
       - monitoring
       - backend
 
+  temporal-worker:
+    volumes:
+      - ./:/app/
+      - /app/.build
+      - api_build:/app/.build
+    build:
+      context: .
+      dockerfile: ./DevDockerfile
+      secrets:
+        - GITHUB_SSH_AUTHENTICATION_TOKEN
+    depends_on:
+      postgres:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+      temporal:
+        condition: service_started
+    environment:
+      RUN_COMMAND: "temporal-worker"
+      METRICS_PORT: "6835"
+    networks:
+      - monitoring
+      - backend
   postgres:
     image: postgres:latest
     container_name: postgres-container
