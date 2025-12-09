@@ -103,7 +103,7 @@ internal actor AuthenticationServiceHelper {
     }
 
     private func getRateLimitString() throws -> String {
-        try Environment.getOrThrow("AUTHENTICATION_CODE_RATE_LIMIT")
+        try Environment.getOrThrow("AUTHENTICATION_CODE_DISTANCE")
     }
 
     private func castCodeRateLimitToNumber(_ rateLimitString: String) throws -> Double {
@@ -571,20 +571,36 @@ internal struct AuthCodeSender {
     }
 
     private func startSendCodeJob() async throws {
-        _ = try await config.temporalClient.startWorkflow(
-            type: SendTransactionalMessageWorkflow.self,
-            options: .init(
-                id: "send-transactional-message-\(config.payload.codeModelId)",
-                taskQueue: "default-queue"
-            ),
-            input: .init(
-                content: MessageFormatterService
-                    .craftVerificationCodeMessage(
-                        code: config.payload.code
-                    ),
-                toPhoneNumber: config.payload.phoneNumber
+        do {
+            _ = try await config.temporalClient.startWorkflow(
+                type: SendTransactionalMessageWorkflow.self,
+                options: .init(
+                    id: "send-transactional-message-\(config.payload.codeModelId)",
+                    taskQueue: "default-queue"
+                ),
+                input: .init(
+                    content: MessageFormatterService
+                        .craftVerificationCodeMessage(
+                            code: config.payload.code
+                        ),
+                    toPhoneNumber: config.payload.phoneNumber
+                )
             )
-        )
+        } catch {
+            // Capture the current stack trace
+            let stackTrace = Thread.callStackSymbols.joined(separator: "\n")
+
+            config.logger.info(
+                "Error occurred while starting workflow to send authentication code",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "error": .string(error.localizedDescription),
+                    "stackTrace": .string(stackTrace),
+                ]
+            )
+
+            throw error
+        }
     }
 
     private func getCodeDeletionTime() -> Date {

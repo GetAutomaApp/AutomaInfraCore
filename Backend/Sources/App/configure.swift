@@ -10,12 +10,20 @@ import JWT
 import Vapor
 
 internal func configure(_ app: Application) async throws {
-    try await AppConfigurator(
-        app: app,
-        config: .init(
-            shouldSetupAPI: true
-        )
-    ).configure()
+    registerCommands(app: app)
+    let shouldSetupAPI = !["temporal-worker"].contains(CommandLine.arguments.last)
+    if shouldSetupAPI {
+        try await AppConfigurator(
+            app: app,
+            config: .init(
+                shouldSetupAPI: true
+            )
+        ).configure()
+    }
+}
+
+internal func registerCommands(app: Application) {
+    app.asyncCommands.use(TemporalWorkerCommand(), as: "temporal-worker")
 }
 
 internal struct AppConfigurator {
@@ -33,16 +41,11 @@ internal struct AppConfigurator {
 
     /// Configures the entire application
     public func configure() async throws {
-        registerCommands()
         registerMiddleware()
         let hasDatabaseURLs = (primaryDatabaseURL != nil) || (regionalDatabaseURL != nil)
         if hasDatabaseURLs {
             try await configureWhenDatabaseURLsAvailable()
         }
-    }
-
-    private func registerCommands() {
-        app.asyncCommands.use(TemporalWorkerCommand(), as: "temporal-worker")
     }
 
     private func registerMiddleware() {
@@ -53,6 +56,7 @@ internal struct AppConfigurator {
         try await DatabaseConfigurator(app: app).configureDatabases()
         try await startPrometheusService()
 
+        app.logger.info("Should setup API: \(config.shouldSetupAPI). Environment: \(environment)")
         if config.shouldSetupAPI {
             try registerControllers()
             try await addAuthenticationJWTKey()

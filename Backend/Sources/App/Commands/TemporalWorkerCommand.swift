@@ -14,6 +14,7 @@ struct TemporalWorkerCommand: AsyncCommand {
     }
 
     func run(using context: CommandContext, signature _: Signature) async throws {
+        let result = 5 ... 1
         try await AppConfigurator(
             app: context.application,
             config: .init(
@@ -26,10 +27,27 @@ struct TemporalWorkerCommand: AsyncCommand {
 
     private func setupTemporal(logger: Logger) async throws {
         logSetupTemporalWorkerStarted(logger)
-        let temporalServerHostname = try getTemporalServerHostname()
-        let worker = try getTemporalWorker(hostname: temporalServerHostname)
+        let worker = try getTemporalWorker(
+            hostname: TemporalClient.getServerHostnameFromEnv()
+        )
         logSetupTemporalWorkerConfigured(logger)
-        try await worker.run()
+        do {
+            try await worker.run()
+        } catch {
+            // Capture the current stack trace
+            let stackTrace = Thread.callStackSymbols.joined(separator: "\n")
+
+            logger.info(
+                "Error occurred while running tmeporal worker",
+                metadata: [
+                    "to": .string("\(String(describing: Self.self)).\(#function)"),
+                    "error": .string(error.localizedDescription),
+                    "stackTrace": .string(stackTrace),
+                ]
+            )
+
+            throw error
+        }
     }
 
     private func logSetupTemporalWorkerStarted(_ logger: Logger) {
@@ -39,10 +57,6 @@ struct TemporalWorkerCommand: AsyncCommand {
                 "to": .string("\(String(describing: Self.self)).\(#function)"),
             ]
         )
-    }
-
-    private func getTemporalServerHostname() throws -> String {
-        try Environment.getOrThrow("TEMPORAL_WORKER_HOSTNAME")
     }
 
     private func getTemporalWorker(hostname temporalServerHostname: String) throws -> TemporalWorker {

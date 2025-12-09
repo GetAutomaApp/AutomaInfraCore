@@ -20,6 +20,14 @@ services:
         condition: service_healthy
       temporal:
         condition: service_started
+      grafana:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      loki:
+        condition: service_started
+      promtail:
+        condition: service_started
     environment:
       RUN_COMMAND: "serve --hostname 0.0.0.0"
       METRICS_PORT: "6834"
@@ -33,7 +41,7 @@ services:
     volumes:
       - ./:/app/
       - /app/.build
-      - api_build:/app/.build
+      - worker_build:/app/.build
     build:
       context: .
       dockerfile: ./DevDockerfile
@@ -45,6 +53,14 @@ services:
       localstack:
         condition: service_healthy
       temporal:
+        condition: service_started
+      grafana:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      loki:
+        condition: service_started
+      promtail:
         condition: service_started
     environment:
       RUN_COMMAND: "temporal-worker"

@@ -8,9 +8,11 @@ import Vapor
 
 internal extension Application {
     var temporalClient: TemporalClient {
-        let temporalServerHostname = try! Environment.getOrThrow("TEMPORAL_WORKER_HOSTNAME")
-        return try! TemporalClient(
-            target: .dns(host: temporalServerHostname, port: 7_233),
+        try! TemporalClient(
+            target: .dns(
+                host: TemporalClient.getServerHostnameFromEnv(),
+                port: 7_233
+            ),
             transportSecurity: .plaintext,
             configuration: .init(instrumentation: .init(serverHostname: "temporal")),
             logger: Logger(label: "temporal-client")

@@ -1,0 +1,34 @@
+FROM swift:6.2.0-jammy AS build
+
+RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
+    && apt-get -q update \
+    && apt-get -q dist-upgrade -y \
+    && apt-get -q install -y \
+    libjemalloc2 \
+    ca-certificates \
+    tzdata \
+    && apt-get install bash \
+    && apt-get install -y openssl libssl-dev libcurl4 libxml2 \
+    && rm -r /var/lib/apt/lists/*
+
+WORKDIR /build
+
+RUN --mount=type=secret,id=GITHUB_SSH_AUTHENTICATION_TOKEN \
+    TOKEN=$(cat /run/secrets/GITHUB_SSH_AUTHENTICATION_TOKEN) && \
+    git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "https://github.com/"
+
+COPY Package.swift .
+COPY Package.resolved .
+
+COPY DataTypes ./DataTypes
+RUN --mount=type=cache,target=/build/.build swift package resolve
+
+COPY . .
+
+# Let Docker bind to port 8080
+EXPOSE 8080
+
+# Expose PrometheusService server port 
+EXPOSE 6834
+
+CMD /bin/bash -c "sleep 100000"

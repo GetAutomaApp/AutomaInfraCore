@@ -1,7 +1,7 @@
 # ================================
 # Build image
 # ================================
-FROM swift:6.2-noble AS build
+FROM swift:6.2.0-jammy AS build
 
 # Install OS updates
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
@@ -13,43 +13,43 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
 # Set up a build area
 WORKDIR /build
 
-RUN --mount=type=secret,id=GITHUB_SSH_AUTHENTICATION_TOKEN \
-    TOKEN=$(cat /run/secrets/GITHUB_SSH_AUTHENTICATION_TOKEN) && \
-    git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "https://github.com/"
-
 # First just resolve dependencies.
 # This creates a cached layer that can be reused
 # as long as your Package.swift/Package.resolved
 # files do not change.
-COPY ./Package.* ./
+
+RUN --mount=type=secret,id=GITHUB_SSH_AUTHENTICATION_TOKEN \
+    TOKEN=$(cat /run/secrets/GITHUB_SSH_AUTHENTICATION_TOKEN) && \
+    git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "https://github.com/"
+
+COPY Package.swift .
+COPY Package.resolved .
 
 COPY DataTypes ./DataTypes
-RUN swift package resolve \
-    $([ -f ./Package.resolved ] && echo "--force-resolved-versions" || true)
-
+RUN --mount=type=cache,target=/build/.build swift package resolve
 # Copy entire repo into container
 COPY . .
 
-RUN mkdir /staging
-
-# Build the application, with optimizations, with static linking, and using jemalloc
+# Build everything, with optimizations, with static linking, and using jemalloc
 # N.B.: The static version of jemalloc is incompatible with the static Swift runtime.
-RUN --mount=type=cache,target=/build/.build \
-    swift build -c release \
-    --product App \
+# RUN --mount=type=cache,target=/build/.build swift build -c release \
+RUN --mount=type=cache,target=/build/.build swift build \
     --static-swift-stdlib \
-    -Xlinker -ljemalloc \
-    -Xswiftc -g && \
-    # Copy main executable to staging area
-    cp "$(swift build -c release --show-bin-path)/App" /staging && \
-    # Copy resources bundled by SPM to staging area
-    find -L "$(swift build -c release --show-bin-path)" -regex '.*\.resources$' -exec cp -Ra {} /staging \;
+    -Xlinker -ljemalloc
 
 # Switch to the staging area
 WORKDIR /staging
 
+# Copy main executable to staging area
+# RUN --mount=type=cache,target=/build/.build cp "$(swift build --package-path /build -c release --show-bin-path)/App" ./
+RUN --mount=type=cache,target=/build/.build cp "$(swift build --package-path /build --show-bin-path)/App" ./
+
 # Copy static swift backtracer binary to staging area
 RUN cp "/usr/libexec/swift/linux/swift-backtrace-static" ./
+
+# Copy resources bundled by SPM to staging area
+# RUN --mount=type=cache,target=/build/.build find -L "$(swift build --package-path /build -c release --show-bin-path)/" -regex '.*\.resources$' -exec cp -Ra {} ./ \;
+RUN --mount=type=cache,target=/build/.build find -L "$(swift build --package-path /build --show-bin-path)/" -regex '.*\.resources$' -exec cp -Ra {} ./ \;
 
 # Copy any resources from the public directory and views directory if the directories exist
 # Ensure that by default, neither the directory nor any of its contents are writable.
@@ -59,7 +59,7 @@ RUN [ -d /build/Resources ] && { mv /build/Resources ./Resources && chmod -R a-w
 # ================================
 # Run image
 # ================================
-FROM ubuntu:noble
+FROM ubuntu:jammy
 
 # Make sure all system packages are up to date, and install only essential packages.
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
@@ -69,10 +69,8 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
     libjemalloc2 \
     ca-certificates \
     tzdata \
-    # If your app or its dependencies import FoundationNetworking, also install `libcurl4`.
-    libcurl4 \
-    # If your app or its dependencies import FoundationXML, also install `libxml2`.
-    libxml2 \
+    && apt-get install bash \
+    && apt-get install -y openssl libssl-dev libcurl4 libxml2 \
     && rm -r /var/lib/apt/lists/*
 
 # Create a vapor user and group with /app as its home directory
@@ -97,4 +95,3 @@ EXPOSE 8080
 EXPOSE 6834
 
 CMD /bin/bash -c "eval './App $RUN_COMMAND'"
-# CMD /bin/bash -c "sleep 100000"

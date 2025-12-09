@@ -1,0 +1,5 @@
+app = 'automa-backend-temporal-postgres-sandbox'
+primary_region = 'jnb'
+
+[build]
+-
