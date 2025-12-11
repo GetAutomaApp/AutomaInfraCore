@@ -9,7 +9,7 @@ import Vapor
 internal extension Application {
     var temporalClient: TemporalClient {
         let hostname = try! TemporalClient.getServerHostnameFromEnv() ?? "temporal"
-        try! TemporalClient(
+        return try! TemporalClient(
             target: .dns(
                 host: hostname,
                 port: 7_233
