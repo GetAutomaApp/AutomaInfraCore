@@ -1,5 +1,5 @@
 {
-  "originHash" : "25741725534bf349d85342c3c4f09746825ae3902642ee651a2b1cc0ac192cd4",
+  "originHash" : "da402b8112bb9effe58819a094f653dad53d0e1dc5c9038d949d2b991c47a36e",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -330,8 +330,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-configuration.git",
       "state" : {
-        "revision" : "9d5e40727efd060fb9b41b69932738f478abaa43",
-        "version" : "0.2.0"
+        "revision" : "6ffef195ed4ba98ee98029970c94db7edc60d4c6",
+        "version" : "1.0.1"
       }
     },
     {
@@ -546,8 +546,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-temporal-sdk.git",
       "state" : {
-        "revision" : "35235775afe122a2a5e1fd3e400f02d3dc3b6d1b",
-        "version" : "0.4.0"
+        "revision" : "55a222f02f279333489c7a1657195d7489a92cf2",
+        "version" : "0.6.0"
       }
     },
     {

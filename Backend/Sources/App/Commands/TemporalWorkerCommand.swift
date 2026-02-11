@@ -1,5 +1,5 @@
 // TemporalWorkerCommand.swift
-// Copyright (c) 2025 GetAutomaApp
+// Copyright (c) 2026 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
@@ -14,7 +14,6 @@ struct TemporalWorkerCommand: AsyncCommand {
     }
 
     func run(using context: CommandContext, signature _: Signature) async throws {
-        let result = 5 ... 1
         try await AppConfigurator(
             app: context.application,
             config: .init(

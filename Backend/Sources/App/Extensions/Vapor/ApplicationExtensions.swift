@@ -1,5 +1,5 @@
 // ApplicationExtensions.swift
-// Copyright (c) 2025 GetAutomaApp
+// Copyright (c) 2026 GetAutomaApp
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
@@ -8,7 +8,7 @@ import Vapor
 
 internal extension Application {
     var temporalClient: TemporalClient {
-        let hostname = try! TemporalClient.getServerHostnameFromEnv() ?? "temporal"
+        let hostname = try! TemporalClient.getServerHostnameFromEnv()
         return try! TemporalClient(
             target: .dns(
                 host: hostname,
