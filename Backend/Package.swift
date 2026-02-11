@@ -1,4 +1,4 @@
-// swift-tools-version:6.0
+// swift-tools-version:6.2
 import PackageDescription
 
 /// Initializes Package
@@ -24,16 +24,13 @@ public let package = Package(
         .package(url: "https://github.com/MacPaw/OpenAI.git", from: "0.4.5"),
         .package(url: "https://github.com/soto-project/soto.git", from: "7.3.0"),
         .package(url: "https://github.com/swift-server/swift-prometheus.git", from: "2.0.0"),
-        .package(
-            url: "https://github.com/m-barthelemy/vapor-queues-fluent-driver.git",
-            from: "3.0.0-beta1"
-        ),
         .package(url: "https://github.com/nmdias/FeedKit.git", from: "10.0.0-rc.3"),
         .package(url: "https://github.com/GetAutomaApp/swift-retry.git", branch: "main"),
         .package(url: "https://github.com/GetAutomaApp/Fakery", branch: "master"),
         .package(url: "https://github.com/GetAutomaApp/AutomaUtilities", branch: "main"),
         .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.11.1"),
         .package(url: "https://github.com/lovetodream/swift-log-loki.git", branch: "main"),
+        .package(url: "https://github.com/apple/swift-temporal-sdk.git", from: "0.6.0")
     ],
     targets: [
         .executableTarget(
@@ -52,13 +49,13 @@ public let package = Package(
                 .product(name: "SotoS3", package: "soto"),
                 .product(name: "SotoSNS", package: "soto"),
                 .product(name: "Prometheus", package: "swift-prometheus"),
-                .product(name: "QueuesFluentDriver", package: "vapor-queues-fluent-driver"),
                 .product(name: "SotoTextract", package: "soto"),
                 .product(name: "FeedKit", package: "FeedKit"),
                 .product(name: "DMRetry", package: "swift-retry"),
                 .product(name: "AutomaUtilities", package: "AutomaUtilities"),
                 "SwiftSoup",
                 .product(name: "LoggingLoki", package: "swift-log-loki"),
+                .product(name: "Temporal", package: "swift-temporal-sdk"),
             ],
             exclude: [
                 "Documentation.md",

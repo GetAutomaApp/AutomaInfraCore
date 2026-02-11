@@ -4,6 +4,7 @@
 // All rights reserved.
 
 import Fluent
+import Temporal
 import Vapor
 
 /// Extension on rquest to add DB aliases
@@ -16,5 +17,11 @@ internal extension Request {
     /// Read-Only DB
     var dbReadOnly: Database {
         db(.readOnly)
+    }
+}
+
+internal extension Request {
+    var temporalClient: TemporalClient {
+        application.temporalClient
     }
 }

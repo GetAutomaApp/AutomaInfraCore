@@ -7,7 +7,7 @@ import AutomaUtilities
 import DataTypes
 import Fluent
 import JWT
-import Queues
+import Temporal
 import Vapor
 
 internal struct UserRegistrationService: AuthenticationService {
@@ -70,7 +70,15 @@ internal struct UserRegistrationService: AuthenticationService {
         let userDTO = try user.toDTO(logger: config.logger)
         let profilePictureKey = try ProfilePictureService(logger: config.logger).generateImageKey(for: userDTO)
 
-        try await config.queue.dispatch(ProfilePictureAsyncJob.self, .init(payload: userDTO))
+        let temporalClient = config.temporalClient
+        _ = try await temporalClient.startWorkflow(
+            type: CreateProfilePictureWorkflow.self,
+            options: .init(
+                id: "create-user-profile-pic-\(userDTO.id?.uuidString ?? userDTO.username)-\(Date())",
+                taskQueue: "default-queue"
+            ),
+            input: .init(payload: userDTO)
+        )
 
         user.profilePictureKey = profilePictureKey
 
@@ -99,8 +107,8 @@ internal struct UserRegistrationConfig: AuthenticationServiceConfig {
     public let readDb: Database
     /// Logger
     public let logger: Logger
-    /// Queue to submit messages & generation stuff to
-    public let queue: Queue
+    // Temporal client to execute workflows
+    public let temporalClient: TemporalClient
     /// Payload to register user
     public let payload: UserRegistrationPayload
 }

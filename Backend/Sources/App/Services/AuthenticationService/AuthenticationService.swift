@@ -7,7 +7,7 @@ import AutomaUtilities
 import DataTypes
 import Fluent
 import JWT
-import Queues
+import Temporal
 import Vapor
 
 internal struct RootAuthenticationService: AuthenticationService {
@@ -24,13 +24,13 @@ internal struct RootAuthenticationService: AuthenticationService {
     /// Register a user
     public func register(
         _ payload: UserRegistrationPayload,
-        queue: Queue
+        temporalClient: TemporalClient
     ) async throws -> AuthenticationTokensPayloadDTO {
         var registrator = UserRegistrationService(.init(
             writeDb: config.writeDb,
             readDb: config.readDb,
             logger: config.logger,
-            queue: queue,
+            temporalClient: temporalClient,
             payload: payload
         ))
         return try await registrator.register()
@@ -48,7 +48,9 @@ internal struct RootAuthenticationService: AuthenticationService {
     }
 
     /// Send authentication code
-    public func sendAuthCode(phoneNumber: String, queue: Queue) async throws -> AuthenticationCodeResponseDTO {
+    public func sendAuthCode(phoneNumber: String,
+                             temporalClient: TemporalClient) async throws -> AuthenticationCodeResponseDTO
+    {
         let code = RandomService.randomCode()
         logAuthCodeAttempt(phoneNumber: phoneNumber, code: code)
 
@@ -60,9 +62,9 @@ internal struct RootAuthenticationService: AuthenticationService {
 
         return try await sendOrHandleAuthCode(
             phoneNumber: phoneNumber,
-            queue: queue,
             code: code,
-            codeModelId: codeModelId
+            codeModelId: codeModelId,
+            temporalClient: temporalClient
         )
     }
 
@@ -145,9 +147,9 @@ internal struct RootAuthenticationService: AuthenticationService {
 
     private func sendOrHandleAuthCode(
         phoneNumber: String,
-        queue: Queue,
         code: String,
-        codeModelId: UUID
+        codeModelId: UUID,
+        temporalClient: TemporalClient,
     ) async throws -> AuthenticationCodeResponseDTO {
         do {
             return try await helper.sendAuthCode(
@@ -156,7 +158,7 @@ internal struct RootAuthenticationService: AuthenticationService {
                     phoneNumber: phoneNumber,
                     codeModelId: codeModelId
                 ),
-                queue: queue
+                temporalClient: temporalClient
             )
         } catch let error as GenericErrors {
             await helper.sendTelemetryDataOnAuthCodeSendFail(

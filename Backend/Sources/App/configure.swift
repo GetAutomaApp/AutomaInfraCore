@@ -7,29 +7,41 @@ import AutomaUtilities
 import Fluent
 import FluentPostgresDriver
 import JWT
-import Queues
-import QueuesFluentDriver
 import Vapor
 
 internal func configure(_ app: Application) async throws {
-    try await AppConfigurator(app: app).configure()
+    registerCommands(app: app)
+    let shouldSetupAPI = !["temporal-worker"].contains(CommandLine.arguments.last)
+    if shouldSetupAPI {
+        try await AppConfigurator(
+            app: app,
+            config: .init(
+                shouldSetupAPI: true
+            )
+        ).configure()
+    }
+}
+
+internal func registerCommands(app: Application) {
+    app.asyncCommands.use(TemporalWorkerCommand(), as: "temporal-worker")
 }
 
 internal struct AppConfigurator {
     private let app: Application
+    private let config: AppConfiguratorConfig
     private let environment = Environment.get("ENVIRONMENT") ?? "local"
     private let primaryDatabaseURL: String? = try? DatabaseURLs.primary.get()
     private let regionalDatabaseURL: String? = try? DatabaseURLs.regional.get()
 
     /// Initializes Application
-    public init(app: Application) {
+    public init(app: Application, config: AppConfiguratorConfig) {
         self.app = app
+        self.config = config
     }
 
     /// Configures the entire application
     public func configure() async throws {
         registerMiddleware()
-        registerQueues()
         let hasDatabaseURLs = (primaryDatabaseURL != nil) || (regionalDatabaseURL != nil)
         if hasDatabaseURLs {
             try await configureWhenDatabaseURLsAvailable()
@@ -40,20 +52,16 @@ internal struct AppConfigurator {
         app.middleware.use(ErrorStringMiddleware())
     }
 
-    private func registerQueues() {
-        if ["local", "testing"].contains(environment) == false {
-            app.asyncCommands.use(QueuesCommand(application: app), as: "vapor-queues")
-        }
-    }
-
     private func configureWhenDatabaseURLsAvailable() async throws {
         try await DatabaseConfigurator(app: app).configureDatabases()
-        try registerControllers()
         try await startPrometheusService()
-        try await addAuthenticationJWTKey()
-        configureQueues()
-        addJobsToQueue()
-        configureServer()
+
+        app.logger.info("Should setup API: \(config.shouldSetupAPI). Environment: \(environment)")
+        if config.shouldSetupAPI {
+            try registerControllers()
+            try await addAuthenticationJWTKey()
+            configureServer()
+        }
     }
 
     private func registerControllers() throws {
@@ -64,17 +72,7 @@ internal struct AppConfigurator {
     }
 
     private func startPrometheusService() async throws {
-        if environment != "local" {
-            try await PrometheusService().startServer()
-            return
-        }
-
-        switch app.environment.appMode {
-        case .queue:
-            try await PrometheusService().startServer(port: 6_835)
-        default:
-            try await PrometheusService().startServer()
-        }
+        try await PrometheusService().startServer(port: config.metricsPort)
     }
 
     private func addAuthenticationJWTKey() async throws {
@@ -82,19 +80,18 @@ internal struct AppConfigurator {
         await app.jwt.keys.add(hmac: .init(stringLiteral: encryptionSecret), digestAlgorithm: .sha256)
     }
 
-    private func configureQueues() {
-        app.queues.use(.fluent(useSoftDeletes: true))
-        app.queues.configuration.workerCount = 1
-        app.queues.configuration.refreshInterval = .seconds(5)
-    }
-
-    private func addJobsToQueue() {
-        app.queues.add(TransactionalMessageAsyncJob())
-        app.queues.add(ProfilePictureAsyncJob())
-    }
-
     private func configureServer() {
         app.http.server.configuration.responseCompression = .enabled
+    }
+
+    public struct AppConfiguratorConfig {
+        let shouldSetupAPI: Bool
+        let metricsPort: UInt16
+
+        init(shouldSetupAPI: Bool = true, metricsPort: UInt16 = 6_834) {
+            self.shouldSetupAPI = shouldSetupAPI
+            self.metricsPort = metricsPort
+        }
     }
 }
 
@@ -133,7 +130,6 @@ internal struct DatabaseConfigurator {
         app.migrations.add(JWTTokenShouldBeBoundToParentUserObjectMigration1735140054())
         app.migrations.add(UserProfileAddProfilePictureMigration1735216565())
         app.migrations.add(UserProfileConvertIdToImageKeyMigration1735294202())
-        app.migrations.add(JobMetadataMigrate())
         app.migrations.add(RemoveUserStorageMigration1739456565())
         app.migrations.add(AddAcceptedColumnMigration1740658649())
         app.migrations.add(TwitterOAuthTokenMigration1741687313())

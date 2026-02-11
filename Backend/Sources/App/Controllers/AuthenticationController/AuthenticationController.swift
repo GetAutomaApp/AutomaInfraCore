@@ -5,6 +5,7 @@
 
 import DataTypes
 import Fluent
+import Temporal
 import Vapor
 
 /// Controller for handling authentication-related routes.
@@ -47,9 +48,47 @@ internal struct AuthenticationController: RouteCollection {
             throw GenericErrors.userAlreadyExists
         }
 
-        return try await authService.sendAuthCode(
-            phoneNumber: dto.phoneNumber, queue: req.queue
-        )
+        return try await useTemporalClient(request: req) { temporalClient in
+            try await authService.sendAuthCode(
+                phoneNumber: dto.phoneNumber,
+                temporalClient: temporalClient
+            )
+        }
+    }
+
+    private func useTemporalClient<T>(
+        request: Request,
+        _ callback: @escaping (TemporalClient) async throws -> T
+    ) async throws -> T {
+        let temporalClient = request.temporalClient
+
+        // Start the Temporal worker in the background
+        let workerTask = Task {
+            do {
+                try await temporalClient.run()
+            } catch {
+                request.logger.error("Temporal worker failed: \(error)")
+                throw error
+            }
+        }
+
+        // Give the worker a moment to start
+        try await Task.sleep(for: .seconds(2))
+
+        var result: T
+        do {
+            // Execute the callback with the client
+            result = try await callback(temporalClient)
+
+            // Give any workflows a moment to start
+            try await Task.sleep(for: .seconds(1))
+
+        } catch {
+            request.logger.error("Error in Temporal operation: \(error)")
+            throw error
+        }
+        workerTask.cancel()
+        return result
     }
 
     /// Registers a new user with the provided phone number and code.
@@ -69,7 +108,12 @@ internal struct AuthenticationController: RouteCollection {
             throw GenericErrors.userAlreadyExists
         }
 
-        return try await authService.register(.init(authCodePayload: dto, signer: req.jwt), queue: req.queue)
+        return try await useTemporalClient(request: req) { temporalClient in
+            try await authService.register(
+                .init(authCodePayload: dto, signer: req.jwt),
+                temporalClient: temporalClient
+            )
+        }
     }
 
     /// Sends a login code to the user's phone number.
@@ -90,9 +134,11 @@ internal struct AuthenticationController: RouteCollection {
             throw GenericErrors.userNotFound
         }
 
-        return try await authService.sendAuthCode(
-            phoneNumber: dto.phoneNumber, queue: req.queue
-        )
+        return try await useTemporalClient(request: req) { temporalClient in
+            try await authService.sendAuthCode(
+                phoneNumber: dto.phoneNumber, temporalClient: temporalClient
+            )
+        }
     }
 
     /// Logs in a user with the provided phone number and code.
