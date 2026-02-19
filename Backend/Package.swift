@@ -1,11 +1,11 @@
-// swift-tools-version:6.2
+// swift-tools-version:6.2.3
 import PackageDescription
 
 /// Initializes Package
 public let package = Package(
     name: "Backend",
     platforms: [
-        .macOS(.v15),
+        .macOS(.v15)
     ],
     dependencies: [
         // 💧 A server-side Swift web framework.
@@ -30,7 +30,7 @@ public let package = Package(
         .package(url: "https://github.com/GetAutomaApp/AutomaUtilities", branch: "main"),
         .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.11.1"),
         .package(url: "https://github.com/lovetodream/swift-log-loki.git", branch: "main"),
-        .package(url: "https://github.com/apple/swift-temporal-sdk.git", from: "0.6.0")
+        .package(url: "https://github.com/apple/swift-temporal-sdk.git", from: "0.6.0"),
     ],
     targets: [
         .executableTarget(
@@ -58,7 +58,7 @@ public let package = Package(
                 .product(name: "Temporal", package: "swift-temporal-sdk"),
             ],
             exclude: [
-                "Documentation.md",
+                "Documentation.md"
             ],
             swiftSettings: swiftSettings,
             linkerSettings: [

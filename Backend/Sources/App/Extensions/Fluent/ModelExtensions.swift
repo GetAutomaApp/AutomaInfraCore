@@ -4,6 +4,7 @@
 // All rights reserved.
 
 import Fluent
+import Foundation
 
 /// Extension on model to check if a specific row with id exists
 internal extension Model {
