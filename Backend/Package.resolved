@@ -34,7 +34,7 @@
       "location" : "https://github.com/GetAutomaApp/AutomaUtilities",
       "state" : {
         "branch" : "main",
-        "revision" : "331cb7c30e544907a79d0731df268ad96f98700f"
+        "revision" : "1c1d3f32c8efc8b844aa785b7bfe2b8bc14955eb"
       }
     },
     {
@@ -98,6 +98,15 @@
       "state" : {
         "revision" : "de38230104cf63ef4843cb569ba11c13f8165685",
         "version" : "0.26.2"
+      }
+    },
+    {
+      "identity" : "grpc-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/grpc/grpc-swift.git",
+      "state" : {
+        "revision" : "f857994e146f5146d702e9c31ac6f3c27d55d18a",
+        "version" : "1.27.0"
       }
     },
     {
@@ -209,6 +218,33 @@
       }
     },
     {
+      "identity" : "opentelemetry-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/open-telemetry/opentelemetry-swift.git",
+      "state" : {
+        "revision" : "df57cc4fd0b4cf4f9d715253c6aaba4b6912f7e0",
+        "version" : "2.3.0"
+      }
+    },
+    {
+      "identity" : "opentelemetry-swift-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/open-telemetry/opentelemetry-swift-core.git",
+      "state" : {
+        "revision" : "240c8d5e36c3c7b774ed961325369f0b1f2c965f",
+        "version" : "2.3.0"
+      }
+    },
+    {
+      "identity" : "opentracing-objc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/undefinedlabs/opentracing-objc",
+      "state" : {
+        "revision" : "18c1a35ca966236cee0c5a714a51a73ff33384c1",
+        "version" : "0.5.2"
+      }
+    },
+    {
       "identity" : "phonenumberkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/marmelroy/PhoneNumberKit",
@@ -231,8 +267,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/postgres-nio.git",
       "state" : {
-        "revision" : "d578b86fb2c8321b114d97cd70831d1a3e9531a6",
-        "version" : "1.30.1"
+        "revision" : "7fa45c5a1f6e79338a26e18121210a87389f7a67",
+        "version" : "1.31.0"
       }
     },
     {
@@ -510,8 +546,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-server/swift-service-lifecycle.git",
       "state" : {
-        "revision" : "1de37290c0ab3c5a96028e0f02911b672fd42348",
-        "version" : "2.9.1"
+        "revision" : "89888196dd79c61c50bca9a103d8114f32e1e598",
+        "version" : "2.10.1"
       }
     },
     {
@@ -557,6 +593,15 @@
       "state" : {
         "revision" : "d86f244ed497d48012782e2f59c985a55e77b3f5",
         "version" : "2.11.3"
+      }
+    },
+    {
+      "identity" : "thrift-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/undefinedlabs/Thrift-Swift",
+      "state" : {
+        "revision" : "18ff09e6b30e589ed38f90a1af23e193b8ecef8e",
+        "version" : "1.1.2"
       }
     },
     {

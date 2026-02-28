@@ -28,6 +28,8 @@ services:
         condition: service_started
       promtail:
         condition: service_started
+      tempo:
+        condition: service_started
     environment:
       RUN_COMMAND: "serve --hostname 0.0.0.0"
       METRICS_PORT: "6834"
@@ -134,6 +136,18 @@ services:
       - "3000:3000"
     networks:
       - monitoring
+  tempo:
+    image: grafana/tempo:latest
+    command:
+      - "-config.file=/etc/tempo/local-config.yaml"
+    volumes:
+      - ./infra/compose-services-configurations/tempo:/etc/tempo:ro
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    networks:
+      - monitoring
+      - backend
 
   prometheus:
     image: prom/prometheus

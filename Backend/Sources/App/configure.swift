@@ -77,11 +77,18 @@ internal struct AppConfigurator {
 
     private func addAuthenticationJWTKey() async throws {
         let encryptionSecret = try Environment.getOrThrow("JWT_ENCRYPTION_SECRET")
-        await app.jwt.keys.add(hmac: .init(stringLiteral: encryptionSecret), digestAlgorithm: .sha256)
+        await app.jwt.keys.add(
+            hmac: .init(stringLiteral: encryptionSecret), digestAlgorithm: .sha256)
     }
 
     private func configureServer() {
         app.http.server.configuration.responseCompression = .enabled
+    }
+
+    private func startTracing() {
+        TracingService.configureGrafanaTempoTracing(
+            serviceName: "automa-backend"
+        )
     }
 
     public struct AppConfiguratorConfig {
@@ -113,13 +120,15 @@ internal struct DatabaseConfigurator {
     }
 
     private func registerDatabases() throws {
-        try app.databases.use(.postgres(
-            url: DatabaseURLs.primary.get()
-        ), as: .primary)
+        try app.databases.use(
+            .postgres(
+                url: DatabaseURLs.primary.get()
+            ), as: .primary)
 
-        try app.databases.use(.postgres(
-            url: DatabaseURLs.regional.get()
-        ), as: .readOnly)
+        try app.databases.use(
+            .postgres(
+                url: DatabaseURLs.regional.get()
+            ), as: .readOnly)
     }
 
     private func addMigrations() {
@@ -162,7 +171,7 @@ public struct DatabaseSeeder {
                 "Could not convert seed oauth token ID to UUID, this should never happen.",
                 metadata: [
                     "to": .string("seedDatabase"),
-                    "token": .string(envTokenId)
+                    "token": .string(envTokenId),
                 ]
             )
         }
@@ -175,7 +184,7 @@ public struct DatabaseSeeder {
                 "Could not convert seed user token ID to UUID, this should never happen.",
                 metadata: [
                     "to": .string("seedDatabase"),
-                    "token": .string(envUserTokenId)
+                    "token": .string(envUserTokenId),
                 ]
             )
         }
@@ -213,7 +222,11 @@ public struct DatabaseSeeder {
 
 internal enum DatabaseURLs {
     /// primary database url has read & write access
-    public static let primary: Result<String, Error> = Result { try Environment.getOrThrow("PRIMARY_POSTGRES_URL") }
+    public static let primary: Result<String, Error> = Result {
+        try Environment.getOrThrow("PRIMARY_POSTGRES_URL")
+    }
     /// regional url most likely doesn't have write access, but allows for extremely fast reads
-    public static let regional: Result<String, Error> = Result { try Environment.getOrThrow("REGIONAL_POSTGRES_URL") }
+    public static let regional: Result<String, Error> = Result {
+        try Environment.getOrThrow("REGIONAL_POSTGRES_URL")
+    }
 }
