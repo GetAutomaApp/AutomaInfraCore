@@ -7,3 +7,13 @@ TODOS:
 - [ ] FUTURE: Fix swift protobuf package warnings (find upstream package, make a pull request to swift protobuf to support latest 
     swift version - fix warnings) and update upstream package `Package.swift` to use 
     latest protobuf version.
+
+Local DB admin:
+- `docker compose --env-file .env.local up -d pgadmin`
+- Open `http://127.0.0.1:5050`
+- Sign in with `admin@example.com` / `admin`
+- The Postgres server is preconfigured from `PRIMARY_POSTGRES_URL` in `.env.local`
+
+Hoppscotch:
+- `docker compose --env-file .env.local up -d hoppscotch`
+- Open `http://127.0.0.1:3123`

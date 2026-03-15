@@ -3,8 +3,8 @@
 // All source code and related assets are the property of GetAutomaApp.
 // All rights reserved.
 
+import AutomaUtilities
 import Logging
-import LoggingLoki
 import NIOCore
 import NIOPosix
 import Vapor
@@ -17,27 +17,7 @@ internal enum Entrypoint {
     public static func main() async throws {
         // Detect the current environment configuration
         var env = try Environment.detect()
-        let environment = Environment.get("ENVIRONMENT") ?? "local"
-
-        if environment == "local" {
-            let processor = LokiLogProcessor(
-                configuration: LokiLogProcessorConfiguration(lokiURL: "http://loki:3100")
-            )
-
-            let consoleLogger = try getConsoleLogger(from: &env)
-            LoggingSystem.bootstrap { label in
-                MultiplexLogHandler([
-                    consoleLogger,
-                    LokiLogHandler(label: label, processor: processor)
-                ])
-            }
-            Task {
-                try await processor.run()
-            }
-        } else {
-            // Set up the logging system based on the environment
-            try LoggingSystem.bootstrap(from: &env)
-        }
+        try setupTelemetry(environment: &env)
 
         // Create a new application instance with the detected environment
         let app = try await Application.make(env)
@@ -69,6 +49,25 @@ internal enum Entrypoint {
         try await app.execute()
         // Shut down the application after execution
         try await app.asyncShutdown()
+    }
+
+    private static func setupTelemetry(environment: inout Environment) throws {
+        let environmentName =
+            Environment.get("ENVIRONMENT")
+            ?? Environment.get("ENVIROMENT")
+            ?? "local"
+        if environmentName == "local" {
+            let consoleLogger = try getConsoleLogger(from: &environment)
+            LoggingSystem.bootstrap { label in
+                MultiplexLogHandler([
+                    consoleLogger
+                ])
+            }
+        } else {
+            try LoggingSystem.bootstrap(from: &environment)
+        }
+
+        _ = try TelemetryExportService.configureGrafanaTempoTracing(serviceName: "automa-backend")
     }
 }
 

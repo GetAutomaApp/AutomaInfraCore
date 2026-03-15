@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-server/async-http-client.git",
       "state" : {
-        "revision" : "52ed9d172018e31f2dbb46f0d4f58d66e13c281e",
-        "version" : "1.31.0"
+        "revision" : "2fc4652fb4689eb24af10e55cabaa61d8ba774fd",
+        "version" : "1.32.0"
       }
     },
     {
@@ -34,7 +34,7 @@
       "location" : "https://github.com/GetAutomaApp/AutomaUtilities",
       "state" : {
         "branch" : "main",
-        "revision" : "1c1d3f32c8efc8b844aa785b7bfe2b8bc14955eb"
+        "revision" : "341ad12397af26c09debdfc890c175b3ce3ed50e"
       }
     },
     {
@@ -101,15 +101,6 @@
       }
     },
     {
-      "identity" : "grpc-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/grpc/grpc-swift.git",
-      "state" : {
-        "revision" : "f857994e146f5146d702e9c31ac6f3c27d55d18a",
-        "version" : "1.27.0"
-      }
-    },
-    {
       "identity" : "grpc-swift-2",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/grpc/grpc-swift-2.git",
@@ -132,8 +123,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/grpc/grpc-swift-nio-transport.git",
       "state" : {
-        "revision" : "812f12edcca82bfc4cf57263c66ffca0aded9bff",
-        "version" : "2.4.2"
+        "revision" : "9ed6c16a4c1619520cf8dd72f8ee0058b1103749",
+        "version" : "2.4.3"
       }
     },
     {
@@ -220,10 +211,10 @@
     {
       "identity" : "opentelemetry-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/open-telemetry/opentelemetry-swift.git",
+      "location" : "https://github.com/getautomaapp/opentelemetry-swift.git",
       "state" : {
-        "revision" : "df57cc4fd0b4cf4f9d715253c6aaba4b6912f7e0",
-        "version" : "2.3.0"
+        "branch" : "main",
+        "revision" : "5e2bf0a6b298fb25ad54564055c9e32d13fece62"
       }
     },
     {
@@ -249,8 +240,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/marmelroy/PhoneNumberKit",
       "state" : {
-        "revision" : "e0f91a22bbc96a67430e1cff502f943a67a97ed3",
-        "version" : "4.2.5"
+        "revision" : "ad20aba8db84a6ba373abfcffe38b1c8e6f8258b",
+        "version" : "4.2.7"
       }
     },
     {
@@ -285,8 +276,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/soto-project/soto.git",
       "state" : {
-        "revision" : "e67559846e8f746bcab2ad889e0a749bb29d44d5",
-        "version" : "7.12.0"
+        "revision" : "95513f2a8df8bdfff1e5cde951dfdf9c5a6b691e",
+        "version" : "7.13.0"
       }
     },
     {
@@ -294,8 +285,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/soto-project/soto-core.git",
       "state" : {
-        "revision" : "510e4ca86264267cfae1df066780706ca6cc4a5f",
-        "version" : "7.11.1"
+        "revision" : "ae265c8819c0067a2b361408ad92fca0fd60d667",
+        "version" : "7.13.0"
       }
     },
     {
@@ -492,8 +483,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-openapi-runtime",
       "state" : {
-        "revision" : "7cdf33371bf89b23b9cf4fd3ce8d3c825c28fbe8",
-        "version" : "1.9.0"
+        "revision" : "16c8eb7f65d28f5ddb8cb0dc1be5ec32e796fe45",
+        "version" : "1.10.1"
+      }
+    },
+    {
+      "identity" : "swift-otel",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-otel/swift-otel.git",
+      "state" : {
+        "revision" : "b5f4d8b3ec75c63bf85526b6ff3789b6de0d54a1",
+        "version" : "1.0.4"
       }
     },
     {
@@ -519,8 +519,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-protobuf.git",
       "state" : {
-        "revision" : "9bbb079b69af9d66470ced85461bf13bb40becac",
-        "version" : "1.35.0"
+        "revision" : "5596511fce902e649c403cd4d6d5da1254f142b7",
+        "version" : "1.35.1"
       }
     },
     {
@@ -587,6 +587,15 @@
       }
     },
     {
+      "identity" : "swift-w3c-trace-context",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-otel/swift-w3c-trace-context.git",
+      "state" : {
+        "revision" : "5da9b143ba6046734de3fa51dafea28290174e4e",
+        "version" : "1.0.0-beta.5"
+      }
+    },
+    {
       "identity" : "swiftsoup",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scinfu/SwiftSoup.git",
@@ -618,8 +627,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/vapor.git",
       "state" : {
-        "revision" : "6d06e13021c299aa3300986f4eb5bb143d17ac9b",
-        "version" : "4.121.2"
+        "revision" : "a8db2dbda8b3cdc8a61bd35128590bd296e85563",
+        "version" : "4.121.3"
       }
     },
     {

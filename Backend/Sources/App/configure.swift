@@ -60,7 +60,7 @@ internal struct AppConfigurator {
         if config.shouldSetupAPI {
             try registerControllers()
             try await addAuthenticationJWTKey()
-            configureServer()
+            try configureServer()
         }
     }
 
@@ -81,14 +81,10 @@ internal struct AppConfigurator {
             hmac: .init(stringLiteral: encryptionSecret), digestAlgorithm: .sha256)
     }
 
-    private func configureServer() {
+    private func configureServer() throws {
         app.http.server.configuration.responseCompression = .enabled
-    }
-
-    private func startTracing() {
-        TracingService.configureGrafanaTempoTracing(
-            serviceName: "automa-backend"
-        )
+        app.lifecycle.use(TelemetryLifecycleHandler())
+        app.middleware.use(TracingMiddleware())
     }
 
     public struct AppConfiguratorConfig {
@@ -99,6 +95,13 @@ internal struct AppConfigurator {
             self.shouldSetupAPI = shouldSetupAPI
             self.metricsPort = metricsPort
         }
+    }
+}
+
+private struct TelemetryLifecycleHandler: LifecycleHandler {
+    func shutdown(_ application: Application) {
+        TelemetryExportService.shutdownTelemetry(timeout: 5)
+        application.logger.info("Telemetry exporters shut down")
     }
 }
 

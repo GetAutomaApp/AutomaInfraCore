@@ -1,9 +1,7 @@
-networks:
-  monitoring:
-  backend:
-
 services:
   api-dev:
+    env_file:
+      - ./.env.local
     volumes:
       - ./:/app/
       - /app/.build
@@ -11,8 +9,6 @@ services:
     build:
       context: .
       dockerfile: ./DevDockerfile
-      secrets:
-        - GITHUB_SSH_AUTHENTICATION_TOKEN
     depends_on:
       postgres:
         condition: service_healthy
@@ -33,13 +29,11 @@ services:
     environment:
       RUN_COMMAND: "serve --hostname 0.0.0.0"
       METRICS_PORT: "6834"
-    ports:
-      - "6886:8080"
-    networks:
-      - monitoring
-      - backend
+    network_mode: host
 
   temporal-worker:
+    env_file:
+      - ./.env.local
     volumes:
       - ./:/app/
       - /app/.build
@@ -47,8 +41,6 @@ services:
     build:
       context: .
       dockerfile: ./DevDockerfile
-      secrets:
-        - GITHUB_SSH_AUTHENTICATION_TOKEN
     depends_on:
       postgres:
         condition: service_healthy
@@ -67,9 +59,7 @@ services:
     environment:
       RUN_COMMAND: "temporal-worker"
       METRICS_PORT: "6835"
-    networks:
-      - monitoring
-      - backend
+    network_mode: host
   postgres:
     image: postgres:latest
     container_name: postgres-container
@@ -84,10 +74,63 @@ services:
       interval: 5s
       timeout: 10s
       retries: 120
+    network_mode: host
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: "5050"
+      POSTGRES_ENV_FILE: /run/config/.env.local
+      PGADMIN_SERVER_JSON_FILE: /var/lib/pgadmin/servers.json
+      PGADMIN_REPLACE_SERVERS_ON_STARTUP: "True"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./.env.local:/run/config/.env.local:ro
+      - ./infra/local/pgadmin/bootstrap-pgadmin.py:/pgadmin4/bootstrap-pgadmin.py:ro
+      - ./infra/local/pgadmin/start-pgadmin.sh:/pgadmin4/start-pgadmin.sh:ro
+      - pgadmin_data:/var/lib/pgadmin
+    entrypoint: ["/bin/sh", "/pgadmin4/start-pgadmin.sh"]
+    network_mode: host
+
+  hoppscotch:
+    image: hoppscotch/hoppscotch
+    container_name: hoppscotch
+    depends_on:
+      hoppscotch-db:
+        condition: service_healthy
     ports:
-      - "5432:5432"
-    networks:
-      - backend
+      - "3123:3000"
+    environment:
+      DATABASE_URL: postgres://hoppscotch:hoppscotch@hoppscotch-db:5432/hoppscotch
+      WHITELISTED_ORIGINS: http://127.0.0.1:3123,http://localhost:3123
+      VITE_BASE_URL: http://127.0.0.1:3123
+      VITE_BACKEND_API_URL: http://127.0.0.1:3123
+      VITE_ADMIN_URL: http://127.0.0.1:3123
+      VITE_SHORTCODE_BASE_URL: http://127.0.0.1:3123
+      DATA_ENCRYPTION_KEY: 0123456789abcdef0123456789abcdef
+    volumes:
+      - ./infra/local/hoppscotch/start-hoppscotch.sh:/start-hoppscotch.sh:ro
+    command: ["sh", "/start-hoppscotch.sh"]
+
+  hoppscotch-db:
+    image: postgres:16
+    container_name: hoppscotch-db
+    environment:
+      POSTGRES_USER: hoppscotch
+      POSTGRES_PASSWORD: hoppscotch
+      POSTGRES_DB: hoppscotch
+    volumes:
+      - hoppscotch_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hoppscotch -d hoppscotch"]
+      interval: 5s
+      timeout: 10s
+      retries: 60
 
   localstack:
     image: localstack/localstack:latest
@@ -101,27 +144,20 @@ services:
     volumes:
       - "$PWD/infra/local/localstack/s3.sh:/etc/localstack/init/ready.d/init-aws.sh"
       - "/var/run/docker.sock:/var/run/docker.sock"
-    ports:
-      - "127.0.0.1:4566:4566" # LocalStack Gateway
-      - "127.0.0.1:4510-4559:4510-4559" # external services port range
-    networks:
-      - backend
+    network_mode: host
   loki:
     image: grafana/loki:latest
-    ports:
-      - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
-    networks:
-      - monitoring
-      - backend
+    volumes:
+      - ./infra/compose-services-configurations/loki:/etc/loki
+    network_mode: host
 
   promtail:
     image: grafana/promtail:latest
     volumes:
       - /var/log:/var/log
     command: -config.file=/etc/promtail/config.yml
-    networks:
-      - monitoring
+    network_mode: host
 
   grafana:
     environment:
@@ -132,44 +168,31 @@ services:
     image: grafana/grafana:latest
     volumes:
       - ./infra/compose-services-configurations/grafana:/etc/grafana/provisioning/datasources
-    ports:
-      - "3000:3000"
-    networks:
-      - monitoring
+    network_mode: host
   tempo:
-    image: grafana/tempo:latest
+    image: grafana/tempo:2.10.1
     command:
       - "-config.file=/etc/tempo/local-config.yaml"
     volumes:
       - ./infra/compose-services-configurations/tempo:/etc/tempo:ro
-    ports:
-      - "4317:4317"
-      - "4318:4318"
-    networks:
-      - monitoring
-      - backend
+      - tempo_data:/var/tempo
+    network_mode: host
 
   prometheus:
     image: prom/prometheus
     container_name: prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
-    ports:
-      - 9090:9090
     restart: unless-stopped
     volumes:
       - ./infra/compose-services-configurations/prometheus:/etc/prometheus
       - prom_data:/prometheus
-    networks:
-      - monitoring
+    network_mode: host
   temporal:
     image: temporalio/temporal
     container_name: temporal
     command: ["server", "start-dev", "--ip", "0.0.0.0"]
-    ports:
-      - 8233:8233
-    networks:
-      - backend
+    network_mode: host
 volumes:
   postgres_data:
     driver: local
@@ -178,7 +201,6 @@ volumes:
   worker_build:
     driver: local
   prom_data:
-
-secrets:
-  GITHUB_SSH_AUTHENTICATION_TOKEN:
-    file: ./infra/docker-secrets/GITHUB_SSH_AUTHENTICATION_TOKEN
+  tempo_data:
+  pgadmin_data:
+  hoppscotch_db:
