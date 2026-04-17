@@ -2,7 +2,13 @@
   "fly" : {
    "config_files_root" : "Backend/infra/fly",
    "deploy_secrets": {
-      "automa-backend-production": ["env.production"]
+      "automa-backend-production": ["env.production"],
+      "automa-backend-sandbox": ["env.sandbox"],
+      "automa-backend-staging": ["env.staging"],
+      "automa-backend-temporal-production": ["env.production"],
+      "automa-backend-temporal-sandbox": ["env.sandbox"],
+      "automa-backend-temporal-worker-production": ["env.production"],
+      "automa-backend-temporal-worker-sandbox": ["env.sandbox"]
     }
   },
   "actionsSecrets" : {
