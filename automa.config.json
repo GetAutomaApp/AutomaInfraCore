@@ -1,11 +1,9 @@
 {
   "fly" : {
-    "environments" : [
-      "production",
-      "sandbox",
-      "staging"
-    ],
-    "config_files_root" : "Backend/infra/fly"
+   "config_files_root" : "Backend/infra/fly",
+   "deploy_secrets": {
+      "automa-backend-production": ["env.production"]
+    }
   },
   "actionsSecrets" : {
     "owner_repo" : "GetAutomaApp/AutomaInfraCore"
@@ -16,4 +14,5 @@
   "obsidian": {
     "vault_name": "Automa"
   }
+
 }
